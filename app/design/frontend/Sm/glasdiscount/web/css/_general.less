@@ -392,7 +392,7 @@ body.checkout-cart-index .row.item-info .item-actions {position:absolute;bottom:
 .cart.table-wrapper .product-item-photo {position:relative;top:0;float:right}
 .cart.table-wrapper .product-item-name {margin-top:0;}
 .cart.table-wrapper .product-item-details {margin-bottom:10px;float:left;padding-left:10px;}
-body .cart-container .product-image-container {margin-bottom: 5px;display: inline-block;}
+body .cart-container .product-image-container {margin-bottom: 5px;display: inline;}
 .cart.table-wrapper .row.item-info .item-actions {margin-top:15px;}
 }
 
@@ -1250,15 +1250,15 @@ mark, .mark {
         background-color: #fff;
         border-top: 1px solid #dddddd;
         border-bottom: 1px solid #dddddd;
-        text-transform: uppercase;
         color: #444;
         text-align: left;
-        padding: 13px 20px 10px;
+        padding: 13px 20px 20px;
 
         .label {
             font-weight: 700 !important;
             font-size: 116.67% !important;
             color: #444;
+            text-transform: uppercase;
         }
 
         .price-container {
@@ -1269,6 +1269,10 @@ mark, .mark {
                 font-size: 133.33%;
             }
         }
+    }
+
+    .price-excluding-tax::before {
+        content: attr(data-label) ' ' !important;
     }
 
     .block-content > .actions {
@@ -2976,9 +2980,8 @@ body .afmeting.field.required {width:25%;display:inline-block;margin:-1px 0 0}
 .levertijd a {color:#585858; text-decoration:underline;}
 
 .catalog-product-view .price-box .price {color: #f47727;}
-.catalog-product-view .price-wrapper.price-including-tax {margin-top:8px;}
-.catalog-product-view .price-wrapper.price-excluding-tax .price {font-size:14px; font-weight:bold; float:left; margin-right:6px;}
-.catalog-product-view .price-wrapper.price-including-tax .price {font-size:24px; font-weight:bold; float:left; margin-right:7px;}
+.catalog-product-view .price-wrapper .price-excluding-tax .price {font-size:14px; font-weight:bold; float:left; margin-right:6px;}
+.catalog-product-view .price-wrapper .price-including-tax .price {font-size:24px; font-weight:bold; float:left; margin-right:7px;}
 .catalog-product-view .prices-tier .price-including-tax .price {float: none;
     margin-right: 0;
     font-size: 12px;
@@ -2990,11 +2993,14 @@ body .afmeting.field.required {width:25%;display:inline-block;margin:-1px 0 0}
     color: #31312f;
     font-weight: bold;}
 .prices-tier .inclusief {color:#31312f; top:0}
-.exclusief, .inclusief {color:#31312f;}
+.exclusief, .inclusief {top:3px; color:#31312f;}
 .inclusief {top:10.5px;position:relative;}
 .product-options-wrapper .fieldset > .field.required > .label:after, .product-options-wrapper .fieldset > .fields > .field.required > .label:after, .product-options-wrapper .fieldset > .field._required > .label:after, .product-options-wrapper .fieldset > .fields > .field._required > .label:after {content: ':';font-weight: bold;font-size: 16px;color: #31312f;margin-left:1px;}
 .catalog-product-view .product-info-main .price-box {display:block;margin:5px 0 0;}
 body.catalog-product-view .price-including-tax, body.catalog-product-view .price-excluding-tax {line-height:normal;}
+body .block.block-minicart .price-including-tax, body .block.block-minicart .price-excluding-tax {line-height:1.8rem;margin-top:0;display:block}
+body .block.block-minicart .price-including-tax {text-align:right;}
+.price-excluding-tax .price {font-size: 14px !important;}
 
 .levertijd-container {color:#009900;font-size:12px;font-weight:600; padding-bottom:2px; height:21px;}
 .levertijd {width: unset;float:none;text-align:center;padding-right: 0px; margin-top:4px}
@@ -3050,7 +3056,7 @@ body .usp-block ul li:before {
 .webwinkelkeur p {margin-bottom: 0px;color:#31312f;line-height: 18px;}
 .webwinkelkeur strong {font-weight:bold;}
 .usps {padding-left:15px;}
-.row.usp-block {background:#f5f5f5;padding: 12px 0px 16px 18px;margin-left:-15px;}
+.row.usp-block {background:#e8f5e9;padding: 6px 7px 16px 8px;}
 .klantscore { border-left:1px solid #bac4ba; text-align:center;}
 .usp-block .col-lg-8.col-md-8 {flex: 0 0 59%; max-width: 59%;}
 .usp-block .col-lg-4.col-md-4 {flex: 0 0 41%; max-width: 41%; margin: 7px 0;}

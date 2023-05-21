@@ -61,19 +61,20 @@ $product = $block->getSaleableItem();
                        data-tier-price="<?= $block->escapeHtmlAttr($block->jsonEncode($tierPriceData)) ?>">
                         <?= $block->escapeHtml(__('Click for price')) ?></a>
                 <?php else :
-                    $priceAmountBlock = $block->renderAmount(
-                        $price['price'],
-                        [
-                            'price_id'          => $index,
-                            'id_suffix'         => '-' . $index,
-                            'include_container' => true,
-                            'zone' => \Magento\Framework\Pricing\Render::ZONE_ITEM_OPTION
-                        ]
-                    );
+                    $priceAmountBlock = number_format(round($price['price']->getValue(),2),2, ',', '.');
+                    // $block->renderAmount(
+                    //     $price['price'],
+                    //     [
+                    //         'price_id'          => $index,
+                    //         'id_suffix'         => '-' . $index,
+                    //         'include_container' => true,
+                    //         'zone' => \Magento\Framework\Pricing\Render::ZONE_ITEM_OPTION
+                    //     ]
+                    // );
                     ?>
                     <?= /* @noEscape */ ($block->getShowDetailedPrice() !== false)
                     ? __(
-                        'Koop %1 voor %2 per stuk en <strong class="benefit">bespaar<span class="percent tier-%3">&nbsp;%4</span>%</strong>',
+                        'Koop %1 voor %2 incl. BTW per stuk en <strong class="benefit">bespaar<span class="percent tier-%3">&nbsp;%4</span>%</strong>',
                         $price['price_qty'],
                         $priceAmountBlock,
                         $index,

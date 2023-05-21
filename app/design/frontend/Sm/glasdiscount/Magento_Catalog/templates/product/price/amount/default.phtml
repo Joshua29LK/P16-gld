@@ -9,25 +9,38 @@
 ?>
 
 <?php /** @var \Magento\Framework\Pricing\Render\Amount $block */ ?>
+<?php /** @var $_product \Magento\Catalog\Model\Product */ ?>
 
 <span class="price-container <?= /* @escapeNotVerified */ $block->getAdjustmentCssClasses() ?>"
         <?= $block->getSchema() ? ' itemprop="offers" itemscope itemtype="http://schema.org/Offer"' : '' ?>>
     <?php if ($block->getDisplayLabel()): ?>
         <span class="price-label"><?= /* @escapeNotVerified */ $block->getDisplayLabel() ?></span>
     <?php endif; ?>
-	<?php if ($block->hasAdjustmentsHtml()): ?>
-    <?= $block->getAdjustmentsHtml() ?><span class="exclusief">excl BTW</span>
+    <?php if ($block->hasAdjustmentsHtml()): ?>
+        <div style="display: flex;" class="prijs-excl">
+            <?= $block->getAdjustmentsHtml() ?>
+            <span style="margin-top:auto; margin-left:5px;" class="excl-label">excl. BTW</span>
+        </div>
 <?php endif; ?>
-    <span <?php if ($block->getPriceId()): ?> id="<?= /* @escapeNotVerified */ $block->getPriceId() ?>"<?php endif;?>
-        <?= ($block->getPriceDisplayLabel()) ? 'data-label="' . $block->getPriceDisplayLabel() . $block->getPriceDisplayInclExclTaxes() . '"' : '' ?>
-        data-price-amount="<?= /* @escapeNotVerified */ $block->getDisplayValue() ?>"
-        data-price-type="<?= /* @escapeNotVerified */ $block->getPriceType() ?>"
-        class="price-wrapper <?= /* @escapeNotVerified */ $block->getPriceWrapperCss() ?>">
-        <?= /* @escapeNotVerified */ $block->formatCurrency($block->getDisplayValue(), (bool)$block->getIncludeContainer()) ?>
-    </span><span class="inclusief">incl. BTW</span>
+    <div style="display:flex;" class="prijs-incl">
+        <span <?php if ($block->getPriceId()): ?> id="<?= /* @escapeNotVerified */ $block->getPriceId() ?>"<?php endif;?>
+            <?= ($block->getPriceDisplayLabel()) ? 'data-label="' . $block->getPriceDisplayLabel() . $block->getPriceDisplayInclExclTaxes() . '"' : '' ?>
+            data-price-amount="<?= /* @escapeNotVerified */ $block->getDisplayValue() ?>"
+            data-price-type="<?= /* @escapeNotVerified */ $block->getPriceType() ?>"
+            class="price-wrapper <?= /* @escapeNotVerified */ $block->getPriceWrapperCss() ?>">
+            <?= /* @escapeNotVerified */ $block->formatCurrency($block->getDisplayValue(), (bool)$block->getIncludeContainer()) ?>
+        </span>
+        <span style="margin-top:auto; margin-left:5px;" class="incl-label">incl. BTW</span>
+    </div>
 
     <?php if ($block->getSchema()): ?>
         <meta itemprop="price" content="<?= /* @escapeNotVerified */ $block->getDisplayValue() ?>" />
         <meta itemprop="priceCurrency" content="<?= /* @escapeNotVerified */ $block->getDisplayCurrencyCode() ?>" />
     <?php endif; ?>
 </span>
+
+<style>
+    .owl-carousel .prijs-incl {display:inline-block!important}
+    .owl-carousel .prijs-incl .incl-label {display:none}
+    .owl-carousel .prijs-excl {display:none!important}
+</style>
