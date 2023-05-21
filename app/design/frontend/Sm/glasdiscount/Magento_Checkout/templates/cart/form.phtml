@@ -10,6 +10,16 @@
 ?>
 <?php $mergedCells = ($this->helper(Magento\Tax\Helper\Data::class)->displayCartBothPrices() ? 2 : 1); ?>
 <?= $block->getChildHtml('form_before') ?>
+<table style="margin-bottom: -1.2rem;">
+    <thead>
+        <tr>
+            <th style="width:59%;" class="col item" scope="col"><span style="font-size: 15px;">Product</span></th>
+            <th style="width:17%" class="col item" scope="col"><span style="font-size: 15px;">Prijs</span></th>
+            <th style="width:15%" class="col item" scope="col"><span style="font-size: 15px;">Aantal</span></th>
+            <th class="col item" scope="col"><span style="font-size: 15px;">Subtotaal</span></th>
+        </tr>
+    </thead>
+</table> 
 <form action="<?= $block->escapeUrl($block->getUrl('checkout/cart/updatePost')) ?>"
           method="post"
           id="form-validate"
