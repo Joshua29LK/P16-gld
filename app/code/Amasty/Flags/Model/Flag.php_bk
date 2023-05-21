@@ -1,0 +1,237 @@
+<?php
+/**
+* @author Amasty Team
+* @copyright Copyright (c) 2022 Amasty (https://www.amasty.com)
+* @package Order Notes for Magento 2
+*/
+namespace Amasty\Flags\Model;
+
+use Amasty\Flags\Api\Data\FlagInterface;
+use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Model\AbstractModel;
+use Magento\Framework\View\Element\UiComponent\DataProvider\Document;
+
+class Flag extends AbstractModel implements FlagInterface
+{
+    public const FLAGS_FOLDER = 'amasty/flags';
+    public const IMAGE_PLACEHOLDER = 'Amasty_Flags::img/empty.png';
+
+    /**
+     * @var \Magento\Store\Model\StoreManagerInterface
+     */
+    private $storeManager;
+
+    /**
+     * @var \Magento\Framework\View\Asset\Repository
+     */
+    private $assetRepository;
+
+    /**
+     * @var \Magento\Framework\Filesystem
+     */
+    private $filesystem;
+
+    public function __construct(
+        \Magento\Framework\Model\Context $context,
+        \Magento\Framework\Registry $registry,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\View\Asset\Repository $assetRepository,
+        \Magento\Framework\Filesystem $filesystem,
+        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
+        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        array $data = []
+    ) {
+        parent::__construct($context, $registry, $resource, $resourceCollection, $data);
+        $this->storeManager = $storeManager;
+        $this->assetRepository = $assetRepository;
+        $this->filesystem = $filesystem;
+    }
+
+    protected function _construct()
+    {
+        $this->_init(\Amasty\Flags\Model\ResourceModel\Flag::class);
+    }
+
+    /**
+     * @param Document|Flag|null $flag
+     *
+     * @return string
+     */
+    public function getImageUrl($flag = null)
+    {
+        $url = $this->getUploadUrl()
+            . $this->getImageNameByFlag($flag)
+            . '?' . $this->getImageModifiedTime($flag);
+
+        return $url;
+    }
+
+    private function getImageNameByFlag($flag = null)
+    {
+        return $flag ? $flag->getImageName() : $this->getImageName();
+    }
+
+    private function getImageModifiedTime($flag = null)
+    {
+        $stat = $this->filesystem->getDirectoryRead(DirectoryList::MEDIA)->stat(
+            self::FLAGS_FOLDER . '/' . $this->getImageNameByFlag($flag)
+        );
+
+        return $stat['mtime'];
+    }
+
+    public function getUploadUrl()
+    {
+        $baseUrl = $this->storeManager->getStore()->getBaseUrl(
+            \Magento\Framework\UrlInterface::URL_TYPE_MEDIA
+        );
+
+        return $baseUrl . self::FLAGS_FOLDER . '/';
+    }
+
+    public function getImageRelativePath()
+    {
+        return self::FLAGS_FOLDER . '/' . $this->getImageName();
+    }
+
+    public function getImagePlaceholderUrl()
+    {
+        return $this->assetRepository->createAsset(self::IMAGE_PLACEHOLDER)->getUrl();
+    }
+
+    /**
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->getData(FlagInterface::NAME);
+    }
+
+    /**
+     * @param string $name
+     * @return \Amasty\Flags\Api\Data\FlagInterface
+     */
+    public function setName($name)
+    {
+        return $this->setData(FlagInterface::NAME, $name);
+    }
+
+    /**
+     * @return string
+     */
+    public function getImageName()
+    {
+        return $this->getData(FlagInterface::IMAGE_NAME);
+    }
+
+    /**
+     * @param string $imageName
+     * @return \Amasty\Flags\Api\Data\FlagInterface
+     */
+    public function setImageName($imageName)
+    {
+        return $this->setData(FlagInterface::IMAGE_NAME, $imageName);
+    }
+
+    /**
+     * @return int
+     */
+    public function getPriority()
+    {
+        return $this->getData(FlagInterface::PRIORITY);
+    }
+
+    /**
+     * @param int $priority
+     * @return \Amasty\Flags\Api\Data\FlagInterface
+     */
+    public function setPriority($priority)
+    {
+        return $this->setData(FlagInterface::PRIORITY, $priority);
+    }
+
+    /**
+     * @return string
+     */
+    public function getNote()
+    {
+        return $this->getData(FlagInterface::NOTE);
+    }
+
+    /**
+     * @param string $note
+     * @return \Amasty\Flags\Api\Data\FlagInterface
+     */
+    public function setNote($note)
+    {
+        return $this->setData(FlagInterface::NOTE, $note);
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getApplyColumn()
+    {
+        return $this->getData(FlagInterface::APPLY_COLUMN);
+    }
+
+    /**
+     * @param int|null $applyColumn
+     * @return \Amasty\Flags\Api\Data\FlagInterface
+     */
+    public function setApplyColumn($applyColumn)
+    {
+        return $this->setData(FlagInterface::APPLY_COLUMN, $applyColumn);
+    }
+
+    /**
+     * @return string
+     */
+    public function getApplyStatus()
+    {
+        return $this->getData(FlagInterface::APPLY_STATUS);
+    }
+
+    /**
+     * @param string $applyStatus
+     * @return \Amasty\Flags\Api\Data\FlagInterface
+     */
+    public function setApplyStatus($applyStatus)
+    {
+        return $this->setData(FlagInterface::APPLY_STATUS, $applyStatus);
+    }
+
+    /**
+     * @return string
+     */
+    public function getApplyShipping()
+    {
+        return $this->getData(FlagInterface::APPLY_SHIPPING);
+    }
+
+    /**
+     * @param string $applyShipping
+     * @return \Amasty\Flags\Api\Data\FlagInterface
+     */
+    public function setApplyShipping($applyShipping)
+    {
+        return $this->setData(FlagInterface::APPLY_SHIPPING, $applyShipping);
+    }
+
+    /**
+     * @return string
+     */
+    public function getApplyPayment()
+    {
+        return $this->getData(FlagInterface::APPLY_PAYMENT);
+    }
+
+    /**
+     * @param string $applyPayment
+     * @return \Amasty\Flags\Api\Data\FlagInterface
+     */
+    public function setApplyPayment($applyPayment)
+    {
+        return $this->setData(FlagInterface::APPLY_PAYMENT, $applyPayment);
+    }
+}

@@ -1,0 +1,172 @@
+<?php
+/**
+ * @var $block \Balticode\CategoryConfigurator\Block\Configurator\Step\StepGlassShapes
+ */
+?>
+<?php $htmlId = $block->escapeHtml($block->getHtmlId()); ?>
+<div class="configurator-step" data-bind="scope: '<?php echo $htmlId; ?>'">
+    <div class="configurator-step-header">
+        <div class="configurator-step-title">
+            <span>
+                <?php echo $block->escapeHtml($block->getTitle()); ?>
+            </span>
+        </div>
+        <?php if ($block->getInfo()): ?>
+            <span class="configurator-step-info-tooltip">
+                <span class="tooltip-icon"></span>
+                <span class="tooltip-content"><?php echo $block->getInfo(); ?></span>
+            </span>
+        <?php endif; ?>
+    </div>
+    <div class="configurator-step-description">
+        <span>
+            <?php echo $block->getDescription(); ?>
+        </span>
+    </div>
+    <div class="configurator-step-product-list-container">
+        <ul class="configurator-step-product-list owl-carousel no-bullet-list" id="<?php echo $htmlId; ?>">
+            <!-- ko foreach: { data: products, as: 'glassShape'} -->
+                <li class="configurator-step-product-list-item" data-bind="click: function(data, event) { $parent.selectProduct(data, event) }">
+                    <div class="configurator-step-product">
+                        <input type="hidden" name="product_id" data-bind="value: glassShape.product_id">
+                        <div class="configurator-step-product-image">
+                            <span class="product-view-modal-button" data-bind="click: function(productId) { $parent.openProductViewModal(glassShape.product_id) }"></span>
+                            <img data-bind="attr: { src: glassShape.image }" />
+                        </div>
+                        <div class="configurator-step-product-name">
+                            <span data-bind="text: glassShape.name"></span>
+                        </div>
+                        <div class="glass-shape-dimension-input width">
+                            <label class="dimension-label" data-bind="attr: {'for': 'width-' + glassShape.product_id }">
+                                <span><?php echo __('Width') ?>: </span>
+                            </label>
+                            <input class="dimension-field"
+                                   name="width"
+                                   data-bind="attr: {'id': 'width-' + glassShape.product_id },
+                                              value: glassShape.width,
+                                              event: {
+                                                  change: function(data, event) { $parent.updateGlassShapeDimensions(data, event) },
+                                                  focus: function(data, event) { $parent.resetGlassShapeDimensionFieldValue(data, event) },
+                                                  focusout: function(data, event) { $parent.restoreValueIfNotChanged(data, event) }
+                                              }"
+                            >
+                            <label class="units-label" data-bind="attr: {'for': 'width-' + glassShape.product_id }">
+                                <span>mm</span>
+                            </label>
+                        </div>
+                        <div class="glass-shape-dimension-input width custom-width">
+                            <label class="dimension-label" data-bind="attr: {'for': 'top-width-' + glassShape.product_id }">
+                                <span><?php echo __('Top Width') ?>: </span>
+                            </label>
+                            <input class="dimension-field"
+                                   name="top_width"
+                                   data-bind="attr: {'id': 'top-width-' + glassShape.product_id },
+                                              value: glassShape.top_width,
+                                              event: {
+                                                  change: function(data, event) { $parent.updateGlassShapeDimensions(data, event) },
+                                                  focus: function(data, event) { $parent.resetGlassShapeDimensionFieldValue(data, event) },
+                                                  focusout: function(data, event) { $parent.restoreValueIfNotChanged(data, event) }
+                                              }"
+                            >
+                            <label class="units-label" data-bind="attr: {'for': 'top-width-' + glassShape.product_id }">
+                                <span>mm</span>
+                            </label>
+                        </div>
+                        <div class="glass-shape-dimension-input width custom-width">
+                            <label class="dimension-label" data-bind="attr: {'for': 'bottom-width-' + glassShape.product_id }">
+                                <span><?php echo __('Bottom Width') ?>: </span>
+                            </label>
+                            <input class="dimension-field"
+                                   name="bottom_width"
+                                   data-bind="attr: {'id': 'bottom-width-' + glassShape.product_id },
+                                              value: glassShape.bottom_width,
+                                              event: {
+                                                  change: function(data, event) { $parent.updateGlassShapeDimensions(data, event) },
+                                                  focus: function(data, event) { $parent.resetGlassShapeDimensionFieldValue(data, event) },
+                                                  focusout: function(data, event) { $parent.restoreValueIfNotChanged(data, event) }
+                                              }"
+                            >
+                            <label class="units-label" data-bind="attr: {'for': 'bottom-width-' + glassShape.product_id }">
+                                <span>mm</span>
+                            </label>
+                        </div>
+						 <div class="glass-shape-dimension-input">
+                            <label class="dimension-label" data-bind="attr: {'for': 'height-' + glassShape.product_id }">
+                                <span><?php echo __('Height') ?>: </span>
+                            </label>
+                            <input class="dimension-field"
+                                   name="height"
+                                   data-bind="attr: {'id': 'height-' + glassShape.product_id },
+                                              value: glassShape.height,
+                                              event: {
+                                                  change: function(data, event) { $parent.updateGlassShapeDimensions(data, event) },
+                                                  focus: function(data, event) { $parent.resetGlassShapeDimensionFieldValue(data, event) },
+                                                  focusout: function(data, event) { $parent.restoreValueIfNotChanged(data, event) }
+                                              }"
+                            >
+                            <label class="units-label" data-bind="attr: {'for': 'height-' + glassShape.product_id }">
+                                <span>mm</span>
+                            </label>
+                        </div>
+                        <div class="custom-width-control">
+                            <input type="button" id="custom-width-button" value="+" data-bind="click: function(data, event) { $parent.toggleWidthFieldsVisibility(data, event) }">
+                            <label for="custom-width-button">
+                                <span><?php echo __('Custom Width') ?></span>
+                            </label>
+                        </div>
+                    </div>
+                </li>
+            <!-- /ko -->
+        </ul>
+        <div id="glass-shape-dimension-error" class="glass-shape-dimension-error configurator-error-message">
+            <span data-bind="text: $t(dimensionErrorText)"></span>
+        </div>
+        <div class="glass-shape-types-message">
+            <span><?php echo __('Here are the available glass types for this glass shape:'); ?></span>
+        </div>
+        <ul class="configurator-step-product-list owl-carousel no-bullet-list" id="glass-shape-types">
+            <!-- ko foreach: { data: glassShapeTypes, as: 'glassShapeType'} -->
+                <li class="configurator-step-product-list-item" data-bind="click: function(data, event) { $parent.selectGlassShapeType(data, event) }">
+                    <div class="configurator-step-product">
+                        <input type="hidden" name="product_id" data-bind="value: glassShapeType.product_id">
+                        <div class="configurator-step-product-image">
+                            <span class="product-view-modal-button" data-bind="click: function(productId) { $parent.openGlassShapeTypeModal(glassShapeType.product_id) }"></span>
+                            <img data-bind="attr: { src: glassShapeType.image }" />
+                            <label class="product-price-label">
+                                <span><?php echo $block->escapeHtml($block->getCurrencySymbol()); ?></span>
+                                <span class="product-price" data-bind="text: $parent.getFormattedPrice(glassShapeType.price)"></span>
+                            </label>
+                        </div>
+                        <div class="configurator-step-product-name">
+                            <span data-bind="text: glassShapeType.name"></span>
+                        </div>
+                    </div>
+                </li>
+            <!-- /ko -->
+        </ul>
+    </div>
+</div>
+<script type="text/x-magento-init">
+    {
+        "*": {
+            "Magento_Ui/js/core/app": {
+                "components": {
+                    "<?php echo $htmlId; ?>": {
+                        "component": "Balticode_CategoryConfigurator/js/configurator/step/glass-shapes",
+                        "selector": "<?php echo '#' . $htmlId; ?>",
+                        "glassShapeTypesSelector": "<?php echo "#glass-shape-types"; ?>",
+                        "action": "<?php echo $block->escapeUrl($block->getGlassShapesActionUrl()); ?>",
+                        "stepItemCount": "<?php echo $block->escapeHtml($block->getStepCarouselItemCount()); ?>",
+                        "mobileStepItemCount": "<?php echo $block->escapeHtml($block->getHalfStepCarouselItemCount()); ?>",
+                        "glassShapesMinimumWidth": "<?php echo $block->escapeHtml($block->getGlassShapesMinimumWidth()); ?>",
+                        "glassShapesMaximumWidth": "<?php echo $block->escapeHtml($block->getGlassShapesMaximumWidth()); ?>",
+                        "glassShapesMinimumHeight": "<?php echo $block->escapeHtml($block->getGlassShapesMinimumHeight()); ?>",
+                        "glassShapesMaximumHeight": "<?php echo $block->escapeHtml($block->getGlassShapesMaximumHeight()); ?>",
+                        "currencySymbol": "<?php echo $block->escapeHtml($block->getCurrencySymbol()); ?>",
+                        "stepSortOrder": "<?php echo $block->escapeHtml($block->getSortOrder()); ?>"
+                    }
+                }
+            }
+        }
+    }
+</script>

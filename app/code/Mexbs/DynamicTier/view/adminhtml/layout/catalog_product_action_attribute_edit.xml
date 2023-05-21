@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceContainer name="left">
+            <referenceBlock name="attributes_tabs">
+                <block class="Mexbs\DynamicTier\Block\Adminhtml\Product\Edit\Action\Attribute\Tab\TierPrices" name="tab_tier_prices" template="catalog/product/edit/action/tier_prices.phtml"/>
+                <action method="addTab">
+                    <argument name="name" xsi:type="string">tier_prices</argument>
+                    <argument name="block" xsi:type="string">tab_tier_prices</argument>
+                </action>
+            </referenceBlock>
+        </referenceContainer>
+    </body>
+</page>

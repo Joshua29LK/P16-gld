@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+	<type name="Magento\Sales\Api\OrderManagementInterface">
+        <plugin name="ec" type="Anowave\Ec\Plugin\Order\PlaceAfter" sortOrder="99" />
+    </type>
+    <virtualType name="Anowave\Ec\Model\ResourceModel\Consent\Collection">
+        <arguments>
+            <argument name="mainTable" xsi:type="string">ae_ec_gdpr</argument>
+            <argument name="eventPrefix" xsi:type="string">track_consent_grid_collection</argument>
+        	<argument name="eventObject" xsi:type="string">consent_grid_collection</argument>
+            <argument name="resourceModel" xsi:type="string">Anowave\Ec\Model\ResourceModel\Consent</argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
+        <arguments>
+            <argument name="collections" xsi:type="array">
+                <item name="track_consent_listing_data_source" xsi:type="string">Anowave\Ec\Model\ResourceModel\Consent\Grid\Collection</item>
+            </argument>
+        </arguments>
+    </type>
+</config>

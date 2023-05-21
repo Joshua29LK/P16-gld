@@ -1,0 +1,90 @@
+<script data-ommit="true">
+
+    document.addEventListener("DOMContentLoaded", () => 
+    {
+    	(() => 
+    	{
+    		let map = {};
+    
+    		document.querySelectorAll('[data-widget]').forEach((element) => 
+            {
+                let widget = element.dataset.widget;
+                
+            	let entity = 
+    			{
+    				id: 				   element.dataset.id,
+    				name: 				   element.dataset.name,
+    				category:			   element.dataset.category,
+    				brand:				   element.dataset.brand,
+    				list:				   element.dataset.list,
+    				price:		parseFloat(element.dataset.price),
+    				position: 	parseFloat(element.dataset.position)
+            	};
+
+            	let attributes = element.dataset.attributes;
+                
+            	if (attributes)
+    	        {
+        	        Object.entries(JSON.parse(attributes)).forEach(([key, value]) => 
+        	        {
+            	        entity[key] = value;
+        	        });
+        	    }
+
+        	    if (!map.hasOwnProperty(widget))
+        	    {
+            	    map[widget] = [];
+        	    }
+
+        	    map[widget].push(entity);
+            });
+
+    		Object.entries(map).forEach(([key, value]) => 
+	        {
+		        if (value.length)
+		        {
+    		        let data = 
+    			    {
+    					event: 'widgetViewNonInteractive',
+    					ecommerce:
+    					{
+    						actionField:
+    						{
+    							list: 		  value.find(Boolean).category,
+    							currencyCode: <?php echo json_encode($block->getHelper()->getCurrency()) ?>
+    						},
+    						impressions: value
+    					}
+    				};
+
+    		        if ('undefined' !== typeof dataLayer)
+    				{
+    					(function(callback)
+    					{
+    						if (AEC.Const.COOKIE_DIRECTIVE)
+    						{
+    							AEC.CookieConsent.queue(callback).process();
+    						}
+    						else 
+    						{
+    							callback.apply(window,[]);
+    						}
+    					})
+    					(
+    						(function(dataLayer, data)
+    						{
+    							return function()
+    							{
+    								AEC.EventDispatcher.trigger('ec.widget.view.data', data);
+    								
+    								dataLayer.push(data);
+    							}
+    						})(dataLayer, data)
+    					);
+    				}
+		        }
+	        });
+    	})();
+    });
+	
+</script>

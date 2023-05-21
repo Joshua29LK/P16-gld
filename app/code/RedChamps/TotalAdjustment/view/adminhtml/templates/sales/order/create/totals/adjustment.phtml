@@ -1,0 +1,66 @@
+<?php
+/**
+ * @var $block \RedChamps\TotalAdjustment\Block\Adminhtml\Sales\Order\Total\Item\Adjustments
+ */
+?>
+<?php $helper = $block->getConfigReader();?>
+<?php if ($helper->canApply()):?>
+    <?php $adjustments = $this->getAdjustments();?>
+    <?php $currencyCode = $this->getQuote() ? $this->getQuote()->getQuoteCurrencyCode() : $this->getSource()->getOrderCurrencyCode();?>
+    <?php $currency = $helper->getCurrencySymbol($currencyCode);?>
+    <?php if (!$this->getSource() || ($this->getSource() && method_exists($this->getSource(), "canInvoice") && $this->getSource()->canInvoice())):?>
+        <tr class="add-adjustments-container" <?php if ($adjustments):?> style="display: none;" <?php endif;?>>
+            <td>&nbsp;</td>
+            <td class="adjustment-link" id="add-adjustments">Korting<p><span style="color:#222;font-size:11px;">Let op: I.v.m koppeling administratie maximaal 1 kortingsregel per order</span></p></td>
+        </tr>
+    <?php endif;?>
+    <?php if ($adjustments):?>
+        <?php foreach ($adjustments as $adjustmentNumber => $adjustment):?>
+            <?php $isPercentage = (isset($adjustment['type']) && $adjustment['type'] == 'percentage') ? true : false?>
+            <tr class="row-totals adjustment-wrapper">
+                <td style="<?php echo $this->getStyle() ?>" class="admin__total-amount">
+                    <input type="text" placeholder="Titel" class="adjustment-title" name="adjustment_title[]" value="<?php echo $adjustment['title']?>">
+                </td>
+                <td style="<?php echo $this->getStyle() ?>" class="admin__total-amount">
+                    <select class="adjustment-type" name="adjustment_type[]">
+                        <option <?php if (!$isPercentage):?>selected<?php endif;?> value="flat"><?php echo $currency?></option>
+                        <option <?php if ($isPercentage):?>selected<?php endif;?> value="percentage">%</option>
+                    </select>
+                    <input type="text" placeholder="Bedrag" class="adjustment-amount" name="adjustment_amount[]" value="<?php echo $isPercentage ? $adjustment['percentage'] : $adjustment['amount']?>">
+                    <input type="hidden" placeholder="Amount" class="adjustment-percentage-amount" name="adjustment_percentage_amount[]" value="<?= $adjustment['amount']?>">
+                    <span class="amount-value"><?php echo str_replace($currency . "-", "-" . $currency, $currency . $adjustment['amount'])?></span>
+                    <span class="remove-adjustment adjustment-link">x</span>
+                </td>
+            </tr>
+        <?php endforeach;?>
+    <?php else:?>
+        <tr class="row-totals adjustment-wrapper" style="display: none">
+            <td style="<?php echo $this->getStyle() ?>" class="admin__total-amount">
+                <input type="text" placeholder="Titel" class="adjustment-title" name="adjustment_title[]" value="">
+            </td>
+            <td style="<?php echo $this->getStyle() ?>" class="admin__total-amount">
+                <select class="adjustment-type" name="adjustment_type[]">
+                    <option value="flat"><?php echo $currency?></option>
+                    <option value="percentage">%</option>
+                </select>
+                <input type="text" placeholder="Bedrag" class="adjustment-amount" name="adjustment_amount[]" value="">
+                <span class="remove-adjustment adjustment-link">x</span>
+            </td>
+        </tr>
+    <?php endif;?>
+    <tr class="add-more-adjustments-container" <?php if (!$adjustments):?>style="display: none"<?php endif;?>>
+        <td></td>
+        <td class="adjustment-link" id="save-adjustments">Opslaan</td>
+    </tr>
+    <?php if ($this->getSource()):?>
+        <script>
+            require(
+                [
+                    'jquery'
+                ], function (jQuery) {
+                    var formTag = '<form id="add-adjustments-form" action="<?php echo $this->getUrl('totalAdjustment/action/addAdjustment', ['order_id'=>$this->getSource()->getId()])?>"></form>';
+                    jQuery("#save-adjustments").closest('table').wrap(formTag);
+                });
+        </script>
+    <?php endif;?>
+<?php endif;?>

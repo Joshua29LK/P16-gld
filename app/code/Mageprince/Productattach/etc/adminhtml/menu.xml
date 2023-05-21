@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * MagePrince
+ * Copyright (C) 2020 Mageprince <info@mageprince.com>
+ *
+ * @package Mageprince_Productattach
+ * @copyright Copyright (c) 2020 Mageprince (http://www.mageprince.com/)
+ * @license http://opensource.org/licenses/gpl-3.0.html GNU General Public License,version 3 (GPL-3.0)
+ * @author MagePrince <info@mageprince.com>
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
+    <menu>
+        <add id="Mageprince_Productattach::top_level"
+             title="Product Attachments"
+             module="Mageprince_Productattach"
+             sortOrder="30"
+             resource="Mageprince_Productattach::menu"
+             parent="Magento_Catalog::catalog"/>
+        <add id="Mageprince_Productattach::manage_attachment"
+             title="Manage Attachments"
+             module="Mageprince_Productattach"
+             sortOrder="10"
+             parent="Mageprince_Productattach::top_level"
+             action="productattach/index/"
+             resource="Mageprince_Productattach::manage"/>
+        <add id="Mageprince_Productattach::manage_fileicon"
+             action="productattach/fileicon/index"
+             module="Mageprince_Productattach"
+             parent="Mageprince_Productattach::top_level"
+             resource="Mageprince_Productattach::manage_fileicon"
+             sortOrder="20"
+             title="Manage Attachment Icons"/>
+        <add id="Mageprince_Productattach::configuration"
+             action="adminhtml/system_config/edit/section/productattach"
+             module="Mageprince_Productattach"
+             parent="Mageprince_Productattach::top_level"
+             resource="Mageprince_Productattach::configuration"
+             sortOrder="30"
+             title="Configuration"/>
+    </menu>
+</config>

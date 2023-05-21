@@ -1,0 +1,153 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <!-- Add new Tab -->
+        <tab id="magearray" translate="label" sortOrder="100" class="magearray" >
+            <label>MageArray Extensions</label>
+        </tab>
+        <section id="customprice" translate="label" type="text" sortOrder="150" showInDefault="1" showInWebsite="1"
+                 showInStore="1">
+            <label>CSV Pricing</label>
+            <tab>magearray</tab>
+            <!-- resource tag name which we have to defined in the acl.xml -->
+            <resource>MageArray_Customprice::config_customprice</resource>
+            <group id="general" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1"
+                   showInStore="1">
+                <label>General Options</label>
+                <field id="active" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1"
+                       showInStore="1">
+                    <label>Enable CSV Pricing Module</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <!-- <field id="enabled_row_csv" translate="label" type="select" sortOrder="2" showInDefault="1"
+                       showInWebsite="1" showInStore="1">
+                    <label>Activate Option Wise (Multiple) CSV Price</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <depends>
+                        <field id="active">1</field>
+                    </depends>
+                </field>
+                <field id="option_field_name" translate="label" type="text" sortOrder="3" showInDefault="1"
+                       showInWebsite="1" showInStore="1">
+                    <label>Option Wise CSV Label</label>
+                    <depends>
+                        <field id="enabled_row_csv">1</field>
+                    </depends>
+                    <comment>
+                        <![CDATA[
+                        Dropdown OR Radio type Custom Option Label (Depanding upon options in it, 
+                        it will generate fields to upload csv)]]>
+                        </comment>
+                </field> -->
+                <field id="row_label" translate="label" type="text" sortOrder="4" showInDefault="1" showInWebsite="1"
+                       showInStore="1">
+                    <label>Row Label</label>
+                    <depends>
+                        <field id="active">1</field>
+                    </depends>
+                </field>
+                <field id="column_label" translate="label" type="text" sortOrder="5" showInDefault="1" showInWebsite="1"
+                       showInStore="1">
+                    <label>Column Label</label>
+                    <depends>
+                        <field id="active">1</field>
+                    </depends>
+                </field>
+                <!-- <field id="unit" translate="label" type="text" sortOrder="6" showInDefault="1" showInWebsite="1"
+                       showInStore="1">
+                    <label>Unit</label>
+                    <depends>
+                        <field id="active">1</field>
+                    </depends>
+                    <comment>
+                        <![CDATA[Measurement Unit to show after textbox or inside dropdown (MM, CM, Inch. etc).]]>
+                    </comment>
+                </field> -->
+                <field id="pricemin" translate="label" type="select" sortOrder="7" showInDefault="1" showInWebsite="1"
+                       showInStore="1">
+                    <label>Price Min</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <depends>
+                        <field id="active">1</field>
+                    </depends>
+                    <comment>
+                        <![CDATA[
+                        If size not found then check upper and lower limit of price sheet. 
+                        If select yes then find size to lower limit.
+                        ]]>
+                    </comment>
+                </field>
+                <field id="include_baseprice" translate="label" type="select" sortOrder="8" showInDefault="1"
+                       showInWebsite="1" showInStore="1">
+                    <label>Include Base Price</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <depends>
+                        <field id="active">1</field>
+                    </depends>
+                </field>
+                <field id="displaydropdown" translate="label" type="select" sortOrder="9" showInDefault="1"
+                       showInWebsite="1" showInStore="1">
+                    <label>Display as a dropdown</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <depends>
+                        <field id="active">1</field>
+                    </depends>
+                </field>
+                <field id="range" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1"
+                       showInStore="1">
+                    <label>Display all range value</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <depends>
+                        <field id="displaydropdown">1</field>
+                    </depends>
+                </field>
+                <field id="csv_delimiter" translate="label" type="text" sortOrder="11" showInDefault="1"
+                       showInWebsite="1" showInStore="1">
+                    <label>CSV Delimiter</label>
+                    <depends>
+                        <field id="active">1</field>
+                    </depends>
+                </field>
+                <field id="max_error" translate="label" type="text" sortOrder="12" showInDefault="1" showInWebsite="1"
+                       showInStore="1">
+                    <label>Max Error</label>
+                    <depends>
+                        <field id="active">1</field>
+                    </depends>
+                </field>
+                <field id="min_error" translate="label" type="text" sortOrder="13" showInDefault="1" showInWebsite="1"
+                       showInStore="1">
+                    <label>Min Error</label>
+                    <depends>
+                        <field id="active">1</field>
+                    </depends>
+                </field>
+                <field id="not_found_size" translate="label" type="text" sortOrder="14" showInDefault="1"
+                       showInWebsite="1" showInStore="1">
+                    <label>Not Found Size</label>
+                    <depends>
+                        <field id="active">1</field>
+                    </depends>
+                </field>
+                <!-- <field id="display_min_max_value_default" translate="label" type="select" sortOrder="15"
+                       showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Display Max-Min Value By Default</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <depends>
+                        <field id="active">1</field>
+                    </depends>
+                </field> -->
+            </group>
+            <group id="current_version" translate="label" type="text" sortOrder="2" showInDefault="1" 
+                showInWebsite="1" showInStore="1">
+                <label>Current Version Installed</label>
+                <field id="version" translate="label" type="label" sortOrder="1" showInDefault="1" 
+                    showInWebsite="1" showInStore="1">
+                    <label>Current Version</label>
+                    <backend_model>MageArray\Customprice\Model\Config\Version</backend_model>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>

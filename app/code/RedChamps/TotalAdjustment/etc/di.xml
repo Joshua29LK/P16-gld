@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="RedChamps\TotalAdjustment\Api\Order\AdjustmentsInterface" type="RedChamps\TotalAdjustment\Model\Sales\Order\AdjustmentsModifier" />
+    <preference for="RedChamps\TotalAdjustment\Api\Quote\AdjustmentsInterface" type="RedChamps\TotalAdjustment\Model\Sales\Quote\AdjustmentsModifier" />
+    <type name="Magento\Sales\Model\Order\Invoice\Total\Tax">
+        <plugin sortOrder="1" name="redChampsTotalAdjustmentTax"
+                type="RedChamps\TotalAdjustment\Plugin\Model\Order\Invoice\Total\TaxPlugin"/>
+    </type>
+    <type name="Magento\Tax\Model\Sales\Total\Quote\Tax">
+        <plugin sortOrder="1" name="redChampsTotalAdjustmentTax"
+                type="RedChamps\TotalAdjustment\Plugin\Model\Sales\Total\Quote\TaxPlugin"/>
+    </type>
+</config>

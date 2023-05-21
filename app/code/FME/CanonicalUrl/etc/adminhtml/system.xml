@@ -1,0 +1,152 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+  <system>
+    <tab id="fmeextensions" translate="label" sortOrder="1000">
+      <label>FME Extensions</label>
+    </tab>
+    <section id="canonicalurl" translate="label" type="text" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="1">
+      <class>separator-top</class>
+      <label>Canonical Url</label>
+      <tab>fmeextensions</tab>
+      <resource>FME_CanonicalUrl::canonicalurl_config</resource>
+
+      <group id="general" translate="label" type="text" sortOrder="99" showInDefault="1" showInWebsite="1" showInStore="1">
+        <label>General Setting</label>
+
+        <field id="canonicalurl_mod_enable" translate="label" type="select" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="1">
+          <label>Enable Module</label>
+          <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+          <comment>If ‘Yes’, the canonical meta tag will be added in meta header for any targeted page.</comment>
+        </field>
+
+        <field id="exclude_canonical_mod" translate="label" type="textarea" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="1">
+          <label>Exclude canonical meta tag on these pages</label>
+          <depends>
+            <field id="canonicalurl_mod_enable">1</field>
+          </depends>
+          <comment><![CDATA[
+            Please specify the pages to exclude or ignore canonical meta tag. <br />
+            Eg. <br />
+            To exclude canonical meta tag on product pages use : 'catalog_product_view' <br />
+            To exclude canonical meta tag on CMS home page use : 'cms_index_index'
+            <br/>
+            To exclude canonical meta tag on category pages use: 'catalog_category_view'
+
+
+            ]]>
+          </comment>
+
+        </field>
+
+        <field id="canonicalurl_storeurl_enable" translate="label" type="select" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="1">
+          <label>Canonical meta tag for store url (cross domain)</label>
+          <depends>
+            <field id="canonicalurl_mod_enable">1</field>
+          </depends>
+          <source_model>FME\CanonicalUrl\Model\Config\Source\Selectstore</source_model>
+          <comment>Choose the main domain for the pages from other domains that have identical content.</comment>
+
+        </field>
+
+        <field id="canonicalurl_customurl_enable" translate="label" type="text" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="1">
+          <label>Canonical meta tag for custom url (cross domain)</label>
+          <validate>validate-url</validate>
+          <depends>
+            <field id="canonicalurl_mod_enable">1</field>
+          </depends>
+          <comment>Specify the domain for the pages from other domains that have identical content.</comment>
+        </field>
+
+
+        <field id="canonicalurl_trailingslash_enable" translate="label" type="select" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="1">
+          <label>Trailing slash for canonical meta tag</label>
+          <depends>
+            <field id="canonicalurl_mod_enable">1</field>
+          </depends>
+          <source_model>FME\CanonicalUrl\Model\Config\Source\Addtrailingslash</source_model>
+          <comment>Please note that the trailing slash can be added to the pages without suffix .html or .htm</comment>
+
+        </field>
+
+      </group>
+
+      <group id="category_canonical_tags" translate="label" type="text" sortOrder="99" showInDefault="1" showInWebsite="1" showInStore="1">
+        <label>Category Canonical Tags</label>
+
+        <field id="category_canonical_tags_enable" translate="label" type="select" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="1">
+          <label>Category Canonical Enabled</label>
+          <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+        </field>
+
+        <field id="paginationpages_canonical_enable" translate="label" type="select" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="1">
+          <label>Add canonical meta tag to catalog pagination pages?</label>
+          <depends>
+            <field id="category_canonical_tags_enable">1</field>
+          </depends>
+
+          <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+          <comment>If "Yes" canonical meta tag will be added on category or product listings pagination page. Eg. pages ending with : ?p=1, ?p=2, ?p=3 etc.</comment>
+
+        </field>
+
+         <field id="canonicalurl_layered_enable" translate="label" type="select" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="1">
+          <label>Add canonical meta tag to catalog layered navigation ?</label>
+          <depends>
+            <field id="category_canonical_tags_enable">1</field>
+          </depends>
+          <source_model>FME\CanonicalUrl\Model\Config\Source\Selectlayer</source_model>
+          <comment>Choose to add the canonical meta tag to the current category, filtered category or disable this feature.</comment>
+
+        </field>
+
+        <field id="paginationpages_mod_enable" translate="label" type="select" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="1">
+          <label>Add rel="next" and rel="prev" to catalog pagination pages?</label>
+          <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+          <depends>
+            <field id="category_canonical_tags_enable">1</field>
+          </depends>
+          <comment>Use the rel=next/prev tag to inform Google, where exactly the 1st and the last pages are, and treat these pages as a logical sequence.</comment>
+
+        </field>
+
+
+      </group>
+
+      <group id="product_canonical_tags" translate="label" type="text" sortOrder="99" showInDefault="1" showInWebsite="1" showInStore="1">
+        <label>Product Canonical Tags</label>
+
+        <field id="product_canonical_tags_enable" translate="label" type="select" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="1">
+          <label>Product Canonical Enabled</label>
+          <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+        </field>
+        
+        <field id="product_canonical_tags_include_cat_path" translate="label" type="select" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="1">
+          <label>Include Category Path</label>
+          <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+          <depends>
+            <field id="product_canonical_tags_enable">1</field>
+          </depends>
+        </field>
+
+        <field id="product_canonical_tags_cat_path_structure" translate="label" type="select" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="1">
+          <label>Category Path Structure</label>
+          <depends>
+            <field id="product_canonical_tags_include_cat_path">1</field>
+          </depends>
+          <source_model>FME\CanonicalUrl\Model\Config\Source\Selectcategorypath</source_model>
+        </field>
+        
+      </group>
+      
+       <group id="cms_canonical_tags" translate="label" type="text" sortOrder="99" showInDefault="1" showInWebsite="1" showInStore="1">
+        <label>CMS Canonical Tags</label>
+
+        <field id="cms_canonical_tags_enable" translate="label" type="select" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="1">
+          <label>CMS Canonical Enabled</label>
+          <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+        </field>
+         
+      </group>
+    </section>
+  </system>
+</config>

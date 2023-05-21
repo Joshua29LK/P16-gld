@@ -1,0 +1,4 @@
+.data tr td {  border: 1px solid #CACACA;padding: 3px;text-align: center;}
+.remove-label { float: left; }
+.file-remove {  float: left;margin-left: 6px;margin-top: 2px; }
+.remove-section { clear:both; margin:10px;overflow:hidden;}

@@ -1,0 +1,35 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+?>
+<?php
+    $_order  = $block->getOrder();
+    $_source = $block->getSource();
+    $_fullInfo = $this->helper('Magento\Tax\Helper\Data')->getCalculatedTaxes($_source);
+    global $taxIter; $taxIter++;
+?>
+
+<?php if ($block->displayFullSummary() && $_fullInfo && !$block->getIsPlaneMode()): ?>
+<tr class="totals-tax-summary">
+<?php elseif ($block->displayFullSummary() && $_fullInfo && $block->getIsPlaneMode()): ?>
+<tr class="totals-tax-summary plane">
+<?php else: ?>
+<tr class="totals-tax">
+<?php endif; ?>
+    <th align="right" <?= /* @escapeNotVerified */ $block->getLabelProperties() ?> scope="row">
+        <?php if ($block->displayFullSummary()): ?>
+            <div class="detailed"><?= /* @escapeNotVerified */ __('Tax') ?></div>
+        <?php else: ?>
+            <?= /* @escapeNotVerified */ __('Tax') ?>
+        <?php endif;?>
+    </th>
+	<td></td>
+    <td align="right" <?= /* @escapeNotVerified */ $block->getValueProperties() ?> data-th="<?= $block->escapeHtml(__('Tax')) ?>">
+        <?= /* @escapeNotVerified */ $_order->formatPrice($_source->getTaxAmount()) ?>
+    </td>
+</tr>

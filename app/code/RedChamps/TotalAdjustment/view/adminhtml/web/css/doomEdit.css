@@ -1,0 +1,39 @@
+.editable-total {
+    cursor:pointer;
+    background:#E2F1B1;
+}
+
+.editable-total:hover {
+    background:#E2F1B1 url(edit.png) no-repeat center right;
+    padding-right:20px;
+}
+
+form {
+    display:inline;
+}
+
+table td {
+    padding:2px;
+    width: 350px;
+    text-align: center;
+}
+
+.doomEditElement {
+    display: block;
+}
+
+#myeditformid {
+    float: right;
+}
+
+#myeditformid button {
+    float: left;
+    width: 50%;
+}
+
+#myeditformid .save-btn {
+    background-color: #514943;
+    border-color: #514943;
+    color: #fff;
+    text-shadow: 1px 1px 1px rgba(0,0,0,0.3);
+}

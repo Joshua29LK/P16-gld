@@ -1,0 +1,58 @@
+/**
+ * BSS Commerce Co.
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the EULA
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://bsscommerce.com/Bss-Commerce-License.txt
+ *
+ * @category   BSS
+ * @package    Bss_CustomOptionImage
+ * @author     Extension Team
+ * @copyright  Copyright (c) 2015-2020 BSS Commerce Co. ( http://bsscommerce.com )
+ * @license    http://bsscommerce.com/Bss-Commerce-License.txt
+ */
+& when (@media-common = true) {
+    .Bss_image_preview .control {
+        margin-top: 5px;
+    }
+    .Bss_image_preview {
+        display: none;
+    }
+    .Bss_image_radio {
+        width: 100%;
+        border: solid 1px #ccc;
+        border-radius: 5px;
+        position: relative;
+    }
+    .Bss_image_radio img {
+        z-index: 0;
+        border: solid 1px #aaa;
+        margin: 5px 30px;
+        float: right;
+    }
+    .Bss_image_radio input {
+        position: absolute;
+        z-index: 0;
+        transform: translateY(-50%);
+        margin: 7px;
+        pointer-events: none;
+    }
+    .Bss_image_radio label {
+        margin-top: 20px;
+        position: absolute;
+        width: 55%;
+    }
+    .Bss_image_multiselect {
+        display: none;
+        margin-bottom: 5px;
+    }
+    .product-custom-option option {
+        white-space: pre-line;
+    }
+    .Bss_image_radio .price-container .price-excluding-tax {
+        white-space : initial;
+    }
+}

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+
+	<fieldset name="general">
+        <settings>
+            <label/>
+        </settings>
+	</fieldset>	
+
+	<fieldset name="indexfollow_settings">
+        <argument name="data" xsi:type="array">
+            <item name="config" xsi:type="array">
+                <item name="label" xsi:type="string" translate="true">Index Follow</item>
+                <item name="collapsible" xsi:type="boolean">true</item>
+                <item name="sortOrder" xsi:type="number">100</item>
+            </item>
+        </argument>
+		
+		<field name="indexfollow_enable" sortOrder="40" formElement="select">
+				<settings>
+					<dataType>string</dataType>
+					<label translate="true">Enable Index Follow</label>                    
+				</settings>
+				<formElements>
+					<select>
+						<settings>
+							<options class="Magento\Config\Model\Config\Source\Yesno"/>
+						</settings>
+					</select>
+				</formElements>
+		</field>
+		
+		<field name="indexfollow_followvalue" sortOrder="41" formElement="select">
+				<settings>
+					<dataType>string</dataType>
+					<label translate="true">Follow Value</label>                    
+				</settings>
+				<formElements>
+					<select>
+						<settings>
+							<options class="Cynoinfotech\IndexFollow\Model\Config\Source\FollowOptions"/>
+						</settings>
+					</select>
+				</formElements>
+		</field>
+		
+		<field name="indexfollow_indexvalue" sortOrder="42" formElement="select">
+				<settings>
+					<dataType>string</dataType>
+					<label translate="true">Index Value</label>                    
+				</settings>
+				<formElements>
+					<select>
+						<settings>
+							<options class="Cynoinfotech\IndexFollow\Model\Config\Source\IndexOptions"/>
+						</settings>
+					</select>
+				</formElements>
+		</field>
+		
+	</fieldset>  
+    
+</form>

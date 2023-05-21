@@ -1,0 +1,107 @@
+<?xml version="1.0"?>
+<!--
+/**
+* BSS Commerce Co.
+*
+* NOTICE OF LICENSE
+*
+* This source file is subject to the EULA
+* that is bundled with this package in the file LICENSE.txt.
+* It is also available through the world-wide-web at this URL:
+* http://bsscommerce.com/Bss-Commerce-License.txt
+*
+* @category   BSS
+* @package    Bss_CustomOptionImage
+* @author     Extension Team
+* @copyright  Copyright (c) 2015-2020 BSS Commerce Co. ( http://bsscommerce.com )
+* @license    http://bsscommerce.com/Bss-Commerce-License.txt */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <tab id="bss" translate="label" sortOrder="300">
+            <label><![CDATA[Bss Commerce]]></label>
+        </tab>
+        <section id="bss_coi" translate="label" type="text" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="0">
+            <label>Custom Option Image</label>
+            <tab>bss</tab>
+            <resource>Bss_CustomOptionImage::config</resource>
+            <group id="general" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="0">
+                <label>General</label>
+                <field id="enable" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
+                    <label>Enable</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment><![CDATA[Version 1.1.9]]></comment>
+                </field>
+            </group>
+            <group id="frontend_view" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="0">
+                <label>Frontend View</label>
+                <field id="dropdown" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
+                    <label>Drop-down Option View</label>
+                    <source_model>Bss\CustomOptionImage\Model\Config\Source\View</source_model>
+                </field>
+                <field id="multiple" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
+                    <label>Multiple Select Option View</label>
+                    <source_model>Bss\CustomOptionImage\Model\Config\Source\View</source_model>
+                </field>
+            </group>
+            <group id="image_size" translate="label" type="text" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="0">
+                <label>Image Size Settings</label>
+                <field id="dropdown_y" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
+                    <label>Drop-down Option Image Height</label>
+                    <validate>validate-not-negative-number validate-digits validate-digits-range digits-range-10-1100</validate>
+                    <comment><![CDATA[Allow entry between 10-1100]]></comment>
+                </field>
+                <field id="dropdown_x" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
+                    <label>Drop-down Option Image Width</label>
+                    <validate>validate-not-negative-number validate-digits validate-digits-range digits-range-10-1100</validate>
+                    <comment><![CDATA[Allow entry between 10-1100]]></comment>
+                </field>
+                <field id="radio_y" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
+                    <label>Radio Buttons Option Image Height</label>
+                    <validate>validate-not-negative-number validate-digits validate-digits-range digits-range-10-1100</validate>
+                    <comment><![CDATA[Allow entry between 10-1100]]></comment>
+                </field>
+                <field id="radio_x" translate="label" type="text" sortOrder="40" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
+                    <label>Radio Buttons Option Image Width</label>
+                    <validate>validate-not-negative-number validate-digits validate-digits-range digits-range-10-1100</validate>
+                    <comment><![CDATA[Allow entry between 10-1100]]></comment>
+                </field>
+                <field id="checkbox_y" translate="label" type="text" sortOrder="50" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
+                    <label>Checkbox Option Image Height</label>
+                    <validate>validate-not-negative-number validate-digits validate-digits-range digits-range-10-1100</validate>
+                    <comment><![CDATA[Allow entry between 10-1100]]></comment>
+                </field>
+                <field id="checkbox_x" translate="label" type="text" sortOrder="60" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
+                    <label>Checkbox Option Image Width</label>
+                    <validate>validate-not-negative-number validate-digits validate-digits-range digits-range-10-1100</validate>
+                    <comment><![CDATA[Allow entry between 10-1100]]></comment>
+                </field>
+                <field id="multiple_y" translate="label" type="text" sortOrder="70" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
+                    <label>Multiple Select Option Image Height</label>
+                    <validate>validate-not-negative-number validate-digits validate-digits-range digits-range-10-1100</validate>
+                    <comment><![CDATA[Allow entry between 10-1100]]></comment>
+                </field>
+                <field id="multiple_x" translate="label" type="text" sortOrder="80" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
+                    <label>Multiple Select Option Image Width</label>
+                    <validate>validate-not-negative-number validate-digits validate-digits-range digits-range-10-1100</validate>
+                    <comment><![CDATA[Allow entry between 10-1100]]></comment>
+                </field>
+            </group>
+            <group id="compatible" translate="label" type="text" sortOrder="60" showInDefault="1" showInWebsite="0" showInStore="0">
+                <label>Recommended Extensions</label>
+                <field id="dependent_install" translate="label comment" type="label" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Bss Dependent Custom Option</label>
+                    <frontend_model>Bss\CustomOptionCore\Block\Adminhtml\Module\DependCustomOption</frontend_model>
+                </field>
+                <field id="absolute_price_quantity_install" translate="label comment" type="label" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Bss Custom Option Absolute Price Quantity</label>
+                    <frontend_model>Bss\CustomOptionCore\Block\Adminhtml\Module\AbsPriceQty</frontend_model>
+                </field>
+                <field id="option_template_install" translate="label comment" type="label" sortOrder="30" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Bss Custom Option Template</label>
+                    <frontend_model>Bss\CustomOptionCore\Block\Adminhtml\Module\CustomOptionTemplate</frontend_model>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>

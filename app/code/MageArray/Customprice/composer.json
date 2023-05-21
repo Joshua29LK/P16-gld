@@ -1,0 +1,17 @@
+{
+  "name": "magearray/module-customprice",
+  "description": "CSV Pricing Extension for Magento 2 By MageArray",
+  "type": "magento2-module",
+  "version": "1.1.4",
+  "license": [
+    "proprietary"
+  ],
+  "autoload": {
+    "files": [
+      "registration.php"
+    ],
+    "psr-4": {
+      "MageArray\\Customprice\\": ""
+    }
+  }
+}

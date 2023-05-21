@@ -1,0 +1,77 @@
+//
+//  Common
+//  _____________________________________________
+
+& when (@media-common = true) {
+    .ui-autocomplete {
+        margin-top:19px;
+        position: absolute;
+        max-height: 300px;
+        overflow-y: auto;
+        overflow-x: hidden;
+        padding: 0;
+        z-index: 9999;
+        border: 1px solid #cccccc;
+
+        .ui-menu-item:hover {
+            background-color:#e9f1f9;
+        }
+
+        .ui-menu-item {
+            cursor: pointer;
+            margin: 0;
+            padding-left: 10px;
+            padding-top: 5px;
+            padding-bottom: 5px;
+            background-color: #ffffff;
+        }
+    }
+
+    .form-be-autocomplete {
+        .ui-helper-hidden-accessible {
+            display: none;
+        }
+    }
+
+    .autocomplete-result {
+        .checked {
+            &:before {
+                content: @icon-checkmark;
+                font-family: @icon-font;
+            }
+            position:relative;
+            float:right;
+        }
+        &:empty {
+            padding: 0;
+        }
+
+        margin-bottom: 15px;
+        padding: 10px 15px;
+        font-size: 18px;
+        color: #006909;
+        background-color: #c7dfc7;
+    }
+
+    .autocomplete-message {
+        display: none;
+        color: #e02b27;
+    }
+
+    ._error-postcode .autocomplete-message {
+        display: block;
+    }
+
+    .complete-house-number span{
+        color: darkgray;
+        float: right;
+        font-family: monospace;
+
+        &.remark {
+            float: none;
+            font-size: 14px;
+            font-family: inherit;
+            padding-left: 0.5em;
+        }
+    }
+}

@@ -1,0 +1,12 @@
+<?php
+/**
+ * Copyright © 2017 Magmodules.eu. All rights reserved.
+ * See COPYING.txt for license details.
+ * @var $block \Magmodules\WebwinkelKeur\Block\Widget\Summary
+ */
+?>
+    <?php if ($summary = $block->getSummaryData()) { ?>
+                <p>
+                    <?php echo __('<span class="text"><a href="%2" class="webwinkelkeurPopup" title="Webshop Trustmark" target="_blank">%3 beoordelingen bij WebwinkelKeur</a></span>', $block->escapeHtml($summary['score']) . ' / ' . (int)$summary['score_max'], $block->escapeUrl($summary['review_url']), (int)$summary['total_reviews']); ?>
+                </p>
+    <?php } ?>

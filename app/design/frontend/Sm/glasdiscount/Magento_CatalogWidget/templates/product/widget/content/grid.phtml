@@ -1,0 +1,62 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+/** @var \Magento\CatalogWidget\Block\Product\ProductsList $block */
+?>
+<?php if ($exist = ($block->getProductCollection() && $block->getProductCollection()->getSize())): ?>
+<?php
+    $type = 'widget-product-grid';
+
+    $mode = 'grid';
+
+    $image = 'new_products_content_widget_grid';
+    $items = $block->getProductCollection()->getItems();
+
+    $showWishlist = true;
+    $showCompare = true;
+    $showCart = true;
+    $templateType = \Magento\Catalog\Block\Product\ReviewRendererInterface::DEFAULT_VIEW;
+    $description = false;
+?>
+        <?php if ($block->getTitle()): ?>
+         <div class="widget-product-title"><strong><?= $block->escapeHtml(__($block->getTitle())) ?></strong></div>
+		 <?php endif ?>
+ <?php $iterator = 1; ?>
+                    <?php foreach ($items as $_item): ?>
+
+            <?= /* @noEscape */ '<!-- ' . $image . '-->' ?>
+
+           		<div class="widget-item col-md-4">
+				
+                    <div class="product-details">
+						<div class="row">
+						<div class="col-md-10">
+                            <div class="product-foto">
+                                <?= $block->getImage($_item, $image)->toHtml() ?>
+                            </div>
+							<div class="product-naam">
+                                    <a title="<?= $block->escapeHtml($_item->getName()) ?>"
+                                       href="<?= $block->escapeUrl($block->getProductUrl($_item)) ?>"
+                                       class="product-item-link">
+                                        <?= $block->escapeHtml($_item->getName()) ?>
+                                    </a>
+							</div>
+						</div>
+						<div class="col-md-2">
+							 <div class="product-bestellen">
+                                 <a href="<?= $block->escapeUrl($block->getProductUrl($_item)) ?>"><span></span></a>
+                            </div>
+						</div>
+						</div>
+					</div>
+				</div>
+
+
+
+ <?php endforeach ?>
+<?php endif;?>

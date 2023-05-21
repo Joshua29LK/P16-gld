@@ -1,0 +1,116 @@
+<?php
+/**
+ * @var $block \RedChamps\TotalAdjustment\Block\Adminhtml\Sales\Order\Total\Item\Adjustments
+ */
+?>
+<?php $this->setPriceDataObject($this->getSource()) ?>
+<?php if ($adjustments = $this->getSource()->getAdjustments()): ?>
+    <?php $viewModel = $block->getViewModel();?>
+    <?php $canModify = method_exists($this->getSource(), "canInvoice") && $this->getSource()->canInvoice() && $block->getConfigReader()->canApply()?>
+    <?php $adjustments = $block->decodeAdjustments($adjustments);?>
+    <?php if ($canModify):?>
+        <?php $editableAdjustments = $adjustments;?>
+        <?php $invoicedAdjustments = $this->getSource()->getAdjustmentsInvoiced();?>
+        <?php if ($invoicedAdjustments):?>
+            <?php $invoicedAdjustments = $block->decodeAdjustments($invoicedAdjustments);?>
+            <?php foreach ($invoicedAdjustments as $invoicedAdjustmentNumber => $invoicedAdjustment):?>
+                <?php if (isset($editableAdjustments[$invoicedAdjustmentNumber])):?>
+                    <?php unset($editableAdjustments[$invoicedAdjustmentNumber]);?>
+                <?php endif;?>
+            <?php endforeach;?>
+        <?php endif;?>
+    <?php endif;?>
+    <?php foreach ($adjustments as $adjustmentNumber => $adjustment):?>
+        <?php if ($adjustment['amount']):?>
+            <tr>
+                <td class="label"><?php echo $adjustment['title'] ?></td>
+
+                <td class="remove-adjustment-container">
+                    <span id="adjustment_<?php echo $adjustmentNumber?>"><?php echo $this->displayPrices(isset($adjustment['base_amount']) ? $adjustment['base_amount'] : $adjustment['amount'], $adjustment['amount']); ?></span>
+                    <?php if ($canModify && isset($editableAdjustments[$adjustmentNumber])):?>
+                        <a href="<?php echo $this->getUrl('totalAdjustment/action/removeAdjustment', ['order_id'=>$this->getSource()->getId(),'adjustment'=> $adjustmentNumber])?>" class="delete-adjustment">x</a>
+                    <?php endif;?>
+                </td>
+            </tr>
+        <?php endif;?>
+    <?php endforeach;?>
+    <?php if ($canModify):?>
+        <script type="text/javascript">
+            require(
+                [
+                    'jquery',
+                    'Magento_Ui/js/modal/alert',
+                    'Magento_Ui/js/modal/confirm',
+                    'redchamps/doomEdit'
+                ], function (jQuery, alert, confirmation) {
+                    var oldValue = "";
+                    var formKeyContent = '<?php echo str_replace("\n", "", $block->getBlockHtml('formkey')); ?>';
+                    var editField = '<input name="value" class="doomEditElement text" type="text">' + formKeyContent;
+                    var elements = new Array();
+                    <?php foreach ($editableAdjustments as $adjustmentNumber => $adjustment):?>
+                    elements[<?php echo $adjustmentNumber?>] = [
+                        'adjustment_<?php echo $adjustmentNumber?>',
+                        "<?php echo $this->getUrl('totalAdjustment/action/editAdjustment', ['order_id' => $this->getSource()->getId(), 'adjustment_number' => $adjustmentNumber]) . '?isAjax=true'?>",
+                        <?php echo $adjustment['amount']?>
+                    ];
+                    <?php endforeach;?>
+                    jQuery.each(elements, function (key, value) {
+                        if(value) {
+                            jQuery("#"+value[0]).doomEdit({
+                                editForm: {
+                                    method: 'post',
+                                    id: 'myeditformid',
+                                    action: value[1]
+                                },
+                                afterFormSubmit: function (data, form, el) {
+                                    var obj = JSON.parse(data);
+                                    if(obj.success) {
+                                        el.text(oldValue.replace(value[2], obj.new));
+                                        confirmation({
+                                            title: 'Success',
+                                            content: obj.message+"<br/><br/>  Page reload is required to refresh order total. Click OK to reload the page or click CANCEL to do more editing.",
+                                            actions: {
+                                                confirm: function(){
+                                                    location.reload();
+                                                },
+                                                cancel: function(){},
+                                                always: function(){}
+                                            }
+                                        });
+                                    } else {
+                                        alert({
+                                            title: "Error",
+                                            content: obj.message,
+                                            actions: {
+                                                always: function(){}
+                                            }
+                                        });
+                                    }
+                                },
+                                onStartEdit: function () {
+                                    var editElem = jQuery(".doomEditElement");
+                                    oldValue = editElem.val();
+                                    editElem.val(value[2]);
+                                },
+                                editField: editField
+                            }).addClass('editable-total');
+                        }
+                    });
+                });
+        </script>
+    <?php endif;?>
+<?php endif; ?>
+<style>
+    .remove-adjustment-container, .admin__total-amount {
+        position: relative;
+    }
+    .delete-adjustment {
+        color: blue;
+        text-align: right;
+        position: absolute;
+        padding-left: 12px;
+        font-size: 17px;
+        top: 8px;
+        right: -11px;
+    }
+</style>

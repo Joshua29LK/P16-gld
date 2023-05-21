@@ -1,0 +1,26 @@
+<?php if ($block->checkCustomOptionLabel()):?>
+    <?php $data = $block->jsonEncodeandDecode();?>
+    <?php if ($block->_product->getIsOneDimensional() == 1): ?>
+        <?php $data = $block->jsonEncodeandDecode(); ?>
+        <script>
+            require(['MageArray_Customprice/js/onedimensional'],function(jQuery){
+                new OneDimensional(<?= /* @noEscape */ $data?>);
+            });
+        </script>
+    <?php elseif ($block->_product->getCsvCsvActive() == 1): ?>
+        <script>
+            require(['MageArray_Customprice/js/admincustompricepro'],function(){
+                new AdminCustomPricePro(<?= /* @noEscape */ $data; ?>);
+            });
+        </script>
+    <?php else: ?>
+        <script>
+            require(['MageArray_Customprice/js/admincustomprice'],function(){
+                new AdminCustomPrice(<?= /* @noEscape */ $data; ?>);
+            });
+        </script>
+    <?php endif;?>
+<?php endif;?>
+<style>
+.no-display { display: none !important; }
+</style>

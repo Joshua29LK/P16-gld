@@ -1,0 +1,163 @@
+//
+//  Common
+//  _____________________________________________
+& when (@media-common = true) {
+    .ui-menu-item-wrapper.complete-street span {
+        float: right;
+        color: @color-gray-middle3;
+        margin-right: 5px;
+    }
+    .mp-12{
+        .form-postcodenl,
+        .form-be-autocomplete {
+            clear: both;
+        }
+    }
+    .form-postcodenl,
+    .form-be-autocomplete {
+        .fieldset{
+            .manual {
+                clear: both;
+                .field.required {
+                    >label:after {
+                        content: '*';
+                        color: @color-red10;
+                        font-size: 1.2rem;
+                        margin: 0 0 0 5px;
+                    }
+                }
+            }
+        }
+        .info-message {
+            display: block;
+            margin-bottom: 10px;
+        }
+        .half-width {
+            width: calc(~'50% - 6px');
+            display: inline-block;
+            vertical-align: top;
+            float: left;
+        }
+        .half-start {
+            margin-right: 6px;
+        }
+        .half-end {
+            margin-left: 6px;
+        }
+    }
+    .postcode-validation-result {
+        .postcode-valid-address {
+            &:before {
+                content: @icon-checkmark;
+                font-family: @icon-font;
+                -webkit-font-smoothing: antialiased;
+                font-size: 24px;
+                line-height: 24px;
+                margin: -12px 0 0;
+                vertical-align: middle;
+                display: inline-block;
+                font-weight: normal;
+                overflow: hidden;
+                speak: none;
+                left: 0;
+                top: 22px;
+                width: 45px;
+                position: absolute;
+                text-align: center;
+            }
+            position:relative;
+            padding: 12px 20px 12px 25px;
+            display: block;
+            font-size: 1.3rem;
+            padding-left: 45px;
+        }
+        &:empty {
+            padding: 0;
+        }
+
+        margin-bottom: 15px;
+        font-size: 1.5rem;
+        color: @color-dark-green1;
+        background-color: @color-gray-light1;
+        width: calc(~'50% - 6px');
+        display: inline-block;
+        cursor: default;
+        vertical-align: top;
+    }
+
+    .validation-warning {
+        .postcode-valid-address {
+            &:before {
+                content: '\e61f';
+                color: @color-red11;
+            }
+        }
+        background: @color-pink1;
+        color: @color-red10;
+    }
+
+    .postcode-additions {
+        margin-bottom: 15px;
+        button {
+            background-color: transparent;
+            border: 0;
+            font-size: 1.5rem;
+            color: @color-dark-green1;
+            box-shadow: none;
+            text-decoration: underline;
+            text-decoration-color: @color-black;
+            padding: 0 3px;
+            &:hover {
+                opacity: 0.8;
+            }
+        }
+    }
+    .postcode-validation {
+        .message{
+            &.warning {
+                clear: both;
+            }
+        }
+        .manual-link {
+            display: inline-block;
+            color: @color-blue3;
+            max-width: calc(~'50% - 6px');
+            font-size: 1.3rem;
+            padding-left: 10px;
+
+            .change-link {
+                text-decoration: underline;
+                text-decoration-style: dashed;
+                text-decoration-color: @color-sky-blue1;
+                cursor: pointer;
+                display: block;
+                &:hover {
+                    color: @color-sky-blue1;
+                }
+            }
+        }
+    }
+
+    .customer-account-fieldset {
+        margin-bottom: 20px;
+    }
+}
+//
+//  Mobile
+//  _____________________________________________
+
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__s) {
+    .postcode-validation-result,
+    .postcode-additions {
+        width: 100%;
+    }
+    .postcode-validation {
+        .manual-link {
+            max-width: 100%;
+
+            .change-link {
+                display: inline-block;margin-left: 5px;
+            }
+        }
+    }
+}

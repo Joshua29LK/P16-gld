@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+* @author Amasty Team
+* @copyright Copyright (c) 2022 Amasty (https://www.amasty.com)
+* @package Order Archive for Magento 2
+*/-->
+
+<form xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+    <htmlContent name="amastyorderarchive_content">
+        <block class="Amasty\Orderarchive\Block\Adminhtml\Customer\ArchivedOrdersTab" name="customer_amastyorderarchive"/>
+    </htmlContent>
+</form>

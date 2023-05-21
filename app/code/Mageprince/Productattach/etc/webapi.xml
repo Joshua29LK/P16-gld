@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * MagePrince
+ * Copyright (C) 2020 Mageprince <info@mageprince.com>
+ *
+ * @package Mageprince_Productattach
+ * @copyright Copyright (c) 2020 Mageprince (http://www.mageprince.com/)
+ * @license http://opensource.org/licenses/gpl-3.0.html GNU General Public License,version 3 (GPL-3.0)
+ * @author MagePrince <info@mageprince.com>
+ */
+-->
+<routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Webapi:etc/webapi.xsd">
+    <route method="POST" url="/V1/product/attachment">
+        <service class="Mageprince\Productattach\Api\ProductattachInterface" method="updateInsertAttachment"/>
+        <resources>
+            <resource ref="Mageprince_Productattach::manage"/>
+        </resources>
+    </route>
+    <route method="DELETE" url="/V1/product/attachment/:attachmentId">
+        <service class="Mageprince\Productattach\Api\ProductattachInterface" method="deleteAttachment"/>
+        <resources>
+            <resource ref="Mageprince_Productattach::manage"/>
+        </resources>
+    </route>
+    <route method="GET" url="/V1/product/attachment/:attachmentId">
+        <service class="Mageprince\Productattach\Api\ProductattachInterface" method="getAttachment"/>
+        <resources>
+            <resource ref="anonymous"/>
+        </resources>
+    </route>
+    <route method="GET" url="/V1/product/attachment/productid/:productId">
+        <service class="Mageprince\Productattach\Api\ProductattachInterface" method="getAttachmentByProductId"/>
+        <resources>
+            <resource ref="anonymous"/>
+        </resources>
+    </route>
+</routes>

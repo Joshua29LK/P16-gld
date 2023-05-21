@@ -1,0 +1,12 @@
+<script>
+    require(['jquery'], function($){
+        $.ajax({
+            type: "GET",
+            async: true,
+            url: '<?=$block->getUrl('redchamps/action/validate')?>',
+            success: function(data)
+            {
+            }
+        });
+    });
+</script>

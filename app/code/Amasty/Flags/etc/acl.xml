@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<!--
+/**
+* @author Amasty Team
+* @copyright Copyright (c) 2022 Amasty (https://www.amasty.com)
+* @package Order Notes for Magento 2
+*/-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Acl/etc/acl.xsd">
+    <acl>
+        <resources>
+            <resource id="Magento_Backend::admin">
+                <resource id="Magento_Sales::sales">
+                    <resource id="Magento_Sales::sales_operation">
+                        <resource id="Magento_Sales::sales_order">
+                            <resource id="Magento_Sales::actions">
+                                <resource id="Amasty_Flags::assign_flags" title="Assign Flags" translate="title" sortOrder="999" />
+                            </resource>
+                        </resource>
+                    </resource>
+                    <resource id="Amasty_Flags::flags" title="Order Notes" translate="title" sortOrder="100">
+                        <resource id="Amasty_Flags::manage_flags" title="Flags" translate="title" sortOrder="10"/>
+                        <resource id="Amasty_Flags::manage_columns" title="Columns" translate="title" sortOrder="20"/>
+                    </resource>
+                </resource>
+            </resource>
+        </resources>
+    </acl>
+</config>

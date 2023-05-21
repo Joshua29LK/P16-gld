@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * @author CynoInfotech Team
+ * @package Cynoinfotech_IndexFollow
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <cynoinfotech_indexfollow>		
+            <general>			
+                <enable>1</enable>              						
+			</general>
+			<efcpcp>			
+                <category_enable>1</category_enable>
+				<product_enable>1</product_enable>       
+				<cms_enable>1</cms_enable>       				
+			</efcpcp>
+        </cynoinfotech_indexfollow>
+    </default>
+</config>

@@ -1,0 +1,23 @@
+<?php
+/**
+ * @author Amasty Team
+ * @copyright Copyright (c) 2022 Amasty (https://www.amasty.com)
+ * @package Mass Order Actions for Magento 2
+ */
+?>
+<script>
+    require([
+            'jquery',
+            'Magento_Ui/js/modal/alert',
+            'prototype'
+    ], function($) {
+            //<![CDATA[
+            var entity = $('#entity');
+            entity.hide();
+            entity.closest('fieldset').find('label.label.admin__field-label').css('visibility','hidden');
+            $(entity).val('amasty_oaction');
+            varienImport.handleEntityTypeSelector();
+            //]]>
+        }
+    );
+</script>

@@ -1,0 +1,71 @@
+
+.manual-button {
+  margin-bottom: 25px;
+}
+.manual-button .manual-button-top {
+text-align: center; padding: 25px 0; border-bottom: 1px solid rgba(0,0,0,0.35); background: #f47727; color: #fff;
+}
+.manual-button .manual-button-top span {
+  margin-top: 20px;
+  font-size: 2.1rem;
+  display: block;
+}
+.manual-button .manual-button-bottom {
+  padding: 20px;
+  background: #fff;
+  border: 1px solid #e0e0e0;
+  border-top: 0;
+}
+hr.manual-divider {
+  color: #e0e0e0; margin: 25px 0;
+}
+h2.manual-heading {
+  margin-bottom: 25px;
+}
+.manual-video {
+  margin-top: 30px;
+}
+.manual-video .manual-step-help,
+.manual-bottom-help .manual-step-help {
+  margin-bottom: 15px;
+  margin-top: 30px;
+  background: #f5f5f5;
+  padding: 15px;
+  border-bottom: 1px solid #00516c;
+}
+.manual-video .manual-step-help h1.manual-need-help,
+.manual-bottom-help .manual-step-help h1.manual-need-help {
+  margin-bottom: 15px;
+  color: #00516c;
+  font-size: 2.1rem;
+}
+.manual-steps .manual-step {
+  margin-bottom: 15px;
+  background: #f5f5f5;
+  padding: 15px;
+  border-bottom: 1px solid #00516c;
+}
+.manual-steps .manual-step h1.step-heading {
+  margin-bottom: 15px;
+  color: #00516c;
+  font-size: 2.1rem;
+}
+h3.manual-upsell-heading {
+  margin: 30px 0;
+  font-size: 24px;
+  font-weight: 300;
+}
+
+.modal-popup._inner-scroll .modal-inner-wrap {
+  max-width: 1000px;
+}
+.page-main .category-view .category-image {
+  margin-bottom: 30px;
+}
+.product-options-wrapper .maat-bepalen {
+    background: #dbe5e9;
+    padding: 5px 15px;
+    font-size: 14px;
+    color: #31312f !important;
+    margin: 0 12px 11px !important;
+}

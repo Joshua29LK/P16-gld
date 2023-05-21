@@ -1,0 +1,97 @@
+<?xml version="1.0"?>
+<!--
+/**
+* @author Amasty Team
+* @copyright Copyright (c) 2022 Amasty (https://www.amasty.com)
+* @package Order Archive for Magento 2
+*/-->
+
+<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/layout_generic.xsd">
+    <container name="root">
+        <block class="Magento\Backend\Block\Widget\Grid" name="customer.amastyorderarchive.edit.tab">
+            <arguments>
+                <argument name="dataSource" xsi:type="object" shared="false">Amasty\Orderarchive\Model\ResourceModel\Customer\Orders\Grid\Collection</argument>
+                <argument name="id" xsi:type="string">customer_amastyorderarchive</argument>
+                <argument name="use_ajax" xsi:type="string">true</argument>
+                <argument name="default_sort" xsi:type="string">created_at</argument>
+                <argument name="grid_url" xsi:type="url" path="amastyorderarchive/customer/archive">
+                    <param name="_current">1</param>
+                </argument>
+            </arguments>
+            <block class="Magento\Backend\Block\Widget\Grid\ColumnSet" as="grid.columnSet" name="customer.amastyorderarchive.edit.tab.columnSet">
+                <arguments>
+                    <argument name="empty_text" xsi:type="string" translate="true">No Items Found</argument>
+                </arguments>
+                <block class="Magento\Backend\Block\Widget\Grid\Column" name="customer.amastyorderarchive.edit.tab.columnSet.increment_id" as="increment_id">
+                    <arguments>
+                        <argument name="header" xsi:type="string" translate="true">Order #</argument>
+                        <argument name="id" xsi:type="string">increment_id</argument>
+                        <argument name="index" xsi:type="string">increment_id</argument>
+                        <argument name="width" xsi:type="string">100</argument>
+                    </arguments>
+                </block>
+                <block class="Magento\Backend\Block\Widget\Grid\Column" name="customer.amastyorderarchive.edit.tab.columnSet.created_at" as="created_at">
+                    <arguments>
+                        <argument name="header" xsi:type="string" translate="true">Purchased</argument>
+                        <argument name="index" xsi:type="string">created_at</argument>
+                        <argument name="id" xsi:type="string">created_at</argument>
+                        <argument name="type" xsi:type="string">datetime</argument>
+                    </arguments>
+                </block>
+                <block class="Magento\Backend\Block\Widget\Grid\Column" name="customer.amastyorderarchive.edit.tab.columnSet.billing_name" as="billing_name">
+                    <arguments>
+                        <argument name="header" xsi:type="string" translate="true">Bill-to Name</argument>
+                        <argument name="index" xsi:type="string">billing_name</argument>
+                        <argument name="id" xsi:type="string">billing_name</argument>
+                    </arguments>
+                </block>
+                <block class="Magento\Backend\Block\Widget\Grid\Column" name="customer.amastyorderarchive.edit.tab.columnSet.shipping_name" as="shipping_name">
+                    <arguments>
+                        <argument name="header" xsi:type="string" translate="true">Ship-to Name</argument>
+                        <argument name="index" xsi:type="string">shipping_name</argument>
+                        <argument name="id" xsi:type="string">shipping_name</argument>
+                    </arguments>
+                </block>
+                <block class="Magento\Backend\Block\Widget\Grid\Column" name="customer.amastyorderarchive.edit.tab.columnSet.grand_total" as="grand_total">
+                    <arguments>
+                        <argument name="header" xsi:type="string" translate="true">Order Total</argument>
+                        <argument name="index" xsi:type="string">grand_total</argument>
+                        <argument name="id" xsi:type="string">grand_total</argument>
+                        <argument name="type" xsi:type="string">currency</argument>
+                        <argument name="currency" xsi:type="string">order_currency_code</argument>
+                        <argument name="rate" xsi:type="string">1</argument>
+                    </arguments>
+                </block>
+                <block class="Magento\Backend\Block\Widget\Grid\Column\Multistore" name="customer.amastyorderarchive.edit.tab.columnSet.store" as="store">
+                    <arguments>
+                        <argument name="header" xsi:type="string" translate="true">Purchase Point</argument>
+                        <argument name="index" xsi:type="string">store_id</argument>
+                        <argument name="id" xsi:type="string">store_id</argument>
+                        <argument name="sortable" xsi:type="string">0</argument>
+                        <argument name="type" xsi:type="string">store</argument>
+                        <argument name="store_view" xsi:type="string">1</argument>
+                        <argument name="width" xsi:type="string">100px</argument>
+                    </arguments>
+                </block>
+                <block class="Magento\Backend\Block\Widget\Grid\Column" name="customer.amastyorderarchive.edit.tab.columnSet.action" as="action">
+                    <arguments>
+                        <argument name="type" xsi:type="string">action</argument>
+                        <argument name="header" xsi:type="string" translate="true">Action</argument>
+                        <argument name="filter" xsi:type="string">0</argument>
+                        <argument name="sortable" xsi:type="string">0</argument>
+                        <argument name="index" xsi:type="string">entity_id</argument>
+                        <argument name="actions" xsi:type="array">
+                            <item name="edit" xsi:type="array">
+                                <item name="caption" xsi:type="string" translate="true">Edit</item>
+                                <item name="url" xsi:type="array">
+                                    <item name="base" xsi:type="string">sales/order/view</item>
+                                </item>
+                                <item name="field" xsi:type="string">order_id</item>
+                            </item>
+                        </argument>
+                    </arguments>
+                </block>
+            </block>
+        </block>
+    </container>
+</layout>

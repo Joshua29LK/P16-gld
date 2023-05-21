@@ -1,0 +1,24 @@
+<?php /* @var $adjustmentManager \RedChamps\TotalAdjustment\Model\AdjustmentManager*/?>
+<?php $adjustmentManager = $block->getViewModel()->getAdjustmentManager()?>
+<?php if ($this->getSource() instanceof \Magento\Sales\Model\Order) :?>
+    <?php $adjustmentsRefunded = $this->getSource()->getAdjustmentsRefunded(); ?>
+    <?php if ($adjustmentsRefunded): ?>
+        <?php foreach ($adjustmentManager->decodeAdjustments($adjustmentsRefunded) as $adjustmentNumber => $adjustment):?>
+            <tr>
+                <td class="label"><strong><?php echo __('%1 Refunded', $adjustment['title']) ?></strong></td>
+                <td><strong><?php echo $this->displayPrices(isset($adjustment['base_amount']) ? $adjustment['base_amount'] : $adjustment['amount'], $adjustment['amount']); ?></strong></td>
+            </tr>
+        <?php endforeach; ?>
+    <?php endif; ?>
+<?php else:?>
+    <?php $adjustments = $this->getSource()->getAdjustments(); ?>
+    <?php if ($adjustments): ?>
+        <?php foreach ($adjustmentManager->decodeAdjustments($adjustments) as $adjustmentNumber => $adjustment):?>
+            <tr>
+                <td class="label"><?php echo __('%1 Refunded', $adjustment['title']) ?></td>
+                <td><?php echo $this->displayPrices(isset($adjustment['base_amount']) ? $adjustment['base_amount'] : $adjustment['amount'], $adjustment['amount']); ?></td>
+            </tr>
+        <?php endforeach; ?>
+    <?php endif; ?>
+<?php endif; ?>
+

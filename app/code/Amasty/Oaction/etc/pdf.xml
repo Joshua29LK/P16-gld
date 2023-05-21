@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * @author Amasty Team
+ * @copyright Copyright (c) 2022 Amasty (https://www.amasty.com)
+ * @package Mass Order Actions for Magento 2
+ */-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Sales:etc/pdf_file.xsd">
+    <renderers>
+        <page type="packing_slip">
+            <renderer product_type="default">Amasty\Oaction\Model\Order\Pdf\Items\PackingSlip\DefaultPackingSlip</renderer>
+            <renderer product_type="bundle">Amasty\Oaction\Model\Order\Pdf\Items\PackingSlip\BundlePackingSlip</renderer>
+        </page>
+    </renderers>
+</config>

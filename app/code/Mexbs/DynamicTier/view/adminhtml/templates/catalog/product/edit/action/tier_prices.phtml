@@ -1,0 +1,115 @@
+<?php
+/**
+ * @var \Mexbs\DynamicTier\Block\Adminhtml\Product\Edit\Action\Attribute\Tab\TierPrices $block
+ */
+?>
+<script>
+    require(['jquery'], function($){
+        var currentIndex = 0;
+        addTierPriceRow = function(){
+            var template = '<tr class="data-row" data-type="template">\
+                <td>\
+                <div class="admin__field" data-index="website_id">\
+                <div class="admin__field-control">\
+                <select class="admin__control-select" name="tier_price[{{current_index}}][website_id]">\
+                <?php foreach($block->getWebsitesOptionsArray() as $websiteOption): ?>
+                <option data-title="<?php echo $websiteOption['label'] ?>" value="<?php echo $websiteOption['value'] ?>"><?php echo $websiteOption['label'] ?></option>\
+                <?php endforeach; ?>
+                </select>\
+                </div>\
+                </div>\
+                </td>\
+                <td>\
+                <div class="admin__field" data-index="cust_group">\
+                <div class="admin__field-control">\
+                <select class="admin__control-select" name="tier_price[{{current_index}}][cust_group]">\
+                <?php foreach($block->getCustomerGroupsOptionsArray() as $customerGroupOption): ?>
+                <option data-title="<?php echo $customerGroupOption['label'] ?>" value="<?php echo $customerGroupOption['value'] ?>"><?php echo $customerGroupOption['label'] ?></option>\
+                <?php endforeach; ?>
+                </select>\
+                </div>\
+                </div>\
+                </td>\
+                <td>\
+                <div class="admin__field" data-index="price_qty">\
+                <div class="admin__field-control">\
+                <input class="admin__control-text" name="tier_price[{{current_index}}][price_qty]" placeholder="" type="text">\
+                </div>\
+                </div>\
+                </td>\
+                <td>\
+                <div class="admin__field" data-index="price">\
+                <div class="admin__field-control">\
+                <input class="admin__control-text" name="tier_price[{{current_index}}][price]" placeholder="" type="text">\
+                </div>\
+                </div>\
+                </td>\
+                <td>\
+                <div class="admin__field" data-index="price_type">\
+                <div class="admin__field-control">\
+                <select class="admin__control-select" name="tier_price[{{current_index}}][price_type]">\
+                <option data-title="Fixed Price" value="fixed">Fixed</option>\
+            <option data-title="Percent Discount" value="discount">Discount</option>\
+                </select>\
+                </div>\
+                </div>\
+                </td>\
+                <td>\
+            <button class="action-delete" data-action="tier_price_remove_row">\
+                <span></span>\
+                </button>\
+                </td>\
+                </tr>';
+
+            var indexedTempalte = template.replace(new RegExp('{{current_index}}', 'g'), currentIndex)
+            var templateElement = $(indexedTempalte);
+
+            $('table[data-index="tier_price"] tbody').append(templateElement);
+            currentIndex++;
+        }
+
+        $(document).on('click', 'button[data-action="tier_price_remove_row"]', function(){
+            $(this).closest('tr').remove();
+        });
+        $('button[data-action="tier_price_add_new_row"]').click(function(){
+            addTierPriceRow();
+        });
+    });
+</script>
+<div class="admin__field _required">
+    <div class="admin__field-control" data-role="grid-wrapper" data-index="tier_price">
+        <div class="admin__control-table-wrapper">
+            <table class="admin__dynamic-rows admin__control-table" data-role="grid" data-index="tier_price">
+                <thead>
+                <tr>
+                    <th data-repeat-index="0">Website</th>
+                    <th data-repeat-index="1">Customer Group</th>
+                    <th data-repeat-index="2">Quantity</th>
+                    <th data-repeat-index="3">Price / Discount</th>
+                    <th data-repeat-index="4">Price / Discount Type</th>
+                    <th data-repeat-index="5"></th>
+                </tr>
+                </thead>
+                <tbody>
+                </tbody>
+                <tfoot>
+                <tr>
+                    <td colspan="6">
+                        <button type="button" data-action="tier_price_add_new_row">
+                            <span>Add</span>
+                        </button>
+                    </td>
+                </tr>
+                </tfoot>
+            </table>
+            <label class="addafter" for="name">
+                <span class="attribute-change-checkbox">
+                    <input type="checkbox" id="toggle_tier_price" name="toggle_tier_price" class="checkbox"aria-required="true">
+                    <label class="label" for="toggle_tier_price">
+                        Change
+                    </label>
+                </span>
+            </label>
+        </div>
+    </div>
+</div>

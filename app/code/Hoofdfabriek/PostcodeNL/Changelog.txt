@@ -1,0 +1,24 @@
+CHANGELOG
+
+
+### v2.0.3
+Released on 11-06-2018
+Release notes:
+
+- Add support of Mageplaza_Osc extension
+- Add support of Onestepcheckout_Iosc
+- Fix issue with missing house number on checkout when house addition is changed
+- Fix issue with missing house addition select on customer address edit form
+
+### v2.0.4
+Released on 15-06-2018
+Release notes:
+- Refactor checkout js
+
+### v2.1.0
+Released on 27-07-2018
+Release notes:
+- Add API support for Belgium address autocomplete
+- Add PostcodeNL subscription information on extension configuration page
+- Add verification that PostcodeNL account creds are entered correctly and account is active
+- Split a housenumber addition from a housenumber on enter house number field

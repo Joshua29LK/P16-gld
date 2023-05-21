@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <tab id="redchamps" translate="label" sortOrder="999998">
+            <label>RedChamps</label>
+        </tab>
+        <section id="total_adjustment" translate="label" showInDefault="1" showInWebsite="0" showInStore="0">
+            <label>Order Total Adjustments</label>
+            <tab>redchamps</tab>
+            <resource>RedChamps_TotalAdjustment::config</resource>
+            <group id="branding" translate="label" type="text" sortOrder="0" showInDefault="1" showInWebsite="1"
+                   showInStore="1">
+                <label>RedChamps_TotalAdjustment</label>
+                <frontend_model>RedChamps\Core\Block\Adminhtml\System\Config\Form\Heading</frontend_model>
+            </group>
+            <group id="tax" type="text" sortOrder="0" showInDefault="1" showInWebsite="0" showInStore="0" translate="label">
+                <label>Tax Settings</label>
+                <field id="tax_class" type="select" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Tax Class for Adjustments</label>
+                    <source_model>Magento\Tax\Model\TaxClass\Source\Product</source_model>
+                    <comment>
+                        If tax class for adjustments is chosen other than "None" then Tax will be calculated for the adjustments.
+                    </comment>
+                </field>
+                <field id="before_tax" type="select" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
+                    <label>Apply adjustments before Tax</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>
+                        Choose yes if you would like to apply adjustments to order before Tax
+                    </comment>
+                    <depends>
+                        <field id="tax_class">0</field>
+                    </depends>
+                </field>
+                <field id="inclusive" type="select" sortOrder="30" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
+                    <label>Adjustments amounts includes Tax</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>
+                        Choose yes if the adjustment amounts are tax inclusive. This setting will be applicable only when 'Tax Class' is chosen in above settings.
+                    </comment>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>

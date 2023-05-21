@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <sales>
+            <totals_sort>
+                <adjustment>99</adjustment>
+            </totals_sort>
+        </sales>
+        <total_adjustment>
+            <tax>
+                <before_tax>0</before_tax>
+                <tax_class>0</tax_class>
+                <inclusive>0</inclusive>
+            </tax>
+        </total_adjustment>
+    </default>
+</config>

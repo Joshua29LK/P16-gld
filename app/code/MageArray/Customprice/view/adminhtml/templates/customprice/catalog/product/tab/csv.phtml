@@ -1,0 +1,565 @@
+<div class="loading-mask" data-role="loader" style="display: none;">
+    <div class="popup popup-loading">
+        <div class="popup-inner">
+            <img alt="Loading..."
+                 src="<?= /* @noEscape */ $block->getViewFileUrl('images/loader-2.gif'); ?>">
+            Please wait...
+        </div>
+    </div>
+</div>
+<div id="messages" style="display: none;">
+    <div class="messages">
+        <div class="message message-success success">
+            <div data-ui-id="messages-message-success">
+                <?= /* @noEscape */ __('File Uploaded Successfully.'); ?>
+            </div>
+        </div>
+    </div>
+</div>
+<?php $block->getConfigJson(); ?>
+<?php $url = $block->getConfig()->getUrl();?>
+<?php $productId = $block->getProduct()->getId();?>
+<?php if ($block->getProduct()->getApplyCsvType() == 'multiple'):?>
+    <table class="dynamic-grid data" id="attribute-labels-table" border="1">
+        <?php if ($block->getProductCustomOption() != ''):?>
+            <tr>
+                <th class="entry-edit-head">
+                    <h4><?= /* @noEscape */ $block->getOptionFieldName();?></h4>
+                </th>
+                <th class="entry-edit-head"><?= /* @noEscape */ __('CSV File');?></th>
+            </tr>
+            <?php $options = $block->getProductCustomOption();?>
+            <?php if (is_object($options) && is_array($options->getValues())):?>
+                <?php $values = $options->getValues();?>
+                <?php foreach ($values as $k => $v):?>
+                    <?php
+                    $optsku = '';
+                    $optsku = strtolower(str_replace(' ', '', $v->getSku()));
+                    ?>
+                <tr>
+                    <td>
+                        <?= /* @noEscape */ $v->getTitle();?>
+                    </td>
+                    <td class="store-csv">
+                        <div id="csvfile-<?= /* @noEscape */ $optsku ?>" class="uploader">
+                            <span class="fileinput-button form-buttons">
+                                <span><?= /* @noEscape */ __('Browse Files...') ?></span>
+                                <input class="fileupload" type="file" name="csvfileupload<?= /* @noEscape */ $optsku?>"
+                                       data-url="<?= /* @noEscape */ $url ?>" >
+                                <input type="hidden" name="uploadedfile[<?= /* @noEscape */ $optsku?>]"
+                                       id="uploadedfile<?= /* @noEscape */ $optsku?>"
+                                       value="" data-form-part="product_form" >
+                            </span>
+                            <div class="clear"></div>
+                            <script type="text/x-magento-template" id="csvfile-<?= /* @noEscape */ $optsku?>-template">
+                                <div id="<%- data.id %>" class="file-row">
+                                    <span class="file-info">
+                                        <%- data.name %> (<%- data.size %>)</span>
+                                    <div class="progressbar-container">
+                                        <div class="progressbar upload-progress"
+                                             style="width: 0%;"></div>
+                                    </div>
+                                    <div class="clear"></div>
+                                </div>
+                            </script>
+                            <script>
+                                require([
+                                    'jquery',
+                                    'mage/template',
+                                    'jquery/file-uploader',
+                                    'domReady!'
+                                ], function ($, mageTemplate) {
+                                    $('#csvfile-<?= /* @noEscape */ $optsku?> .fileupload').fileupload({
+                                        dataType: 'json',
+                                        formData: {
+                                            isAjax: 'true',
+                                            form_key: FORM_KEY,
+                                            option_id: '<?= /* @noEscape */ $optsku?>'
+                                        },
+                                        sequentialUploads: true,
+                                        acceptFileTypes: /(\.|\/)(csv)$/i,
+                                        maxFileSize: 2000000 ,
+                                        add: function (e, data) {
+                                            var progressTmpl =
+                                                mageTemplate('#csvfile-<?= /* @noEscape */ $optsku?>-template'),
+                                                fileSize,
+                                                tmpl;
+                                            $.each(data.files, function (index, file) {
+                                                fileSize = typeof file.size == "undefined" ?
+                                                    $.mage.__('We could not detect a size.') :
+                                                    byteConvert(file.size);
+                                                data.fileId = Math.random().toString(36).substr(2, 9);
+                                                tmpl = progressTmpl({
+                                                    data: {
+                                                        name: file.name,
+                                                        size: fileSize,
+                                                        id: data.fileId
+                                                    }
+                                                });
+                                                $(tmpl).data('image', data)
+                                                .appendTo('#csvfile-<?= /* @noEscape */ $optsku?>');
+                                            });
+                                            jQuery('.loading-mask').show();
+                                            $(this).fileupload('process', data).done(function () {
+                                                data.submit();
+                                            });
+                                        },
+                                        done: function (e, data) {
+                                            var progressSelector = '#' + data.fileId + 
+                                            ' .progressbar-container .progressbar';
+                                            var tempErrorMessage = document.createElement("div");
+                                            $(progressSelector).css('width', '100%');
+                                            $('[data-action="show-error"]').children(".message").remove();
+                                            if (data.result && !data.result.hasOwnProperty('errorcode')) {
+                                                $(progressSelector).removeClass('upload-progress')
+                                                .addClass('upload-success');
+                                                jQuery('#uploadedfile<?= /* @noEscape */ $optsku?>')
+                                                .val(data.result.file);
+                                                jQuery("#messages").show().delay(2000).hide(0);
+                                                jQuery('.loading-mask').hide();
+                                            } else {
+                                                jQuery('.loading-mask').hide();
+                                                tempErrorMessage.className = "message message-warning warning";
+                                                tempErrorMessage.innerHTML = data.result.error;
+                                                $('[data-action="show-error"]').append(tempErrorMessage);
+                                                $(progressSelector).removeClass('upload-progress')
+                                                .addClass('upload-failure');
+                                            }
+                                        },
+                                        progress: function (e, data) {
+                                            var progress = parseInt(data.loaded / data.total * 100, 10);
+                                            var progressSelector = '#' + data.fileId + 
+                                            ' .progressbar-container .progressbar';
+                                            $(progressSelector).css('width', progress + '%');
+                                        },
+                                        fail: function (e, data) {
+                                            var progressSelector = '#' + data.fileId + 
+                                            ' .progressbar-container .progressbar';
+                                            $(progressSelector).removeClass('upload-progress')
+                                            .addClass('upload-failure');
+                                        }
+                                    });
+                                    $('#csvfile-<?= /* @noEscape */ $optsku?> .fileupload').fileupload('option', {
+                                        process: [{
+                                            action: 'load',
+                                            fileTypes: /(\.|\/)(csv)$/i,
+                                            maxFileSize: 2000000
+                                        }, {
+                                            action: 'save'
+                                        }]
+                                    });
+                                });
+                            </script>
+                        </div>
+                        <div>
+                            <?php $csv = $block->getCsvPathFile($optsku); ?>
+                            <?php if (!empty($csv)): ?>
+                                <div class="remove-section">
+                                    <div class="remove-label">
+                                        <input type="checkbox" name="remove_file[<?= /* @noEscape */ $optsku;?>]"
+                                               data-form-part="product_form" >
+                                    </div>
+                                    <div class="file-remove"><?= /* @noEscape */ __('Remove');?></div>
+                                </div>
+                                <?= /* @noEscape */ $csv;?>
+                                &nbsp;&nbsp;
+                                <a id="openModel<?= /* @noEscape */ $optsku?>" style="cursor:pointer;" >View</a>
+                                <?php $filedata = $block->getCsvFileDataForView($optsku); ?>
+                                <?php if (isset($filedata) && !empty($filedata)):?>
+                                    <?php $i=0;?>
+                                    <div id="myModel<?= /* @noEscape */ $optsku?>">
+                                        <table class="data">
+                                            <?php foreach ($filedata as $filedatakey => $filedatavalue):?>
+                                                <?php if ($i==0):?>
+                                                    <tr>
+                                                        <td>
+                                                            <?= /* @noEscape */ $block->getColumnLabel();?> &#8594;
+                                                            <?= /* @noEscape */ $block->getRowLabel();?>&#8595;
+                                                        </td>
+                                                        <?php if (is_array($filedatavalue)): ?>
+                                                            <?php $filedatarowvalue=array_keys($filedatavalue);?>
+                                                            <?php foreach ($filedatarowvalue as $filedatarow):?>
+                                                                <td>
+                                                                    <?= /* @noEscape */ $filedatarow;?>
+                                                                </td>
+                                                            <?php endforeach;?>
+                                                        <?php else:?>
+                                                            <td>
+                                                                <?= /* @noEscape */ $filedatavalue;?>
+                                                            </td>
+                                                        <?php endif;?>
+                                                    </tr>
+                                                <?php endif;?>
+                                                <?php $i++;?>
+                                                <tr>
+                                                    <td>
+                                                        <?= /* @noEscape */ $filedatakey;?>
+                                                    </td>
+                                                    <?php if (is_array($filedatavalue)): ?>
+                                                        <?php
+                                                        foreach ($filedatavalue as $filedatakeys => $filedatavalues):
+                                                            ?>
+                                                            <td>
+                                                                <?= /* @noEscape */ $filedatavalues;?>
+                                                            </td>
+                                                        <?php endforeach;?>
+                                                    <?php else:?>
+                                                        <td>
+                                                            <?= /* @noEscape */ $filedatavalue;?>
+                                                        </td>
+                                                    <?php endif;?>
+                                                </tr>
+                                            <?php endforeach;?>
+                                        </table>
+                                    </div>
+                                    <script>
+                                        require(
+                                            [
+                                                'jquery',
+                                                'Magento_Ui/js/modal/modal'
+                                            ],
+                                            function($,modal) {
+                                                var options = {
+                                                    type: 'popup',
+                                                    responsive: true,
+                                                    innerScroll: true,
+                                                    title: 'CSV Pricesheet'
+                                                };
+                                                var popup = modal(options, $('#myModel<?= /* @noEscape */ $optsku?>'));
+                                                $("#openModel<?= /* @noEscape */ $optsku?>").on("click",function(){
+                                                    $('#myModel<?= /* @noEscape */ $optsku?>').modal('openModal');
+                                                });
+                                                $('.modal-footer').hide();
+                                            }
+                                        );
+                                    </script>
+                                <?php endif;?>
+                            <?php endif;?>
+                        </div>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
+        <?php endif;?>
+        <?php else: ?>
+            <p>Please fill <b>Option Wise CSV Label</b> attribute.</p>
+        <?php endif;?>
+    </table>
+<?php elseif ($block->getProduct()->getApplyCsvType() == 'dimensional'):?>
+    <div class="entry-edit">
+        <div class="entry-edit-head">
+            <h4 class="icon-head head-edit-form fieldset-legend">
+                <?= /* @noEscape */ __('Upload CSV File');?></h4>
+        </div>
+
+        <div id="group_fields4" class="fieldset fieldset-wide">
+            <div id="error-message" data-action="show-error"></div>
+            <div id="csvfilehtmlid" class="uploader">
+                <span class="fileinput-button form-buttons">
+                    <span><?= /* @noEscape */ __('Browse Files...') ?></span>
+                    <input class="fileupload" type="file" name="csvfileupload"
+                           data-url="<?= /* @noEscape */ $url ?>" >
+                    <input type="hidden" name="uploadedfile[0]" id="uploadedfile"
+                           value="" data-form-part="product_form" >
+                </span>
+                <div class="clear"></div>
+                <script type="text/x-magento-template" id="csvfilehtmlid-template">
+                    <div id="<%- data.id %>" class="file-row">
+                        <span class="file-info">
+                            <%- data.name %> (<%- data.size %>)</span>
+                        <div class="progressbar-container">
+                            <div class="progressbar upload-progress"
+                                 style="width: 0%;"></div>
+                        </div>
+                        <div class="clear"></div>
+                    </div>
+                </script>
+                <script>
+                    require([
+                        'jquery',
+                        'mage/template',
+                        'jquery/file-uploader',
+                        'domReady!'
+                    ], function ($, mageTemplate) {
+                        $('#csvfilehtmlid .fileupload').fileupload({
+                            dataType: 'json',
+                            formData: {
+                                isAjax: 'true',
+                                form_key: FORM_KEY,
+                                option_id: ''
+                            },
+                            sequentialUploads: true,
+                            acceptFileTypes: /(\.|\/)(csv)$/i,
+                            maxFileSize: 2000000 ,
+                            add: function (e, data) {
+                                var progressTmpl =
+                                    mageTemplate('#csvfilehtmlid-template'),
+                                    fileSize,
+                                    tmpl;
+                                $.each(data.files, function (index, file) {
+                                    fileSize = typeof file.size == "undefined" ?
+                                        $.mage.__('We could not detect a size.') :
+                                        byteConvert(file.size);
+                                    data.fileId = Math.random().toString(36).substr(2, 9);
+                                    tmpl = progressTmpl({
+                                        data: {
+                                            name: file.name,
+                                            size: fileSize,
+                                            id: data.fileId
+                                        }
+                                    });
+                                    $(tmpl).data('image', data).appendTo('#csvfilehtmlid');
+                                });
+                                jQuery('.loading-mask').show();
+                                $(this).fileupload('process', data).done(function () {
+                                    data.submit();
+                                });
+                            },
+                            done: function (e, data) {
+                                var progressSelector = '#' + data.fileId + ' .progressbar-container .progressbar';
+                                var tempErrorMessage = document.createElement("div");
+                                $(progressSelector).css('width', '100%');
+                                $('[data-action="show-error"]').children(".message").remove();
+                                if (data.result && !data.result.hasOwnProperty('errorcode')) {
+                                    $(progressSelector).removeClass('upload-progress').addClass('upload-success');
+                                    jQuery('#uploadedfile').val(data.result.file);
+                                    jQuery("#messages").show().delay(2000).hide(0);
+                                    jQuery('.loading-mask').hide();
+                                } else {
+                                    jQuery('.loading-mask').hide();
+                                    tempErrorMessage.className = "message message-warning warning";
+                                    tempErrorMessage.innerHTML = data.result.error;
+                                    $('[data-action="show-error"]').append(tempErrorMessage);
+                                    $(progressSelector).removeClass('upload-progress').addClass('upload-failure');
+                                }
+                            },
+                            progress: function (e, data) {
+                                var progress = parseInt(data.loaded / data.total * 100, 10);
+                                var progressSelector = '#' + data.fileId + ' .progressbar-container .progressbar';
+                                $(progressSelector).css('width', progress + '%');
+                            },
+                            fail: function (e, data) {
+                                var progressSelector = '#' + data.fileId + ' .progressbar-container .progressbar';
+                                $(progressSelector).removeClass('upload-progress').addClass('upload-failure');
+                            }
+                        });
+                        $('#csvfilehtmlid .fileupload').fileupload('option', {
+                            process: [{
+                                action: 'load',
+                                fileTypes: /(\.|\/)(csv)$/i,
+                                maxFileSize: 2000000
+                            }, {
+                                action: 'save'
+                            }]
+                        });
+                    });
+                </script>
+            </div>
+            <?php if ($data=$block->getCsvFileData()):?>
+                <div class="remove-section">
+                    <div class="remove-label">
+                        <input type="checkbox" name="remove_file[0]"
+                               id="remove_file" data-form-part="product_form" >
+                    </div>
+                    <div class="file-remove"><?= /* @noEscape */ __('Remove CSV File');?>
+                    </div>
+                </div>
+            <?php endif;?>
+        </div>
+        <?php $i=0;?>
+        <div class="data">
+            <?php if ($data=$block->getCsvFileData()):?>
+                <table class="data">
+                    <?php foreach ($data as $key => $value):?>
+                        <?php
+                        if (is_array($value)) {
+                            echo '<tr><td><b>Invalid one-dimensional CSV format.</b></td></tr>';
+                            break;
+                        }
+                        ?>
+                        <?php if ($i==0):?>
+                            <tr>
+                                <td>
+                                    <?= /* @noEscape */ $block->getRowLabel();?>
+                                </td>
+                                <td>
+                                    <?= /* @noEscape */ __('Price');?>
+                                </td>
+                            </tr>
+                        <?php endif;?>
+                        <?php $i++;?>
+                        <tr>
+                            <td>
+                                <?= /* @noEscape */ $key; ?>
+                            </td>
+                            <td>
+                                <?= /* @noEscape */ $value; ?>
+                            </td>
+                        </tr>
+                    <?php endforeach;?>
+                </table>
+            <?php endif;?>
+        </div>
+    </div>
+<?php else: ?>
+    <div class="entry-edit">
+        <div class="entry-edit-head">
+            <h4 class="icon-head head-edit-form fieldset-legend">
+                <?= /* @noEscape */ __('Upload CSV File');?></h4>
+        </div>
+
+        <div id="group_fields4" class="fieldset fieldset-wide">
+            <div id="error-message" data-action="show-error"></div>
+            <div id="csvfilehtmlid" class="uploader">
+                <span class="fileinput-button form-buttons">
+                    <span><?= /* @noEscape */ __('Browse Files...') ?></span>
+                    <input class="fileupload" type="file" name="csvfileupload"
+                           data-url="<?= /* @noEscape */ $url ?>" >
+                    <input type="hidden" name="uploadedfile[0]" id="uploadedfile"
+                           value="" data-form-part="product_form" >
+                </span>
+                <div class="clear"></div>
+                <script type="text/x-magento-template" id="csvfilehtmlid-template">
+                    <div id="<%- data.id %>" class="file-row">
+                        <span class="file-info">
+                            <%- data.name %> (<%- data.size %>)</span>
+                        <div class="progressbar-container">
+                            <div class="progressbar upload-progress"
+                                 style="width: 0%;"></div>
+                        </div>
+                        <div class="clear"></div>
+                    </div>
+                </script>
+                <script>
+                    require([
+                        'jquery',
+                        'mage/template',
+                        'jquery/file-uploader',
+                        'domReady!'
+                    ], function ($, mageTemplate) {
+                        $('#csvfilehtmlid .fileupload').fileupload({
+                            dataType: 'json',
+                            formData: {
+                                isAjax: 'true',
+                                form_key: FORM_KEY,
+                                option_id: ''
+                            },
+                            sequentialUploads: true,
+                            acceptFileTypes: /(\.|\/)(csv)$/i,
+                            maxFileSize: 2000000 ,
+                            add: function (e, data) {
+                                var progressTmpl =
+                                    mageTemplate('#csvfilehtmlid-template'),
+                                    fileSize,
+                                    tmpl;
+                                $.each(data.files, function (index, file) {
+                                    fileSize = typeof file.size == "undefined" ?
+                                        $.mage.__('We could not detect a size.') :
+                                        byteConvert(file.size);
+                                    data.fileId = Math.random().toString(36).substr(2, 9);
+                                    tmpl = progressTmpl({
+                                        data: {
+                                            name: file.name,
+                                            size: fileSize,
+                                            id: data.fileId
+                                        }
+                                    });
+                                    $(tmpl).data('image', data).appendTo('#csvfilehtmlid');
+                                });
+                                jQuery('.loading-mask').show();
+                                $(this).fileupload('process', data).done(function () {
+                                    data.submit();
+                                });
+                            },
+                            done: function (e, data) {
+                                var progressSelector = '#' + data.fileId + ' .progressbar-container .progressbar';
+                                var tempErrorMessage = document.createElement("div");
+                                $(progressSelector).css('width', '100%');
+                                $('[data-action="show-error"]').children(".message").remove();
+                                if (data.result && !data.result.hasOwnProperty('errorcode')) {
+                                    $(progressSelector).removeClass('upload-progress').addClass('upload-success');
+                                    jQuery('#uploadedfile').val(data.result.file);
+                                    jQuery("#messages").show().delay(2000).hide(0);
+                                    jQuery('.loading-mask').hide();
+                                } else {
+                                    jQuery('.loading-mask').hide();
+                                    tempErrorMessage.className = "message message-warning warning";
+                                    tempErrorMessage.innerHTML = data.result.error;
+                                    $('[data-action="show-error"]').append(tempErrorMessage);
+                                    $(progressSelector).removeClass('upload-progress').addClass('upload-failure');
+                                }
+                            },
+                            progress: function (e, data) {
+                                var progress = parseInt(data.loaded / data.total * 100, 10);
+                                var progressSelector = '#' + data.fileId + ' .progressbar-container .progressbar';
+                                $(progressSelector).css('width', progress + '%');
+                            },
+                            fail: function (e, data) {
+                                var progressSelector = '#' + data.fileId + ' .progressbar-container .progressbar';
+                                $(progressSelector).removeClass('upload-progress').addClass('upload-failure');
+                            }
+                        });
+                        $('#csvfilehtmlid .fileupload').fileupload('option', {
+                            process: [{
+                                action: 'load',
+                                fileTypes: /(\.|\/)(csv)$/i,
+                                maxFileSize: 2000000
+                            }, {
+                                action: 'save'
+                            }]
+                        });
+                    });
+                </script>
+            </div>
+            <?php if ($data=$block->getCsvFileData()):?>
+                <div class="remove-section">
+                    <div class="remove-label">
+                        <input type="checkbox" name="remove_file[0]"
+                               id="remove_file" data-form-part="product_form" >
+                    </div>
+                    <div class="file-remove"><?= /* @noEscape */ __('Remove CSV File');?>
+                    </div>
+                </div>
+            <?php endif;?>
+        </div>
+        <?php $i=0;?>
+        <div class="data">
+            <?php if ($data=$block->getCsvFileData()):?>
+                <table class="data">
+                    <?php foreach ($data as $key => $value):?>
+                        <?php
+                        if (!is_array($value)) {
+                            echo '<tr><td><b>Invalid CSV format.</b></td></tr>';
+                            break;
+                        }
+                        ?>
+                        <?php if ($i==0):?>
+                            <tr>
+                                <td>
+                                    <?= /* @noEscape */ $block->getColumnLabel();?> &#8594;
+                                    <?= /* @noEscape */ $block->getRowLabel();?>&#8595;
+                                </td>
+                                <?php $rowvalue=array_keys($value);?>
+                                <?php foreach ($rowvalue as $row):?>
+                                    <td>
+                                        <?= /* @noEscape */ $row;?>
+                                    </td>
+                                <?php endforeach;?>
+                            </tr>
+                        <?php endif;?>
+                        <?php $i++;?>
+                        <tr>
+                            <td>
+                                <?= /* @noEscape */ $key;?>
+                            </td>
+                            <?php foreach ($value as $keys => $values):?>
+                                <td>
+                                    <?= /* @noEscape */ $values;?>
+                                </td>
+                            <?php endforeach;?>
+                        </tr>
+                    <?php endforeach;?>
+                </table>
+            <?php endif;?>
+        </div>
+    </div>
+<?php endif; ?>

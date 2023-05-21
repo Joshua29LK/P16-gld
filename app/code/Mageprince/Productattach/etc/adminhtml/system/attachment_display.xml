@@ -1,0 +1,51 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * MagePrince
+ * Copyright (C) 2020 Mageprince <info@mageprince.com>
+ *
+ * @package Mageprince_Productattach
+ * @copyright Copyright (c) 2020 Mageprince (http://www.mageprince.com/)
+ * @license http://opensource.org/licenses/gpl-3.0.html GNU General Public License,version 3 (GPL-3.0)
+ * @author MagePrince <info@mageprince.com>
+ */
+-->
+<include xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_include.xsd">
+    <group id="display" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+        <label>Attachment Configuration For Product Page</label>
+        <field id="productdetail" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+            <label>Show On Product Details</label>
+            <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+        </field>
+        <field id="producttab" translate="label" type="select" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+            <label>Show On Product Tab</label>
+            <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+        </field>
+        <field id="tabname" translate="label" type="text" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+            <label>Attachment Tab Label</label>
+            <depends>
+                <field id="productattach/display/producttab">1</field>
+            </depends>
+        </field>
+        <field id="attachment_view" translate="label" type="select" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+            <label>Attachment View</label>
+            <source_model>Mageprince\Productattach\Model\Config\Source\AttachmentView</source_model>
+        </field>
+        <field id="table_view_columns" translate="label" type="multiselect" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+            <label>Table View Column</label>
+            <source_model>Mageprince\Productattach\Model\Config\Source\TableViewColumns</source_model>
+            <validate>required-entry</validate>
+            <depends>
+                <field id="productattach/display/attachment_view">table</field>
+            </depends>
+        </field>
+        <field id="list_view_columns" translate="label" type="multiselect" sortOrder="70" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+            <label>List View Column</label>
+            <source_model>Mageprince\Productattach\Model\Config\Source\ListViewColumns</source_model>
+            <validate>required-entry</validate>
+            <depends>
+                <field id="productattach/display/attachment_view">list</field>
+            </depends>
+        </field>
+    </group>
+</include>

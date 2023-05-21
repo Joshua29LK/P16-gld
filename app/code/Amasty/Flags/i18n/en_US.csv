@@ -1,0 +1,88 @@
+"Save and Continue Edit","Save and Continue Edit"
+"Edit Column '%1'","Edit Column '%1'"
+"New Column","New Column"
+"Apply Flags","Apply Flags"
+"Apply Flags To Column","Apply Flags To Column"
+Flags,Flags
+"Set flags to column","Set flags to column"
+"General Information","General Information"
+"Column Information","Column Information"
+Name,Name
+Position,Position
+"Numeric value for internal use.","Numeric value for internal use."
+Comments,Comments
+"Edit Flag '%1'","Edit Flag '%1'"
+"New Flag","New Flag"
+"Automatic Apply","Automatic Apply"
+"Automatically Apply On Order Status Change And Selected Shipping Method","Automatically Apply On Order Status Change And Selected Shipping Method"
+"Column name","Column name"
+"Assign to column","Assign to column"
+"Order Status","Order Status"
+"Set flag if order changes to one of selected statuses","Set flag if order changes to one of selected statuses"
+"Order Shipping Method","Order Shipping Method"
+"Set flag if in the order used one of selected shipping methods. Each shipping method can be selected for only one flag.","Set flag if in the order used one of selected shipping methods. Each shipping method can be selected for only one flag."
+"Order Payment Method","Order Payment Method"
+"Set flag if in the order used one of selected payment methods. Each payment method can be selected for only one flag.","Set flag if in the order used one of selected payment methods. Each payment method can be selected for only one flag."
+"Flag Information","Flag Information"
+"Icon Image","Icon Image"
+"JPG, PNG, GIF or SVG. 20x20 pixels strongly recommended. Images of different size will break design.","JPG, PNG, GIF or SVG. 20x20 pixels strongly recommended. Images of different size will break design."
+Priority,Priority
+Note,Note
+"We can't find a column to delete.","We can't find a column to delete."
+"The column has been deleted.","The column has been deleted."
+"This column no longer exists.","This column no longer exists."
+"Edit Column","Edit Column"
+Columns,Columns
+"Edit Column ""%1""","Edit Column ""%1"""
+Sales,Sales
+"Order Flag Columns","Order Flag Columns"
+"The column has been saved.","The column has been saved."
+"We can't find a flag to delete.","We can't find a flag to delete."
+"The flag has been deleted.","The flag has been deleted."
+"This flag no longer exists.","This flag no longer exists."
+"Edit Flag","Edit Flag"
+"Edit Flag ""%1""","Edit Flag ""%1"""
+"Order Flags","Order Flags"
+"The flag has been saved.","The flag has been saved."
+"Bad request","Bad request"
+"No orders selected.","No orders selected."
+"The flags have been successfully assigned.","The flags have been successfully assigned."
+"The flags have been successfully unassigned.","The flags have been successfully unassigned."
+"No flag","No flag"
+"Assign the ""%1"" flag to the selected orders?","Assign the ""%1"" flag to the selected orders?"
+"Assign Flags To ""%1"" Column","Assign Flags To ""%1"" Column"
+All,All
+"Unassign all the flags for the selected orders?","Unassign all the flags for the selected orders?"
+"For Column ""%1""","For Column ""%1"""
+"Unassign all the flags from ""%1"" column for the selected orders?","Unassign all the flags from ""%1"" column for the selected orders?"
+"Unassign Flags","Unassign Flags"
+"Please Confirm","Please Confirm"
+Red,Red
+Orange,Orange
+Green,Green
+Gray,Gray
+Yellow,Yellow
+Blue,Blue
+Black,Black
+Busy,Busy
+Star,Star
+Plus,Plus
+"On Hold","On Hold"
+Edit,Edit
+Ok,Ok
+Lock,Lock
+"Source file does not exist","Source file does not exist"
+"File name is not specified","File name is not specified"
+"Enter/modify note for the flag you want to assign, and click `Set` button.","Enter/modify note for the flag you want to assign, and click `Set` button."
+Set,Set
+"Flag For Order #%1 (Column: %2)","Flag For Order #%1 (Column: %2)"
+"Unknown error","Unknown error"
+"Assign Flags","Assign Flags"
+"Order Notes","Order Notes"
+"Add New Column","Add New Column"
+"Applied Flags","Applied Flags"
+"Add New Flag","Add New Flag"
+Icon,Icon
+"Auto Apply on Order Status","Auto Apply on Order Status"
+"Auto Apply on Order Shipping Method","Auto Apply on Order Shipping Method"
+"Auto Apply on Order Payment Method","Auto Apply on Order Payment Method"

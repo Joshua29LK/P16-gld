@@ -1,0 +1,42 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+?>
+<?php
+$required = '';
+if ($block->hasRequiredOptions()) {
+    $required = ' data-hasrequired="' . __('* Required Fields') . '"';
+}
+?>
+<div class="product-options-wrapper" id="product-options-wrapper"<?= /* @escapeNotVerified */ $required ?>>
+
+
+<?php
+    $_helper = $this->helper('Magento\Catalog\Helper\Output');
+    $_product = $block->getProduct();
+
+    /* Demo Attributes */
+    $maatglas = $_product->getAttributeText('glasmeten');
+
+?>
+<?php if( $maatglas != '' ) { echo $this->getLayout() ->createBlock('Magento\Cms\Block\Block') ->setBlockId('link-maat-bepalen-glas') ->toHtml(); } else { echo ''; } ?>
+
+<?php
+    $_helper = $this->helper('Magento\Catalog\Helper\Output');
+    $_product = $block->getProduct();
+
+    /* Demo Attributes */
+    $maatdouche = $_product->getAttributeText('douchemeten');
+
+?>
+<?php if( $maatdouche != '' ) { echo $this->getLayout() ->createBlock('Magento\Cms\Block\Block') ->setBlockId('link-maat-bepalen-douche') ->toHtml(); } else { echo ''; } ?>
+
+
+
+    <div class="fieldset" tabindex="0">
+        <?= $block->getChildHtml('', true) ?>
+    <div class="verplicht">* verplichte velden</div>
+	</div>
+</div>

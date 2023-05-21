@@ -1,0 +1,78 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * BSS Commerce Co.
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the EULA
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://bsscommerce.com/Bss-Commerce-License.txt
+ *
+ * @category   BSS
+ * @package    Bss_DependentCustomOptionApi
+ * @author     Extension Team
+ * @copyright  Copyright (c) 2020-2021 BSS Commerce Co. ( http://bsscommerce.com )
+ * @license    http://bsscommerce.com/Bss-Commerce-License.txt
+ */
+-->
+<routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Webapi:etc/webapi.xsd">
+    <!-- Config -->
+    <route url="/V1/depend-co-configuration" method="GET">
+        <service class="Bss\DependentCustomOption\Api\DependentOptionManagementInterface" method="getConfig"/>
+        <resources>
+            <resource ref="Bss_DependentCustomOption::depend_co"/>
+        </resources>
+    </route>
+    <!-- Depend CO APIs -->
+    <route url="/V1/depend-co/optionId/:optionId" method="GET">
+        <service class="Bss\DependentCustomOption\Api\DependentOptionRepositoryInterface" method="getByOptionId"/>
+        <resources>
+            <resource ref="Bss_DependentCustomOption::depend_co"/>
+        </resources>
+    </route>
+    <route url="/V1/depend-co/:sku/options" method="GET">
+        <service class="Bss\DependentCustomOption\Api\DependentOptionRepositoryInterface" method="getListBySku"/>
+        <resources>
+            <resource ref="Bss_DependentCustomOption::depend_co"/>
+        </resources>
+    </route>
+    <route url="/V1/depend-co/products/options" method="POST">
+        <service class="Bss\DependentCustomOption\Api\DependentOptionRepositoryInterface" method="save"/>
+        <resources>
+            <resource ref="Bss_DependentCustomOption::depend_co"/>
+        </resources>
+    </route>
+    <route url="/V1/depend-co/products/options/:optionId" method="PUT">
+        <service class="Bss\DependentCustomOption\Api\DependentOptionRepositoryInterface" method="saveById"/>
+        <resources>
+            <resource ref="Bss_DependentCustomOption::depend_co"/>
+        </resources>
+    </route>
+    <route url="/V1/depend-co/products/:sku" method="PUT">
+        <service class="Bss\DependentCustomOption\Api\ProductRepositoryInterface" method="saveBySku" />
+        <resources>
+            <resource ref="Bss_DependentCustomOption::depend_co_products" />
+        </resources>
+    </route>
+    <route url="/V1/depend-co/products" method="POST">
+        <service class="Bss\DependentCustomOption\Api\ProductRepositoryInterface" method="save" />
+        <resources>
+            <resource ref="Bss_DependentCustomOption::depend_co_products" />
+        </resources>
+    </route>
+    <route url="/V1/depend-co/products" method="GET">
+        <service class="Bss\DependentCustomOption\Api\ProductRepositoryInterface" method="getList"/>
+        <resources>
+            <resource ref="Bss_DependentCustomOption::depend_co_products" />
+        </resources>
+    </route>
+    <route url="/V1/depend-co/products/:sku" method="GET">
+        <service class="Bss\DependentCustomOption\Api\ProductRepositoryInterface" method="get"/>
+        <resources>
+            <resource ref="Bss_DependentCustomOption::depend_co_products" />
+        </resources>
+    </route>
+</routes>

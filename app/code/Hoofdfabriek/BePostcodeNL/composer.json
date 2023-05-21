@@ -1,0 +1,26 @@
+{
+  "name": "hoofdfabriek/magento2-be-postcodenl",
+  "description": "Magento 2 Belgian addresses autocomplete with postcodenl",
+  "type": "magento2-module",
+  "version": "2.0.1",
+  "require": {
+    "hoofdfabriek/magento2-postcodenl": "2.1.1"
+  },
+  "license": "proprietary",
+  "authors": [
+    {
+      "name": "Hoofdfabriek",
+      "email": "support@hoofdfabriek.nl",
+      "homepage": "http://hoofdfabriek.nl",
+      "role": "Technical Support"
+    }
+  ],
+  "autoload": {
+    "files": [
+      "registration.php"
+    ],
+    "psr-4": {
+      "Hoofdfabriek\\BePostcodeNL\\": ""
+    }
+  }
+}

@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * BSS Commerce Co.
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the EULA
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://bsscommerce.com/Bss-Commerce-License.txt
+ *
+ * @category   BSS
+ * @package    Bss_CustomOptionImage
+ * @author     Extension Team
+ * @copyright  Copyright (c) 2015-2020 BSS Commerce Co. ( http://bsscommerce.com )
+ * @license    http://bsscommerce.com/Bss-Commerce-License.txt
+ */
+ -->
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+  <table name="bss_catalog_product_option_type_image" resource="default" engine="innodb" comment="Catalog Product Option Type Image Url">
+    <column xsi:type="int" name="option_type_image_id" padding="10" unsigned="true" nullable="false" identity="false" comment="Option Type Image ID" disabled="true"/>
+    <column xsi:type="int" name="image_id" padding="10" unsigned="false" nullable="false" identity="true" comment="image_id"/>
+    <column xsi:type="int" name="option_type_id" padding="10" unsigned="true" nullable="true" identity="false" comment="Option type ID"/>
+    <column xsi:type="varchar" name="image_url" nullable="true" length="255" comment="Url"/>
+    <column xsi:type="varchar" name="swatch_image_url" nullable="true" length="255" comment="swatch image url"/>
+    <constraint xsi:type="primary" referenceId="PRIMARY">
+      <column name="image_id"/>
+    </constraint>
+    <constraint xsi:type="foreign" referenceId="FK_2EC7E4E638A4C0652297B5EC62784E66" table="bss_catalog_product_option_type_image" column="option_type_id" referenceTable="catalog_product_option_type_value" referenceColumn="option_type_id" onDelete="CASCADE"/>
+    <index referenceId="BSS_CATALOG_PRODUCT_OPTION_TYPE_IMAGE_OPTION_TYPE_ID" indexType="btree">
+      <column name="option_type_id"/>
+    </index>
+  </table>
+</schema>

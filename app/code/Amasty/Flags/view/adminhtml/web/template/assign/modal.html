@@ -1,0 +1,28 @@
+<div css="modalClass" hasFocus="focused">
+    <h1 data-bind="text: popupTitle"></h1>
+
+    <span data-bind="i18n: 'Enter/modify note for the flag you want to assign, and click `Set` button.'"></span>
+
+    <div class="flags-container">
+        <div class="flag">
+            <div class="image-column"></div>
+            <div class="note-column" data-bind="i18n: 'No flag'"></div>
+            <div class="action-column">
+                <button data-bind="i18n: 'Set', click: setFlag.bind($data, null)" class="primary"></button>
+            </div>
+        </div>
+        <!-- ko foreach: { data: applicableFlags, as: 'flag'} -->
+        <div class="flag">
+            <div class="image-column">
+                <img attr="src: flag.image_src, alt: flag.title, title: flag.title" />
+            </div>
+            <div class="note-column">
+                <input type="text" data-bind="value: flag.note" attr="title: $t('Note'), placeholder: flag.defaultNote"></input>
+            </div>
+            <div class="action-column">
+                <button data-bind="i18n: 'Set', click: $parent.setFlag.bind($parent, flag)" class="primary"></button>
+            </div>
+        </div>
+        <!-- /ko -->
+    </div>
+</div>

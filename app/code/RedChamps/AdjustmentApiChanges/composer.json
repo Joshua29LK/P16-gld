@@ -1,0 +1,21 @@
+{
+    "name": "redchamps/module-adjustment-api-changes",
+    "description": "It merges adjustments with discount amount in API response.",
+    "type": "magento2-module",
+    "version": "1.0.0",
+    "require": {
+        "magento/module-sales": "*",
+        "redchamps/module-total-adjustments": "*"
+    },
+    "license": [
+        "RedChamps EULA"
+    ],
+    "autoload": {
+        "files": [
+            "registration.php"
+        ],
+        "psr-4": {
+            "RedChamps\\AdjustmentApiChanges\\": ""
+        }
+    }
+}

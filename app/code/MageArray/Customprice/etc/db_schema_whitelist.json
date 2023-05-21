@@ -1,0 +1,16 @@
+{
+    "magearray_csvprice": {
+        "column": {
+            "id": true,
+            "product_id": true,
+            "csv_price": true,
+            "option_sku": true,
+            "file_name": true,
+            "f_name": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "MAGEARRAY_CSVPRICE_PRODUCT_ID_CATALOG_PRODUCT_ENTITY_ENTITY_ID": true
+        }
+    }
+}

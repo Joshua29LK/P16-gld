@@ -1,0 +1,37 @@
+<?php
+/**
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+?>
+<?php /** @var $block \Magento\Checkout\Block\Onepage\Success */ ?>
+<?php $_order = $block->getOrderItemsDetails(); ?>
+<div class="checkout-success">
+    <?php if ($block->getOrderId()):?>
+        <?php if ($block->getCanViewOrder()) :?>
+            <p><?php echo __('Your order number is: %1.', sprintf('<a href="%s" class="order-number"><strong>%s</strong></a>', $block->escapeHtml($block->getViewOrderUrl()), $block->escapeHtml($block->getOrderId()))) ?> <?php
+$shipping_addresses = $_order->getShippingAddress()->getData();
+$billing_addresses = $_order->getBillingAddress()->getData();
+?>
+(<?php echo $_order->formatPrice($_order->getGrandTotal()); ?>)</p>
+        <?php  else :?>
+            <p><?php echo __('Uw ordernummer is: <span>%1</span>', $block->escapeHtml($block->getOrderId())) ?> <?php
+$shipping_addresses = $_order->getShippingAddress()->getData();
+$billing_addresses = $_order->getBillingAddress()->getData();
+?>
+(<?php echo $_order->formatPrice($_order->getGrandTotal()); ?>)</p>
+        <?php endif;?>
+            <p><?php /* @escapeNotVerified */ echo __('We\'ll email you an order confirmation with details and tracking info.') ?></p>
+    <?php endif;?>
+
+    <?php echo $block->getAdditionalInfoHtml() ?>
+
+    <div class="actions-toolbar" style="margin-top:15px">
+        <div class="primary">
+            <a class="action primary continue" style="background:#ff5500;font-size:14px!important;text-transform:none;" href="<?php /* @escapeNotVerified */ echo $block->getUrl() ?>"><span><?php /* @escapeNotVerified */ echo __('Continue Shopping') ?></span></a>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,114 @@
+<?php
+	if(!empty($_POST['fieldemail'])){
+		echo '<span style="margin-left: 15px; font-size:medium; color: green;">Het formulier is verzonden!</span>';
+	}
+	function sendMail() {
+		try {
+			if(isset($_POST['submit']) && isset($_POST['fieldname']) && isset($_POST['fieldemail']) && isset($_POST['fieldpickup']) && isset($_POST['fieldzipcode']) && isset($_POST['fieldboknumber']) && isset($_POST['fieldcomment'])){
+				//$to = "glasbok@glasdiscount.nl";
+				$headers = "Content-type: text/html";
+				$to = "glasbok@glasdiscount.nl";
+				$mail_content = "<html><body>";
+				$mail_content .= "<br><img data-imagetype='External' src='https://m227.medeka-ontwikkeling.nl/media/wysiwyg/logo-glasdiscount-newsletter.png' style='margin-bottom:5px' border='0'/><br>";
+				$mail_content .= "<br>Er is een bok gemeld om op te halen.<br><br>Naam: " .$_POST['fieldname']. "<br>Email: " .$_POST['fieldemail']. "<br>Telefoon: " .$_POST['fieldtelephone']. "<br>Ophalen op adres: " .$_POST['fieldpickup']. "<br>Postcode: " .$_POST['fieldzipcode']. "<br>Plaats: " .$_POST['fieldcity']. "<br>Boknummer: " .$_POST['fieldboknumber']. "<br>Ordernummer: " .$_POST['fieldordernumber']. "<br>Bericht: " .$_POST['fieldcomment']. "";
+				$mail_content .= "</body></html>";
+				mail($to, 'Glasbok leegmelden', $mail_content, $headers);
+			}
+		} catch (Exception $e){
+			echo 'Caught exception: ',  $e->getMessage(), "\n";
+		}
+	}
+?>
+<div class="contact-us-page">
+    <div class="row form-contact">
+</div>
+<div class="col-lg-12 col-md-12">
+	<form class="form contact"
+		  action="<?php sendMail(); ?>"
+          id="bokmelder-form"
+          method="post"
+          data-hasrequired="<?php /* @escapeNotVerified */
+		  echo __('* Required Fields') ?>"
+          data-mage-init='{"validation":{}}'>
+		<fieldset class="fieldset">
+				<h2><?php /* @escapeNotVerified */
+					echo __('Bok leegmelden') ?></h2>
+			<div style="margin-top:18px">
+				<div style="display:flex; width: 100%;">
+					<div class="field name required" style="margin:0 10px 10px 0px; width:100%">
+						<div class="control">
+							<input placeholder="<?php echo __('Naam*') ?>" name="fieldname" id="fieldname" title="<?php /* @escapeNotVerified */
+							echo __('Name') ?>" value="" class="input-text" type="text" data-validate="{required:true}"/>
+						</div>
+					</div>
+					<div class="field email required" style="margin:0 10px 10px 0px; width:100%">
+						<div class="control">
+							<input placeholder="<?php echo __('E-mailadres*') ?>" name="fieldemail" id="fieldemail" title="<?php /* @escapeNotVerified */
+							echo __('Email') ?>" value="" class="input-text" type="email" data-validate="{required:true, 'validate-email':true}"/>
+						</div>
+					</div>
+				</div>
+				<div style="display:flex; width: 100%;">
+					<div class="field telephone required" style="margin:0 10px 10px 0px; width:100%">
+						<div class="control">
+							<input placeholder="<?php echo __('Telefoon*') ?>" name="fieldtelephone" id="fieldtelephone" title="<?php /* @escapeNotVerified */
+							echo __('Telefoon') ?>" value="" class="input-text" type="number" data-validate="{required:true}"/>
+						</div>
+					</div>
+					<div class="field pickup required" style="margin:0 10px 10px 0px; width:100%">
+						<div class="control">
+							<input placeholder="<?php echo __('Ophalen op adres*') ?>" name="fieldpickup" id="fieldpickup" title="<?php /* @escapeNotVerified */
+							echo __('Ophalen op adres') ?>" value="" class="input-text" type="text" data-validate="{required:true}"/>
+						</div>
+					</div>
+				</div>
+				<div style="display:flex; width: 100%;">
+                <div class="field zipcode required" style="margin:0 10px 10px 0px; width:100%">
+					<div class="control">
+						<input placeholder="<?php echo __('Postcode*') ?>" name="fieldzipcode" id="fieldzipcode" title="<?php /* @escapeNotVerified */
+						echo __('Postcode') ?>" value="" class="input-text" pattern="[1-9][0-9]{3}\s?[a-zA-Z]{2}" type="text" data-validate="{required:true}"/>
+					</div>
+				</div>
+				<div class="field city required" style="margin:0 10px 10px 0px; width:100%">
+					<div class="control">
+						<input placeholder="<?php echo __('Plaats*') ?>" name="fieldcity" id="fieldcity" title="<?php /* @escapeNotVerified */
+						echo __('Plaats') ?>" value="" class="input-text" type="text" data-validate="{required:true}"/>
+					</div>
+				</div>
+				</div>
+				<div style="display:flex; width: 100%;">
+                <div class="field boknumber required" style="margin:0 10px 10px 0px; width:100%">
+					<div class="control">
+						<input placeholder="<?php echo __('Boknummer*') ?>" name="fieldboknumber" id="fieldboknumber" title="<?php /* @escapeNotVerified */
+						echo __('Boknummer') ?>" value="" class="input-text" type="number" data-validate="{required:true}"/>
+					</div>
+				</div>
+				<div class="field ordernumber required" style="margin:0 10px 10px 0px; width:100%">
+					<div class="control">
+						<input placeholder="<?php echo __('Ordernummer*') ?>" name="fieldordernumber" id="fieldordernumber" title="<?php /* @escapeNotVerified */
+						echo __('Ordernummer') ?>" value="" class="input-text" type="text" data-validate="{required:true}"/>
+					</div>
+				</div>
+				</div>
+			</div>
+			<div class="field comment required" style="margin:0 10px 10px 0px !important;">
+				<div class="control">
+					<textarea placeholder="<?php echo __('Bericht*') ?>" name="fieldcomment" id="fieldcomment" title="<?php /* @escapeNotVerified */
+					echo __('Bericht') ?>" class="input-text" cols="5" rows="3"></textarea>
+				</div>
+			</div>
+			<?php echo $block->getChildHtml('form.additional.info'); ?>
+		</fieldset>
+		<div class="actions-toolbar">
+			<div class="primary">
+					<input type="submit" class="action submit btn btn-primary" style="font-size: 1.3rem !important; margin-bottom: 5px; background-color:#f47727; color: white; border-color:#f47727 !important;" name="submit" value="Verzend" />
+			</div>
+		</div>
+	</form>
+	<span>*Houten bokken zonder boknummer zijn one-way bokken en worden niet opgehaald door de fabrikant. <br />
+		Fabrikanten halen de bokken zelf op na ontvangst van uw melding, dit kan echter enkele dagen duren.</span>
+</div>
+</div>
+</div>
+
+

@@ -1,0 +1,354 @@
+<?php $helper = $block->getConfigManager();?>
+<?php if ($helper->isAllowed()) :?>
+    <?php $allowedSharingOptions = explode(',', $helper->getGeneralConfig('allowed_sharing_options'))?>
+    <?php $smsSharingEnabled = $helper->getTwilioConfig('enabled')?>
+    <?php $loggedIn = $block->isCustomerLoggedIn()?>
+    <?php $isCaptchaEnabled = $helper->getCaptchaConfig('enabled') && !$loggedIn?>
+    <?php $totalEnabledOptions = count($allowedSharingOptions) + $smsSharingEnabled?>
+    <div id="share-cart-popup" class="share-cart-popup-overlay">
+        <div class="share-cart-popup share-cart-email-popup" style="width: <?= $smsSharingEnabled ? '45%' : '30%'?>">
+            <div class="title">
+                <?=/* @noEscape */ __('Winkelwagen delen')?>
+            </div>
+            <span id="share-cart-popup-close" class="close">&times;</span>
+            <div class="content">
+                <ul class="top-actions total-enabled-<?=/* @noEscape */ $totalEnabledOptions?>">
+                    <?php if (in_array('email', $allowedSharingOptions)) :?>
+                    <li id="share-cart-email">
+                        <span><?=/* @noEscape */ __('Email') ?></span>
+                    </li>
+                    <?php endif;?>
+                    <?php if ($smsSharingEnabled) :?>
+                        <li id="share-cart-sms">
+                            <span><?=/* @noEscape */ __('SMS') ?></span>
+                        </li>
+                    <?php endif;?>
+                    <?php if (in_array('url', $allowedSharingOptions)) :?>
+                    <li id="share-cart-link">
+                        <span><?=/* @noEscape */ __('URL') ?></span>
+                    </li>
+                    <?php endif;?>
+                    <?php if (in_array('whatsapp', $allowedSharingOptions)) :?>
+                    <li id="share-cart-whatsapp">
+                        <span><?=/* @noEscape */ __('WhatsApp') ?></span>
+                    </li>
+                    <?php endif;?>
+                </ul>
+                <?php if (in_array('email', $allowedSharingOptions)) :?>
+                <form id="share-cart-email-form" class="share-cart-form" style="display: none" action="<?=/* @noEscape */ $helper->prepareUrl('share_cart/action/email') ?>" method="post">
+                    <?=/* @noEscape */$block->getBlockHtml('formkey'); ?>
+                    <?php if ($isCaptchaEnabled) :?>
+                        <input type="hidden" name="g-recaptcha-response" value="">
+                    <?php endif;?>
+                    <fieldset class="fieldset">
+                        <div class="field required">
+                            <label for="recipient_email"><?=/* @noEscape */__('Recipient Email(s)') ?></label>
+                            <div class="control">
+                                <textarea class="input-text required-entry" id="recipient_email" name="recipient_email" placeholder="<?=/* @noEscape */__("Vul per regel een e-mailadres in")?>" value="<?=/* @noEscape */$block->escapeHtml($block->getRecipientEmail()) ?>"></textarea>
+                            </div>
+                        </div>
+                        <?php if (!$loggedIn) :?>
+                            <div class="field required">
+                                <label for="sender_name"><?=/* @noEscape */__("Your Name") ?></label>
+                                <div class="control">
+                                    <input class="input-text required-entry"  name="sender_name" placeholder="<?=/* @noEscape */__("Enter Your Name")?>" value="<?=/* @noEscape */$block->escapeHtml($block->getSenderName()) ?>" />
+                                </div>
+                            </div>
+                            <div class="field required">
+                                <label for="sender_email"><?=/* @noEscape */__("Your Email") ?></label>
+                                <div class="control">
+                                    <input class="input-text required-entry validate-email"  name="sender_email" placeholder="<?=/* @noEscape */__("Enter Your Email")?>" value="<?=/* @noEscape */$block->escapeHtml($block->getSenderEmail()) ?>" />
+                                </div>
+                            </div>
+                        <?php endif;?>
+                        <div class="field">
+                            <label for="message"><?=/* @noEscape */__("Message (optional)") ?></label>
+                            <div class="control">
+                                <textarea class="input-text" id="message" name="message"><?=/* @noEscape */$block->escapeHtml($block->getMessage()) ?></textarea>
+                            </div>
+                        </div>
+                    </fieldset>
+                    <div class="result" style="display:none;"></div>
+                    <div class="actions-toolbar">
+                        <button type="submit" title="<?=/* @noEscape */__('Share') ?>" class="button2" value="<?=/* @noEscape */__('Share') ?>">
+                            <span>
+                                <span data-processing-text="<?=/* @noEscape */__('Bericht wordt verzonden..') ?>">
+                                    <?=/* @noEscape */__('Share') ?>
+                                </span>
+                            </span>
+                        </button>
+                    </div>
+                </form>
+                <?php endif;?>
+                <?php if ($smsSharingEnabled) :?>
+                    <form id="share-cart-sms-form" class="share-cart-form" style="display: none" action="<?=/* @noEscape */$helper->prepareUrl('share_cart/action/sms') ?>" method="post">
+                        <?=/* @noEscape */$block->getBlockHtml('formkey'); ?>
+                        <?php if ($isCaptchaEnabled) :?>
+                            <input type="hidden" name="g-recaptcha-response" value="">
+                        <?php endif;?>
+                        <fieldset class="fieldset">
+                            <div class="field required">
+                                <label for="recipient_number"><?=/* @noEscape */__("Recipient Number (including country code)") ?></label>
+                                <div class="control">
+                                    <input class="input-text required-entry" id="recipient_number" name="recipient_number" placeholder="<?=/* @noEscape */__("Enter Mobile Number")?>" value="<?=/* @noEscape */$block->escapeHtml($block->getRecipientNumber()) ?>" />
+                                </div>
+                            </div>
+                            <?php if (!$loggedIn) :?>
+                                <div class="field required">
+                                    <label for="sender_name"><?=/* @noEscape */__("Your Name") ?></label>
+                                    <div class="control">
+                                        <input class="input-text required-entry"  name="sender_name" placeholder="<?=/* @noEscape */__("Enter Your Name")?>" value="<?=/* @noEscape */$block->escapeHtml($block->getSenderName()) ?>" />
+                                    </div>
+                                </div>
+                                <div class="field required">
+                                    <label for="sender_email"><?=/* @noEscape */__("Your Email") ?></label>
+                                    <div class="control">
+                                        <input class="input-text required-entry validate-email"  name="sender_email" placeholder="<?=/* @noEscape */__("Enter Your Email")?>" value="<?=/* @noEscape */$block->escapeHtml($block->getSenderEmail()) ?>" />
+                                    </div>
+                                </div>
+                            <?php endif;?>
+                        </fieldset>
+                        <div class="result" style="display:none;"></div>
+                        <div class="actions-toolbar">
+                            <button type="submit" title="<?=/* @noEscape */__('Share') ?>" class="button2" value="<?=/* @noEscape */__('Share') ?>">
+                                <span>
+                                    <span data-processing-text="<?=/* @noEscape */__('Bericht wordt verzonden..') ?>">
+                                        <?=/* @noEscape */__('Share') ?>
+                                    </span>
+                                </span>
+                            </button>
+                        </div>
+                    </form>
+                <?php endif;?>
+                <?php if (in_array('url', $allowedSharingOptions)) :?>
+                <form id="share-cart-link-form" class="share-cart-form" style="display: none" action="<?=/* @noEscape */$helper->prepareUrl('share_cart/action/link')?>" method="post">
+                    <?=/* @noEscape */$block->getBlockHtml('formkey')?>
+                    <?php if ($isCaptchaEnabled) :?>
+                        <input type="hidden" name="g-recaptcha-response" value="">
+                    <?php endif;?>
+                    <?php if (!$loggedIn) :?>
+                    <fieldset class="fieldset">
+                        <div class="field required">
+                            <label for="sender_name"><?=/* @noEscape */__("Your Name") ?></label>
+                            <div class="control">
+                                <input class="input-text required-entry"  name="sender_name" placeholder="<?=/* @noEscape */__("Enter Your Name")?>" value="<?=/* @noEscape */$block->escapeHtml($block->getSenderName()) ?>" />
+                            </div>
+                        </div>
+                        <div class="field required">
+                            <label for="sender_email"><?=/* @noEscape */__("Your Email") ?></label>
+                            <div class="control">
+                                <input class="input-text required-entry validate-email  "  name="sender_email" placeholder="<?=/* @noEscape */__("Enter Your Email")?>" value="<?=/* @noEscape */$block->escapeHtml($block->getSenderEmail()) ?>" />
+                            </div>
+                        </div>
+                    </fieldset>
+                <?php endif;?>
+                <div class="result" style="display:none;"></div>
+                <div class="actions-toolbar">
+                    <button type="submit" title="<?=/* @noEscape */__('Get Link') ?>" class="button2" value="<?=/* @noEscape */__('Get Link') ?>">
+                        <span>
+                            <span data-processing-text="<?=/* @noEscape */__('Link genereren, een momeent geduld a.u.b..') ?>">
+                                <?=/* @noEscape */__('Link aanmaken') ?>
+                            </span>
+                        </span>
+                    </button>
+                </div>
+                </form>
+                <?php endif;?>
+                <?php if (in_array('whatsapp', $allowedSharingOptions)) :?>
+                <form id="share-cart-whatsapp-form" class="share-cart-form" style="display: none" action="<?=/* @noEscape */$helper->prepareUrl('share_cart/action/whatsApp')?>" method="post">
+                    <?=/* @noEscape */$block->getBlockHtml('formkey')?>
+                    <?php if ($isCaptchaEnabled) :?>
+                        <input type="hidden" name="g-recaptcha-response" value="">
+                    <?php endif;?>
+                    <?php if (!$loggedIn) :?>
+                    <fieldset class="fieldset">
+                        <div class="field required">
+                            <label for="sender_name"><?=/* @noEscape */__("Your Name") ?></label>
+                            <div class="control">
+                                <input class="input-text required-entry"  name="sender_name" placeholder="<?=/* @noEscape */__("Enter Your Name")?>" value="<?=/* @noEscape */$block->escapeHtml($block->getSenderName()) ?>" />
+                            </div>
+                        </div>
+                        <div class="field required">
+                            <label for="sender_email"><?=/* @noEscape */__("Your Email") ?></label>
+                            <div class="control">
+                                <input class="input-text required-entry validate-email  "  name="sender_email" placeholder="<?=/* @noEscape */__("Enter Your Email")?>" value="<?=/* @noEscape */$block->escapeHtml($block->getSenderEmail()) ?>" />
+                            </div>
+                        </div>
+                    </fieldset>
+                <?php endif;?>
+                <div class="result" style="display:none;"></div>
+                <div class="actions-toolbar">
+                    <button type="submit" title="<?=/* @noEscape */__('Prepare Cart to Share') ?>" class="button2" value="<?=/* @noEscape */__('Prepare Cart to Share') ?>">
+                        <span>
+                            <span data-processing-text="<?=/* @noEscape */__('Processing. Please wait..') ?>">
+                                <?=/* @noEscape */__('Prepare Cart to Share') ?>
+                            </span>
+                        </span>
+                    </button>
+                </div>
+                </form>
+                <?php endif;?>
+            </div>
+        </div>
+        <script type="text/javascript">
+            //<![CDATA[
+            // Get the modal
+            var shareCartPop = document.getElementById('share-cart-popup');
+
+
+            // Get the <span> element that closes the modal
+            var shareCartPopClose = document.getElementById("share-cart-popup-close");
+
+
+            // When the user clicks on <span> (x), close the modal
+            shareCartPopClose.onclick = function() {
+                shareCartPop.style.display = "none";
+                resetBodyScroll();
+            };
+
+            // When the user clicks anywhere outside of the modal, close it
+            window.onclick = function(event) {
+                if (event.target == shareCartPop) {
+                    shareCartPop.style.display = "none";
+                    resetBodyScroll();
+
+                }
+            };
+
+            require([
+                'jquery',
+                'mage/mage',
+                'mage/validation'
+            ], function($){
+
+                var shareCartEmailForm = $('#share-cart-email-form');
+
+                shareCartEmailForm.mage('validation', {
+                }).find('input:text').attr('autocomplete', 'off');
+
+                var shareCartLinkForm = $('#share-cart-link-form');
+
+                shareCartLinkForm.mage('validation', {
+                }).find('input:text').attr('autocomplete', 'off');
+
+                $('#share-cart-whatsapp-form').mage('validation', {
+                }).find('input:text').attr('autocomplete', 'off');
+                <?php if ($smsSharingEnabled) :?>
+                var shareCartSmsForm = $('#share-cart-sms-form');
+
+                shareCartSmsForm.mage('validation', {
+                }).find('input:text').attr('autocomplete', 'off');
+                <?php endif;?>
+
+                $('.top-actions li').click(function () {
+                    currentFormId = $(this).attr('id')+"-form";
+                    $('.top-actions li').each(function(){
+                        formId = $(this).attr('id')+"-form";
+                        if(formId != currentFormId) {
+                            $("#"+formId).hide();
+                        }
+                    });
+                    activate(this);
+                    $("#"+currentFormId).show();
+                });
+
+                $("#share-cart-email").click();
+
+                //ajax code
+                $(".share-cart-form").submit(function(e) {
+                    currentForm = $(this);
+                    validationResult = currentForm.validation('isValid');
+                    if(validationResult) {
+                        //captcha code
+                        <?php if ($isCaptchaEnabled) :?>
+                        grecaptcha.ready(function() {
+                            grecaptcha.execute('<?=/* @noEscape */$helper->getCaptchaConfig('site_key')?>', {action: formId.replace(/-/g, "_")}).then(function(token) {
+                                currentForm.find('[name="g-recaptcha-response"]').val(token);
+                                submitForm(currentForm);
+                            });
+                        });
+                        <?php else :?>
+                        submitForm(currentForm);
+                        <?php endif;?>
+                    }
+                    e.preventDefault(); // avoid to execute the actual submit of the form.
+                });
+            });
+
+            function submitForm(currentForm) {
+                actionButton = currentForm.find('button[type="submit"]');
+                actionButtonContainer = currentForm.find('button[type="submit"] span span');
+                origLabel = actionButtonContainer.html();
+                var url = currentForm.attr('action');
+                var resultContainer = currentForm.find(".result");
+                resultContainer.html('');
+                resultContainer.hide();
+                actionButton.prop('disabled', true);
+                actionButtonContainer.html(actionButtonContainer.attr('data-processing-text'));
+                jQuery.ajax({
+                    type: "POST",
+                    url: url,
+                    data: currentForm.serialize(), // serializes the form's elements.
+                    success: function(data)
+                    {
+                        var result = jQuery.parseJSON(JSON.stringify(data));
+                        resultContainer.removeAttr('style');
+                        if(!result.error) {
+                            if(currentForm.attr("id") == "share-cart-link-form") {
+                                resultContainer.html(
+                                    '<span>' +
+                                    '<input type="text" id="link-to-share" value="'+result.message+'"/>' +
+                                    '<button type="button" onclick="copyText(this)"  id="copy-link-to-share"><?=/* @noEscape */ __("Copy")?></button>' +
+                                    '</span>'
+                                );
+                            } else if(currentForm.attr("id") == "share-cart-whatsapp-form") {
+                                resultContainer.html('<span class="success"><a id="whatsapp-link" href="'+result.message+'" target="_blank">Click here to Share</a></span>');
+                                //window.open(result.message, '_blank');
+                                //$("#whatsapp-link")[0].click();
+                            } else {
+                                resultContainer.html('<span class="success">'+result.message+'</span>');
+                            }
+                        } else {
+                            resultContainer.html('<span class="error">'+result.message+'</span>');
+                        }
+                        actionButton.prop('disabled', false);
+                        actionButtonContainer.html(origLabel);
+                    },
+                    error: function (error) {
+                        resultContainer.removeAttr('style');
+                        resultContainer.html('<span class="error"><?=/* @noEscape */ __("Some error occurred. Please retry.")?></span>');
+                        actionButton.prop('disabled', false);
+                        actionButtonContainer.html(origLabel);
+                    }
+                });
+            }
+
+            function copyText(elem) {
+                /* Get the text field */
+                var copyText = document.getElementById("link-to-share");
+
+                /* Select the text field */
+                copyText.select();
+
+                /* Copy the text inside the text field */
+                document.execCommand("Copy");
+
+                origLabel = elem.innerHTML;
+                elem.innerHTML = 'Copied';
+                setTimeout(function(){elem.innerHTML = origLabel; }, 2000);
+            }
+
+            function activate(elem) {
+                jQuery('.share-cart-popup .top-actions li').removeClass('active');
+                jQuery(elem).addClass('active');
+            }
+            function resetBodyScroll() {
+                jQuery('body').removeClass('stop-scroll');
+            }
+            //]]>
+        </script>
+        <style>
+            <?=/* @noEscape */$helper->getDesignConfig('custom_css')?>
+        </style>
+    </div>
+<?php endif;?>

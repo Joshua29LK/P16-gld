@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <head>
+        <link src="RedChamps_TotalAdjustment::css/doomEdit.css"/>
+        <script src="RedChamps_TotalAdjustment::js/adjustments.js"/>
+    </head>
+    <body>
+        <referenceBlock name="order_totals">
+            <block class="RedChamps\TotalAdjustment\Block\Adminhtml\Sales\Order\Total\Item\Adjustments" template="RedChamps_TotalAdjustment::sales/order/total.phtml" name="adjustment">
+                <arguments>
+                    <argument name="view_model" xsi:type="object">RedChamps\TotalAdjustment\ViewModel\Helper</argument>
+                </arguments>
+            </block>
+            <block class="Magento\Sales\Block\Adminhtml\Order\Totals\Item" template="RedChamps_TotalAdjustment::sales/order/refunded.phtml" name="surcharge.refunded">
+                <action method="setDisplayArea">
+                    <argument name="area" xsi:type="string">footer</argument>
+                </action>
+                <arguments>
+                    <argument name="view_model" xsi:type="object">RedChamps\TotalAdjustment\ViewModel\Helper</argument>
+                </arguments>
+            </block>
+            <block class="RedChamps\TotalAdjustment\Block\Adminhtml\Sales\Order\Total\Item\Adjustments" name="add.adjustment" template="RedChamps_TotalAdjustment::sales/order/create/totals/adjustment.phtml">
+                <arguments>
+                    <argument name="view_model" xsi:type="object">RedChamps\TotalAdjustment\ViewModel\Helper</argument>
+                </arguments>
+            </block>
+        </referenceBlock>
+    </body>
+</page>

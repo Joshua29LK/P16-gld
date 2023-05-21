@@ -1,0 +1,5 @@
+select::-ms-expand {
+    display: none;
+}
+
+.header-style-1 .header-top {background:#06506f;}

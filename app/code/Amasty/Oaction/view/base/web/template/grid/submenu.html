@@ -1,0 +1,50 @@
+<!--
+/**
+* @author Amasty Team
+* @copyright Copyright (c) 2021 Amasty (https://www.amasty.com)
+* @package Amasty_Oaction
+*/
+-->
+
+<ul
+    class="action-submenu"
+    data-bind="foreach: {data: action.actions, as: 'action'},
+    css: { _active: action.visible }">
+    <li data-bind="css: { '_visible': $data.visible}">
+        <div class="amasty-oaction-form">
+            <table>
+                <tr>
+                    <td>
+                        <label data-bind="i18n: action.fieldLabel"></label>
+                    </td>
+                    <td>
+                        <div class="amoaction-comment-container">
+                        <!-- ko if: $data.typefield == 'select' || $data.typefield == 'select_input' -->
+                            <select class="admin__control-select"
+                                    data-amoaction-js="action"
+                                    data-bind="
+                                options: action.child,
+                                optionsText: 'label',
+                                optionsValue: 'fieldvalue',
+                                value: $parent.selectedStatus,
+                                event:{ change: $parent.applyAmastyAction.bind($parent, $data, event)}
+                                ">
+                            </select>
+                        <!-- /ko -->
+                        <!-- ko if: $data.typefield == 'input' || $data.typefield == 'select_input' -->
+                            <label if="$data.subLabel" data-bind="text: $data.subLabel"></label>
+                            <input class="admin__control-text"
+                                   data-amoaction-js="action"
+                                   data-bind="value: $parent.comment_text"/>
+                            <button class="amoaction-button"
+                                    data-bind="
+                                        i18n: 'Apply',
+                                        click: $parent.applyAmastyAction.bind($parent, $data, event)"></button>
+                        <!-- /ko -->
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </li>
+</ul>

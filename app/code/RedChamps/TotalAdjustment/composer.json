@@ -1,0 +1,22 @@
+{
+    "name": "redchamps/module-total-adjustment",
+    "description": "It allows adding flat/percentage based surcharge or discount to the new orders getting created from admin or to the existing orders.",
+    "type": "magento2-module",
+    "version": "1.2.0",
+    "require": {
+        "redchamps/module-core": "*",
+        "magento/module-tax": "*",
+        "magento/module-sales": "*"
+    },
+    "license": [
+        "RedChamps EULA"
+    ],
+    "autoload": {
+        "files": [
+            "registration.php"
+        ],
+        "psr-4": {
+            "RedChamps\\TotalAdjustment\\": ""
+        }
+    }
+}

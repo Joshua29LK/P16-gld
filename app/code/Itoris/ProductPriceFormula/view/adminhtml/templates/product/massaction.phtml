@@ -1,0 +1,70 @@
+<script type="text/javascript">
+	<?php if ($block->isEnabled()) { ?>
+    require([
+        'jquery'
+    ], function (jQuery) {
+        jQuery(document).ready(function(){
+            var scripts = document.getElementsByTagName('script'), initScript = false;
+            for(var i=0; i<scripts.length; i++) if (scripts[i].type == 'text/x-magento-init') {
+                initScript = scripts[i];
+                if (initScript) {
+                    try{
+                        //creating mass action items here, not from xml of the ui_component
+                        var obj = JSON.parse(initScript.innerHTML);
+                        var actions = obj['*']['Magento_Ui/js/core/app']['components']['product_listing']['children']['product_listing']['children']['listing_top']['children']['listing_massaction']['config']['actions'];
+                        actions[actions.length] = {
+                            component: "uiComponent",
+                            label: "<?php echo $block->escapeHtml(__("Copy Price Formulas 1 to Many")) ?>",
+                            type: "copy_price_formulas",
+                            url: "<?php echo $block->getUrl('productpriceformula/product/massCopy') ?>",
+                            confirm: {
+                                message: "<?php echo $block->escapeHtml(__("Please enter the product Id you wish to copy formulas from")) ?>: <span id='ppfMassActionContainer'></span><scri"+"pt>ppfGrid.attachCopyMassActionEvent()</scr"+"ipt>",
+                                title: "<?php echo $block->escapeHtml(__("Copy Price Formulas 1 to Many")) ?>"
+                            }
+                        };
+                        initScript.innerHTML = JSON.stringify(obj);
+                    } catch(e){}
+                }
+            }
+        });
+    });
+	var ppfGrid = {
+		attachCopyMassActionEvent: function(){
+			require([
+				'uiRegistry'
+			], function (registry) {
+				var massaction = registry.get('product_listing.product_listing.listing_top.listing_massaction');
+				var postParams = massaction.getSelections();
+				window.ppfMassActionObject = massaction.getAction('copy_price_formulas');
+				window.ppfMassActionURL = window.ppfMassActionObject.url;
+			});
+			var container = jQuery('#ppfMassActionContainer'), popup = jQuery('#ppfMassActionContainer').closest('.modal-popup');
+			var input = jQuery('<input>').attr('type', 'text');
+			container.append(input);
+			container.closest('.modal-popup').find('button.action-accept').attr('disabled', 'disabled');
+			input.on('keyup', function(){
+				if (this.value != "") {
+					popup.find('button.action-accept').removeAttr('disabled');
+				} else {
+					popup.find('button.action-accept').attr('disabled', 'disabled');
+				}
+				window.ppfMassActionObject.url = window.ppfMassActionURL + 'from_product_id/'+this.value+'/';
+			});
+			setTimeout(function(){input.focus()}, 100);
+		}
+	}
+	<?php } else { ?>
+		require([
+			'jquery'
+		], function (jQuery) {
+			window.ppfHideMassActions = function(){
+				if (jQuery('.action-menu-items').length) {
+					jQuery('.action-menu-items li span').each(function(i, span){
+						if (span.innerHTML.toLowerCase().indexOf('copy price formulas') > -1) span.parentNode.style.display = 'none';
+					});
+				} else setTimeout(window.ppfHideMassActions, 200);
+			}
+			window.ppfHideMassActions();
+		});
+	<?php } ?>
+</script>

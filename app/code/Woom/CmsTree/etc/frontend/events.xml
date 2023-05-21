@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
+    <event name="cms_controller_router_match_before">
+        <observer name="cms_page_view_replace_cms_with_tree" instance="Woom\CmsTree\Observer\ReplaceCmsWithTree" />
+    </event>
+    <event name="page_block_html_topmenu_gethtml_before">
+        <observer name="topmenu_gethtml_before_add_cms_pages" disabled="true" />
+        <observer name="topmenu_gethtml_before_add_tree_items" instance="Woom\CmsTree\Observer\AddTreeToTopmenu" />
+    </event>
+</config>

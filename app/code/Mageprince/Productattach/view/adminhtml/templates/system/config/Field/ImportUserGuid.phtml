@@ -1,0 +1,72 @@
+<?php
+// @codingStandardsIgnoreFile
+/**
+ * @see \Mageprince\Productattach\Block\Adminhtml\System\Config\Field\AllAttachmentBlockInfo
+ * @var \Mageprince\Productattach\Block\Adminhtml\System\Config\Field\AllAttachmentBlockInfo $block
+ */
+
+?>
+<div class="product-attachment-info-block">
+    <div class="userguide-container">
+        <div id="messages">
+            <ul class="messages">
+                <li class="message message-notice notice" style="list-style: none;">
+                    <ul>
+                        <li style="list-style: none;">
+                            <?= __('Please check below user guide to import attachments') ?>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+        <div class="import-steps">
+            Step 1: Go to <b><i>System->Import</i></b> </br>
+            Step 2: Select the entity type <b><i>Product Attachment Import</i></b> to import attachments </br>
+            Step 3: You can download a sample CSV file by clicking on <a href="javascript:void()">Download Sample File</a></br>
+            Step 4: Fill the attachment data into the downloaded sample file. </br>
+            Step 5: Now copy attachment files(which you added into file column) into <b><i>&lt;Magento Root&gt;/pub/media/productattach/</i></b></br>
+            Step 6: Select Import Behaviour:
+            <select id="" name="behavior" title="" class="admin__control-select">
+                <option value="append">Add/Update</option>
+            </select></br>
+            Step 7. Upload CSV file and click on the <button type="button" class="scalable primary"><span>Check Data</span></button></br>
+            Step 8. Now click on the <button type="button" class="scalable"><span>Import</span></button> button to import attachments </br>
+            </br>
+        </div>
+        <i>Follow the same steps to import attachment product relations. To import attachment product relation you need to select entity type <b>Product Attachment Relation Import</b></i>
+
+        </br>
+        </br>
+        <b>Check Full Documentation Here: <a href="https://marketplace.magento.com/media/catalog/product/prince-module-productattachment-2-0-5-ce/user_guides.pdf">Product Attachment User Guid</a></b>
+        </br>
+        </br>
+        Read More: <a href="https://docs.magento.com/m2/ce/user_guide/system/data-import.html">Magento 2 Import</a>
+    </div>
+</div>
+<style type="text/css">
+    .product-attachment-info-block .userguide-container {
+        border: dotted 1px #ccc;
+        padding: 20px;
+        margin-top: 25px;
+    }
+
+    .product-attachment-info-block .attachment-note {
+        margin-top: 30px;
+        text-align: center;
+    }
+
+    ul.attachment-parameters li {
+        padding: 5px;
+        margin-left: 20px;
+    }
+
+    .product-attachment-info-block .import-steps {
+        font-size: 15px;
+        line-height: 2.5;
+    }
+
+    .product-attachment-info-block .import-steps select {
+        width: 135px;
+    }
+</style>
+

@@ -1,0 +1,23 @@
+<div id="product-view-modal" class="product-view-modal">
+    <div class="product-view-image-container">
+        <!-- ko if: renderPrice -->
+            <label class="product-view-price-label">
+                <span data-bind="text: currencyCode"></span>
+                <span class="product-view-price" data-bind="text: productPrice"></span>
+            </label>
+        <!-- /ko -->
+        <span id="previous-product-button" class="previous-product-button" data-bind="if: hasPreviousProduct, click: selectPreviousProduct"></span>
+        <div class="product-view-image-wrapper">
+            <img class="product-view-image" data-bind="attr: { src: productImageUrl }" />
+        </div>
+        <span id="next-product-button" class="next-product-button" data-bind="click: selectNextProduct"></span>
+    </div>
+    <div class="product-view-info-container">
+        <div class="product-view-title-container">
+            <h3 class="product-view-title" data-bind="text: productName"></h3>
+        </div>
+        <div class="product-view-description-container">
+            <span data-bind="html: productDescription"></span>
+        </div>
+    </div>
+</div>

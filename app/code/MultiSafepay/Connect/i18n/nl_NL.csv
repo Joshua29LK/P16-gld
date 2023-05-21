@@ -1,0 +1,122 @@
+"The transaction was canceled or declined and the order was closed, please try again.","De transactie is geannuleerd of geweigerd en de bestelling is niet doorgevoerd, probeer het opnieuw."
+"There was an error processing your transaction request, please try again with another payment method.","Er is een fout opgetreden met de betaling, probeer het opnieuw met een andere betaalmethode."
+Guests,Gasten
+"-- Please Select --","-- Maak een keuze --"
+"<b>Klarna:</b> ","<b>Klarna:</b> "
+"Error: Refund not processed online as it did not match the complete shipping cost.  ","Fout: Terugbetaling niet online verwerkt omdat deze niet overeenkomt met de volledige verzendkosten.  "
+"Your shipment has been processed. Your transaction has also been updated at MultiSafepay","Uw verzending is verwerkt. De transactie is tevens geüpdate bij MultiSafepay"
+"Your shipment has been processed, but the transaction could not be updated at MultiSafepay. If needed you need to update your transaction manually using MultiSafepay Control","Uw verzending is verwerkt, maar de transactie kon niet worden bijgewerkt bij MultiSafepay. Indien nodig moet u de transactie handmatig bijwerken met MultiSafepay Control"
+"Proceed to FastCheckout","Ga verder naar FastCheckout"
+"Place Order","Plaats bestelling"
+"MultiSafepay Settings","MultiSafepay Instellingen"
+"Test or Live","Test of Live"
+"Live Api Key","Live Api Key"
+"Test Api Key","Test Api Key"
+"When send the order confirmation e-mail","Moment van het verzenden van de orderbevestigingsmail"
+"E-mail invoice to customer","E-mail factuur naar de klant"
+"Default selected method","Standaard voorgeselecteerde betaalmethode"
+"Use base currency?","Gebruik standaardvaluta?"
+"New Order Status","Status nieuwe bestelling"
+"Declined Order Status","Status afgewezen bestelling"
+"Canceled Order Status","Status geannuleerde bestelling"
+"Expired Order Status","Status verlopen bestelling"
+"Chargeback Order Status","Status teruggevorderde bestelling"
+"Create Payment link","Maak betaallink aan"
+"Reset Gateway","Reset Gateway"
+"Keep cart alive","Behoud winkelwagen"
+"Enable debug mode","Activeer debug mode"
+"MultiSafepay Gateways","MultiSafepay Gateways"
+iDEAL,iDEAL
+Enabled,Ingeschakeld
+Title,Titel
+"Enable Shipping Method Restriction","Activeer verzendmethode restricties"
+"Allowed Shipping Methods","Toegestane verzendmethodes"
+"Allowed Currencies","Toegestane valuta"
+"Allowed Groups","Toegestane groepen"
+"Payment from Applicable Countries","Betaling vanuit landen die van toepassing zijn"
+"Payment from Specific Countries","Betaling vanuit specifieke landen"
+"Minimum Order Total","Minimale bestelwaarde"
+"Maximum Order Total","Maximale bestelwaarde"
+"Days active","Dagen actief"
+"Seconds active","Seconden actief"
+Instructions,Instructies
+"Sort Order","Sorteer volgorde"
+"Credit card","Credit card"
+"Allowed Credit cards","Toegestane Credit cards"
+Visa,Visa
+Mastercard,Mastercard
+Giropay,Giropay
+"Bank transfer",Bankoverschrijving
+"SOFORT Banking","SOFORT Banking"
+Maestro,Maestro
+Bancontact,Bancontact
+"American Express","American Express"
+"Direct Debit","Eenmalige machtiging"
+"Pay After Delivery","Betaal Na Ontvangst"
+E-Invoicing,E-Invoicing
+"Klarna - buy now, pay later","Klarna - Betaal later in 14 dagen"
+"Betaalplan","Betaal per Maand"
+PayPal,PayPal
+TrustPay,TrustPay
+CBC,CBC
+KBC,KBC
+AliPay,AliPay
+Belfius,Belfius
+in3,in3
+"ING Home'Pay","ING Home'Pay"
+EPS,EPS
+Dotpay,Dotpay
+Paysafecard,Paysafecard
+AfterPay,AfterPay
+Trustly,Trustly
+"iDEAL QR","iDEAL QR"
+"MultiSafepay Giftcards","MultiSafepay Giftcards"
+Wijncadeau,Wijncadeau
+Fashiongiftcard,Fashiongiftcard
+Podium,Podium
+"VVV Cadeaukaart","VVV Cadeaukaart"
+"Sport en Fit","Sport en Fit"
+Yourgift,Yourgift
+Givacard,Givacard
+Goodcard,Goodcard
+"Nationale Tuinbon","Nationale Tuinbon"
+"Nationale Verwencadeaubon","Nationale Verwencadeaubon"
+Gezondheidsbon,Gezondheidsbon
+Babygiftcard,Babygiftcard
+Boekenbon,Boekenbon
+Erotiekbon,Erotiekbon
+Fashioncheque,Fashioncheque
+Parfumcadeaukaart,Parfumcadeaukaart
+Webshopgiftcard,Webshopgiftcard
+"Beauty and Wellness","Beauty and Wellness"
+Fietsenbon,Fietsenbon
+"Wellness Giftcard","Wellness Giftcard"
+"Winkel Cheque","Winkel Cheque"
+Fastcheckout,Fastcheckout
+"Fastcheckout Settings","Fastcheckout Instellingen"
+"Enable Fastcheckout","Activeer Fastcheckout"
+"Send account e-mail","Verstuur account e-mail"
+"Send invoice ID to MultiSafepay","Verstuur factuur ID naar MultiSafepay"
+"Fastcheckout - Custom Fields","Fastcheckout - Aangepaste Velden"
+"Force accept agreements","Forceer akkoord overeenkomsten"
+"Alternate Agreements URL","Alternatieve URL voor overeenkomsten"
+"Company name","Bedrijfsnaam"
+Birthday,Geboortedag
+Phonenumber,Telefoonnummer
+"Chamber of Commerce (CoC/KvK)","Kamer van Koophandel (KvK)"
+"VAT number","BTW nummer"
+"Passport number","Paspoort nummer"
+"Drivers license","Rijbewijs nummer"
+Sex,Geslacht
+Salutation,Aanhef
+Comment,Commentaar
+Newsletter,Nieuwsbrief
+"Choose your bank...","Kies uw bank..."
+"Choose your credit card...","Kies uw credit card..."
+"Order", "Bestelling"
+"@","@"
+"Are you sure you want to delete this credit card?","Weet u zeker dat u deze credit card wilt verwijderen?"
+"Notice: Captured amount %1 differs from MultiSafepay amount %2","Melding: Gefactureerd bedrag %1 verschilt van het via MultiSafepay betaalde bedrag %2"
+"Payment methods specification","Betaalmethodes specificatie"
+"This gateway does not allow a different billing and shipping address","Deze betaalmethode is alleen toegestaan als het verzendadres overeenkomt met het factuuradres"
+"Credit card will not be saved for Maestro.", "Credit card wordt niet opgeslagen voor Maestro."

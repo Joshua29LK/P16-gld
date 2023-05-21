@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="admin-2columns-left" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <update handle="styles"/>
+    <update handle="editor"/>
+    <head>
+        <link src="Woom_CmsTree::js/page/edit.js"/>
+    </head>
+    <body>
+        <referenceContainer name="left" htmlTag="div" />
+        <referenceContainer name="page.main.actions">
+            <block class="Woom\CmsTree\Block\Adminhtml\Store\Switcher" name="woom.cmstree.magento.store.switcher" template="Magento_Backend::store/switcher.phtml"/>
+        </referenceContainer>
+        <referenceContainer name="left">
+            <block class="Woom\CmsTree\Block\Adminhtml\Page\TreeBlock" name="woom.cmstree.page.treeblock" template="Woom_CmsTree::page/treeblock.phtml"/>
+        </referenceContainer>
+        <referenceContainer name="content">
+            <uiComponent name="cms_page_form"/>
+            <block class="Woom\CmsTree\Block\Adminhtml\Page\Edit" name="woom.cmstree.page.edit" template="Woom_CmsTree::page/edit.phtml" />
+        </referenceContainer>
+        <referenceBlock name="head.components">
+            <block class="Magento\Framework\View\Element\Js\Components" name="cms_page_head_components" template="Magento_Catalog::js/components.phtml"/>
+        </referenceBlock>
+    </body>
+</page>

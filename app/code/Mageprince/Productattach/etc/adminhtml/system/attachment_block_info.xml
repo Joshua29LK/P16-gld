@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * MagePrince
+ * Copyright (C) 2020 Mageprince <info@mageprince.com>
+ *
+ * @package Mageprince_Productattach
+ * @copyright Copyright (c) 2020 Mageprince (http://www.mageprince.com/)
+ * @license http://opensource.org/licenses/gpl-3.0.html GNU General Public License,version 3 (GPL-3.0)
+ * @author MagePrince <info@mageprince.com>
+ */
+-->
+<include xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_include.xsd">
+    <group id="attachment_block_info" translate="label" type="text" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
+        <label>Block code to show attachments on CMS page or static block</label>
+        <field id="all_attachment_block_code" type="textarea" translate="label" sortOrder="100" showInDefault="1" showInWebsite="1">
+            <frontend_model>Mageprince\Productattach\Block\Adminhtml\System\Config\Field\Disable</frontend_model>
+            <label>Show all attachments</label>
+        </field>
+        <field id="attachment_by_file_type_block_code" type="textarea" translate="label" sortOrder="100" showInDefault="1" showInWebsite="1">
+            <frontend_model>Mageprince\Productattach\Block\Adminhtml\System\Config\Field\Disable</frontend_model>
+            <label>Show attachments by file type</label>
+            <comment>Use "file_type" to show attachments by file type</comment>
+        </field>
+        <field id="attachment_count_block_code" type="textarea" translate="label" sortOrder="100" showInDefault="1" showInWebsite="1">
+            <frontend_model>Mageprince\Productattach\Block\Adminhtml\System\Config\Field\Disable</frontend_model>
+            <label>Set count in collection of attachments</label>
+            <comment>Use "count" to set limit in collection of attachments</comment>
+        </field>
+        <field id="attachment_id_block_code" type="textarea" translate="label" sortOrder="100" showInDefault="1" showInWebsite="1">
+            <frontend_model>Mageprince\Productattach\Block\Adminhtml\System\Config\Field\Disable</frontend_model>
+            <label>Show attachment by attachment ID</label>
+            <comment>Use "attachment_id" to show attachment by attachment ID</comment>
+        </field>
+    </group>
+</include>

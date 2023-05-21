@@ -1,0 +1,63 @@
+<?xml version="1.0" ?>
+<routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Webapi:etc/webapi.xsd">
+	<route method="POST" url="/V1/balticode-categoryconfigurator/configurator">
+		<service class="Balticode\CategoryConfigurator\Api\ConfiguratorRepositoryInterface" method="save"/>
+		<resources>
+			<resource ref="Balticode_CategoryConfigurator::Configurator_save"/>
+		</resources>
+	</route>
+	<route method="GET" url="/V1/balticode-categoryconfigurator/configurator/search">
+		<service class="Balticode\CategoryConfigurator\Api\ConfiguratorRepositoryInterface" method="getList"/>
+		<resources>
+			<resource ref="Balticode_CategoryConfigurator::Configurator_view"/>
+		</resources>
+	</route>
+	<route method="GET" url="/V1/balticode-categoryconfigurator/configurator/:configuratorId">
+		<service class="Balticode\CategoryConfigurator\Api\ConfiguratorRepositoryInterface" method="getById"/>
+		<resources>
+			<resource ref="Balticode_CategoryConfigurator::Configurator_view"/>
+		</resources>
+	</route>
+	<route method="PUT" url="/V1/balticode-categoryconfigurator/configurator/:configuratorId">
+		<service class="Balticode\CategoryConfigurator\Api\ConfiguratorRepositoryInterface" method="save"/>
+		<resources>
+			<resource ref="Balticode_CategoryConfigurator::Configurator_update"/>
+		</resources>
+	</route>
+	<route method="DELETE" url="/V1/balticode-categoryconfigurator/configurator/:configuratorId">
+		<service class="Balticode\CategoryConfigurator\Api\ConfiguratorRepositoryInterface" method="deleteById"/>
+		<resources>
+			<resource ref="Balticode_CategoryConfigurator::Configurator_delete"/>
+		</resources>
+	</route>
+	<route method="POST" url="/V1/balticode-categoryconfigurator/step">
+		<service class="Balticode\CategoryConfigurator\Api\StepRepositoryInterface" method="save"/>
+		<resources>
+			<resource ref="Balticode_CategoryConfigurator::Step_save"/>
+		</resources>
+	</route>
+	<route method="GET" url="/V1/balticode-categoryconfigurator/step/search">
+		<service class="Balticode\CategoryConfigurator\Api\StepRepositoryInterface" method="getList"/>
+		<resources>
+			<resource ref="Balticode_CategoryConfigurator::Step_view"/>
+		</resources>
+	</route>
+	<route method="GET" url="/V1/balticode-categoryconfigurator/step/:stepId">
+		<service class="Balticode\CategoryConfigurator\Api\StepRepositoryInterface" method="getById"/>
+		<resources>
+			<resource ref="Balticode_CategoryConfigurator::Step_view"/>
+		</resources>
+	</route>
+	<route method="PUT" url="/V1/balticode-categoryconfigurator/step/:stepId">
+		<service class="Balticode\CategoryConfigurator\Api\StepRepositoryInterface" method="save"/>
+		<resources>
+			<resource ref="Balticode_CategoryConfigurator::Step_update"/>
+		</resources>
+	</route>
+	<route method="DELETE" url="/V1/balticode-categoryconfigurator/step/:stepId">
+		<service class="Balticode\CategoryConfigurator\Api\StepRepositoryInterface" method="deleteById"/>
+		<resources>
+			<resource ref="Balticode_CategoryConfigurator::Step_delete"/>
+		</resources>
+	</route>
+</routes>

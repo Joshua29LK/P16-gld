@@ -1,0 +1,1 @@
+It allows adding flat/percentage based surcharge or discount to the new orders getting created from admin or to the existing orders.

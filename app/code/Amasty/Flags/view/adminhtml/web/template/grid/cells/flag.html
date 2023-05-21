@@ -1,0 +1,8 @@
+<img
+        class="admin__control-thumbnail"
+        attr="src: $col.getSrc($row()),
+            alt: $col.getAlt($row()),
+            title: $col.getAlt($row()),
+            'data-assign-allowed': +$col.isAssignAllowed,
+            id: getElementId($row())"
+        data-bind="click: openModal.bind($col, $row())" />

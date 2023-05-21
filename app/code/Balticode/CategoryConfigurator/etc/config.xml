@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <category_configurator_config>
+            <general>
+                <glass_shapes_default_height>2000</glass_shapes_default_height>
+                <glass_shapes_default_width>900</glass_shapes_default_width>
+                <glass_shapes_minimum_height>200</glass_shapes_minimum_height>
+                <glass_shapes_minimum_width>200</glass_shapes_minimum_width>
+                <glass_shapes_maximum_height>3000</glass_shapes_maximum_height>
+                <glass_shapes_maximum_width>3000</glass_shapes_maximum_width>
+                <full_step_carousel_item_count>4</full_step_carousel_item_count>
+                <half_step_carousel_item_count>2</half_step_carousel_item_count>
+                <glass_shapes_width_title>Width</glass_shapes_width_title>
+                <glass_shapes_height_title>Height</glass_shapes_height_title>
+                <glass_shapes_top_width_title>Top Width</glass_shapes_top_width_title>
+                <glass_shapes_bottom_width_title>Bottom Width</glass_shapes_bottom_width_title>
+            </general>
+        </category_configurator_config>
+    </default>
+</config>

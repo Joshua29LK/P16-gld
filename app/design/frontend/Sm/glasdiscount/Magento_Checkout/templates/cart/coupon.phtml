@@ -1,0 +1,63 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+/**
+ * @var \Magento\Framework\View\Element\AbstractBlock $block
+ */
+
+// We should use strlen function because coupon code could be "0", converted to bool will lead to false
+$hasCouponCode = (bool) strlen($block->getCouponCode());
+?>
+<div class="discount"
+     id="block-discount"
+     data-mage-init='{"collapsible":{"active": <?= $hasCouponCode ? 'true' : 'false' ?>, "openedState": "active", "saveState": false}}'
+>
+    
+
+        <form id="discount-coupon-form"
+              action="<?= $block->escapeUrl($block->getUrl('checkout/cart/couponPost')) ?>"
+              method="post"
+              data-mage-init='{"discountCode":{"couponCodeSelector": "#coupon_code",
+                                               "removeCouponSelector": "#remove-coupon",
+                                               "applyButton": "button.action.apply",
+                                               "cancelButton": "button.action.cancel"}}'>
+            <div class="fieldset coupon container-fluid <?= $hasCouponCode ? ' applied' : '' ?>">
+			   <div class="row"
+                <input type="hidden" name="remove" id="remove-coupon" value="0" />
+                <div class="field col-10 px-0">
+                    <div class="control">
+                        <input type="text"
+                               class="input-text"
+                               id="coupon_code"
+                               name="coupon_code"
+                               value="<?= $block->escapeHtmlAttr($block->getCouponCode()) ?>"
+                               placeholder="<?= $block->escapeHtmlAttr(__('Heeft u een kortingscode?')) ?>"
+                                <?php if ($hasCouponCode) :?>
+                                   disabled="disabled"
+                                <?php endif; ?>
+                        />
+                    </div>
+                </div>
+                <div class="actions-toolbar col-2 pr-0">
+                    <?php if (!$hasCouponCode) :?>
+                    <div class="primary text-center w-100">
+                        <button class="action apply text-center primary w-100 p-0" type="button" value="<?= $block->escapeHtmlAttr(__('Code toepassen')) ?>">
+                            <span><i class="fas fa-plus"></i></span>
+                        </button>
+                    </div>
+                    <?php else :?>
+                        <div class="primary text-center w-100">
+                            <button  type="button" class="action cancel text-center primary w-100 p-0" value="<?= $block->escapeHtmlAttr(__('Cancel Coupon')) ?>"><span><i class="fas fa-minus"></i></span></button>
+                        </div>
+                    <?php endif; ?>
+                </div>
+			   </div>
+            </div>
+            <?php if (!$hasCouponCode) : ?>
+                <?= /* @noEscape */ $block->getChildHtml('captcha') ?>
+            <?php endif; ?>
+        </form>
+</div>

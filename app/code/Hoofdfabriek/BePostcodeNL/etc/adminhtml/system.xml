@@ -1,0 +1,27 @@
+<?xml version="1.0" ?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <section id="postcodenl">
+            <group id="autocomplete" showInDefault="1" showInStore="1" showInWebsite="1" sortOrder="10" translate="label">
+                <label>Autocomplete</label>
+                <field id="use_be_autocomplete" showInDefault="1" showInStore="1" showInWebsite="1" sortOrder="50" translate="label" type="select">
+                    <label>Enable Belgium address autocomplete</label>
+                    <comment/>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="belgium_validation" showInDefault="1" showInStore="1" showInWebsite="1" sortOrder="50" translate="label" type="select">
+                    <label>Belgium housenumber validation</label>
+                    <comment>
+                        <![CDATA[Determines when an unknown input house number may appear as an 'unknown' suggestion. Possible values:<br />
+                        <strong style="color:orangered">Strict</strong> - never<br />
+                        <strong style="color:orangered">Street</strong> - when no house numbers are known for the given street<br />
+                        <strong style="color:orangered">Number</strong> - as for 'street', or when at least the number part is known<br />
+                        <strong style="color:orangered">None</strong> - always when the input does not exactly match a known address
+                        ]]>
+                    </comment>
+                    <source_model>Hoofdfabriek\BePostcodeNL\Model\Config\Source\Validation</source_model>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>

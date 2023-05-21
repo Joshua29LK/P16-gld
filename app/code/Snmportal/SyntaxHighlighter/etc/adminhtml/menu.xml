@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
+    <menu>
+        <update id="Snmportal_Base::topmenu" title="SNM-PORTAL" sortOrder="60" resource="Snmportal_Base::base"/>
+        <update id="Snmportal_Base::settings" title="Settings" sortOrder="100" parent="Snmportal_Base::topmenu" resource="Snmportal_Base::settings"/>
+
+        <add id="Snmportal_SyntaxHighlighter::settings" title="SyntaxHighlighter" module="Snmportal_SyntaxHighlighter"
+             sortOrder="12" parent="Snmportal_Base::settings"
+             action="adminhtml/system_config/edit/section/cms"
+             resource="Snmportal_SyntaxHighlighter::settings"/>
+    </menu>
+</config>

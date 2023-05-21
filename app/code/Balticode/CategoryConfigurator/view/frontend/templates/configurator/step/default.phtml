@@ -1,0 +1,25 @@
+<?php
+/**
+ * @var $block \Balticode\CategoryConfigurator\Block\Configurator\Step\StepDefault
+ */
+?>
+<div class="configurator-step">
+    <div class="configurator-step-header">
+        <div class="configurator-step-title">
+            <span>
+                <?php echo $block->escapeHtml($block->getTitle()); ?>
+            </span>
+        </div>
+        <?php if ($block->getInfo()): ?>
+            <span class="configurator-step-info-tooltip">
+                <span class="tooltip-icon"></span>
+                <span class="tooltip-content"><?php echo $block->getInfo(); ?></span>
+            </span>
+        <?php endif; ?>
+    </div>
+    <div class="configurator-step-description">
+        <span>
+            <?php echo $block->getDescription(); ?>
+        </span>
+    </div>
+</div>

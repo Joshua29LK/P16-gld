@@ -1,0 +1,28 @@
+<?php
+$order = $block->getOrder();
+$billingAddress = $order->getBillingAddress();
+$shippingAddress = $order->getShippingAddress();
+?>
+<!-- Global site tag (gtag.js) - Google Ads: 123456 -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=AW-1069851393"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config','AW-1069851393', {'allow_enhanced_conversions':true});
+</script>
+<script>
+  var enhanced_conversion_data = {
+    "email": '<?php echo $shippingAddress->getEmail()?>',
+    "phone_number": '<?php echo $shippingAddress->getTelephone()?>',
+    "first_name": '<?php echo $shippingAddress->getFirstname()?>',
+    "last_name": '<?php echo $shippingAddress->getLastname()?>',
+    "home_address": {
+      "street": '<?php echo implode(" ", $shippingAddress->getStreet())?>',
+      "city":'<?php echo $shippingAddress->getCity()?>',
+      "region": '<?php echo $shippingAddress->getRegion()?>',
+      "postal_code": '<?php echo $shippingAddress->getPostcode()?>',
+      "country": '<?php echo $shippingAddress->getCountryId()?>'
+    }
+  };
+</script>

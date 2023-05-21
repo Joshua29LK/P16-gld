@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<!--
+/**
+* @author Amasty Team
+* @copyright Copyright (c) 2022 Amasty (https://www.amasty.com)
+* @package Order Archive for Magento 2
+*/-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Magento\Sales\Block\Adminhtml\Order\View">
+        <plugin name="amasty_orderarchive_add_top_button" type="Amasty\Orderarchive\Plugin\AddButton"/>
+    </type>
+    <type name="Magento\Sales\Model\ResourceModel\Grid">
+        <plugin name="amasty_orderarchive_grid_refresh" type="Amasty\Orderarchive\Plugin\GridRefreshPlugin" />
+    </type>
+    <type name="Magento\Ui\Model\Export\MetadataProvider">
+        <arguments>
+            <argument name="data" xsi:type="array">
+                <item name="sales_order_grid" xsi:type="array">
+                    <item name="created_at" xsi:type="string">amasty_sales_order_archives_grid</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider">
+        <plugin sortOrder="1" name="amastyOrderarchiveDataProvider" type="Amasty\Orderarchive\Plugin\UiComponent\DataProvider\DataProviderPlugin"/>
+    </type>
+</config>

@@ -1,0 +1,28 @@
+<?php
+//change these parameters
+$storeUrl = "https://www.glasdiscount.nl/";
+$adminUserName = "elmer";
+$adminPassword = "36WP45cB8T";
+//this is not order number instead it is what you see in the browser URL while viewing order in admin
+$orderId = 48941;
+
+$userData = array("username" => "elmer", "password" => "36WP45cB8T");
+$ch = curl_init($storeUrl."rest/V1/integration/admin/token");
+curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($userData));
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+curl_setopt($ch, CURLOPT_HTTPHEADER, array("Content-Type: application/json", "Content-Lenght: " . strlen(json_encode($userData))));
+
+$token = curl_exec($ch);
+
+$ch = curl_init($storeUrl."rest/V1/orders/".$orderId);
+curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "GET");
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+curl_setopt($ch, CURLOPT_HTTPHEADER, array("Content-Type: application/json", "Authorization: Bearer " . json_decode($token)));
+
+$result = curl_exec($ch);
+
+$result = json_decode($result, 1);
+$result = json_encode($result, JSON_PRETTY_PRINT);
+header('Content-Type: application/json');
+echo $result;

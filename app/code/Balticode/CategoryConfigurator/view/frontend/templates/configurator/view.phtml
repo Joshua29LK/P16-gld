@@ -1,0 +1,42 @@
+<?php
+/**
+ * @var $block \Balticode\CategoryConfigurator\Block\Configurator\View
+ */
+?>
+<div class="configurator" data-bind="scope: 'configurator'">
+    <?php $steps = $block->getStepBlocks(); ?>
+    <script type="text/x-magento-init">
+    {
+        "*": {
+            "Magento_Ui/js/core/app": {
+                "components": {
+                    "configurator": {
+                        "component": "Balticode_CategoryConfigurator/js/configurator/configurator",
+                        "defaultData": <?php echo $block->getStepsJsonData($steps); ?>,
+                        "children": {
+                            "product-view-modal": {
+                                "component": "Balticode_CategoryConfigurator/js/configurator/step/product-modal",
+                                "defaultCurrencyCode": "<?php echo $block->getCurrencySymbol() ?>",
+                                "nextProductArrowSelector": "#next-product-button",
+                                "previousProductArrowSelector": "#previous-product-button"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    </script>
+    <ul class="configurator-step-list no-bullet-list">
+        <?php foreach ($steps as $step): ?>
+            <li class="configurator-step-list-item <?php echo $block->escapeHtml($step->getStepSizeHtmlClass()); ?>">
+                <?php echo $step->toHtml(); ?>
+            </li>
+        <?php endforeach; ?>
+    </ul>
+    <div data-bind="scope: requestChild('product-view-modal')">
+        <div class="product-view-modal-wrapper">
+            <!-- ko template: getTemplate() --><!-- /ko -->
+        </div>
+    </div>
+</div>

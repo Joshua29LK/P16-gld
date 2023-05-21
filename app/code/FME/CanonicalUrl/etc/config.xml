@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <canonicalurl>
+            <general>
+                <canonicalurl_mod_enable>1</canonicalurl_mod_enable>
+            </general>
+            <category_canonical_tags>
+                <category_canonical_tags_enable>1</category_canonical_tags_enable>
+                <paginationpages_canonical_enable>1</paginationpages_canonical_enable>
+                <paginationpages_mod_enable>1</paginationpages_mod_enable>
+ 			</category_canonical_tags>
+ 			<product_canonical_tags>
+ 				<product_canonical_tags_enable>1</product_canonical_tags_enable>
+ 			</product_canonical_tags>
+ 			<cms_canonical_tags>
+ 				<cms_canonical_tags>1</cms_canonical_tags>
+     		</cms_canonical_tags>
+        </canonicalurl>
+    </default>
+</config>

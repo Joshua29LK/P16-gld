@@ -1,0 +1,57 @@
+{
+    "amasty_flags_column": {
+        "column": {
+            "id": true,
+            "name": true,
+            "position": true,
+            "comment": true
+        },
+        "constraint": {
+            "PRIMARY": true
+        }
+    },
+    "amasty_flags_flag": {
+        "column": {
+            "id": true,
+            "name": true,
+            "image_name": true,
+            "priority": true,
+            "note": true,
+            "apply_column": true,
+            "apply_status": true,
+            "apply_shipping": true,
+            "apply_payment": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "AMASTY_FLAGS_FLAG_APPLY_COLUMN_AMASTY_FLAGS_COLUMN_ID": true
+        }
+    },
+    "amasty_flags_flag_column": {
+        "column": {
+            "column_id": true,
+            "flag_id": true
+        },
+        "constraint": {
+            "AMASTY_FLAGS_FLAG_COLUMN_COLUMN_ID_AMASTY_FLAGS_COLUMN_ID": true,
+            "AMASTY_FLAGS_FLAG_COLUMN_FLAG_ID_AMASTY_FLAGS_FLAG_ID": true,
+            "AMASTY_FLAGS_FLAG_COLUMN_COLUMN_ID_FLAG_ID": true
+        }
+    },
+    "amasty_flags_order_flag": {
+        "column": {
+            "id": true,
+            "order_id": true,
+            "flag_id": true,
+            "column_id": true,
+            "note": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "AMASTY_FLAGS_ORDER_FLAG_COLUMN_ID_AMASTY_FLAGS_COLUMN_ID": true,
+            "AMASTY_FLAGS_ORDER_FLAG_ORDER_ID_SALES_ORDER_ENTITY_ID": true,
+            "AMASTY_FLAGS_ORDER_FLAG_FLAG_ID_AMASTY_FLAGS_FLAG_ID": true,
+            "AMASTY_FLAGS_ORDER_FLAG_COLUMN_ID_ORDER_ID": true
+        }
+    }
+}

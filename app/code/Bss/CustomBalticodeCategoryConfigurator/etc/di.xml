@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Balticode\CategoryConfigurator\Model\Product\BaseFieldsProvider">
+        <plugin name="display-bundel-price" type="Bss\CustomBalticodeCategoryConfigurator\Plugin\BaseFieldsProvider" sortOrder="10" />
+    </type>
+    <type name="Balticode\CategoryConfigurator\Model\Product\GlassShapesProvider">
+        <plugin name="add-config-width-height" type="Bss\CustomBalticodeCategoryConfigurator\Plugin\GlassShapesProvider" sortOrder="10" />
+    </type>
+    <type name="Balticode\CategoryConfigurator\Model\GlassShapeService">
+        <plugin name="convert-qty" type="Bss\CustomBalticodeCategoryConfigurator\Plugin\GlassShapeService" sortOrder="10" />
+    </type>
+    <preference for="Balticode\CategoryConfigurator\Model\QuoteManager" type="Bss\CustomBalticodeCategoryConfigurator\Override\QuoteManager" />
+    <preference for="Balticode\CategoryConfigurator\Block\Configurator\Step\StepCategory" type="Bss\CustomBalticodeCategoryConfigurator\Override\Block\Configurator\Step\StepCategory" />
+</config>

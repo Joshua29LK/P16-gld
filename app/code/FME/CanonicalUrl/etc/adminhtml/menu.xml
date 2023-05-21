@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
+    <menu>
+        <update id="FME_Extensions::fmeextensions" title="FME Extensions" module="Magento_Backend" sortOrder="400" resource="FME_Extensions::fmeextensions"/>
+        <add id="FME_CanonicalUrl::main_menu" title="Canonical Url" module="FME_CanonicalUrl" sortOrder="10" parent="FME_Extensions::fmeextensions" resource="FME_CanonicalUrl::main_menu"/>
+        <add id="FME_CanonicalUrl::canonicalurl_configuration"
+             title="Configurations"
+             module="FME_CanonicalUrl" sortOrder="46" 
+             parent="FME_CanonicalUrl::main_menu" 
+             action="adminhtml/system_config/edit/section/canonicalurl"
+             resource="FME_CanonicalUrl::canonicalurl_config" /> 
+    </menu>
+</config>
+

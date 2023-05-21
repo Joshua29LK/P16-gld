@@ -1,0 +1,466 @@
+<IfModule LiteSpeed>
+LiteMage on
+</IfModule>
+
+# BEGIN LiteSpeed noabort
+<IfModule rewrite_module>
+RewriteEngine On
+RewriteRule .* - [E=noabort:1]
+</IfModule>
+# END liteSpeed noabort
+
+RewriteCond %{REQUEST_URI} ^/(index.php/)?beheer789(.*) [NC]
+## Kantoor loenen
+RewriteCond %{REMOTE_ADDR} !^94\.168\.56\.242
+RewriteCond %{REMOTE_ADDR} !^62\.45\.80\.26
+RewriteCond %{REMOTE_ADDR} !^141\.224\.203\.174
+## Elmer
+RewriteCond %{REMOTE_ADDR} !^62\.163\.208\.199
+RewriteCond %{REMOTE_ADDR} !^84\.85\.116\.208
+## Joost kantoor
+RewriteCond %{REMOTE_ADDR} !^95\.97\.188\.114
+## Joost thuis
+RewriteCond %{REMOTE_ADDR} !^213\.127\.33\.181
+## Patrick thuis
+RewriteCond %{REMOTE_ADDR} !^217\.103\.37\.29
+## Ben thuis
+RewriteCond %{REMOTE_ADDR} !^213\.127\.52\.39
+RewriteCond %{REMOTE_ADDR} !^89\.99\.155\.97
+## Arnold thuis
+RewriteCond %{REMOTE_ADDR} !^217\.160\.211\.210
+## Bas thuis
+RewriteCond %{REMOTE_ADDR} !^83\.82\.16\.231
+RewriteCond %{REMOTE_ADDR} !^83\.128\.157\.86
+RewriteCond %{REMOTE_ADDR} !^87\.99\.182\.4
+## Wietse thuis
+#RewriteCond %{REMOTE_ADDR} !^77\.249\.145\.75
+#RewriteCond %{REMOTE_ADDR} !^143\.178\.160\.214
+#RewriteCond %{REMOTE_ADDR} !^213\.127\.45\.199
+## Bob thuis
+RewriteCond %{REMOTE_ADDR} !^77\.160\.129\.172
+## Michel thuis
+RewriteCond %{REMOTE_ADDR} !^159\.180\.14\.23
+## Stephan thuis
+RewriteCond %{REMOTE_ADDR} !^86\.88\.211\.241
+## Els thuis
+RewriteCond %{REMOTE_ADDR} !^141\.224\.205\.231
+## Dealer4dealer reeks
+RewriteCond %{REMOTE_ADDR} !^185\.67\.200\.0
+## Dealer4dealer nieuw per 17/18 april 2021
+RewriteCond %{REMOTE_ADDR} !^84\.247\.10\.74
+RewriteCond %{REMOTE_ADDR} !^136\.144\.141\.215
+RewriteCond %{REMOTE_ADDR} !^149\.210\.237\.247
+RewriteCond %{REMOTE_ADDR} !^84\.247\.10\.80
+RewriteCond %{REMOTE_ADDR} !^84\.247\.10\.82
+RewriteCond %{REMOTE_ADDR} !^37\.34\.57\.56
+RewriteCond %{REMOTE_ADDR} !^141\.138\.139\.136
+## Dealer4dealer nieuw per 26 augustus 2021
+RewriteCond %{REMOTE_ADDR} !^136\.144\.178\.57
+## Thomas thuis
+RewriteCond %{REMOTE_ADDR} !^213\.127\.38\.254
+## Famke thuis
+#RewriteCond %{REMOTE_ADDR} !^213\.127\.38\.78
+## Alexander thuis
+RewriteCond %{REMOTE_ADDR} !^141\.224\.203\.46
+## Marcel thuis
+RewriteCond %{REMOTE_ADDR} !^92\.111\.104\.99
+RewriteCond %{REMOTE_ADDR} !^84\.86\.147\.48
+RewriteCond %{REMOTE_ADDR} !^188\.34\.176\.203
+RewriteCond %{REMOTE_ADDR} !^152\.70\.53\.58
+## Titia thuis
+RewriteCond %{REMOTE_ADDR} !^84\.86\.78\.17
+## Raymond thuis
+RewriteCond %{REMOTE_ADDR} !^86\.81\.193\.78
+## Kantoor loenen
+RewriteCond %{REMOTE_ADDR} !^77\.160\.147\.214
+RewriteCond %{REMOTE_ADDR} !^141\.224\.207\.47
+RewriteRule .* - [F,L]
+
+RewriteEngine On
+RewriteCond %{HTTPS} off [OR]
+RewriteCond %{HTTP_HOST} !^www\. [NC]
+RewriteCond %{HTTP_HOST} ^(?:www\.)?(.+)$ [NC]
+RewriteRule ^ https://www.%1%{REQUEST_URI} [L,NE,R=301]
+
+RedirectMatch 301 ^/pub/media/(.*)$ /media/$1
+RewriteRule ^isolatieglas/dubbel-glas/dubbel-glas-standaard$ /isolatieglas/dubbel-glas/dubbel-glas-standaard/dubbel-glas-op-maat [L,R=301]
+RewriteRule ^isolatieglas/dubbel-glas/dubbel-glas-standaard/dubbel-glas-3016 /isolatieglas/dubbel-glas/dubbel-glas-standaard/dubbel-glas-op-maat [L,R=301]
+RewriteRule ^isolatieglas/dubbel-glas/dubbel-glas-1-zijdig-gelaagd$ /isolatieglas/dubbel-glas/dubbel-glas-1-zijdig-gelaagd/dubbel-glas-1-zijdig-gelaagd [L,R=301]
+RewriteRule ^isolatieglas/dubbel-glas/dubbel-glas-2-zijdig-gelaagd$ /isolatieglas/dubbel-glas/dubbel-glas-2-zijdig-gelaagd/dubbel-glas-2-zijdig-gelaagd [L,R=301]
+RewriteRule ^isolatieglas/dubbel-glas/dubbel-glas-1-zijdig-gelaagd-matte-folie$ /isolatieglas/dubbel-glas/dubbel-glas-1-zijdig-gelaagd-matte-folie/dubbel-glas-met-matte-folie-1-zijdig-gelaagd [L,R=301]
+RewriteRule ^isolatieglas/hr-isolatieglas/hr-dubbel-glas$ /isolatieglas/hr-isolatieglas/hr-dubbel-glas/hr [L,R=301]
+RewriteRule ^isolatieglas/hr-isolatieglas/hr-dubbel-glas-gelaagd-1-zijdig-binnen$ /isolatieglas/hr-isolatieglas/hr-dubbel-glas-gelaagd-1-zijdig-binnen/hr-dubbel-glas-gelaagd-1-zijdig-binnen [L,R=301]
+RewriteRule ^isolatieglas/hr-isolatieglas/hr-dubbel-glas-gelaagd-1-zijdig-buiten$ /isolatieglas/hr-isolatieglas/hr-dubbel-glas-gelaagd-1-zijdig-buiten/hr-dubbel-glas-gelaagd-1-zijdig-buiten [L,R=301]
+RewriteRule ^isolatieglas/hr-isolatieglas/hr-dubbel-glas-gelaagd-2-zijdig-binnen-buiten$ /isolatieglas/hr-isolatieglas/hr-dubbel-glas-gelaagd-2-zijdig-binnen-buiten/hr-dubbel-glas-gelaagd-2-zijdig-binnen-buiten [L,R=301]
+RewriteRule ^isolatieglas/hr-isolatieglas/hr-1-zijdig-gelaagd-matte-folie-buiten$ /isolatieglas/hr-isolatieglas/hr-1-zijdig-gelaagd-matte-folie-buiten/hr-dubbel-glas-met-matte-folie-buiten [L,R=301]
+RewriteRule ^isolatieglas/ecoclear-hr$ /isolatieglas/ecoclear-hr/ecoclear-isolatieglas-hr [L,R=301]
+RewriteRule ^isolatieglas/zhr-zonwerend-isolatieglas/zhr$ /isolatieglas/zhr-zonwerend-isolatieglas/zhr/zhr-zonwerend-isolatieglas [L,R=301]
+RewriteRule ^isolatieglas/zhr-zonwerend-isolatieglas/zhr-gelaagd$ /isolatieglas/zhr-zonwerend-isolatieglas/zhr-gelaagd/zhr-dubbel-glas-gelaagd [L,R=301]
+RewriteRule ^isolatieglas/driedubbel-glas/driedubbel-glas$ /isolatieglas/driedubbel-glas/driedubbel-glas/driedubbel-isolatieglas-hr [L,R=301]
+RewriteRule ^isolatieglas/driedubbel-glas/zonwerend-driedubbel-zrh-glas$ /isolatieglas/driedubbel-glas/zonwerend-driedubbel-zrh-glas/zonwerend-driedubbel-isolatieglas-hr [L,R=301]
+RewriteRule ^isolatieglas/isolatieglas-hr-figuurglas$ /isolatieglas/isolatieglas-hr-figuurglas/hr-figuurglas [L,R=301]
+RewriteRule ^isolatieglas/isolatieglas-met-figuurglas$ /isolatieglas/isolatieglas-met-figuurglas/dubbel-glas-figuurglas-isolatie-glas [L,R=301]
+RewriteRule ^isolatieglas/geluidswerend-isolatieglas$ /isolatieglas/geluidswerend-isolatieglas/geluidswerend-isolatieglas [L,R=301]
+RewriteRule ^isolatieglas/isolatieglas-met-kruiskozijnen$ /isolatieglas/isolatieglas-met-kruiskozijnen/isolatieglas-met-wiener-sprossen [L,R=301]
+RewriteRule ^isolatieglas/climaplus-hr/climaplus-0-8-hr$ /isolatieglas/climaplus-hr/climaplus-0-8-hr/climaplus-0-8-hr [L,R=301]
+RewriteRule ^isolatieglas/climaplus-hr/climaplus-0-9-hr$ /isolatieglas/climaplus-hr/climaplus-0-9-hr/climaplus-0-9-hr-blank [L,R=301]
+RewriteRule ^isolatieglas/conforglace-isolatieglas-voor-stalen-ramen$ /isolatieglas/conforglace-isolatieglas-voor-stalen-ramen/isolatieglas [L,R=301]
+RewriteRule ^isolatieglas/isolatieglas-met-glas-in-lood$ /isolatieglas/isolatieglas-met-glas-in-lood/isolatieglas-met-glas-in-lood [L,R=301]
+RewriteRule ^isolatieglas/dubbel-glas-zonwerend-heat-mirror$ /isolatieglas/dubbel-glas-zonwerend-heat-mirror/heat-mirror-zonwerend-dubbel-glas-isolatieglas [L,R=301]
+RewriteRule ^enkel-glas/inmeet-en-montageservice$ /enkel-glas/inmeet-en-montageservice/inmeetservice-voor-al-uw-glas [L,R=301]
+RewriteRule ^enkel-glas/blank-enkel-glas/enkel-glas$ /enkel-glas/blank-enkel-glas/enkel-glas/blank-enkel-floatglas [L,R=301]
+RewriteRule ^enkel-glas/blank-enkel-glas/enkel-glas-rondom-geslepen$ /enkel-glas/blank-enkel-glas/enkel-glas-rondom-geslepen/blank-enkel-floatglas-rondom-geslepen [L,R=301]
+RewriteRule ^enkel-glas/gehard-veiligheidsglas/gehard-veiligheidsglas$ /enkel-glas/gehard-veiligheidsglas/gehard-veiligheidsglas/gehard-veiligheidsglas [L,R=301]
+RewriteRule ^enkel-glas/gehard-veiligheidsglas/gehard-veiligheidsglas-rondom-geslepen$ /enkel-glas/gehard-veiligheidsglas/gehard-veiligheidsglas-rondom-geslepen/gehard-glas-rondom-geslepen [L,R=301]
+RewriteRule ^enkel-glas/gelaagd-veiligheidsglas/gelaagd-veiligheidsglas$ /enkel-glas/gelaagd-veiligheidsglas/gelaagd-veiligheidsglas/blank-gelaagd-veiligheidsglas [L,R=301]
+RewriteRule ^enkel-glas/gelaagd-veiligheidsglas/gelaagd-veiligheidsglas-rondom-geslepen$ /enkel-glas/gelaagd-veiligheidsglas/gelaagd-veiligheidsglas-rondom-geslepen/blank-gelaagd-veiligheidsglas-geslepen [L,R=301]
+RewriteRule ^enkel-glas/gehard-gelaagd-veilgheidsglas/gehard-en-gelaagd-veiligheidsglas$ /enkel-glas/gehard-gelaagd-veilgheidsglas/gehard-en-gelaagd-veiligheidsglas/gehard-gelaagd-veiligheidsglas [L,R=301]
+RewriteRule ^gehard-gelaagd-veiligheidsglas$ /enkel-glas-gehard-gelaagd-veiligheidsglas [L,R=301]
+RewriteRule ^enkel-glas/gehard-gelaagd-veilgheidsglas/gehard-en-gelaagd-veiligheidsglas/blank-gelaagd-veiligheidsglas$ /enkel-glas/gehard-gelaagd-veilgheidsglas/gehard-en-gelaagd-veiligheidsglas/gehard-gelaagd-veiligheidsglas [L,R=301]
+RewriteRule ^enkel-glas/gehard-gelaagd-veilgheidsglas/gehard-gelaagd-veiligheidsglas-rondom-geslepen$ /enkel-glas/gehard-gelaagd-veilgheidsglas/gehard-gelaagd-veiligheidsglas-rondom-geslepen/blank-gelaagd-veiligheidsglas-rondom-geslepen [L,R=301]
+RewriteRule ^enkel-glas/spiegel/spiegel-op-maat$ /enkel-glas/spiegel/spiegel-op-maat/spiegel-op-maat [L,R=301]
+RewriteRule ^enkel-glas/spiegel/spiegels-rondom-geslepen$ /enkel-glas/spiegel/spiegels-rondom-geslepen/spiegels-rondom-geslepen [L,R=301]
+RewriteRule ^enkel-glas/spiegel/spiegels-met-led$ /enkel-glas/spiegel/spiegels-met-led/spiegels-met-led-verlichting [L,R=301]
+RewriteRule ^enkel-glas/draadglas$ /enkel-glas/draadglas/draadglas [L,R=301]
+RewriteRule ^enkel-glas/enkelglas-extra-helder$ /enkel-glas/enkelglas-extra-helder/extra-blank-floatglas-optiwhite [L,R=301]
+RewriteRule ^enkel-glas/glasbewerkingen/kies-uw-randafwerking$ /enkel-glas/glasbewerkingen/kies-uw-randafwerking/randafwerking [L,R=301]
+RewriteRule ^enkel-glas/glasbewerkingen/kies-uw-sparingen$ /enkel-glas/glasbewerkingen/kies-uw-sparingen/kies-uw-sparingen [L,R=301]
+RewriteRule ^enkel-glas/figuurglas$ /enkel-glas/figuurglas/figuurglas [L,R=301]
+RewriteRule ^enkel-glas/gekleurd-glas/gekleurd-glas$ /enkel-glas/gekleurd-glas/gekleurd-glas/gekleurd-enkel-glas [L,R=301]
+RewriteRule ^enkel-glas/gekleurd-glas/gekleurd-glas-rondom-geslepen$ /enkel-glas/gekleurd-glas/gekleurd-glas-rondom-geslepen/gekleurd-enkel-glas-floatglas-rondom-geslepen [L,R=301]
+RewriteRule ^enkel-glas/gekleurd-glas/gehard-gekleurd-glas$ /enkel-glas/gekleurd-glas/gehard-gekleurd-glas/gekleurd-enkel-glas-floatglas-gehard [L,R=301]
+RewriteRule ^enkel-glas/gekleurd-glas/gehard-gekleurd-glas-rondom-geslepen$ /enkel-glas/gekleurd-glas/gehard-gekleurd-glas-rondom-geslepen/gekleurd-enkel-glas-floatglas-gehard-rondom-geslepen [L,R=301]
+RewriteRule ^enkel-glas/glas-in-lood$ /enkel-glas/glas-in-lood/glas-in-lood [L,R=301]
+RewriteRule ^glazen-deuren/gehard-glazen-binnendeuren/kies-uw-glassoort$ /glazen-deuren/gehard-glazen-binnendeuren/kies-uw-glassoort/kies-uw-glassoort [L,R=301]
+RewriteRule ^glazen-deuren/gehard-glazen-douchedeuren/kies-uw-glassoort$ /glazen-deuren/gehard-glazen-douchedeuren/kies-uw-glassoort/kies-uw-glassoort [L,R=301]
+RewriteRule ^glazen-deuren/glazen-douche-opstellingen/enkele-douchedeur/kies-uw-glassoort$ /glazen-deuren/glazen-douche-opstellingen/enkele-douchedeur/kies-uw-glassoort/kies-uw-glassoort [L,R=301]
+RewriteRule ^glazen-deuren/glazen-douche-opstellingen/douchedeur-met-zijpaneel/kies-uw-glassoort$ /glazen-deuren/glazen-douche-opstellingen/douchedeur-met-zijpaneel/kies-uw-glassoort/kies-hier-uw-douchedeur-zijpaneel [L,R=301]
+RewriteRule ^glazen-deuren/glazen-douche-opstellingen/douchedeur-met-zijpaneel/kies-uw-afmeting-zijpaneel$ /glazen-deuren/glazen-douche-opstellingen/douchedeur-met-zijpaneel/kies-uw-afmeting-zijpaneel/kies-hier-uw-afmeting-zijpaneel [L,R=301]
+RewriteRule ^glazen-deuren/glazen-douche-opstellingen/douchehoek-met-deur/kies-uw-glassoort$ /glazen-deuren/glazen-douche-opstellingen/douchehoek-met-deur/kies-uw-glassoort/kies-hier-uw-glassoort-douchehoek [L,R=301]
+RewriteRule ^glazen-deuren/glazen-douche-opstellingen/douchehoek-met-deur/kies-uw-afmeting-zijpaneel$ /glazen-deuren/glazen-douche-opstellingen/douchehoek-met-deur/kies-uw-afmeting-zijpaneel/kies-hier-uw-afmeting-douchehoek-zijpaneel [L,R=301]
+RewriteRule ^glazen-deuren/glazen-douche-opstellingen/u-douche/kies-uw-glassoort$ /glazen-deuren/glazen-douche-opstellingen/u-douche/kies-uw-glassoort/kies-hier-uw-glassoort-u-douche [L,R=301]
+RewriteRule ^glazen-deuren/glazen-douche-opstellingen/u-douche/kies-uw-afmeting-zijpaneel$ /glazen-deuren/glazen-douche-opstellingen/u-douche/kies-uw-afmeting-zijpaneel/kies-hier-uw-afmeting-u-douche-zijpaneel [L,R=301]
+RewriteRule ^glazen-deuren/glazen-douche-opstellingen/inloopdouche-zonder-deur$ /glazen-deuren/glazen-douche-opstellingen/douchehoek-met-deur/kies-uw-afmeting-zijpaneel/kies-hier-uw-afmeting-douchehoek-zijpaneel [L,R=301]
+RewriteRule ^glazen-deuren/gehard-glazen-schuifdeuren-binnen/kies-uw-glassoort$ /glazen-deuren/gehard-glazen-schuifdeuren-binnen/kies-uw-glassoort/glassoort-binnen-schuifdeur [L,R=301]
+RewriteRule ^glazen-deuren/glazen-schuifdeuren-douche/kies-uw-glas-voor-uw-schuifdeur$ /glazen-deuren/glazen-schuifdeuren-douche/kies-uw-glas-voor-uw-schuifdeur/glassoort-douche-schuifdeur [L,R=301]
+RewriteRule ^wanden/uw-eigen-kantoorwand-samenstellen/glassoort$ /wanden/uw-eigen-kantoorwand-samenstellen/glassoort/glassoort-kantoor-wand [L,R=301]
+RewriteRule ^wanden/uw-eigen-kantoorwand-samenstellen/glazen-kantoorwanden-op-maat$ /kantoorwand [L,R=301]
+RewriteRule ^glazen-kantoorwanden-op-maat$ /kantoorwand [L,R=301]
+RewriteRule ^wanden/uw-eigen-kantoorwand-samenstellen/glasdeur$ /wanden/uw-eigen-kantoorwand-samenstellen/glasdeur/kies-uw-glasdeur [L,R=301]
+RewriteRule ^wanden/douchewand-samenstellen-stappenplan/stap1-glassoort$ /wanden/douchewand-samenstellen-stappenplan/stap1-glassoort/kies-uw-glas-voor-uw-douchewand [L,R=301]
+RewriteRule ^wanden/badwand-van-glas/stap1-glassoort$ /wanden/badwand-van-glas/stap1-glassoort/kies-uw-glassoort-badwand [L,R=301]
+RewriteRule ^wanden/glazen-schuifwanden/glassoort$ /wanden/glazen-schuifwanden/glassoort/kies-uw-glassoort-voor-uw-schuifwand [L,R=301]
+RewriteRule ^glasbeslag/complete-beslagsets/beslagsets-sauna$ /glasbeslag/complete-beslagsets/beslagsets-sauna/flamea-sauna-set [L,R=301]
+RewriteRule ^glasbeslag/stabilisatiestangen/kant-en-klare-stabilisatie-stangen/stabilisatiestangen-sets-verticaal$ /glasbeslag/stabilisatiestangen/kant-en-klare-stabilisatie-stangen/stabilisatiestangen-sets-verticaal/vigo-inloopdouche-wand [L,R=301]
+RewriteRule ^speciaal-glas/tafelblad$ /speciaal-glas/tafelblad/tafelblad-van-glas [L,R=301]
+RewriteRule ^speciaal-glas/achterwanden-van-glas-voor-o-a-keukens/montage-glazen-keuken-achterwand$ /speciaal-glas/achterwanden-van-glas-voor-o-a-keukens/montage-glazen-keuken-achterwand/montage-service-glazen-keuken-achterwanden [L,R=301]
+RewriteRule ^speciaal-glas/interieurglas/planilaque$ /speciaal-glas/interieurglas/planilaque/planilaque-interieurglas [L,R=301]
+RewriteRule ^speciaal-glas/interieurglas/lacobel-safe$ /speciaal-glas/interieurglas/lacobel-safe/lacobel-interieurglas [L,R=301]
+RewriteRule ^speciaal-glas/beloopbaar-glas$ /speciaal-glas/beloopbaar-glas/beloopbaar-glas [L,R=301]
+RewriteRule ^speciaal-glas/glazen-luifels$ /speciaal-glas/glazen-luifels/glasluifels [L,R=301]
+RewriteRule ^speciaal-glas/vervang-het-glas-van-uw-velux-dakvenster$ /speciaal-glas/vervang-het-glas-van-uw-velux-dakvenster/hr-isolatieglas-voor-uw-velux-dakraam [L,R=301]
+RewriteRule ^montage-en-inmeetservice/montage-van-deuren-en-puien$ /montage-en-inmeetservice/montage-van-deuren-en-puien/inmeet-en-montage-service-deuren-en-puien [L,R=301]
+RewriteRule ^montage-en-inmeetservice/montage-glazen-keuken-achterwand$ /montage-en-inmeetservice/montage-glazen-keuken-achterwand/montage-service-glazen-keuken-achterwanden [L,R=301]
+RewriteRule ^glazen-deuren/gehard-glazen-binnendeuren$ /glazen-deuren/gehard-glazen-binnendeuren/gehard-glazen-binnendeuren [L,R=301]
+RewriteRule ^glazen-deuren/gehard-glazen-douchedeuren$ /glazen-deuren/gehard-glazen-douchedeuren/gehard-glazen-douchedeuren [L,R=301]
+RewriteRule ^glazen-deuren/glazen-douche-opstellingen/enkele-douchedeur$ /glazen-deuren/glazen-douche-opstellingen/enkele-douchedeur/enkele-douchedeuren [L,R=301]
+RewriteRule ^glazen-deuren/glazen-douche-opstellingen/u-douche$ /glazen-deuren/glazen-douche-opstellingen/u-douche/u-douche [L,R=301]
+RewriteRule ^glazen-deuren/gehard-glazen-schuifdeuren-binnen$ /glazen-deuren/gehard-glazen-schuifdeuren-binnen/glazen-schuifdeur [L,R=301]
+RewriteRule ^glazen-deuren/glazen-schuifdeuren-douche$ /glazen-deuren/glazen-schuifdeuren-douche/hard-glazen-douche-schuifdeur [L,R=301]
+RewriteRule ^wanden/uw-eigen-kantoorwand-samenstellen$ /wanden/uw-eigen-kantoorwand-samenstellen/glazen-kantoorwanden-op-maat [L,R=301]
+RewriteRule ^wanden/douchewand-samenstellen-stappenplan$ /wanden/douchewand-samenstellen-stappenplan/glazen-douchewand [L,R=301]
+RewriteRule ^wanden/badwand-van-glas$ /wanden/badwand-van-glas/glazen-badwand [L,R=301]
+RewriteRule ^wanden/glazen-schuifwanden$ /wanden/glazen-schuifwanden/glazen-schuifwanden [L,R=301]
+RewriteRule ^speciaal-glas/glazen-dak-maken/compleet-houten-veranda$ /speciaal-glas/glazen-dak-maken/veranda-met-glazen-dak [L,R=301]
+
+
+############################################
+## Optional override of deployment mode. We recommend you use the
+## command bin/magento deploy:mode:set to switch modes instead
+
+# Options are default, production, or developer
+#   SetEnv MAGE_MODE default
+
+############################################
+## Uncomment these lines for CGI mode.
+## Make sure to specify the correct cgi php binary file name
+## it might be /cgi-bin/php-cgi
+
+#    Action php5-cgi /cgi-bin/php5-cgi
+#    AddHandler php5-cgi .php
+
+############################################
+## GoDaddy specific options
+
+#   Options -MultiViews
+
+## You might also need to add this line to php.ini
+##     cgi.fix_pathinfo = 1
+## If it still doesn't work, rename php.ini to php5.ini
+
+############################################
+## Enable usage of methods arguments in backtrace
+
+    #SetEnv MAGE_DEBUG_SHOW_ARGS 1
+
+############################################
+## This line is specific for 1and1 hosting
+
+    #AddType x-mapp-php5 .php
+    #AddHandler x-mapp-php5 .php
+
+############################################
+## Default index file
+
+    DirectoryIndex index.php
+
+<IfModule mod_php7.c>
+############################################
+## Adjust memory limit
+
+    php_value memory_limit 756000M
+    php_value max_execution_time 18000
+
+############################################
+## Disable automatic session start
+## before autoload was initialized
+
+    php_flag session.auto_start off
+
+############################################
+## Enable resulting html compression
+
+    #php_flag zlib.output_compression on
+
+###########################################
+# Disable user agent verification to not break multiple image upload
+
+    php_flag suhosin.session.cryptua off
+</IfModule>
+
+<IfModule mod_php.c>
+############################################
+## Adjust memory limit
+
+    php_value memory_limit 756000M
+    php_value max_execution_time 18000
+
+############################################
+## Disable automatic session start
+## before autoload was initialized
+
+    php_flag session.auto_start off
+
+############################################
+## Enable resulting html compression
+
+    #php_flag zlib.output_compression on
+</IfModule>
+
+<IfModule mod_security.c>
+###########################################
+# Disable POST processing to not break multiple image upload
+
+    SecFilterEngine Off
+    SecFilterScanPOST Off
+</IfModule>
+
+<IfModule mod_deflate.c>
+
+############################################
+## Enable apache served files compression
+## http://developer.yahoo.com/performance/rules.html#gzip
+
+    # Insert filter on all content
+    ###SetOutputFilter DEFLATE
+    # Insert filter on selected content types only
+    #AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css text/javascript application/javascript application/x-javascript application/json image/svg+xml
+
+    # Netscape 4.x has some problems...
+    #BrowserMatch ^Mozilla/4 gzip-only-text/html
+
+    # Netscape 4.06-4.08 have some more problems
+    #BrowserMatch ^Mozilla/4\.0[678] no-gzip
+
+    # MSIE masquerades as Netscape, but it is fine
+    #BrowserMatch \bMSIE !no-gzip !gzip-only-text/html
+
+    # Don't compress images
+    #SetEnvIfNoCase Request_URI \.(?:gif|jpe?g|png)$ no-gzip dont-vary
+
+    # Make sure proxies don't deliver the wrong content
+    #Header append Vary User-Agent env=!dont-vary
+
+</IfModule>
+
+<IfModule mod_ssl.c>
+
+############################################
+## Make HTTPS env vars available for CGI mode
+
+    SSLOptions StdEnvVars
+
+</IfModule>
+
+############################################
+## Workaround for Apache 2.4.6 CentOS build when working via ProxyPassMatch with HHVM (or any other)
+## Please, set it on virtual host configuration level
+
+##    SetEnvIf Authorization "(.*)" HTTP_AUTHORIZATION=$1
+############################################
+
+<IfModule mod_rewrite.c>
+
+############################################
+## Enable rewrites
+
+    Options +FollowSymLinks
+    RewriteEngine on
+
+############################################
+## You can put here your magento root folder
+## path relative to web root
+
+    #RewriteBase /magento/
+
+############################################
+## Workaround for HTTP authorization
+## in CGI environment
+
+    RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+
+############################################
+## TRACE and TRACK HTTP methods disabled to prevent XSS attacks
+
+    RewriteCond %{REQUEST_METHOD} ^TRAC[EK]
+    RewriteRule .* - [L,R=405]
+
+############################################
+## Redirect for mobile user agents
+
+    #RewriteCond %{REQUEST_URI} !^/mobiledirectoryhere/.*$
+    #RewriteCond %{HTTP_USER_AGENT} "android|blackberry|ipad|iphone|ipod|iemobile|opera mobile|palmos|webos|googlebot-mobile" [NC]
+    #RewriteRule ^(.*)$ /mobiledirectoryhere/ [L,R=302]
+
+############################################
+## Never rewrite for existing files, directories and links
+
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_FILENAME} !-l
+
+############################################
+## Rewrite everything else to index.php
+
+    RewriteRule .* index.php [L]
+
+</IfModule>
+
+
+############################################
+## Prevent character encoding issues from server overrides
+## If you still have problems, use the second line instead
+
+    AddDefaultCharset Off
+    #AddDefaultCharset UTF-8
+    AddType 'text/html; charset=UTF-8' html
+
+<IfModule mod_expires.c>
+
+############################################
+## Add default Expires header
+## http://developer.yahoo.com/performance/rules.html#expires
+
+    ExpiresDefault "access plus 1 year"
+    ExpiresByType text/html A0
+    ExpiresByType text/plain A0
+
+</IfModule>
+
+###########################################
+## Deny access to release notes to prevent disclosure of the installed Magento version
+
+    <Files RELEASE_NOTES.txt>
+        <IfVersion < 2.4>
+            order allow,deny
+            deny from all
+        </IfVersion>
+        <IfVersion >= 2.4>
+            Require all denied
+        </IfVersion>
+    </Files>
+    <Files .htaccess>
+        <IfVersion < 2.4>
+            order allow,deny
+            deny from all
+        </IfVersion>
+        <IfVersion >= 2.4>
+            Require all denied
+        </IfVersion>
+    </Files>
+## Deny access  to cron.php
+    <Files cron.php>
+        <IfVersion < 2.4>
+            order allow,deny
+            deny from all
+        </IfVersion>
+        <IfVersion >= 2.4>
+            Require all denied
+        </IfVersion>
+    </Files>
+## Deny access  to .user.ini
+    <Files .user.ini>
+        <IfVersion < 2.4>
+            order allow,deny
+            deny from all
+        </IfVersion>
+        <IfVersion >= 2.4>
+            Require all denied
+        </IfVersion>
+    </Files>
+
+# For 404s and 403s that aren't handled by the application, show plain 404 response
+ErrorDocument 404 /errors/404.php
+ErrorDocument 403 /errors/404.php
+
+################################
+## If running in cluster environment, uncomment this
+## http://developer.yahoo.com/performance/rules.html#etags
+
+    #FileETag none
+
+# ######################################################################
+# # INTERNET EXPLORER                                                  #
+# ######################################################################
+
+# ----------------------------------------------------------------------
+# | Document modes                                                     |
+# ----------------------------------------------------------------------
+
+# Force Internet Explorer 8/9/10 to render pages in the highest mode
+# available in the various cases when it may not.
+#
+# https://hsivonen.fi/doctype/#ie8
+#
+# (!) Starting with Internet Explorer 11, document modes are deprecated.
+# If your business still relies on older web apps and services that were
+# designed for older versions of Internet Explorer, you might want to
+# consider enabling `Enterprise Mode` throughout your company.
+#
+# https://msdn.microsoft.com/en-us/library/ie/bg182625.aspx#docmode
+# http://blogs.msdn.com/b/ie/archive/2014/04/02/stay-up-to-date-with-enterprise-mode-for-internet-explorer-11.aspx
+
+<IfModule mod_headers.c>
+    ############################################
+    Header set X-UA-Compatible "IE=edge"
+
+    # `mod_headers` cannot match based on the content-type, however,
+    # the `X-UA-Compatible` response header should be send only for
+    # HTML documents and not for the other resources.
+    <FilesMatch "\.(appcache|atom|bbaw|bmp|crx|css|cur|eot|f4[abpv]|flv|geojson|gif|htc|ico|jpe?g|js|json(ld)?|m4[av]|manifest|map|mp4|oex|og[agv]|opus|otf|pdf|png|rdf|rss|safariextz|svgz?|swf|topojson|tt[cf]|txt|vcard|vcf|vtt|webapp|web[mp]|webmanifest|woff2?|xloc|xml|xpi)$">
+        Header unset X-UA-Compatible
+    </FilesMatch>
+
+    ## Prevent clickjacking
+    Header set X-Frame-Options SAMEORIGIN
+</IfModule>

@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<!--
+/**
+* BSS Commerce Co.
+*
+* NOTICE OF LICENSE
+*
+* This source file is subject to the EULA
+* that is bundled with this package in the file LICENSE.txt.
+* It is also available through the world-wide-web at this URL:
+* http://bsscommerce.com/Bss-Commerce-License.txt
+*
+* @category   BSS
+* @package    Bss_DependentCustomOption
+* @author     Extension Team
+* @copyright  Copyright (c) 2017-2022 BSS Commerce Co. ( http://bsscommerce.com )
+* @license    http://bsscommerce.com/Bss-Commerce-License.txt
+*/
+-->
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+  <table name="bss_depend_co" resource="default" engine="innodb" comment="Catalog Product Option Type Dependent">
+    <column xsi:type="int" name="dependent_id" padding="10" unsigned="true" nullable="false" identity="true" comment="Option Type Image ID"/>
+    <column xsi:type="longtext" name="depend_value" nullable="true" comment="Depend Values"/>
+    <column xsi:type="int" name="option_type_id" padding="10" unsigned="true" nullable="true" identity="false" comment="Option Type ID"/>
+    <column xsi:type="int" name="option_id" padding="10" unsigned="true" nullable="true" identity="false" comment="Option ID"/>
+    <column xsi:type="bigint" name="increment_id" padding="20" unsigned="false" nullable="true" identity="false" comment="Increment Id"/>
+    <column xsi:type="int" name="product_id" padding="10" unsigned="true" nullable="false" identity="false" comment="Product Id"/>
+    <constraint xsi:type="primary" referenceId="PRIMARY">
+      <column name="dependent_id"/>
+    </constraint>
+    <constraint xsi:type="foreign" referenceId="BSS_DEPEND_CO_OPT_TYPE_ID_CAT_PRD_OPT_TYPE_VAL_OPT_TYPE_ID" table="bss_depend_co" column="option_type_id" referenceTable="catalog_product_option_type_value" referenceColumn="option_type_id" onDelete="CASCADE"/>
+    <constraint xsi:type="foreign" referenceId="BSS_DEPEND_CO_OPTION_ID_CATALOG_PRODUCT_OPTION_OPTION_ID" table="bss_depend_co" column="option_id" referenceTable="catalog_product_option" referenceColumn="option_id" onDelete="CASCADE"/>
+    <index referenceId="BSS_DEPEND_CO_DEPENDENT_ID" indexType="btree">
+      <column name="dependent_id"/>
+    </index>
+  </table>
+  <table name="catalog_product_option" resource="default">
+    <column xsi:type="smallint" name="bss_dco_require" padding="6" unsigned="false" nullable="false" identity="false" default="1" comment="Option Qty"/>
+  </table>
+</schema>

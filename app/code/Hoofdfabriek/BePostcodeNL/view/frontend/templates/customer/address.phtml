@@ -1,0 +1,30 @@
+<?php /** @var $block Hoofdfabriek\BePostcodeNL\Block\Customer\Address */ ?>
+
+<?php if ($block->isEnabled()) : ?>
+    <div id="postcod-be" class="customer-account-fieldset" data-bind="scope:'postcod-be'">
+        <!-- ko template: getTemplate() --><!-- /ko -->
+    </div>
+    <script type="text/x-magento-init">
+    {
+        "#postcod-be": {
+            "Magento_Ui/js/core/app": {
+               "components": {
+                    "postcod-be": {
+                        "component": "Hoofdfabriek_BePostcodeNL/js/view/customer/postcode-be",
+                        "template": "Hoofdfabriek_BePostcodeNL/customer/autocomplete",
+                        "settings": {
+                            "url": "<?php echo $block->getUrl('bepostcodenl/autocomplete/') ?>",
+                            "street2_housenumber": "<?php echo (int)$block->isSecondLineForHouseNumber() ?>",
+                            "street3_houseaddition": "<?php echo (int)$block->isThirdLineForHouseAddition() ?>",
+                            "house_number": "<?php echo $block->getHouseNumber() ?>",
+                            "postcode": "<?php echo $block->getAddress()->getPostcode() ?>",
+                            "street": "<?php echo $block->getSteet() ?>",
+                            "city": "<?php echo $block->getAddress()->getCity() ?>"
+                        }
+                    }
+                }
+            }
+        }
+    }
+    </script>
+<?php endif; ?>

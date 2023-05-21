@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+    <table name="magearray_csvprice" resource="default" engine="innodb"
+           comment="MageArray csv Table">
+        <column xsi:type="int" name="id" unsigned="true" nullable="false" identity="true"
+                comment="CSVPRICE ID"/>
+        <column xsi:type="int" name="product_id" padding="10" unsigned="true" nullable="false" identity="false"
+                comment="Product Id"/>
+        <column xsi:type="text" name="csv_price" nullable="false"
+                comment="CSV Price"/>
+        <column xsi:type="varchar" name="option_sku" nullable="true" length="64" comment="Option Sku"/>
+        <column xsi:type="varchar" name="file_name" nullable="false" length="255" comment="File name with path"/>
+        <column xsi:type="text" name="f_name" nullable="true" comment="File name"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="id"/>
+        </constraint>
+        <constraint xsi:type="foreign" referenceId="MAGEARRAY_CSVPRICE_FK_PRD_ID_CAT_PRD_ENTT_ENTT_ID"
+                    table="magearray_csvprice" column="product_id" referenceTable="catalog_product_entity"
+                    referenceColumn="entity_id" onDelete="CASCADE"/>
+    </table>
+</schema>

@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<!--
+/**
+* @author Amasty Team
+* @copyright Copyright (c) 2022 Amasty (https://www.amasty.com)
+* @package Custom Order Number for Magento 2
+*/-->
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+  <table name="amasty_number_counter_data" resource="default" engine="innodb" comment="Amasty Number Counter Data">
+    <column xsi:type="int" name="counter_id" padding="11" unsigned="false" nullable="false" identity="true" comment="Counter ID"/>
+    <column xsi:type="int" name="scope_id" padding="10" unsigned="true" nullable="false" identity="false" comment="Counter Scope ID"/>
+    <column xsi:type="text" name="scope_type_id" nullable="false" comment="Counter Scope Type"/>
+    <column xsi:type="text" name="entity_type_id" nullable="false" comment="Counter Entity Type"/>
+    <column xsi:type="int" name="current_value" padding="10" unsigned="true" nullable="false" identity="false" comment="Counter Current Value"/>
+    <column xsi:type="timestamp" name="updated_at" on_update="true" nullable="false" default="CURRENT_TIMESTAMP" comment="Counter Updated At"/>
+    <constraint xsi:type="primary" referenceId="PRIMARY">
+      <column name="counter_id"/>
+    </constraint>
+  </table>
+</schema>

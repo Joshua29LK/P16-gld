@@ -1,0 +1,68 @@
+<?xml version="1.0"?>
+<!--
+/**
+* @author Amasty Team
+* @copyright Copyright (c) 2022 Amasty (https://www.amasty.com)
+* @package Order Notes for Magento 2
+*/-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
+        <arguments>
+            <argument name="collections" xsi:type="array">
+                <item name="amflags_flag_listing_data_source" xsi:type="string">Amasty\Flags\Model\ResourceModel\Flag\Grid\Collection</item>
+                <item name="amflags_column_listing_data_source" xsi:type="string">Amasty\Flags\Model\ResourceModel\Column\Grid\Collection</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <virtualType name="AmflagsGirdFilterPool" type="Magento\Framework\View\Element\UiComponent\DataProvider\FilterPool">
+        <arguments>
+            <argument name="appliers" xsi:type="array">
+                <item name="regular" xsi:type="object">Magento\Framework\View\Element\UiComponent\DataProvider\RegularFilter</item>
+            </argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="AmflagsFlagGridDataProvider" type="Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider">
+        <arguments>
+            <argument name="collection" xsi:type="object" shared="false">Amasty\Flags\Model\ResourceModel\Flag\Collection</argument>
+            <argument name="filterPool" xsi:type="object" shared="false">AmflagsGirdFilterPool</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="AmflagsColumnGridDataProvider" type="Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider">
+        <arguments>
+            <argument name="collection" xsi:type="object" shared="false">Amasty\Flags\Model\ResourceModel\Column\Collection</argument>
+            <argument name="filterPool" xsi:type="object" shared="false">AmflagsGirdFilterPool</argument>
+        </arguments>
+    </virtualType>
+    <type name="Amasty\Flags\Model\ResourceModel\Flag\Grid\Collection">
+        <arguments>
+            <argument name="mainTable" xsi:type="string">amasty_flags_flag</argument>
+            <argument name="eventPrefix" xsi:type="string">amasty_flags_flag_grid_collection</argument>
+            <argument name="eventObject" xsi:type="string">flag_grid_collection</argument>
+            <argument name="resourceModel" xsi:type="string">Amasty\Flags\Model\ResourceModel\Flag</argument>
+        </arguments>
+    </type>
+    <type name="Amasty\Flags\Model\ResourceModel\Column\Grid\Collection">
+        <arguments>
+            <argument name="mainTable" xsi:type="string">amasty_flags_column</argument>
+            <argument name="eventPrefix" xsi:type="string">amasty_flags_column_grid_collection</argument>
+            <argument name="eventObject" xsi:type="string">column_grid_collection</argument>
+            <argument name="resourceModel" xsi:type="string">Amasty\Flags\Model\ResourceModel\Column</argument>
+        </arguments>
+    </type>
+
+    <!-- Setup Operations Start -->
+    <type name="Amasty\Flags\Setup\SampleData\Installer">
+        <arguments>
+            <argument name="installers" xsi:type="array">
+                <item name="flags" xsi:type="object">Amasty\Flags\Setup\SampleData\Installer\Flags</item>
+                <item name="images" xsi:type="object">Amasty\Flags\Setup\SampleData\Installer\Images</item>
+            </argument>
+        </arguments>
+    </type>
+    <!-- Setup Operations End -->
+
+    <preference for="Amasty\Flags\Api\FlagRepositoryInterface" type="Amasty\Flags\Model\FlagRepository" />
+    <preference for="Amasty\Flags\Api\ColumnRepositoryInterface" type="Amasty\Flags\Model\ColumnRepository" />
+</config>

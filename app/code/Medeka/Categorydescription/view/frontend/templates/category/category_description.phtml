@@ -1,0 +1,12 @@
+<?php if ($_mk_catomschrijving = $block->getCurrentCategory()->getMk_catomschrijving()) :?>
+<div class="category-description top">
+        <?= /* @noEscape */ $this->helper(Magento\Catalog\Helper\Output::class)->categoryAttribute(
+            $block->getCurrentCategory(),
+            $_mk_catomschrijving,
+            'mk_catomschrijving'
+        ) ?>
+</div>
+<?php endif; ?>
+
+
+

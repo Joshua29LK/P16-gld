@@ -1,0 +1,91 @@
+<?php
+/**
+ * BSS Commerce Co.
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the EULA
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://bsscommerce.com/Bss-Commerce-License.txt
+ *
+ * @category   BSS
+ * @package    Bss_DependentCustomOption
+ * @author     Extension Team
+ * @copyright  Copyright (c) 2017-2020 BSS Commerce Co. ( http://bsscommerce.com )
+ * @license    http://bsscommerce.com/Bss-Commerce-License.txt
+ */
+
+// @codingStandardsIgnoreFile
+use Bss\DependentCustomOption\Block\Options\Type\Text;
+use Magento\Catalog\Model\Product\Option;
+
+/**
+ * Text options block
+ *
+ * @var Text $block
+ */
+?>
+<?php
+$option = $block->getOption();
+$class = ($option->getIsRequire()) ? ' required' : '';
+$moduleConfig = $block->getConfigHelper();
+?>
+<div class="field<?php  echo $class; ?><?php echo ($option->getType() == Option::OPTION_TYPE_AREA) ? ' textarea' : ''; ?>"
+    id="bss_options_<?php echo $option->getId() ?>">
+    <label class="label" for="options_<?php echo $option->getId() ?>_text">
+        <span><?php echo $block->escapeHtml($option->getTitle()) ?></span>
+        <?php echo $block->getFormatedPrice() ?>
+        <?php  echo $block->getBssCustomOptionBlock('after_title'); ?>
+    </label>
+
+    <?php echo $block->getBssCustomOptionBlock('before_control'); ?>
+    <div class="control">
+        <?php if ($option->getType() == Option::OPTION_TYPE_FIELD) : ?>
+            <?php $textValidate = null;
+            if ($option->getIsRequire()) {
+                $textValidate['required'] = true;
+            }
+            if ($option->getMaxCharacters()) {
+                $textValidate['maxlength'] = $option->getMaxCharacters();
+            }
+            ?>
+            <input type="text"
+                   id="options_<?php echo $option->getId() ?>_text"
+                   class="input-text product-custom-option"
+                   <?php if (!empty($textValidate)) {
+                ?>
+                   data-validate="<?php echo  $block->escapeHtml($block->jsonClass()->serialize($textValidate)); ?>"
+                   <?php
+            } ?>
+                   name="options[<?php echo $option->getId() ?>]"
+                   data-selector="options[<?php echo $option->getId() ?>]"
+                   value="<?php echo $block->escapeHtml($block->getDefaultValue()) ?>"/>
+        <?php elseif ($option->getType() == Option::OPTION_TYPE_AREA) : ?>
+            <?php $textAreaValidate = null;
+            if ($option->getIsRequire()) {
+                $textAreaValidate['required'] = true;
+            }
+            if ($option->getMaxCharacters()) {
+                $textAreaValidate['maxlength'] = $option->getMaxCharacters();
+            }
+            ?>
+            <textarea id="options_<?php echo $option->getId() ?>_text"
+                      class="product-custom-option"
+                    <?php if (!empty($textAreaValidate)) {
+                ?>
+                        data-validate="<?php echo $block->escapeHtml($block->jsonClass()->serialize($textAreaValidate)); ?>"
+                    <?php
+            } ?>
+                      name="options[<?php echo $option->getId() ?>]"
+                      data-selector="options[<?php echo $option->getId() ?>]"
+                      rows="5"
+                      cols="25"><?php echo $block->escapeHtml($block->getDefaultValue()) ?></textarea>
+        <?php endif; ?>
+        <?php if ($option->getMaxCharacters()): ?>
+            <p class="note"><?php echo __('Maximum number of characters:') ?>
+                <strong><?php echo $option->getMaxCharacters() ?></strong></p>
+        <?php endif; ?>
+    </div>
+    <?php  echo $block->getBssCustomOptionBlock('after_control'); ?>
+</div>

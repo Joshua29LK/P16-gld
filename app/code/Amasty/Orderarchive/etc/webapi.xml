@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<!--
+/**
+* @author Amasty Team
+* @copyright Copyright (c) 2022 Amasty (https://www.amasty.com)
+* @package Order Archive for Magento 2
+*/-->
+<routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Webapi:etc/webapi.xsd">
+
+    <route url="/V1/amastyMoveToArchive" method="POST">
+        <service class="Amasty\Orderarchive\Api\ArchiveProcessorInterface" method="moveToArchive"/>
+        <resources>
+            <resource ref="Amasty_Orderarchive::orderarchive" />
+        </resources>
+    </route>
+    <route url="/V1/amastyMoveFromArchive" method="POST">
+        <service class="Amasty\Orderarchive\Api\ArchiveProcessorInterface" method="removeFromArchive"/>
+        <resources>
+            <resource ref="Amasty_Orderarchive::orderarchive" />
+        </resources>
+    </route>
+    <route url="/V1/amastyRemovePermanently" method="POST">
+        <service class="Amasty\Orderarchive\Api\ArchiveProcessorInterface" method="removePermanently"/>
+        <resources>
+            <resource ref="Amasty_Orderarchive::orderarchive" />
+        </resources>
+    </route>
+</routes>

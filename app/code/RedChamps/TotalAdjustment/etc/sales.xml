@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Sales:etc/sales.xsd">
+    <section name="quote">
+        <group name="totals">
+            <item name="adjustment" instance="RedChamps\TotalAdjustment\Model\Sales\Quote\Address\Total\Adjustment" sort_order="401">
+                <renderer name="adminhtml" instance="RedChamps\TotalAdjustment\Block\Adminhtml\Sales\Order\Total\Adjustment"/>
+            </item>
+        </group>
+    </section>
+    <section name="order_invoice">
+        <group name="totals">
+            <item name="adjustment" instance="RedChamps\TotalAdjustment\Model\Sales\Order\Total\Invoice\Adjustment" sort_order="300"/>
+        </group>
+    </section>
+    <section name="order_creditmemo">
+        <group name="totals">
+            <item name="adjustment" instance="RedChamps\TotalAdjustment\Model\Sales\Order\Total\Creditmemo\Adjustment" sort_order="300"/>
+        </group>
+    </section>
+</config>

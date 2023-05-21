@@ -1,0 +1,59 @@
+<?xml version="1.0" ?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+	<preference for="Balticode\CategoryConfigurator\Api\ConfiguratorRepositoryInterface" type="Balticode\CategoryConfigurator\Model\ConfiguratorRepository"/>
+	<preference for="Balticode\CategoryConfigurator\Api\StepRepositoryInterface" type="Balticode\CategoryConfigurator\Model\StepRepository"/>
+	<preference for="Balticode\CategoryConfigurator\Api\Data\ConfiguratorInterface" type="Balticode\CategoryConfigurator\Model\Configurator"/>
+	<preference for="Balticode\CategoryConfigurator\Api\Data\StepInterface" type="Balticode\CategoryConfigurator\Model\Step"/>
+	<preference for="Balticode\CategoryConfigurator\Api\Data\ConfiguratorSearchResultsInterface" type="Magento\Framework\Api\SearchResults"/>
+	<preference for="Balticode\CategoryConfigurator\Api\Data\StepSearchResultsInterface" type="Magento\Framework\Api\SearchResults"/>
+	<preference for="Balticode\CategoryConfigurator\Model\Validator\ValidatorInterface" type="Balticode\CategoryConfigurator\Model\Validator\Product"/>
+	<virtualType name="Balticode\CategoryConfigurator\Model\ResourceModel\Configurator\Grid\Collection" type="Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult">
+		<arguments>
+			<argument name="mainTable" xsi:type="string">balticode_categoryconfigurator_configurator</argument>
+			<argument name="resourceModel" xsi:type="string">Balticode\CategoryConfigurator\Model\ResourceModel\Configurator\Collection</argument>
+		</arguments>
+	</virtualType>
+	<type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
+		<arguments>
+			<argument name="collections" xsi:type="array">
+				<item name="balticode_categoryconfigurator_configurator_grid_data_source" xsi:type="string">Balticode\CategoryConfigurator\Model\ResourceModel\Configurator\Grid\Collection</item>
+				<item name="balticode_categoryconfigurator_step_grid_data_source" xsi:type="string">Balticode\CategoryConfigurator\Model\ResourceModel\Step\Grid\Collection</item>
+			</argument>
+		</arguments>
+	</type>
+	<virtualType name="Balticode\CategoryConfigurator\Model\ResourceModel\Step\Grid\Collection" type="Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult">
+		<arguments>
+			<argument name="mainTable" xsi:type="string">balticode_categoryconfigurator_step</argument>
+			<argument name="resourceModel" xsi:type="string">Balticode\CategoryConfigurator\Model\ResourceModel\Step\Collection</argument>
+		</arguments>
+	</virtualType>
+	<type name="Balticode\CategoryConfigurator\Model\Config\Source\Type">
+		<arguments>
+			<argument name="values" xsi:type="array">
+				<item name="Default" xsi:type="const">Balticode\CategoryConfigurator\Model\Config\Source\Type::DEFAULT</item>
+				<item name="Category" xsi:type="const">Balticode\CategoryConfigurator\Model\Config\Source\Type::CATEGORY</item>
+				<item name="Related" xsi:type="const">Balticode\CategoryConfigurator\Model\Config\Source\Type::RELATED</item>
+				<item name="First" xsi:type="const">Balticode\CategoryConfigurator\Model\Config\Source\Type::FIRST</item>
+				<item name="Glass Shapes" xsi:type="const">Balticode\CategoryConfigurator\Model\Config\Source\Type::GLASS_SHAPES</item>
+			</argument>
+		</arguments>
+	</type>
+	<type name="Balticode\CategoryConfigurator\Controller\Configurator\Cart">
+		<arguments>
+			<argument name="validator" xsi:type="object">Balticode\CategoryConfigurator\Model\Validator\StepsData</argument>
+		</arguments>
+	</type>
+	<type name="Balticode\CategoryConfigurator\Controller\Configurator\Step\GlassShapes">
+		<arguments>
+			<argument name="validator" xsi:type="object">Balticode\CategoryConfigurator\Model\Validator\Product</argument>
+		</arguments>
+	</type>
+	<type name="Balticode\CategoryConfigurator\Controller\Configurator\Step\RelatedProducts">
+		<arguments>
+			<argument name="validator" xsi:type="object">Balticode\CategoryConfigurator\Model\Validator\Product</argument>
+		</arguments>
+	</type>
+	<type name="Magento\Catalog\Controller\Category\View">
+		<plugin name="categoryViewPlugin" type="Balticode\CategoryConfigurator\Plugin\CategoryViewPlugin" sortOrder="1" />
+	</type>
+</config>

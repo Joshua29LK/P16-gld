@@ -1,0 +1,70 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <tab id="category_configurator" translate="label" sortOrder="10">
+            <label>Category Configurator</label>
+        </tab>
+        <section id="category_configurator_config" translate="label" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+            <class>separator-top</class>
+            <label>General</label>
+            <tab>category_configurator</tab>
+            <resource>Balticode_CategoryConfigurator::category_configurator_config</resource>
+            <group id="general" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="1">
+                <label>General Configurations</label>
+                <field id="glass_shapes_category" translate="label comment" type="select" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Glass Shapes Product Category</label>
+                    <source_model>Balticode\CategoryConfigurator\Model\Config\Source\Category</source_model>
+                    <comment>Select the product category in which glass shapes are stored.</comment>
+                </field>
+                <field id="glass_shapes_default_height" translate="label comment" type="text" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Default Glass Shape Height</label>
+                    <comment>Specify the default height of a glass shape.</comment>
+                </field>
+                <field id="glass_shapes_default_width" translate="label comment" type="text" sortOrder="30" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Default Glass Shape Width</label>
+                    <comment>Specify the default width of a glass shape.</comment>
+                </field>
+                <field id="glass_shapes_minimum_height" translate="label comment" type="text" sortOrder="40" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Minimum Glass Shape Height</label>
+                    <comment>Specify the minimum height of a glass shape.</comment>
+                </field>
+                <field id="glass_shapes_minimum_width" translate="label comment" type="text" sortOrder="50" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Minimum Glass Shape Width</label>
+                    <comment>Specify the minimum width of a glass shape.</comment>
+                </field>
+                <field id="glass_shapes_maximum_height" translate="label comment" type="text" sortOrder="60" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Maximum Glass Shape Height</label>
+                    <comment>Specify the maximum height of a glass shape.</comment>
+                </field>
+                <field id="glass_shapes_maximum_width" translate="label comment" type="text" sortOrder="70" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Maximum Glass Shape Width</label>
+                    <comment>Specify the maximum width of a glass shape.</comment>
+                </field>
+                <field id="full_step_carousel_item_count" translate="label comment" type="text" sortOrder="80" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Full Size Step Carousel Item Count</label>
+                    <comment>Specify the number of visible items in the carousel of a full size step.</comment>
+                </field>
+                <field id="half_step_carousel_item_count" translate="label comment" type="text" sortOrder="90" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Half Size Step Carousel Item Count</label>
+                    <comment>Specify the number of visible items in the carousel of a half size step.</comment>
+                </field>
+                <field id="glass_shapes_width_title" translate="label comment" type="text" sortOrder="100" showInDefault="1" showInWebsite="0" showInStore="1">
+                    <label>Glass Shape Width Option Title</label>
+                    <comment>Specify the title by which glass shape width option will be identified.</comment>
+                </field>
+                <field id="glass_shapes_height_title" translate="label comment" type="text" sortOrder="110" showInDefault="1" showInWebsite="0" showInStore="1">
+                    <label>Glass Shape Height Option Title</label>
+                    <comment>Specify the title by which glass shape width option will be identified.</comment>
+                </field>
+                <field id="glass_shapes_top_width_title" translate="label comment" type="text" sortOrder="120" showInDefault="1" showInWebsite="0" showInStore="1">
+                    <label>Glass Shape Top Width Option Title</label>
+                    <comment>Specify the title by which glass shape width option will be identified.</comment>
+                </field>
+                <field id="glass_shapes_bottom_width_title" translate="label comment" type="text" sortOrder="130" showInDefault="1" showInWebsite="0" showInStore="1">
+                    <label>Glass Shape Bottom Width Option Title</label>
+                    <comment>Specify the title by which glass shape width option will be identified.</comment>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>

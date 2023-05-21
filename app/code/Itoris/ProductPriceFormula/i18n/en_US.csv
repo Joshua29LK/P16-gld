@@ -1,0 +1,95 @@
+Product Price Formula,Product Price Formula
+Formula is required,Formula is required
+Formula is incorrect,Formula is incorrect
+Price Formulas,Price Formulas
+Add New Formula,Add New Formula
+All Groups,All Groups
+No formulas,No formulas
+Name,Name
+Position,Position
+Status,Status
+Date From,Date From
+Date To,Date To
+Delete Formula,Delete Formula
+Active,Active
+Inactive,Inactive
+Customer Groups:,Customer Groups:
+Apply Formula To:,Apply Formula To:
+Item Price,Item Price
+Row Total *,Row Total *
+Show Product Price on Frontend as:,Show Product Price on Frontend as:
+Default,Default
+Multiplied by the QTY selected,Multiplied by the QTY selected
+Condition:,Condition:
+Need help on condition syntax?,Need help on condition syntax?
+Run always,Run always
+Price =,Price =
+Need help on price syntax?,Need help on price syntax?
+Set formula for the product shipping weight if the condition is TRUE,Set formula for the product shipping weight if the condition is TRUE
+Else?,Else?
+Add a Criteria,Add a Criteria
+Else:,Else:
+remove,remove
+Price =,Price =
+Set formula for the product shipping weight,Set formula for the product shipping weight
+Use the following condition and math operators:,Use the following condition and math operators:
+Operator,Operator
+Explanation,Explanation
+Example,Example
+Math functions:Math functions:
+Function,Function
+Constants,Constants
+Constant,Constant
+Variables,Variables
+Variable,Variable
+Left part is greater than right part,Left part is greater than right part
+Right part is greater than left part,Right part is greater than left part
+Left part is equal to the right part,Left part is equal to the right part
+Left part is not equal to the right part,Left part is not equal to the right part
+Left part greater or equal to the right part,Left part greater or equal to the right part
+Right part greater or equal to the left part,Right part greater or equal to the left part
+"The ""AND"" operator","The ""AND"" operator"
+"The ""OR"" operator","The ""OR"" operator"
+Sub condition,Sub condition
+Addition,Addition
+Subtraction,Subtraction
+Multiplication,Multiplication
+Division,Division
+Returns the absolute value of x,Returns the absolute value of x
+"Returns the arccosine of x, in radians","Returns the arccosine of x, in radians"
+"Returns the arcsine of x, in radians","Returns the arcsine of x, in radians"
+"Returns the arctangent of x as a numeric value between -PI/2 and PI/2 radians","Returns the arctangent of x as a numeric value between -PI/2 and PI/2 radians"
+Returns the arctangent of the quotient of its arguments,Returns the arctangent of the quotient of its arguments
+"Returns x, rounded upwards to the nearest integer","Returns x, rounded upwards to the nearest integer"
+Returns the cosine of x (x is in radians),Returns the cosine of x (x is in radians)
+Returns the value of Ex,Returns the value of Ex
+"Returns x, rounded downwards to the nearest integer","Returns x, rounded downwards to the nearest integer"
+Returns the natural logarithm (base E) of x,Returns the natural logarithm (base E) of x
+Returns the number with the highest value,Returns the number with the highest value
+Returns the number with the lowest value,Returns the number with the lowest value
+Returns the value of x to the power of y,Returns the value of x to the power of y
+Returns a random number between 0 and 1,Returns a random number between 0 and 1
+Rounds x to the nearest integer,Rounds x to the nearest integer
+Returns the sine of x (x is in radians),Returns the sine of x (x is in radians)
+Returns the square root of x,Returns the square root of x
+Returns the tangent of an angle,Returns the tangent of an angle
+Returns Euler\'s number (approx. 2.718),Returns Euler\'s number (approx. 2.718)
+Returns the natural logarithm of 2 (approx. 0.693),Returns the natural logarithm of 2 (approx. 0.693)
+Returns the natural logarithm of 10 (approx. 2.302),Returns the natural logarithm of 10 (approx. 2.302)
+Returns the base-2 logarithm of E (approx. 1.442),Returns the base-2 logarithm of E (approx. 1.442)
+Returns the base-10 logarithm of E (approx. 0.434),Returns the base-10 logarithm of E (approx. 0.434)
+Returns PI (approx. 3.14),Returns PI (approx. 3.14)
+Returns the square root of 1/2 (approx. 0.707),Returns the square root of 1/2 (approx. 0.707)
+Returns the square root of 2 (approx. 1.414),Returns the square root of 2 (approx. 1.414)
+Price after product options selected,Price after product options selected
+Price before options selected,Price before options selected
+Price after all calculations applied,Price after all calculations applied
+Special price configured in the product,Special price configured in the product
+Any product attribute code enclosed into {},Any product attribute code enclosed into {}
+Call any product option by its SKU enclosed into {},Call any product option by its SKU enclosed into {}
+"The quantity of sub-option if <a href=""https://www.itoris.com/magento-2-custom-options.html"">Dynamic Product Options</a> installed","The quantity of sub-option if <a href=""https://www.itoris.com/magento-2-custom-options.html"">Dynamic Product Options</a> installed"
+Get the price of option by sku,Get the price of option by sku
+Get the length of entered text,Get the length of entered text
+Returns the ID of currently selected product within the configurable product,Returns the ID of currently selected product within the configurable product
+Product quantity selected,Product quantity selected
+Get the current customer ID (0 if not logged in),Get the current customer ID (0 if not logged in)

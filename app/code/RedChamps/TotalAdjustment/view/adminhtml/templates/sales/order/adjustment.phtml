@@ -1,0 +1,34 @@
+<?php if($block->canShow()):?>
+    <form id="order_adjustment_form" action="<?php echo $block->getSaveUrl()?>">
+        <div id="order_adjustment" class="fieldset admin__fieldset" style="width: 40%">
+            <div class="field admin__field">
+                <label class="admin__field-label" for="adjustment_title"><?php /* @escapeNotVerified */ echo __('Adjustment Title'); ?></label>
+                <div class="control admin__field-control">
+                    <input type="text" class="input-text admin__control-text"
+                           name="adjustment_title"
+                           id="adjustment_title" />
+                </div>
+            </div>
+            <div class="field admin__field">
+                <label class="admin__field-label" for="adjustment_amount"><?php /* @escapeNotVerified */ echo __('Adjustment Amount'); ?></label>
+                <div class="control admin__field-control">
+                    <input type="text"
+                           class="input-text admin__control-text"
+                           name="adjustment_amount"
+                           id="adjustment_amount" />
+                </div>
+            </div>
+            <div class="field admin__field">
+                <div class="control admin__field-control">
+                    <button title="Submit Comment" type="submit" class="action-default scalable action-save action-secondary">
+                        <span>Apply Adjustment</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </form>
+<?php else:?>
+    <div>
+        Order has been invoiced. So, order total can't be modified.
+    </div>
+<?php endif;?>

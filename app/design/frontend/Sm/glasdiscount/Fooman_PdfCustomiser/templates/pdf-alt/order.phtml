@@ -1,0 +1,120 @@
+<?php
+/**
+ * @var \Fooman\PdfCustomiser\Block\Order $block
+ */
+?>
+<?php $order = $block->getOrder() ?>
+<?php $design = $block->getDesign() ?>
+
+<table width="100%" border="0" cellpadding="8" cellspacing="0">
+    <tr>
+        <?php if ($block->isLogoOnRight()): ?>
+            <td
+                    valign="top"
+                    width="50%"
+                    height="15mm"
+                    style="font-weight:bold;
+                    font-size:<?php echo $block->getFontsize('large') ?>"><?php echo $block->escapeHtml($block->getTitle()) ?></td>
+            <td valign="top">&nbsp;<?php echo $block->getLogoBlock() ?></td>
+        <?php else: ?>
+            <td width="50%"
+                valign="top"><?php echo $block->getLogoBlock() ?></td>
+            <td
+                    valign="top"
+                    height="15mm"
+                    style="font-weight:bold;
+                    font-size:<?php echo $block->getFontsize('large') ?>"><?php echo $block->escapeHtml($block->getTitle()) ?></td>
+        <?php endif; ?>
+    </tr>
+    <tr>
+        <td valign="top" width="50%"><?php echo __('Order #') ?>: <?php echo $order->getIncrementId() ?><br/>
+            <?php echo __('Order Date') ?>: <?php echo $block->getFormattedDate($order->getCreatedAt()) ?><br/>
+			<?php $customText = $block->getCustomText() ?>
+<?php if ($customText) : ?>
+    <br/>
+    <table width="80%" border="0" cellpadding="0" cellspacing="0">
+        <tr>
+            <td colspan="2"><?php echo $customText ?></td>
+        </tr>
+    </table>
+<?php endif; ?>
+        </td>
+        <td valign="top">
+		Geerdink Bouwmaterialen B.V.<br/>
+H.o.d.n. Glasdiscount.nl<br/>
+Hoofdweg 60<br/>
+7371 AJ Loenen GLD<br/>
+tel; 055-843 42 02<br/>
+<br/>
+<strong>Btw nummer:</strong>  8565.12.187.B01<br/>
+<strong>Rek nr:</strong> NL20 RABO 0306 0701 97 t.n.v. <br/>
+Geerdink Bouwmaterialen B.V.<br/>
+<strong>KvK nummer:</strong>  66359953<br/>
+		<?php echo $block->getOwnerAddress() ?><?php if ($order->getShipping_arrival_date()) : ?><?php echo date('d-m-Y', strtotime($order->getShipping_arrival_date())); ?><?php endif; ?></td>
+    </tr>
+    <tr>
+        <td colspan="2">&nbsp;</td>
+    </tr>
+    <tr>
+        <?php if ($block->shouldDisplayBothAddresses()): ?>
+        <!--Example with indentation of address, adjust the percentages to adjust the left-right positioning
+            <td valign="top" colspan="2">
+                <table>
+                    <tr>
+                        <td width="5%"></td>
+                        <td width="45%"><?php echo __('Sold to:') ?><br/><?php echo $block->getBillingAddress() ?></td>
+                        <td width="5%"></td>
+                        <td width="45%"><?php echo __('Ship to:') ?><br/><?php echo $block->getShippingAddress() ?></td>
+                    </tr>
+                </table>
+            </td>-->
+        <td valign="top" width="50%" style="font-weight:bold;border: 2px solid #808080;background-color: #ededed"><?php echo __('Sold to:') ?></td>
+        <td valign="top" style="font-weight:bold;border: 2px solid #808080;background-color: #ededed"><?php if (!$order->getIsVirtual()): ?><?php echo __('Ship to:') ?><?php endif; ?></td>
+    </tr>
+    <tr>
+        <td valign="top" style="border-left: 2px solid #808080;border-bottom: 2px solid #808080;"><?php echo $block->getBillingAddress() ?><?php echo $order->getCustomerEmail(); ?></td>
+        <td valign="top" style="border-bottom: 2px solid #808080;border-right: 2px solid #808080;"><?php if (!$order->getIsVirtual()): ?><?php echo $block->getShippingAddress() ?><?php endif; ?></td>
+
+        <?php elseif ($block->shouldDisplayShippingAddress()): ?>
+            <td valign="top" colspan="2" style="border-left: 2px solid #808080;border-bottom: 2px solid #808080;border-right: 2px solid #808080;"><?php echo $block->getShippingAddress() ?></td>
+        <?php elseif ($block->shouldDisplayBillingAddress()): ?>
+            <td valign="top" colspan="2" style="border-left: 2px solid #808080;border-bottom: 2px solid #808080;border-right: 2px solid #808080;"><?php echo $block->getBillingAddress() ?></td>
+        <?php endif; ?>
+    </tr>
+    <tr>
+        <td colspan="2">&nbsp;</td>
+    </tr>
+    <?php if ($order->getIsVirtual()): ?>
+        <tr>
+            <td valign="top" colspan="2" style="font-weight:bold;border: 2px solid #808080;background-color: #ededed"><strong><?php echo __('Payment Method') ?></strong></td>
+        </tr>
+        <tr>
+            <td valign="top" colspan="2" style="border-left: 2px solid #808080;border-bottom: 2px solid #808080;border-right: 2px solid #808080;"><?php echo $block->getPaymentBlock() ?></td>
+        </tr>
+    <?php else: ?>
+        <tr>
+            <td valign="top" width="50%" style="font-weight:bold;border: 2px solid #808080;background-color: #ededed"><strong><?php echo __('Payment Method') ?></strong></td>
+            <td valign="top" style="font-weight:bold;border: 2px solid #808080;background-color: #ededed"><strong><?php echo __('Shipping Method') ?></strong></td>
+        </tr>
+        <tr>
+            <td valign="top" width="50%" style="border-left: 2px solid #808080;border-bottom: 2px solid #808080;"><?php echo $block->getPaymentBlock() ?></td>
+            <td valign="top" style="border-bottom: 2px solid #808080;border-right: 2px solid #808080;"><?php echo $block->getShippingBlock() ?></td>
+        </tr>
+    <?php endif; ?>
+    <tr>
+        <td colspan="2">&nbsp;</td>
+    </tr>
+</table>
+
+<?php echo $block->getItemsBlock($design->getItemStyling()) ?>
+
+<br/><br/>
+<?php echo $block->getGiftmessageBlock()?>
+
+<?php echo $block->getTaxTableBlock() ?>
+
+<?php echo $block->getCommentsBlock() ?>
+
+<style>
+.amasty-attributes {display:none}
+</style>

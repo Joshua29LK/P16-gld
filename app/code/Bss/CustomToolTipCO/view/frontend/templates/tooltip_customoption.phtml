@@ -1,0 +1,92 @@
+<?php
+$product = $block->getProduct();
+$dataTooltip = [];
+
+foreach ($product->getOptions() as $customoption) {
+    $dataTooltip[$customoption->getOptionId()] = $customoption->getTooltipContent();
+}
+?>
+
+<script type="text/x-magento-init">
+    {
+      "*": {
+          "Bss_CustomToolTipCO/js/tooltip_customoption": {
+              "jsonTooltip": <?php /* @escapeNotVerified */ echo json_encode($dataTooltip, JSON_FORCE_OBJECT) ?>
+          }
+      }
+    }
+
+</script>
+
+<style type="text/css">
+
+body .product-options-wrapper .fieldset>.field, .product-options-wrapper .fieldset>.fields>.field {
+    position: relative;
+}
+#product-options-wrapper .fieldset div.field label {
+display: inline-block;
+}
+
+span.bss-tooltip-content {
+	position: absolute;
+  font-size: 16px !important;
+  font-weight: normal !important;
+  right:15px;
+  cursor:pointer;
+}
+
+span.bss-tooltip-customoption {
+    position: relative;
+}
+
+.bss-custom-tooltip {
+  background: grey;
+  border-radius: 0.5em;
+  box-shadow: 0 10px 20px rgba(black, 0.2);
+  left: 50%;
+  max-width: 90%;
+  pointer-events: none;
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 30em;
+  text-align: left;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  z-index: 999;
+}
+
+.bss-tooltip-content i.far.fa-question-circle{
+  font-size: 16px
+}
+
+.bss-tooltip-content {
+  z-index: 999
+}
+
+.bss-custom-tooltip p {
+    background: #fff;
+    color: #31312f;
+    padding: 8px 12px;
+    line-height: 20px;
+    font-size: 14px;
+	border-radius: 8px;
+    bottom: 100%;
+    border-radius: 8px;
+    border: 1px solid #999;
+}
+
+.bss-custom-tooltip div {
+    background: #fff;
+    color: #31312f;
+    padding: 8px 12px;
+    line-height: 20px;
+    font-size: 14px;
+	border-radius: 8px;
+    bottom: 100%;
+    border-radius: 8px;
+    border: 1px solid #999;
+}
+
+</style>

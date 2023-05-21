@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="Woom\CmsTree\Api\Data\TreeInterface" type="Woom\CmsTree\Model\Page\Tree" />
+    <preference for="Woom\CmsTree\Api\Data\TreeSearchResultsInterface" type="Woom\CmsTree\Model\Page\TreeSearchResult" />
+    <preference for="Woom\CmsTree\Api\TreeRepositoryInterface" type="Woom\CmsTree\Model\Page\TreeRepository" />
+    <preference for="Magento\Sitemap\Model\ResourceModel\Cms\Page" type="Woom\CmsTree\Model\Sitemap\ResourceModel\Cms\Page" />
+</config>

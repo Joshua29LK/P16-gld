@@ -1,0 +1,183 @@
+<?php
+/**
+ * Copyright © 2016 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+/** @var $block \Magento\Catalog\Block\Product\View */
+?>
+<?php $_product = $block->getProduct(); ?>
+<?php $buttonTitle = __('Add to Cart'); ?>
+<?php $verkoopbaar = $_product->getAttributeText('verkoopbaar'); ?>
+<?php
+    $_helper = $this->helper('Magento\Catalog\Helper\Output');
+    $_product = $block->getProduct();
+
+    /* Demo Attributes */
+    $maatglas = $_product->getAttributeText('glasmeten');
+
+    $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+
+    $stockRegistry = $objectManager->get('Magento\CatalogInventory\Api\StockRegistryInterface');
+
+    $stockItem=$stockRegistry->getStockItem($_product->getId());
+
+?>
+<?php if( $verkoopbaar == 'Nee' ) : ?>
+<?php elseif( $verkoopbaar == 'Nee en toon alternatieve button' ): ?>
+<a href="<?php /* @escapeNotVerified */ echo $_product->getResource()->getAttribute('cart_button_url')->getFrontend()->getValue($_product); ?>">
+<div class="cart-button-alternative">
+<span><?php /* @escapeNotVerified */ echo $_product->getResource()->getAttribute('cart_button_alternative')->getFrontend()->getValue($_product); ?></span>
+</div>
+</a>
+<style>
+ .cart-button-alternative {
+ 	float:none;
+    color: #fff !important;
+    height: 44px;
+	line-height: 40px;
+	background-color: #f47727;
+	display:inline-block;
+	padding:0 17px 0 22px;
+	margin:15px 0; }
+ .cart-button-alternative:hover {background-color: #444;}
+ .cart-button-alternative span {    font-weight: 500;color:#fff;    letter-spacing: -0.5px;
+    font-size: 18px;
+	line-height:40px;}
+ .cart-button-alternative span:after {
+    content: "\f061";
+    font-family: FontAwesome;
+    font-size: 20px;
+    font-weight: normal;
+    position: relative;
+    margin-left: 8px;
+	}
+</style>
+<?php elseif( $verkoopbaar == 'Nee en toon alternatieve button met vanafprijs' ): ?>
+<a href="<?php /* @escapeNotVerified */ echo $_product->getResource()->getAttribute('cart_button_url')->getFrontend()->getValue($_product); ?>">
+<div class="cart-button-alternative">
+<span><?php /* @escapeNotVerified */ echo $_product->getResource()->getAttribute('cart_button_alternative')->getFrontend()->getValue($_product); ?></span>
+</div>
+</a>
+<style>
+.in-stock{
+    width: auto;
+    text-align: center;
+    color:green;
+}
+ .cart-button-alternative {
+ 	float:right;
+    color: #fff !important;
+    height: 44px;
+	line-height: 40px;
+	background-color: #f47727;
+	display:inline-block;
+	padding:0 17px 0 22px;
+	margin:15px 0; }
+ .cart-button-alternative:hover {background-color: #444;}
+ .cart-button-alternative span {    font-weight: 500;color:#fff;    letter-spacing: -0.5px;
+    font-size: 18px;
+	line-height:40px;}
+ .cart-button-alternative span:after {
+    content: "\f061";
+    font-family: FontAwesome;
+    font-size: 20px;
+    font-weight: normal;
+    position: relative;
+    margin-left: 8px;
+	}
+@media only screen and (max-width: 991px) {
+ .cart-button-alternative {float: none;}
+}
+</style>
+<?php else : ?>
+<?php if ($_product->isSaleable()): ?>
+    <div class="box-tocart">
+<?php
+    $_helper = $this->helper('Magento\Catalog\Helper\Output');
+    $_product = $block->getProduct();
+    $productQty = $_product->getExtensionAttributes()->getStockItem()->getQty();
+?>
+
+    <div class="fieldset">
+      <div class="row">
+        <?php if ($block->shouldRenderQuantity()): ?>
+          <div class="col-2">
+            <div class="field qty">
+            <div class="control control-qty-cart">
+                <input type="number"
+                       name="qty"
+                       id="qty"
+                       maxlength="12"
+                       value="<?php /* @escapeNotVerified */
+					   echo $block->getProductDefaultQty() * 1 ?>"
+                       title="<?php /* @escapeNotVerified */
+					   echo __('Qty') ?>" class="qty-default input-text qty"
+                       data-validate="<?php echo $block->escapeHtml(json_encode($block->getQuantityValidators())) ?>"
+                />
+
+            </div>
+        </div>
+      </div>
+		<?php endif; ?>
+    <div class="col-10">
+        <div class="actions">
+            <button type="submit"
+                    title="<?php /* @escapeNotVerified */
+					echo $buttonTitle ?>"
+                    class="action primary tocart"
+                    id="product-addtocart-button">
+                <span><?php /* @escapeNotVerified */
+					echo $buttonTitle ?></span>
+            </button>
+			<?php echo $block->getChildHtml('', true) ?>
+            <?php $levertijd_link = '' . $this->getLayout()->createBlock('Magento\Cms\Block\Block')->setBlockId('link-levertijden')->toHtml() . '' ?>
+            <?php if ($stockItem->getData('manage_stock')):
+            $inStock = $productQty > 20 ? '<div class="col-md-5 mt-2" style="color:green;"><span>Op voorraad</span></div>' : (($productQty == 20) ? '<div class="col-md-5 mt-2" style="color:red;"><span>Niet op voorraad</span></div>': '');
+            echo '<div class="row text-center">' . $inStock . ' <div class="col-md-7 mt-2">' . $levertijd_link . '</div></div>'  ?>
+            <?php else: echo '<div class="row text-center"><div class="col-md-10 mt-2">' . $levertijd_link . '</div></div>' ?>
+            <?php endif; ?>
+        </div>
+      </div>
+    </div>
+    </div>
+</div>
+<?php endif; ?>
+<?php if (!$block->isRedirectToCartEnabled()) : ?>
+    <script>
+    require([
+        'jquery',
+        'mage/mage',
+        'Magento_Catalog/product/view/validation',
+        'Magento_Catalog/js/catalog-add-to-cart'
+    ], function ($) {
+        'use strict';
+
+        $('#product_addtocart_form').mage('validation', {
+            radioCheckboxClosest: '.nested',
+            submitHandler: function (form) {
+                var widget = $(form).catalogAddToCart({
+                    bindSubmit: false
+                });
+
+                widget.catalogAddToCart('submitForm', $(form));
+
+                return false;
+            }
+        });
+    });
+</script>
+<?php else : ?>
+    <script type="text/x-magento-init">
+    {
+        "#product_addtocart_form": {
+            "Magento_Catalog/product/view/validation": {
+                "radioCheckboxClosest": ".nested"
+            }
+        }
+    }
+</script>
+<?php endif; ?>
+<?php endif; ?>

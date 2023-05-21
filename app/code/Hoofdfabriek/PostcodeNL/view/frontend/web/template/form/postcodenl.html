@@ -1,0 +1,98 @@
+<form class="form form-postcodenl"
+      data-bind="attr: {'id': element.addressType + '-postcodenl'}">
+<fieldset class="fieldset"
+          data-bind="blockLoader: isLoading, visible: isVisible(), attr: {'id': element.addressType + '-postcodenl-fieldset'}">
+    <!-- ko if: element.messageText -->
+    <span translate="element.messageText" class="info-message"></span>
+    <!-- /ko -->
+
+    <div class="field half-width half-start required">
+        <label class="label" data-bind="attr: {'for': element.addressType + '-postcodenl-postcode'}">
+            <span data-bind="i18n: 'Postcode'"></span>
+        </label>
+        <div class="control">
+            <input class="input-text"
+                   type="text"
+                   data-bind="
+                            value: postcodeNL,
+                            attr: {'id': element.addressType + '-postcodenl-postcode'}"
+                   name="postcodenl_postcode"
+                   data-validate="{required:true}"/>
+        </div>
+    </div>
+
+    <div class="field half-width half-end required">
+        <label class="label" data-bind="attr: {'for': element.addressType + '-postcodenl-house'}">
+            <span data-bind="i18n: 'Housenumber and addition'"></span>
+        </label>
+        <div class="control">
+            <input class="input-text validate-house-number-nl"
+                   type="text"
+                   data-bind="value: houseNumber, attr: {'id': element.addressType + '-postcodenl-house'}"
+                   name="postcodenl_house_number"
+                   data-validate="{required:true}"/>
+
+        </div>
+    </div>
+    <div class="postcode-validation">
+        <div class="postcode-validation-result" data-bind="visible: showAddressDetails,
+          attr: {'id': element.addressType + '-nl-result'},
+          css: {'validation-warning': showAdditions()}">
+            <span class="postcode-valid-address"></span>
+        </div>
+        <div role="alert" class="message warning"
+             data-bind="visible: (validationMessage() && validationMessage().length > 0)" generated="true">
+            <span data-bind="text: validationMessage()"/>
+        </div>
+
+        <div class="manual-link" data-bind="visible: canEnterManually">
+            <div class="field postcode-additions" data-bind="visible: showAdditions">
+                <label class="label" data-bind="attr: {'for': element.addressType + '-postcodenl-addition'}">
+                    <span data-bind="i18n: 'Which house number do you mean?'"></span>
+                </label>
+                <div class="control postcodenl-addition">
+                    <!-- ko foreach: { data: houseAdditionalOptions(), as: 'addition' } -->
+                        <button type="button" data-bind="
+                            text: $parent.lastRequestResult.houseNumber.toString() + ' ' + addition,
+                            click: function(addition, event) {$parent.houseAddition(addition)}"></button>
+                    <!--/ko-->
+                </div>
+            </div>
+            <span data-bind="i18n: 'Not your address?'"></span>
+            <span class="change-link" data-bind="i18n: 'Change', click: toggleManual"></span>
+        </div>
+    </div>
+    <div class="manual" data-bind="visible: isManual">
+        <div class="field required">
+            <label class="label" data-bind="attr: {'for': element.addressType + '-postcodenl-street-manual'}">
+                <span data-bind="i18n: 'Street'"></span>
+            </label>
+            <div class="control">
+                <input class="input-text"
+                       type="text"
+                       data-bind="
+                            value: streetManual,
+                            attr: {'id': element.addressType + '-postcodenl-street-manual'}"
+                       name="postcodenl_street_manual"
+                       data-validate="{required:true}"/>
+
+            </div>
+        </div>
+        <div class="field required">
+            <label class="label" data-bind="attr: {'for': element.addressType + '-postcodenl-city-manual'}">
+                <span data-bind="i18n: 'City'"></span>
+            </label>
+            <div class="control">
+                <input class="input-text"
+                       type="text"
+                       data-bind="
+                            value: cityManual,
+                            attr: {'id': element.addressType + '-postcodenl-city-manual'}"
+                       name="postcodenl_city_manual"
+                       data-validate="{required:true}"/>
+
+            </div>
+        </div>
+    </div>
+</fieldset>
+</form>

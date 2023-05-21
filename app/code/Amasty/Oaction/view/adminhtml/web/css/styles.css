@@ -1,0 +1,55 @@
+.aoaction-cell label{
+    font-weight: bold;
+}
+
+div.aoaction-cell  > .admin__field-label span::after {
+    position: relative;
+    top: 0;
+}
+
+.aoaction-cell {
+    text-align: left;
+}
+.aoaction-cell .title {
+    margin-top: 3px;
+}
+
+.amasty-oaction-form {
+    padding: 8px;
+}
+
+.amasty-oaction-form table {
+    width: 100%;
+}
+
+.amasty-oaction-form label {
+    display: inline-block;
+    margin-right: 8px;
+    max-width: 84px;
+    vertical-align: middle;
+}
+
+.amasty-oaction-form select {
+    vertical-align: middle;
+    max-width: 170px;
+    margin-right: 8px;
+}
+
+.amasty-oaction-hidden {
+    display: none;
+}
+
+.sales-order-index .action-menu-items > .action-menu .amoaction-menu-item .action-submenu {
+    top: 100%;
+    left: 100%;
+    right: auto;
+}
+
+.amoaction-comment-container {
+    display: flex;
+    align-items: center;
+}
+
+.amoaction-comment-container .amoaction-button {
+    margin-left: 10px;
+}

@@ -1,0 +1,60 @@
+<?php
+/**
+ * @var $block \Balticode\CategoryConfigurator\Block\Configurator\Cart
+ */
+?>
+<div class="configurator-cart" data-bind="scope: 'configurator-cart'">
+    <?php $currencyCode = $block->escapeUrl($block->getCurrencySymbol()); ?>
+    <div id="configurator-cart-container" class="configurator-cart-container">
+        <div class="configurator-cart-header-container">
+            <span><?php echo __('Your configuration'); ?></span>
+        </div>
+        <div class="configurator-cart-item-list-container">
+            <ul class="configurator-cart-item-list no-bullet-list">
+                <!-- ko foreach: { data: getAllStepsCartItems(), as: 'stepCartItems'} -->
+                    <!-- ko foreach: { data: stepCartItems, as: 'stepCartItem'} -->
+                        <li class="configurator-cart-item-list-item">
+                            <div class="configurator-cart-item-container">
+                                <span data-bind="text: stepCartItem.name + ': <?php echo $currencyCode; ?> ' + $parents[1].getFormattedPrice(stepCartItem.price)"></span>
+                            </div>
+                        </li>
+                    <!-- /ko -->
+                <!-- /ko -->
+            </ul>
+        </div>
+		<div class="configurator-cart-total">
+		<strong><?php echo __('Total price: '); ?></strong><br/>
+            <span style="margin-top:5px;display:inline-block;">
+                <?php echo $currencyCode . ' '; ?><span data-bind="text: getFormattedPrice(cartTotal())"></span><?php echo __(' excl. BTW'); ?><br/>
+				<?php echo $currencyCode . ' '; ?><span data-bind="text: getFormattedPrice(cartTotal() * 1.21)"></span><?php echo __(' incl. BTW'); ?>
+            </span>
+        </div>
+		
+        <div class="configurator-cart-footer-container">
+            <div id="configurator-cart-error" class="configurator-cart-error configurator-error-message">
+                <span data-bind="text: $t(configuratorCartErrorText)"></span>
+            </div>
+            <button id="configurator-cart-button" class="configurator-cart-button" data-bind="click: addProductsToCart">
+                <?php echo __('In winkelwagen'); ?>
+            </button>
+        </div>
+    </div>
+    <script type="text/x-magento-init">
+    {
+        "*": {
+            "Magento_Ui/js/core/app": {
+                "components": {
+                    "configurator-cart": {
+                        "component": "Balticode_CategoryConfigurator/js/configurator/cart",
+                        "action": "<?php echo $block->escapeUrl($block->getAddToCartActionUrl()); ?>",
+                        "buttonIdentifier": "#configurator-cart-button"
+                    },
+                    "sticky-cart": {
+                        "component": "Balticode_CategoryConfigurator/js/configurator/sticky-cart"
+                    }
+                }
+            }
+        }
+    }
+    </script>
+</div>

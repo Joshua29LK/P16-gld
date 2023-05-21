@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * BSS Commerce Co.
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the EULA
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://bsscommerce.com/Bss-Commerce-License.txt
+ *
+ * @category   BSS
+ * @package    Bss_CustomOptionImage
+ * @author     Extension Team
+ * @copyright  Copyright (c) 2015-2020 BSS Commerce Co. ( http://bsscommerce.com )
+ * @license    http://bsscommerce.com/Bss-Commerce-License.txt
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <bss_coi>
+            <general>
+                <enable>0</enable>
+            </general>
+            <image_size>
+                <dropdown_y>60</dropdown_y>
+                <dropdown_x>60</dropdown_x>
+                <radio_y>50</radio_y>
+                <radio_x>50</radio_x>
+                <checkbox_y>50</checkbox_y>
+                <checkbox_x>50</checkbox_x>
+                <multiple_y>40</multiple_y>
+                <multiple_x>40</multiple_x>
+            </image_size>
+        </bss_coi>
+    </default>
+</config>

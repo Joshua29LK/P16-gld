@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <section id="sitemap">
+            <group id="exclude" translate="label" type="text" sortOrder="7" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Exclude Links</label>
+                <field id="links" translate="label comment" type="textarea" sortOrder="3" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Links</label>
+                    <comment>
+                        Enter each link in next line. If you would like to exclude URL https://website.com/a/b/test.html then enter
+                        a/b/test.html in this option.
+                    </comment>
+                </field>
+                <field id="patterns" translate="label comment" type="textarea" sortOrder="4" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Patterns</label>
+                    <comment>
+                        <![CDATA[Enter each pattern in new line.
+                                    <br/>The patterns can be in below format
+                                    <br/><b>gears*</b>
+                                    <br/><b>*bags*</b>
+                                    <br/><b>*laptops.html</b>
+                                    <br/><b>women*</b>
+                                ]]>
+                    </comment>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>

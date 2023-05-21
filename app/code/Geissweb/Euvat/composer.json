@@ -1,0 +1,33 @@
+{
+  "name": "geissweb/module-euvat",
+  "type": "magento2-module",
+  "version": "1.18.0",
+  "description": "Improved VAT handling for merchants dealing with or in the EU.",
+  "license": "proprietary",
+  "require": {
+    "php": ">=7.1",
+    "ext-curl": "*",
+    "ext-soap": "*",
+    "ext-json": "*",
+    "ext-pcre": "*",
+    "magento/framework": ">=102.0"
+  },
+  "autoload": {
+    "files": [
+      "registration.php"
+    ],
+    "psr-4": {
+      "Geissweb\\Euvat\\": ""
+    }
+  },
+  "authors": [
+    {
+      "name": "Sven Geiß",
+      "email": "info@geissweb.de"
+    }
+  ],
+  "extra": {
+    "_gw_magento_module_name": "Geissweb_Euvat",
+    "_gw_magento_codepool": "app/code"
+  }
+}

@@ -1,0 +1,306 @@
+<?php
+/**
+ * ITORIS
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the ITORIS's Magento Extensions License Agreement
+ * which is available through the world-wide-web at this URL:
+ * http://www.itoris.com/magento-extensions-license.html
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to sales@itoris.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade the extensions to newer
+ * versions in the future. If you wish to customize the extension for your
+ * needs please refer to the license agreement or contact sales@itoris.com for more information.
+ *
+ * @category   ITORIS
+ * @package    ITORIS_M2_PRODUCT_PRICE_FORMULA
+ * @copyright  Copyright (c) 2016 ITORIS INC. (http://www.itoris.com)
+ * @license    http://www.itoris.com/magento-extensions-license.html  Commercial License
+ */
+?>
+<div id="itoris_productpriceformula">
+    <div class="entry-edit">
+        <div class="entry-edit-head ">
+            <h4><?php echo $block->escapeHtml(__('Price Formulas')) ?></h4>
+            <button class="itoris_productpriceformula_add_new_formula scalable add" type="button" title="Create">
+                    <span>
+                        <?php echo $block->escapeHtml(__('Add New Formula')) ?>
+                    </span>
+            </button>
+        </div>
+    </div>
+<?php $templates = [];?>
+<?php
+    $userGroups = $block->_objectManager->create('Magento\Customer\Model\ResourceModel\Group\Collection')->toOptionArray();
+    array_unshift($userGroups, [
+        'label' => $block->escapeHtml(__('All Groups')),
+        'value' => '',
+    ]);
+    $websites = $block->getStoreViews();
+    $storeId = (int) $block->getRequest()->getParam('store', 0);
+    $currencyCode = $block->_objectManager->create('Magento\Store\Model\StoreManagerInterface')->getStore($storeId)->getBaseCurrencyCode();
+?>
+<div class="itoris_productpriceformula_content"><span class="itoris_productpriceformula_no_formulas"><?php echo $block->escapeHtml(__('No formulas'));?></span></div>
+    <?php $templates['settings'] = '
+        <div class="itoris_productpriceformula_formula">
+            <input type="hidden" data-form-part="product_form" name="itoris_productpriceformula_settings[#{formula_id}][formula_id_db]" value="#{formula_id}">
+            <table style="width: 100%; margin-bottom:10px; text-align: left;">
+                <thead>
+                    <tr>
+                        <th class="title">' .  $block->escapeHtml(__('Name')) . ' <span class="required">*</span></th>
+                        <th class="position" style="padding-right:10px;">' .  $block->escapeHtml(__('Position')) . '</th>
+                        <th class="status" >' . $block->escapeHtml(__('Status')) . '</th>
+                        <th class="action_from">' .  $block->escapeHtml(__('Date From')) . '</th>
+                        <th class="action_to">' .  $block->escapeHtml(__('Date To')) . '</th>
+                        <th class="a-right" style="text-align:right">
+                            <button class="itoris_productpriceformula_button_delete scalable delete" type="button" title="Delete">
+                                <span>
+                                    ' .  $block->escapeHtml(__('Delete Formula')) . '
+                                </span>
+                            </button>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><input data-form-part="product_form" type="text" style="width: 250px;" name="itoris_productpriceformula_settings[#{formula_id}][name]" value="#{name}" class="required-entry admin__control-text input-text required-entry" /></td>
+                        <td><input data-form-part="product_form" type="text" style="width: 30px;" name="itoris_productpriceformula_settings[#{formula_id}][position]" value="#{position}" class="admin__control-text" /></td>
+                        <td>
+                            <select data-form-part="product_form" class="itoris_productpriceformula_status admin__control-select" name="itoris_productpriceformula_settings[#{formula_id}][status]" style="width: 115px;">
+                                <option value="1">' .  $block->escapeHtml(__('Active')) . '</option>
+                                <option value="0">' .  $block->escapeHtml(__('Inactive')) . '</option>
+                            </select>
+                        </td>
+                        <td>
+                            <input data-form-part="product_form" type="text" name="itoris_productpriceformula_settings[#{formula_id}][active_from]" style="width: 140px" id="itoris_productpriceformula_active_from_#{formula_id}" class="itoris_productpriceformula_active_from admin__control-text">
+                        </td>
+                        <td>
+                            <input data-form-part="product_form" type="text" name="itoris_productpriceformula_settings[#{formula_id}][active_to]" style="width: 140px" id="itoris_productpriceformula_active_to_#{formula_id}" class="itoris_productpriceformula_active_to admin__control-text">
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <div style="width:300px; float:left;">
+                <span style="display: block; font-weight: bold; padding-bottom: 5px">' . $block->escapeHtml(__('Customer Groups:')) . '</span>
+                <select data-form-part="product_form" id="customer_groups" class="itoris_productpriceformula_group select multiselect" name="itoris_productpriceformula_settings[#{formula_id}][group][]" multiple="multiple" size="10" style="width: 280px; height: 128px">';
+                    foreach($userGroups as $group) {
+                        if ($group['value']== '') {
+                            $templates['settings'] .= '<option selected="selected" value="' . $group['value'] . '">' .  $group['label'] . '</option>';
+                        } else {
+                            $templates['settings'] .= '<option value="' . $group['value'] . '">' . $group['label'] . '</option>';
+                        }
+                    }
+                $templates['settings'] .= '</select>
+                <input data-form-part="product_form" id="group_serialized" type="hidden" name="itoris_productpriceformula_settings[#{formula_id}][group_serialized]" value="#{group_id}" class="admin__control-text" />
+            </div>
+            <div style="width:300px; float:left;">
+                <span style="display: block; font-weight: bold; padding-bottom: 5px">' . $block->escapeHtml(__('Store Views:')) . '</span>
+                <select data-form-part="product_form" id="stores" class="itoris_productpriceformula_stores select multiselect" name="itoris_productpriceformula_settings[#{formula_id}][stores][]" multiple="multiple" size="10" style="width: 280px; height: 128px">';
+                    $templates['settings'] .= '<option value="" selected="selected">' . __('All Store Views') . '</option>';
+                    foreach($websites as $website_name => $website) {
+                        if (count($website)) $templates['settings'] .= '<option disabled="disabled">' . htmlspecialchars($website_name) . '</option>';
+                        foreach($website as $store_id => $store_view) {
+                            $templates['settings'] .= '<option style="padding-left:30px;" value="' . $store_id . '">' . $store_view . '</option>';
+                        }
+                    }
+                $templates['settings'] .= '</select>
+                <input data-form-part="product_form" id="stores_serialized" type="hidden" name="itoris_productpriceformula_settings[#{formula_id}][stores_serialized]" value="#{store_ids}" class="admin__control-text" />
+            </div>
+            <div style="width:300px; float:left;">
+                <div>
+                    <span style="display: block; font-weight: bold; padding-bottom: 5px">' . $block->escapeHtml(__('Apply Formula To:')) . '</span>
+                    <select data-form-part="product_form" class="itoris_productpriceformula_apply_to_total admin__control-select" name="itoris_productpriceformula_settings[#{formula_id}][apply_to_total]" style="width: 300px;">
+                        <option value="0">' .  $block->escapeHtml(__('Item Price')) . '</option>
+                        <option value="1">' .  $block->escapeHtml(__('Row Total *')) . '</option>
+                    </select>
+                    <div>* If &quot;Row Total&quot; selected it is recommended to multiply the formula by {qty}, e.g. Price = {qty} * 0.5</div>
+                </div>
+                <div>
+                    <span style="display: block; font-weight: bold; padding-bottom: 5px; margin-top:15px;">' . $block->escapeHtml(__('Show Product Price on Frontend as:')) . '</span>
+                    <select data-form-part="product_form" class="itoris_productpriceformula_frontend_total admin__control-select" name="itoris_productpriceformula_settings[#{formula_id}][frontend_total]" style="width: 300px;">
+                        <option value="0">' .  $block->escapeHtml(__('Default')) . '</option>
+                        <option value="1">' .  $block->escapeHtml(__('Multiplied by the QTY selected')) . '</option>
+                    </select>
+                </div>
+            </div>
+            <div class="itoris_productpriceformula_constants">
+                <b>'.$block->escapeHtml(__('Add Constants or Custom Variables')).':</b><input type="checkbox" style="margin-left:10px;" class="itoris_productpriceformula_add_variables" />
+                <textarea data-form-part="product_form" rows="5" style="resize: vertical;" class="itoris_productpriceformula_variables constants-validate" name="itoris_productpriceformula_settings[#{formula_id}][variables]" data-validate="{\'constants-validate\':true}">#{variables}</textarea>
+                <div class="itoris_productpriceformula_variables_example">Example:<br />var a = 10;<br />var b = ({width_option} > 10 ? 2 : 3) + {a};<br /><b>Note</b>. Each variable declaration must start with word <b style="color:red">var</b>. To use the variable enclose it into curved brackets <b style="color:red">{...}</b>. Use unique names for variables. Do not mix with options\' SKUs or product attributes.</div>
+            </div>
+            <table class="itoris_productpriceformula_condition_table" style="clear:both">
+                <tr class="itoris_productpriceformula_condition_line">
+                    <td>
+                    <span style="font-weight: bold;">' . $block->escapeHtml(__('Condition:')) . '</span>
+                    <a class="itoris_productpriceformula_condition_help">' . $block->escapeHtml(__('Need help on condition syntax?')). '</a>
+                    <div class="itoris_productpriceformula_run_always"><input data-form-part="product_form" type="checkbox" value="1" #{checked_run_always} name="itoris_productpriceformula_settings[#{formula_id}][run_always]"/><span style="font-weight: bold; padding-left: 5px;">' . $block->escapeHtml(__('Run always')) . '</span></div>
+                    </td>
+                    <td><span style="font-weight: bold;">' . $block->escapeHtml(__('Price =')) . '</span> <a class="itoris_productpriceformula_price_help">' . $block->escapeHtml(__('Need help on price syntax?')). '</a></td>
+                </tr>
+                <tr class="itoris_productpriceformula_condition_input_line">
+                    <td><textarea data-form-part="product_form" rows="5" style="resize: none;" class="itoris_productpriceformula_condition formula-required formula-validate" name="itoris_productpriceformula_conditions[#{formula_id}][#{condition_id}][condition]" onkeyup="noBr(this)" onchange="noBr(this)" data-validate="{\'formula-required\':true, \'formula-validate\':true}">#{condition}</textarea></td>
+                    <td style="white-space:nowrap">
+                        <textarea data-form-part="product_form" rows="5" style="resize: none;" class="itoris_productpriceformula_price formula-required formula-validate" name="itoris_productpriceformula_conditions[#{formula_id}][#{condition_id}][price]" onkeyup="noBr(this)" onchange="noBr(this)" data-validate="{\'formula-required\':true, \'formula-validate\':true}">#{price}</textarea>&nbsp;<b>['.$currencyCode.']</b>
+                        <div class="itoris_productpriceformula_override_weight">
+                            <input data-form-part="product_form" type="checkbox" class="itoris_productpriceformula_override_weight_ch" name="itoris_productpriceformula_conditions[#{formula_id}][#{condition_id}][override_weight]" value="1" #{checked_override_weight} onclick="Element.extend(this).up().select(\'.itoris_productpriceformula_weight_ta\')[0].value=\'\'; Element.extend(this).up().select(\'.itoris_productpriceformula_weight\')[0].setStyle({display: this.checked ? \'block\' : \'none\'})" /> ' . $block->escapeHtml(__('Set formula for the product shipping weight if the condition is TRUE')) . '
+                            <div class="itoris_productpriceformula_weight" style="display:none">
+                                <textarea data-form-part="product_form" rows="5" style="resize: none;" class="itoris_productpriceformula_weight_ta formula-required formula-validate" name="itoris_productpriceformula_conditions[#{formula_id}][#{condition_id}][weight]" onkeyup="noBr(this)" onchange="noBr(this)" data-validate="{\'formula-required\':true, \'formula-validate\':true}">#{weight}</textarea>&nbsp;<b>[Per Item]</b>
+                            </div>
+                        </div>
+                    </td>
+                    <input data-form-part="product_form" type="hidden" name="itoris_productpriceformula_conditions[#{formula_id}][#{condition_id}][position]" value="1"/>
+                </tr>
+            </table>
+            <button class="itoris_productpriceformula_button_else scalable add" type="button" title="Else">
+                <span>' .  $block->escapeHtml(__('Else?')) . '</span>
+            </button>
+            <div style="margin-top:20px; border-top:1px solid #888; padding-top:10px;">
+                <b style="font-size:14px;">Disallow purchasing the product if the following criteria are met:</b>
+                <div class="itoris_productpriceformula_disallow_criteria">
+                    <table class="itoris_productpriceformula_disallow_criteria_table" style="width:950px; margin-top:10px">
+                        <thead>
+                            <tr>
+                                <th style="width:450px">Formula</th>
+                                <th>Error Message</th>
+                                <th>&nbsp;</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                    <input data-form-part="product_form" type="hidden" class="formula_id" value="#{formula_id}" />
+                </div>
+                <button class="itoris_productpriceformula_button_add_disallow scalable add" type="button" title="Add a Criteria">
+                    <span>' .  $block->escapeHtml(__('Add a Criteria')) . '</span>
+                </button>
+            </div>
+        </div>';
+$templates['head'] = '
+    <td>
+        <span style="font-weight: bold;">' . $block->escapeHtml(__('Else:')) . '</span>
+        <a class="itoris_productpriceformula_condition_remove">' . $block->escapeHtml(__('remove')). '</a>
+    </td>
+    <td><span style="font-weight: bold;">' . $block->escapeHtml(__('Price =')) . '</span></td>
+';
+$templates['input'] = '
+    <td><textarea data-form-part="product_form" rows="5" style="resize: none;" class="itoris_productpriceformula_condition formula-required formula-validate" name="itoris_productpriceformula_conditions[#{formula_id}][#{condition_id}][condition]" onkeyup="noBr(this)" onchange="noBr(this)" data-validate="{\'formula-required\':true, \'formula-validate\':true}">#{condition}</textarea></td>
+    <td style="white-space:nowrap">
+        <textarea data-form-part="product_form" rows="5" style="resize: none;" class="itoris_productpriceformula_price formula-required formula-validate" name="itoris_productpriceformula_conditions[#{formula_id}][#{condition_id}][price]" onkeyup="noBr(this)" onchange="noBr(this)" data-validate="{\'formula-required\':true, \'formula-validate\':true}">#{price}</textarea>&nbsp;<b>['.$currencyCode.']</b>
+        <div class="itoris_productpriceformula_override_weight">
+            <input data-form-part="product_form" type="checkbox" class="itoris_productpriceformula_override_weight_ch" name="itoris_productpriceformula_conditions[#{formula_id}][#{condition_id}][override_weight]" value="1" #{checked_override_weight} onclick="Element.extend(this).up().select(\'.itoris_productpriceformula_weight\')[0].setStyle({display: this.checked ? \'block\' : \'none\'})" /> ' . $block->escapeHtml(__('Set formula for the product shipping weight')) . '
+            <div class="itoris_productpriceformula_weight" style="display:none">
+                <textarea data-form-part="product_form" rows="5" style="resize: none;" class="itoris_productpriceformula_weight_ta formula-required formula-validate" name="itoris_productpriceformula_conditions[#{formula_id}][#{condition_id}][weight]" onkeyup="noBr(this)" onchange="noBr(this)" data-validate="{\'formula-required\':true, \'formula-validate\':true}">#{weight}</textarea>&nbsp;<b>[Per Item]</b>
+            </div>
+        </div>
+    </td>
+    <input data-form-part="product_form" type="hidden" name="itoris_productpriceformula_conditions[#{formula_id}][#{condition_id}][position]" value="#{position_condition}"/>
+    ';
+    ?>
+<?php
+    $dateFormat = $block->_objectManager->create('Magento\Framework\Stdlib\DateTime\TimezoneInterface')->getDateFormat(\IntlDateFormatter::SHORT);
+    $operatorsTable = $this->operatorsTable();
+    $operatorsTableForPrice = $this->operatorsTableForPrice();
+    $mathFunctionsTable = $this->mathFunctions();
+    $constantTable = $this->constantTable();
+    $variablesTable = $this->variablesTable();
+?>
+    <div class="itoris_productpriceformula_mask" style="display: none"></div>
+    <div class="itoris_productpriceformula_help_box" style="display: none">
+        <div class="close">X</div>
+        <span class="title"><?php echo $block->escapeHtml(__('Use the following condition and math operators:'))?></span>
+        <table class="operator">
+            <tr>
+                <th class="a-center"><?php echo $block->escapeHtml(__('Operator')) ?></th>
+                <th class="a-center"><?php echo $block->escapeHtml(__('Explanation')) ?></th>
+                <th class="a-center"><?php echo $block->escapeHtml(__('Example')) ?></th>
+            </tr>
+            <?php foreach ($operatorsTable as $operators): ?>
+                <tr>
+                    <?php foreach ($operators as $key => $operator):?>
+                        <td <?php echo $key == 0 ? 'class="a-center"' : ''; ?>><?php echo $block->escapeHtml(__($operator));?></td>
+                    <?php endforeach; ?>
+                </tr>
+            <?php endforeach; ?>
+        </table>
+
+        <table class="operator_for_price" style="display: none;">
+            <tr>
+                <th class="a-center"><?php echo $block->escapeHtml(__('Operator')) ?></th>
+                <th class="a-center"><?php echo $block->escapeHtml(__('Explanation')) ?></th>
+                <th class="a-center"><?php echo $block->escapeHtml(__('Example')) ?></th>
+            </tr>
+            <?php foreach ($operatorsTableForPrice as $operators): ?>
+                <tr>
+                    <?php foreach ($operators as $key => $operator):?>
+                        <td <?php echo $key == 0 ? 'class="a-center"' : ''; ?>><?php echo $block->escapeHtml(__($operator));?></td>
+                    <?php endforeach; ?>
+                </tr>
+            <?php endforeach; ?>
+        </table>
+
+        <span class="title"><?php echo $block->escapeHtml(__('Math functions:'))?></span>
+        <table class="math_functions">
+            <tr>
+                <th class="a-center"><?php echo $block->escapeHtml(__('Function')) ?></th>
+                <th class="a-center"><?php echo $block->escapeHtml(__('Explanation')) ?></th>
+            </tr>
+            <?php foreach ($mathFunctionsTable as $operators): ?>
+                <tr>
+                    <?php foreach ($operators as $key => $operator):?>
+                        <td><?php echo $block->escapeHtml(__($operator));?></td>
+                    <?php endforeach; ?>
+                </tr>
+            <?php endforeach; ?>
+        </table>
+
+        <span class="title"><?php echo $block->escapeHtml(__('Constants'))?>:</span>
+        <table class="constant">
+            <tr>
+                <th class="a-center"><?php echo $block->escapeHtml(__('Constant')) ?></th>
+                <th class="a-center"><?php echo $block->escapeHtml(__('Explanation')) ?></th>
+            </tr>
+            <?php foreach ($constantTable as $operators): ?>
+                <tr>
+                    <?php foreach ($operators as $key => $operator):?>
+                        <td><?php echo $block->escapeHtml(__($operator));?></td>
+                    <?php endforeach; ?>
+                </tr>
+            <?php endforeach; ?>
+        </table>
+
+        <span class="title"><?php echo $block->escapeHtml(__('Variables'))?>:</span>
+        <table class="constant">
+            <tr>
+                <th class="a-center"><?php echo $block->escapeHtml(__('Variable')) ?></th>
+                <th class="a-center"><?php echo $block->escapeHtml(__('Explanation')) ?></th>
+            </tr>
+            <?php foreach ($variablesTable as $operators): ?>
+                <tr>
+                    <?php foreach ($operators as $key => $operator):?>
+                        <td><?php echo $block->escapeHtml(__($operator));?></td>
+                    <?php endforeach; ?>
+                </tr>
+            <?php endforeach; ?>
+        </table>
+    </div>
+<script type="text/javascript">
+    require([
+        'jquery',
+        'uiRegistry',
+        'jquery/ui',
+        'jquery/validate',
+        'prototype',
+        'mage/calendar',
+        'mage/translate'
+    ], function (jQuery, registry) {
+        window.formulaRegistry = registry;
+        var itorisProductPriceFormula = Itoris.ProductPriceFormula.initialize(<?php echo json_encode($templates) ?>, '<?php echo $dateFormat ?>', <?php echo $this->lastFormulaIdFromDb() ? $this->lastFormulaIdFromDb() : 0; ?>, <?php echo json_encode($this->getFormulaSettingsForLoad())?>, <?php echo $this->lastConditionIdFromDb() ? $this->lastConditionIdFromDb() : 0; ?>, <?php echo json_encode($this->getConditionsForLoad())?>);
+    });
+    function noBr(obj) {
+        obj.value = obj.value.replace(/\n|\r/gi, "");
+    }
+</script>

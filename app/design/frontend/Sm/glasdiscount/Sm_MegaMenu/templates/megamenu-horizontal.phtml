@@ -1,0 +1,7 @@
+<?php $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+$customerSession = $objectManager->create('Magento\Customer\Model\Session'); ?>
+<?php if  ($customerSession->isLoggedIn()) { ?>
+<?php echo $this->getLayout() ->createBlock('Magento\Cms\Block\Block') ->setBlockId('links-logged-in-header') ->toHtml(); ?>
+<?php } else { ?>
+<?php echo $this->getLayout() ->createBlock('Magento\Cms\Block\Block') ->setBlockId('links-header') ->toHtml(); } ?>
+			

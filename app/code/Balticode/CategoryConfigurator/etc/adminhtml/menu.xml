@@ -1,0 +1,24 @@
+<?xml version="1.0" ?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
+    <menu>
+        <add id="Balticode_CategoryConfigurator::content"
+             title="Product Configurator"
+             module="Balticode_CategoryConfigurator"
+             sortOrder="100"
+             resource="Balticode_CategoryConfigurator::content" />
+        <add id="Balticode_CategoryConfigurator::balticode_categoryconfigurator_configurator"
+             module="Balticode_CategoryConfigurator"
+             resource="Magento_Backend::content"
+             sortOrder="10"
+             action="balticode_categoryconfigurator/configurator/index"
+             parent="Balticode_CategoryConfigurator::content"
+             title="Configurators"/>
+        <add id="Balticode_CategoryConfigurator::module_settings"
+             module="Balticode_CategoryConfigurator"
+             resource="Magento_Backend::content"
+             sortOrder="20"
+             action="adminhtml/system_config/edit/section/category_configurator_config"
+             parent="Balticode_CategoryConfigurator::content"
+             title="Module Settings" />
+    </menu>
+</config>

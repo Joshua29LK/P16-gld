@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <postcodenl>
+            <autocomplete>
+                <use_be_autocomplete>0</use_be_autocomplete>
+                <belgium_validation>none</belgium_validation>
+            </autocomplete>
+        </postcodenl>
+    </default>
+</config>

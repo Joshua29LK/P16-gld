@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceBlock name="creditmemo_totals">
+            <block class="RedChamps\TotalAdjustment\Block\Adminhtml\Sales\Order\Total\Item\Adjustments" template="RedChamps_TotalAdjustment::sales/order/refunded.phtml" name="surcharge.refunded">
+                <action method="setDisplayArea">
+                    <argument name="area" xsi:type="string">footer</argument>
+                </action>
+                <arguments>
+                    <argument name="view_model" xsi:type="object">RedChamps\TotalAdjustment\ViewModel\Helper</argument>
+                </arguments>
+            </block>
+        </referenceBlock>
+    </body>
+</page>

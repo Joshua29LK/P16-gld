@@ -1,0 +1,14 @@
+<?php
+/**
+ * @var $block \Balticode\CategoryConfigurator\Block\Configurator\Index
+ */
+?>
+<div class="configurator-link-list-container">
+    <ul class="configurator-link-list no-bullet-list">
+        <?php foreach ($block->getLinkBlocks() as $linkBlock): ?>
+            <li class="configurator-link-list-item">
+                <?php echo $linkBlock->toHtml(); ?>
+            </li>
+        <?php endforeach; ?>
+    </ul>
+</div>

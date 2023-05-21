@@ -1,0 +1,49 @@
+<?php if ($block->isActiveCsvPricing()):?>
+    <?php if ($block->_product->getApplyCsvType() == 'dimensional'): ?>
+        <?php $data = $block->jsonEncodeandDecode(); ?>
+        <script type="text/x-magento-init">
+        {
+                "#product_addtocart_form": {
+                    "MageArray_Customprice/js/custompriceonedimensional": {
+                        "optionConfig": <?= /* @noEscape */ $data?>,
+                        "controlContainer": ".field",
+                        "priceHolderSelector": "[data-role=priceBox]",
+                        "csvType": "<?= $block->escapeJs($block->_product->getApplyCsvType()) ?>"
+                    }
+                }
+            }
+        </script>
+    <?php elseif ($block->_product->getApplyCsvType() == 'multiple'): ?>
+        <?php $data=$block->jsonEncodeandDecode();?>
+        <script type="text/x-magento-init">
+        {
+                "#product_addtocart_form": {
+                    "MageArray_Customprice/js/custompricepro": {
+                        "optionConfig": <?= /* @noEscape */ $data?>,
+                        "controlContainer": ".field",
+                        "priceHolderSelector": "[data-role=priceBox]",
+                        "csvType": "<?= $block->escapeJs($block->_product->getApplyCsvType()) ?>"
+                    }
+                }
+            }
+        </script>
+    <?php else: ?>
+        <?php $data=$block->jsonEncodeandDecode();?>
+        <script type="text/x-magento-init">
+        {
+                "#product_addtocart_form": {
+                    "MageArray_Customprice/js/customprice": {
+                        "optionConfig": <?= /* @noEscape */ $data?>,
+                        "controlContainer": ".field",
+                        "priceHolderSelector": "[data-role=priceBox]",
+                        "csvType": "<?= $block->escapeJs($block->_product->getApplyCsvType()) ?>"
+                    }
+                }
+            }
+        </script>
+    <?php endif;?>
+<?php endif;?>
+<script type="text/javascript">
+    var itemQty = '<?= /* @noEscape */ $block->getItemQty() ?>';
+    var productConfigureMode = '<?= /* @noEscape */ $block->getConfigureMode(); ?>';
+</script>

@@ -1,0 +1,78 @@
+<?xml version="1.0"?>
+<!--
+/**
+* @author Amasty Team
+* @copyright Copyright (c) 2022 Amasty (https://www.amasty.com)
+* @package Order Archive for Magento 2
+*/-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="Amasty\Orderarchive\Api\ArchiveProcessorInterface" type="Amasty\Orderarchive\Model\OrderProcessor" />
+    <preference for="Amasty\Orderarchive\Api\Data\ArchiveAffectedIdsInterface" type="Amasty\Orderarchive\Model\ArchiveAffectedIds" />
+    <virtualType name="Amasty\Orderarchive\Model\OrderType" type="Amasty\Orderarchive\Model\TypeWrapper">
+        <arguments>
+            <argument name="sourceTable" xsi:type="string">sales_order_grid</argument>
+            <argument name="processor" xsi:type="object">Amasty\Orderarchive\Model\ResourceModel\OrderGrid</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Amasty\Orderarchive\Model\InvoiceType" type="Amasty\Orderarchive\Model\TypeWrapper">
+        <arguments>
+            <argument name="sourceTable" xsi:type="string">sales_invoice_grid</argument>
+            <argument name="processor" xsi:type="object">Amasty\Orderarchive\Model\ResourceModel\InvoiceGrid</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Amasty\Orderarchive\Model\ShipmentType" type="Amasty\Orderarchive\Model\TypeWrapper">
+        <arguments>
+            <argument name="sourceTable" xsi:type="string">sales_shipment_grid</argument>
+            <argument name="processor" xsi:type="object">Amasty\Orderarchive\Model\ResourceModel\ShipmentGrid</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Amasty\Orderarchive\Model\CreditmemoType" type="Amasty\Orderarchive\Model\TypeWrapper">
+        <arguments>
+            <argument name="sourceTable" xsi:type="string">sales_creditmemo_grid</argument>
+            <argument name="processor" xsi:type="object">Amasty\Orderarchive\Model\ResourceModel\CreditmemoGrid</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Amasty\Orderarchive\Model\ArchiveListMap" type="Magento\Framework\DataObject">
+        <arguments>
+            <argument name="data" xsi:type="array">
+                <item name="order" xsi:type="object">Amasty\Orderarchive\Model\OrderType</item>
+                <item name="invoice" xsi:type="object">Amasty\Orderarchive\Model\InvoiceType</item>
+                <item name="shipment" xsi:type="object">Amasty\Orderarchive\Model\ShipmentType</item>
+                <item name="creditmemo" xsi:type="object">Amasty\Orderarchive\Model\CreditmemoType</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <type name="Amasty\Orderarchive\Model\ArchiveFactory">
+        <arguments>
+            <argument name="list" xsi:type="object">Amasty\Orderarchive\Model\ArchiveListMap</argument>
+        </arguments>
+    </type>
+    <virtualType name="InvoiceArchiveSearchResult" type="Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult">
+        <arguments>
+            <argument name="mainTable" xsi:type="const">\Amasty\Orderarchive\Model\ArchiveFactory::INVOICE_ARCHIVE_NAMESPACE</argument>
+            <argument name="resourceModel" xsi:type="string">Amasty\Orderarchive\Model\ResourceModel\InvoiceGrid</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="ShipmentArchiveSearchResult" type="Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult">
+        <arguments>
+            <argument name="mainTable" xsi:type="const">\Amasty\Orderarchive\Model\ArchiveFactory::SHIPMENT_ARCHIVE_NAMESPACE</argument>
+            <argument name="resourceModel" xsi:type="string">Amasty\Orderarchive\Model\ResourceModel\ShipmentGrid</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="CreditmemoArchiveSearchResult" type="Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult">
+        <arguments>
+            <argument name="mainTable" xsi:type="const">\Amasty\Orderarchive\Model\ArchiveFactory::CREDITMEMO_ARCHIVE_NAMESPACE</argument>
+            <argument name="resourceModel" xsi:type="string">Amasty\Orderarchive\Model\ResourceModel\CreditmemoGrid</argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
+        <arguments>
+            <argument name="collections" xsi:type="array">
+                <item name="amasty_sales_order_archives_grid_data_source" xsi:type="string">Amasty\Orderarchive\Model\ResourceModel\OrderGrid\Collection</item>
+                <item name="amasty_sales_invoice_archives_grid_data_source" xsi:type="string">InvoiceArchiveSearchResult</item>
+                <item name="amasty_sales_shipment_archives_grid_data_source" xsi:type="string">ShipmentArchiveSearchResult</item>
+                <item name="amasty_sales_creditmemo_archives_grid_data_source" xsi:type="string">CreditmemoArchiveSearchResult</item>
+            </argument>
+        </arguments>
+    </type>
+</config>

@@ -1,0 +1,88 @@
+<?xml version="1.0"?>
+<routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Webapi:etc/webapi.xsd">
+    <route url="/V1/order_adjustments/action/add" method="POST">
+        <service class="RedChamps\TotalAdjustment\Api\Order\AdjustmentsInterface" method="addAdjustments"/>
+        <resources>
+            <resource ref="RedChamps_TotalAdjustment::allowed" />
+        </resources>
+    </route>
+    <route url="/V1/order_adjustments/action/remove" method="POST">
+        <service class="RedChamps\TotalAdjustment\Api\Order\AdjustmentsInterface" method="removeAdjustments"/>
+        <resources>
+            <resource ref="RedChamps_TotalAdjustment::allowed" />
+        </resources>
+    </route>
+    <route url="/V1/order_adjustments/action/edit" method="POST">
+        <service class="RedChamps\TotalAdjustment\Api\Order\AdjustmentsInterface" method="editAdjustments"/>
+        <resources>
+            <resource ref="RedChamps_TotalAdjustment::allowed" />
+        </resources>
+    </route>
+    <!--Guest cart adjustments operation-->
+    <route url="/V1/guest-carts/:cartId/adjustments/add" method="POST">
+        <service class="RedChamps\TotalAdjustment\Api\Quote\AdjustmentsInterface" method="addAdjustments"/>
+        <resources>
+            <resource ref="anonymous" />
+        </resources>
+    </route>
+    <route url="/V1/guest-carts/:cartId/adjustments/remove" method="POST">
+        <service class="RedChamps\TotalAdjustment\Api\Quote\AdjustmentsInterface" method="removeAdjustments"/>
+        <resources>
+            <resource ref="anonymous" />
+        </resources>
+    </route>
+    <route url="/V1/guest-carts/:cartId/adjustments/edit" method="POST">
+        <service class="RedChamps\TotalAdjustment\Api\Quote\AdjustmentsInterface" method="editAdjustments"/>
+        <resources>
+            <resource ref="anonymous" />
+        </resources>
+    </route>
+    <!-- Managing my Cart Adjustments -->
+    <route url="/V1/carts/mine/adjustments/add" method="POST">
+        <service class="RedChamps\TotalAdjustment\Api\Quote\AdjustmentsInterface" method="addAdjustments"/>
+        <resources>
+            <resource ref="self" />
+        </resources>
+        <data>
+            <parameter name="cartId" force="true">%cart_id%</parameter>
+        </data>
+    </route>
+    <route url="/V1/carts/mine/adjustments/edit" method="POST">
+        <service class="RedChamps\TotalAdjustment\Api\Quote\AdjustmentsInterface" method="editAdjustments"/>
+        <resources>
+            <resource ref="self" />
+        </resources>
+        <data>
+            <parameter name="cartId" force="true">%cart_id%</parameter>
+        </data>
+    </route>
+    <route url="/V1/carts/mine/adjustments/remove" method="POST">
+        <service class="RedChamps\TotalAdjustment\Api\Quote\AdjustmentsInterface" method="removeAdjustments"/>
+        <resources>
+            <resource ref="self" />
+        </resources>
+        <data>
+            <parameter name="cartId" force="true">%cart_id%</parameter>
+        </data>
+    </route>
+    <!-- Managing Cart Items -->
+    <route url="/V1/carts/:cartId/adjustments/add" method="POST">
+        <service class="RedChamps\TotalAdjustment\Api\Quote\AdjustmentsInterface" method="addAdjustments"/>
+        <resources>
+            <resource ref="RedChamps_TotalAdjustment::allowed" />
+        </resources>
+    </route>
+    <route url="/V1/carts/:cartId/adjustments/edit" method="POST">
+        <service class="RedChamps\TotalAdjustment\Api\Quote\AdjustmentsInterface" method="editAdjustments"/>
+        <resources>
+            <resource ref="RedChamps_TotalAdjustment::allowed" />
+        </resources>
+    </route>
+    <route url="/V1/carts/:cartId/adjustments/remove" method="POST">
+        <service class="RedChamps\TotalAdjustment\Api\Quote\AdjustmentsInterface" method="removeAdjustments"/>
+        <resources>
+            <resource ref="RedChamps_TotalAdjustment::allowed" />
+        </resources>
+    </route>
+</routes>

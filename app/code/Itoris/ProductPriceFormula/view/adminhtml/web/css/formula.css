@@ -1,0 +1,114 @@
+.itoris_productpriceformula_add_new_formula {
+    float: right;
+}
+.itoris_productpriceformula_no_formulas {
+    font-style: italic;
+    color: #7F7F7F;
+    font-size: 14px;
+}
+.itoris_productpriceformula_content {
+    border: 1px solid #D6D6D6;
+    padding: 0 10px;
+}
+.itoris_productpriceformula_formula {
+    background: none repeat scroll 0 0 #E7EFEF;
+    border: 1px solid #CDDDDD;
+    margin: 1.5em 0;
+    padding: 1em;
+}
+.itoris_productpriceformula_formula .title {
+    width: 270px;
+}
+.itoris_productpriceformula_formula .position {
+    width: 55px;
+}
+.itoris_productpriceformula_formula .status, .itoris_productpriceformula_formula .action_from, .itoris_productpriceformula_formula .action_to {
+    width: 145px;
+}
+.itoris_productpriceformula_condition_help, .itoris_productpriceformula_price_help, .itoris_productpriceformula_condition_remove {
+    color: red;
+}
+.itoris_productpriceformula_condition, .itoris_productpriceformula_price, .itoris_productpriceformula_weight_ta, .itoris_productpriceformula_disallow_criteria_table input {
+    /*width: 445px;*/
+    width:98%;
+}
+.itoris_productpriceformula_condition {margin-right:10px;}
+
+.itoris_productpriceformula_run_always {
+    display: inline-block;
+    float: right;
+	margin-right:10px;
+}
+.itoris_productpriceformula_condition_remove, .itoris_productpriceformula_condition_help, .itoris_productpriceformula_price_help {
+    cursor: pointer;
+}
+.itoris_productpriceformula_mask {
+    background: none repeat scroll 0 0 #000000;
+    bottom: 0;
+    left: 0;
+    top: 0;
+    opacity: 0.7;
+    position: fixed;
+    width: 100%;
+    z-index: 10013;
+}
+.itoris_productpriceformula_help_box {
+    background: white;
+    width: 900px;
+    z-index: 10014;
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    top: 30px;
+    margin-left: -450px;
+    height: 1400px;
+}
+.itoris_productpriceformula_help_box table {
+    border: 1px solid #000000;
+    border-collapse: collapse;
+    width: 90%;
+    margin: 10px 40px;
+    font-size: 16px;
+}
+.itoris_productpriceformula_help_box td, .itoris_productpriceformula_help_box th {
+    border: 1px solid #000000;
+    padding: 2px 5px;
+}
+.itoris_productpriceformula_help_box .title {
+    display: block;
+    font-size: 18px;
+    font-weight: bold;
+    padding: 20px 0 0 40px;
+}
+.itoris_productpriceformula_help_box .close {
+    cursor: pointer;
+    float: right;
+    font-size: 22px;
+    font-weight: bold;
+    margin-right: 7px;
+    margin-top: 5px;
+}
+
+.itoris_productpriceformula_disallow_criteria_table .validation-failed {
+	background:#ffeeee;
+	border:1px solid red;
+}
+
+#itoris_productpriceformula {min-width:980px}
+
+#itoris_productpriceformula .entry-edit-head h4 {
+	font-size: 1.7rem;
+	font-weight: 600;
+	letter-spacing: .025em;
+	display: inline-block;
+	border:none;
+}
+
+.itoris_productpriceformula_condition_table {margin-top:5px; width:calc(100% - 50px);}
+.itoris_productpriceformula_condition_table td {padding-top:5px; vertical-align:top;}
+.itoris_productpriceformula_condition_table td:first-child {width:40%;}
+
+div[data-index="price-formula"] .admin__field-complex-content {max-width:100%}
+
+.itoris_productpriceformula_constants {clear:both; padding:20px 0px; margin-bottom:20px; border-bottom: 1px dotted #888;}
+.itoris_productpriceformula_variables {width:calc(100% - 50px);}

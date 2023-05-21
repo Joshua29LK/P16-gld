@@ -1,0 +1,17 @@
+<?php
+/**
+ * @var $block \Balticode\CategoryConfigurator\Block\Configurator\Link
+ */
+?>
+<a href="<?php echo $block->escapeUrl($block->getConfiguratorUrl()); ?>">
+    <div class="configurator-link">
+        <div class="configurator-link-title">
+            <span>
+                <?php echo $block->escapeHtml($block->getTitle()); ?>
+            </span>
+        </div>
+        <div class="configurator-link-image-container">
+            <img class="configurator-link-image" src="<?php echo $block->escapeUrl($block->getImageUrl()); ?>">
+        </div>
+    </div>
+</a>

@@ -1,0 +1,60 @@
+<?xml version="1.0"?>
+<!--
+/**
+* @author Amasty Team
+* @copyright Copyright (c) 2022 Amasty (https://www.amasty.com)
+* @package Order Notes for Magento 2
+*/-->
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+  <table name="amasty_flags_column" resource="default" engine="innodb" comment="Amasty Flags Column Table">
+    <column xsi:type="smallint" name="id" padding="5" unsigned="true" nullable="false" identity="true" comment="Entity ID"/>
+    <column xsi:type="varchar" name="name" nullable="false" length="255" comment="Column Name"/>
+    <column xsi:type="smallint" name="position" padding="6" unsigned="false" nullable="false" identity="false" comment="Column Position"/>
+    <column xsi:type="text" name="comment" nullable="false" comment="Comment"/>
+    <constraint xsi:type="primary" referenceId="PRIMARY">
+      <column name="id"/>
+    </constraint>
+  </table>
+  <table name="amasty_flags_flag" resource="default" engine="innodb" comment="Amasty Flags Flag Table">
+    <column xsi:type="smallint" name="id" padding="5" unsigned="true" nullable="false" identity="true" comment="Entity ID"/>
+    <column xsi:type="varchar" name="name" nullable="false" length="255" comment="Flag Name"/>
+    <column xsi:type="varchar" name="image_name" nullable="false" length="127" comment="Image File Name"/>
+    <column xsi:type="smallint" name="priority" padding="6" unsigned="false" nullable="false" identity="false" comment="Priority"/>
+    <column xsi:type="text" name="note" nullable="false" comment="Note"/>
+    <column xsi:type="smallint" name="apply_column" padding="5" unsigned="true" nullable="true" identity="false" comment="Automatically Applied To Column"/>
+    <column xsi:type="text" name="apply_status" nullable="false" comment="Automatically Applied For Statuses"/>
+    <column xsi:type="text" name="apply_shipping" nullable="false" comment="Automatically Applied For Shipping Methods"/>
+    <column xsi:type="text" name="apply_payment" nullable="false" comment="Automatically Applied For Payment Methods"/>
+    <constraint xsi:type="primary" referenceId="PRIMARY">
+      <column name="id"/>
+    </constraint>
+    <constraint xsi:type="foreign" referenceId="AMASTY_FLAGS_FLAG_APPLY_COLUMN_AMASTY_FLAGS_COLUMN_ID" table="amasty_flags_flag" column="apply_column" referenceTable="amasty_flags_column" referenceColumn="id" onDelete="SET NULL"/>
+  </table>
+  <table name="amasty_flags_flag_column" resource="default" engine="innodb" comment="Amasty Flags Column-Flag Relation Table">
+    <column xsi:type="smallint" name="column_id" padding="5" unsigned="true" nullable="false" identity="false" comment="Column ID"/>
+    <column xsi:type="smallint" name="flag_id" padding="5" unsigned="true" nullable="false" identity="false" comment="Flag ID"/>
+    <constraint xsi:type="foreign" referenceId="AMASTY_FLAGS_FLAG_COLUMN_COLUMN_ID_AMASTY_FLAGS_COLUMN_ID" table="amasty_flags_flag_column" column="column_id" referenceTable="amasty_flags_column" referenceColumn="id" onDelete="CASCADE"/>
+    <constraint xsi:type="foreign" referenceId="AMASTY_FLAGS_FLAG_COLUMN_FLAG_ID_AMASTY_FLAGS_FLAG_ID" table="amasty_flags_flag_column" column="flag_id" referenceTable="amasty_flags_flag" referenceColumn="id" onDelete="CASCADE"/>
+    <constraint xsi:type="unique" referenceId="AMASTY_FLAGS_FLAG_COLUMN_COLUMN_ID_FLAG_ID">
+      <column name="column_id"/>
+      <column name="flag_id"/>
+    </constraint>
+  </table>
+  <table name="amasty_flags_order_flag" resource="default" engine="innodb" comment="Amasty Flags Order-Flag Relation Table">
+    <column xsi:type="int" name="id" padding="10" unsigned="true" nullable="false" identity="true" comment="Entity ID"/>
+    <column xsi:type="int" name="order_id" padding="10" unsigned="true" nullable="false" identity="false" comment="Column ID"/>
+    <column xsi:type="smallint" name="flag_id" padding="5" unsigned="true" nullable="false" identity="false" comment="Flag ID"/>
+    <column xsi:type="smallint" name="column_id" padding="5" unsigned="true" nullable="false" identity="false" comment="Column ID"/>
+    <column xsi:type="text" name="note" nullable="false" comment="Note"/>
+    <constraint xsi:type="primary" referenceId="PRIMARY">
+      <column name="id"/>
+    </constraint>
+    <constraint xsi:type="foreign" referenceId="AMASTY_FLAGS_ORDER_FLAG_COLUMN_ID_AMASTY_FLAGS_COLUMN_ID" table="amasty_flags_order_flag" column="column_id" referenceTable="amasty_flags_column" referenceColumn="id" onDelete="CASCADE"/>
+    <constraint xsi:type="foreign" referenceId="AMASTY_FLAGS_ORDER_FLAG_ORDER_ID_SALES_ORDER_ENTITY_ID" table="amasty_flags_order_flag" column="order_id" referenceTable="sales_order" referenceColumn="entity_id" onDelete="CASCADE"/>
+    <constraint xsi:type="foreign" referenceId="AMASTY_FLAGS_ORDER_FLAG_FLAG_ID_AMASTY_FLAGS_FLAG_ID" table="amasty_flags_order_flag" column="flag_id" referenceTable="amasty_flags_flag" referenceColumn="id" onDelete="CASCADE"/>
+    <constraint xsi:type="unique" referenceId="AMASTY_FLAGS_ORDER_FLAG_COLUMN_ID_ORDER_ID">
+      <column name="column_id"/>
+      <column name="order_id"/>
+    </constraint>
+  </table>
+</schema>

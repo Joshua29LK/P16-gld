@@ -1,0 +1,34 @@
+Postcode,Postcode
+Housenr.,Huisnummer
+Addition,Toevoeging
+"PostcodeNL API is not enabled.","PostcodeNL API is niet actief."
+"Postcode.nl API is not configured.","Postcode.nl API is niet geconfigureerd."
+"Configure your `API key` and `API secret`.","Configure your `API key` and `API secret`."
+"Cannot connect to Postcode.nl API: Server is missing SSL (https) support for CURL.","Kan niet verbinden met Postcode.nl API: Server mist SSL (https) support voor CURL."
+"Invalid postcode format, use `1234AB` format.","Foutief postcode formaat, gebruik 4 cijfers + 2 letter."
+"Zip/Postal Code + housenumber combination does not seem to exist.","Postcode + huisnummer combinatie lijkt niet geldig."
+"Housenumber format is not valid.","Huisnummer is niet geldig."
+"Incorrect address.","Ongeldig adres."
+"Validation error, please use manual input.","Validatie error, gebruik handmatige invoer."
+"Unknown postcode + housenumber combination.","Onbekende postcode+huisnummer combinatie."
+"Enter your zip code and house number and your address will be completed automatically.","Voer uw postcode en huisnummer in en uw adres wordt automatisch ingevuld."
+Housenumber and addition,Huisnummer en toevoeging
+"If you think it is correct you can ignore this notice.","Indien u zeker weet dat dit klopt, dan kunt u deze melding negeren."
+loading...,laden...
+"Provided Zip/Postal Code seems to be invalid.","Ingevoerd postcode lijkt ongeldig."
+" Example: "," Voorbeeld: "
+"Provided Zip/Postal Code seems to be invalid. ","Ingevoerd postcode lijkt ongeldig. "
+"This is required value","Verplicht veld"
+"Hoofdfabriek Extensions","Hoofdfabriek Extensies"
+Postcode.nl,Postcode.nl
+General,Algemeen
+Enabled,Actief
+"Api key","Api key"
+"Api secret","Api secret"
+"Advanced Configuration","Geavanceerde configuratie"
+"Use street 2 for housenumber","Gebruik street 2 voor huisnummer"
+"Use street 3 for housenumber addition","Gebruik street 3 voor huisnummer toevoeging"
+"We cannot find a validated adres of the combination from your zipcode and housenumber.","We konden jouw combinatie van postcode en huisnummer niet vinden."
+"Are the details correct? Then you can fill in the streetname and city manually below","Klopt deze wél? Vul dan je straatnaam en woonplaats in."
+"Not your address?","Adres handmatig invoeren?"
+"Change","Wijzigen"

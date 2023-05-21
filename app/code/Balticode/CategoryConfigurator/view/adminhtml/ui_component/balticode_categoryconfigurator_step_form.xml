@@ -1,0 +1,229 @@
+<?xml version="1.0" ?>
+<form xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+	<argument name="data" xsi:type="array">
+		<item name="js_config" xsi:type="array">
+			<item name="provider" xsi:type="string">balticode_categoryconfigurator_step_form.step_form_data_source</item>
+			<item name="deps" xsi:type="string">balticode_categoryconfigurator_step_form.step_form_data_source</item>
+		</item>
+		<item name="label" translate="true" xsi:type="string">General Information</item>
+		<item name="config" xsi:type="array">
+			<item name="dataScope" xsi:type="string">data</item>
+			<item name="namespace" xsi:type="string">balticode_categoryconfigurator_step_form</item>
+		</item>
+		<item name="template" xsi:type="string">templates/form/collapsible</item>
+		<item name="buttons" xsi:type="array">
+			<item name="back" xsi:type="string">Balticode\CategoryConfigurator\Block\Adminhtml\Step\Edit\BackButton</item>
+			<item name="delete" xsi:type="string">Balticode\CategoryConfigurator\Block\Adminhtml\Step\Edit\DeleteButton</item>
+			<item name="save" xsi:type="string">Balticode\CategoryConfigurator\Block\Adminhtml\Step\Edit\SaveButton</item>
+			<item name="save_and_continue" xsi:type="string">Balticode\CategoryConfigurator\Block\Adminhtml\Step\Edit\SaveAndContinueButton</item>
+		</item>
+	</argument>
+	<dataSource name="step_form_data_source">
+		<argument name="dataProvider" xsi:type="configurableObject">
+			<argument name="class" xsi:type="string">Balticode\CategoryConfigurator\Model\Step\DataProvider</argument>
+			<argument name="name" xsi:type="string">step_form_data_source</argument>
+			<argument name="primaryFieldName" xsi:type="string">step_id</argument>
+			<argument name="requestFieldName" xsi:type="string">step_id</argument>
+			<argument name="data" xsi:type="array">
+				<item name="config" xsi:type="array">
+					<item name="submit_url" path="*/*/save" xsi:type="url"/>
+				</item>
+			</argument>
+		</argument>
+		<argument name="data" xsi:type="array">
+			<item name="js_config" xsi:type="array">
+				<item name="component" xsi:type="string">Magento_Ui/js/form/provider</item>
+			</item>
+		</argument>
+	</dataSource>
+	<fieldset name="General">
+		<argument name="data" xsi:type="array">
+			<item name="config" xsi:type="array">
+				<item name="label" xsi:type="string"/>
+			</item>
+		</argument>
+		<field name="configurator_id">
+			<argument name="data" xsi:type="array">
+				<item name="options" xsi:type="object">Balticode\CategoryConfigurator\Model\Config\Source\Configurator</item>
+				<item name="config" xsi:type="array">
+					<item name="dataType" xsi:type="string">text</item>
+					<item name="label" translate="true" xsi:type="string">Configurator</item>
+					<item name="formElement" xsi:type="string">select</item>
+					<item name="source" xsi:type="string">Step</item>
+					<item name="sortOrder" xsi:type="number">0</item>
+					<item name="dataScope" xsi:type="string">configurator_id</item>
+					<item name="validation" xsi:type="array">
+						<item name="required-entry" xsi:type="boolean">true</item>
+					</item>
+				</item>
+			</argument>
+		</field>
+		<field name="title">
+			<argument name="data" xsi:type="array">
+				<item name="config" xsi:type="array">
+					<item name="dataType" xsi:type="string">text</item>
+					<item name="label" translate="true" xsi:type="string">Title</item>
+					<item name="formElement" xsi:type="string">input</item>
+					<item name="source" xsi:type="string">Step</item>
+					<item name="sortOrder" xsi:type="number">10</item>
+					<item name="dataScope" xsi:type="string">title</item>
+					<item name="validation" xsi:type="array">
+						<item name="required-entry" xsi:type="boolean">true</item>
+					</item>
+				</item>
+			</argument>
+		</field>
+		<field name="description">
+			<argument name="data" xsi:type="array">
+				<item name="config" xsi:type="array">
+					<item name="dataType" xsi:type="string">text</item>
+					<item name="label" translate="true" xsi:type="string">Description</item>
+					<item name="formElement" xsi:type="string">wysiwyg</item>
+					<item name="wysiwyg" xsi:type="boolean">true</item>
+					<item name="template" xsi:type="string">ui/form/field</item>
+					<item name="source" xsi:type="string">Step</item>
+					<item name="sortOrder" xsi:type="number">20</item>
+					<item name="dataScope" xsi:type="string">description</item>
+					<item name="validation" xsi:type="array">
+						<item name="required-entry" xsi:type="boolean">false</item>
+					</item>
+				</item>
+			</argument>
+		</field>
+		<field name="enable">
+			<argument name="data" xsi:type="array">
+				<item name="options" xsi:type="object">Magento\Config\Model\Config\Source\Yesno</item>
+				<item name="config" xsi:type="array">
+					<item name="dataType" xsi:type="string">bool</item>
+					<item name="label" translate="true" xsi:type="string">Enable</item>
+					<item name="formElement" xsi:type="string">select</item>
+					<item name="source" xsi:type="string">Step</item>
+					<item name="sortOrder" xsi:type="number">30</item>
+					<item name="dataScope" xsi:type="string">enable</item>
+					<item name="validation" xsi:type="array">
+						<item name="required-entry" xsi:type="boolean">true</item>
+					</item>
+				</item>
+			</argument>
+		</field>
+		<field name="info">
+			<argument name="data" xsi:type="array">
+				<item name="config" xsi:type="array">
+					<item name="dataType" xsi:type="string">text</item>
+					<item name="label" translate="true" xsi:type="string">Info</item>
+					<item name="formElement" xsi:type="string">wysiwyg</item>
+					<item name="wysiwyg" xsi:type="boolean">true</item>
+					<item name="template" xsi:type="string">ui/form/field</item>
+					<item name="source" xsi:type="string">Step</item>
+					<item name="sortOrder" xsi:type="number">40</item>
+					<item name="dataScope" xsi:type="string">info</item>
+					<item name="validation" xsi:type="array">
+						<item name="required-entry" xsi:type="boolean">false</item>
+					</item>
+				</item>
+			</argument>
+		</field>
+		<field name="full_width">
+			<argument name="data" xsi:type="array">
+				<item name="options" xsi:type="object">Magento\Config\Model\Config\Source\Yesno</item>
+				<item name="config" xsi:type="array">
+					<item name="dataType" xsi:type="string">text</item>
+					<item name="label" translate="true" xsi:type="string">Is Full Width</item>
+					<item name="formElement" xsi:type="string">select</item>
+					<item name="source" xsi:type="string">Step</item>
+					<item name="sortOrder" xsi:type="number">50</item>
+					<item name="dataScope" xsi:type="string">full_width</item>
+					<item name="validation" xsi:type="array">
+						<item name="required-entry" xsi:type="boolean">true</item>
+					</item>
+				</item>
+			</argument>
+		</field>
+		<field name="sort_order">
+			<argument name="data" xsi:type="array">
+				<item name="config" xsi:type="array">
+					<item name="dataType" xsi:type="string">text</item>
+					<item name="label" translate="true" xsi:type="string">Sort order</item>
+					<item name="formElement" xsi:type="string">input</item>
+					<item name="source" xsi:type="string">Step</item>
+					<item name="sortOrder" xsi:type="number">60</item>
+					<item name="dataScope" xsi:type="string">sort_order</item>
+					<item name="validation" xsi:type="array">
+						<item name="required-entry" xsi:type="boolean">false</item>
+					</item>
+				</item>
+			</argument>
+		</field>
+		<field name="type">
+			<argument name="data" xsi:type="array">
+				<item name="options" xsi:type="object">Balticode\CategoryConfigurator\Model\Config\Source\Type</item>
+				<item name="config" xsi:type="array">
+					<item name="dataType" xsi:type="string">text</item>
+					<item name="label" translate="true" xsi:type="string">Type</item>
+					<item name="component" xsi:type="string">Balticode_CategoryConfigurator/js/form/element/stepOptions</item>
+					<item name="formElement" xsi:type="string">select</item>
+					<item name="source" xsi:type="string">Step</item>
+					<item name="sortOrder" xsi:type="number">80</item>
+					<item name="dataScope" xsi:type="string">type</item>
+					<item name="validation" xsi:type="array">
+						<item name="required-entry" xsi:type="boolean">true</item>
+					</item>
+				</item>
+			</argument>
+		</field>
+		<field name="category_id">
+			<argument name="data" xsi:type="array">
+				<item name="options" xsi:type="object">Balticode\CategoryConfigurator\Model\Config\Source\Category</item>
+				<item name="config" xsi:type="array">
+					<item name="dataType" xsi:type="string">text</item>
+					<item name="label" translate="true" xsi:type="string">Category</item>
+					<item name="formElement" xsi:type="string">select</item>
+					<item name="source" xsi:type="string">Step</item>
+					<item name="sortOrder" xsi:type="number">90</item>
+					<item name="dataScope" xsi:type="string">category_id</item>
+					<item name="visible" xsi:type="boolean">false</item>
+					<item name="visibleValue" xsi:type="string">1</item>
+					<item name="validation" xsi:type="array">
+						<item name="required-entry" xsi:type="boolean">false</item>
+					</item>
+				</item>
+			</argument>
+		</field>
+		<field name="parent_id">
+			<argument name="data" xsi:type="array">
+				<item name="options" xsi:type="object">Balticode\CategoryConfigurator\Model\Config\Source\Step</item>
+				<item name="config" xsi:type="array">
+					<item name="dataType" xsi:type="string">text</item>
+					<item name="label" translate="true" xsi:type="string">Test Parent Step</item>
+					<item name="formElement" xsi:type="string">select</item>
+					<item name="source" xsi:type="string">Step</item>
+					<item name="sortOrder" xsi:type="number">100</item>
+					<item name="dataScope" xsi:type="string">parent_id</item>
+					<item name="visible" xsi:type="boolean">false</item>
+					<item name="visibleValue" xsi:type="string">2</item>
+					<item name="validation" xsi:type="array">
+						<item name="required-entry" xsi:type="boolean">false</item>
+					</item>
+				</item>
+			</argument>
+		</field>
+		<field name="second_parent_id">
+			<argument name="data" xsi:type="array">
+				<item name="options" xsi:type="object">Balticode\CategoryConfigurator\Model\Config\Source\Step</item>
+				<item name="config" xsi:type="array">
+					<item name="dataType" xsi:type="string">text</item>
+					<item name="label" translate="true" xsi:type="string">Second Parent Step</item>
+					<item name="formElement" xsi:type="string">select</item>
+					<item name="source" xsi:type="string">Step</item>
+					<item name="sortOrder" xsi:type="number">100</item>
+					<item name="dataScope" xsi:type="string">second_parent_id</item>
+					<item name="visible" xsi:type="boolean">false</item>
+					<item name="visibleValue" xsi:type="string">2</item>
+					<item name="validation" xsi:type="array">
+						<item name="required-entry" xsi:type="boolean">false</item>
+					</item>
+				</item>
+			</argument>
+		</field>
+	</fieldset>
+</form>

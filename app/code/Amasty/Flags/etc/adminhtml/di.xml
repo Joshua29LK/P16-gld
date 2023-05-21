@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<!--
+/**
+* @author Amasty Team
+* @copyright Copyright (c) 2022 Amasty (https://www.amasty.com)
+* @package Order Notes for Magento 2
+*/-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult">
+        <plugin name="Amasty_Flags" type="Amasty\Flags\Plugin\Order\SearchResult" />
+    </type>
+    <type name="Magento\Ui\Component\Listing\Columns">
+        <plugin name="Amasty_Flags" type="Amasty\Flags\Plugin\Ui\Component\Listing\Columns" />
+    </type>
+    <type name="Magento\Ui\Model\Manager">
+        <plugin name="Amasty_Flags" type="Amasty\Flags\Plugin\Ui\Model\Manager" />
+    </type>
+    <type name="Magento\Ui\Config\Reader">
+        <plugin name="Amasty_Flags::addActions" type="Amasty\Flags\Plugin\Ui\Model\Reader"/>
+    </type>
+    <type name="Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider">
+        <plugin name="Amasty_Flags" type="Amasty\Flags\Plugin\View\Element\UiComponent\DataProvider\DataProvider" />
+    </type>
+</config>

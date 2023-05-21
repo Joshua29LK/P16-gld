@@ -1,0 +1,96 @@
+<?php
+/**
+ * @var $block \Balticode\CategoryConfigurator\Block\Configurator\Step\StepRelated
+ */
+?>
+<?php $htmlId = $block->escapeHtml($block->getHtmlId()); ?>
+<div class="configurator-step" data-bind="scope: '<?php echo $htmlId; ?>'">
+    <div class="configurator-step-header">
+        <div class="configurator-step-title">
+            <span>
+                <?php echo $block->escapeHtml($block->getTitle()); ?>
+            </span>
+        </div>
+        <?php if ($block->getInfo()): ?>
+            <span class="configurator-step-info-tooltip">
+                <span class="tooltip-icon"></span>
+                <span class="tooltip-content"><?php echo $block->getInfo(); ?></span>
+            </span>
+        <?php endif; ?>
+    </div>
+    <div class="configurator-step-description">
+        <!-- ko if: hasProducts -->
+        <span>
+            <?php echo $block->getDescription(); ?>
+        </span>
+        <!-- /ko -->
+        <!-- ko ifnot: hasProducts -->
+        <span>
+            <?php echo __('There are no related products to pick based on your current selection.'); ?>
+        </span>
+        <!-- /ko -->
+    </div>
+    <div class="configurator-step-product-list-container">
+        <ul class="configurator-step-product-list owl-carousel no-bullet-list" id="<?php echo $htmlId; ?>">
+            <!-- ko foreach: { data: products, as: 'product'} -->
+                <li class="configurator-step-product-list-item" data-bind="click: function(data, event) { $parent.selectProduct(data, event) }">
+                    <div class="configurator-step-product">
+                        <input type="hidden" name="product_id" data-bind="value: product.product_id">
+                        <div class="configurator-step-product-image">
+                            <span class="product-view-modal-button" data-bind="click: function(productId) { $parent.openProductViewModal(product.product_id) }"></span>
+                            <img data-bind="attr: { src: product.image }" />
+                            <!-- ko if: product.price > 0 -->
+                                <label class="product-price-label">
+                                    <span><?php echo $block->escapeHtml($block->getCurrencySymbol()); ?></span>
+                                    <span class="product-price" data-bind="text: $parent.getFormattedPrice(product.price)"></span>
+                                </label>
+                            <!-- /ko -->
+                        </div>
+                        <div class="configurator-step-product-name">
+                            <span data-bind="text: product.name"></span>
+                        </div>
+                    </div>
+                </li>
+            <!-- /ko -->
+        </ul>
+    </div>
+    <!-- ko if: selectedProductHasOptions && hasProducts -->
+        <div class="configurator-step-selected-product-options-container" data-bind="style: { display: 'block' }">
+            <ul class="configurator-step-selected-product-options no-bullet-list">
+                <!-- ko foreach: { data: selectedProductOptions, as: 'productOption'} -->
+                <li class="configurator-step-selected-product-options-item">
+                    <div class="configurator-step-product-option">
+                        <label data-bind="attr: {'for': 'product-option-' + productOption.option_id }">
+                            <span data-bind="text: productOption.title"></span>
+                        </label>
+                        <select data-bind="attr: {'id': 'product-option-' + productOption.option_id }, event: { change: function(data, event) { $parent.optionChanged(data, event) }}">
+                            <!-- ko foreach: { data: productOption.values, as: 'optionValue'} -->
+                                <option data-bind="value: optionValue.option_type_id, text: $parents[1].getFormattedOptionValueLabel(optionValue)"></option>
+                            <!-- /ko -->
+                        </select>
+                    </div>
+                </li>
+                <!-- /ko -->
+            </ul>
+        </div>
+    <!-- /ko -->
+</div>
+<script type="text/x-magento-init">
+    {
+        "*": {
+            "Magento_Ui/js/core/app": {
+                "components": {
+                    "<?php echo $htmlId; ?>": {
+                        "component": "Balticode_CategoryConfigurator/js/configurator/step/dynamic",
+                        "selector": "<?php echo '#' . $htmlId; ?>",
+                        "action": "<?php echo $block->escapeUrl($block->getRelatedProductsActionUrl()); ?>",
+                        "stepItemCount": "<?php echo $block->escapeHtml($block->getStepCarouselItemCount()); ?>",
+                        "mobileStepItemCount": "<?php echo $block->escapeHtml($block->getHalfStepCarouselItemCount()); ?>",
+                        "currencySymbol": "<?php echo $block->escapeHtml($block->getCurrencySymbol()); ?>",
+                        "stepSortOrder": "<?php echo $block->escapeHtml($block->getSortOrder()); ?>"
+                    }
+                }
+            }
+        }
+    }
+</script>

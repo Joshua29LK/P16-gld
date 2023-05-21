@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <customprice>
+            <general>
+                <active>1</active>
+                <!-- <enabled_row_csv>0</enabled_row_csv>
+                <option_field_name>Select CSV to load</option_field_name> -->
+                <row_label>Width</row_label>
+                <column_label>Height</column_label>
+                <pricemin>0</pricemin>
+                <include_baseprice>0</include_baseprice>
+                <displaydropdown>1</displaydropdown>
+                <csv_delimiter>,</csv_delimiter>
+                <max_error>Min value = {min}, Max value = {max}</max_error>
+                <min_error>Min value = {min}, Max value = {max}</min_error>
+                <not_found_size>Size not available</not_found_size>
+                <display_min_max_value_default>0</display_min_max_value_default>
+            </general>
+        </customprice>
+    </default>
+</config>

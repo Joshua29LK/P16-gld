@@ -1,0 +1,16 @@
+{
+    "name": "redchamps/module-sitemap-url-exclude",
+    "description": "This extension allows you to exclude any URL from XML sitemap.",
+    "require": {
+        "redchamps/module-core": "*"
+    },
+    "license": [
+        "RedChamps EULA"
+    ],
+    "autoload": {
+        "psr-4": { "RedChamps\\SitemapUrlExclude\\": "" },
+        "files": [ "registration.php" ]
+    },
+    "type": "magento2-module",
+    "version": "1.0.3"
+}

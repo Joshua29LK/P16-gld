@@ -1,0 +1,118 @@
+<?xml version="1.0" ?>
+<form xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+	<argument name="data" xsi:type="array">
+		<item name="js_config" xsi:type="array">
+			<item name="provider" xsi:type="string">balticode_categoryconfigurator_configurator_form.configurator_form_data_source</item>
+			<item name="deps" xsi:type="string">balticode_categoryconfigurator_configurator_form.configurator_form_data_source</item>
+		</item>
+		<item name="label" translate="true" xsi:type="string">General Information</item>
+		<item name="config" xsi:type="array">
+			<item name="dataScope" xsi:type="string">data</item>
+			<item name="namespace" xsi:type="string">balticode_categoryconfigurator_configurator_form</item>
+		</item>
+		<item name="template" xsi:type="string">templates/form/collapsible</item>
+		<item name="buttons" xsi:type="array">
+			<item name="back" xsi:type="string">Balticode\CategoryConfigurator\Block\Adminhtml\Configurator\Edit\BackButton</item>
+			<item name="delete" xsi:type="string">Balticode\CategoryConfigurator\Block\Adminhtml\Configurator\Edit\DeleteButton</item>
+			<item name="save" xsi:type="string">Balticode\CategoryConfigurator\Block\Adminhtml\Configurator\Edit\SaveButton</item>
+			<item name="save_and_continue" xsi:type="string">Balticode\CategoryConfigurator\Block\Adminhtml\Configurator\Edit\SaveAndContinueButton</item>
+		</item>
+	</argument>
+	<dataSource name="configurator_form_data_source">
+		<argument name="dataProvider" xsi:type="configurableObject">
+			<argument name="class" xsi:type="string">Balticode\CategoryConfigurator\Model\Configurator\DataProvider</argument>
+			<argument name="name" xsi:type="string">configurator_form_data_source</argument>
+			<argument name="primaryFieldName" xsi:type="string">configurator_id</argument>
+			<argument name="requestFieldName" xsi:type="string">configurator_id</argument>
+			<argument name="data" xsi:type="array">
+				<item name="config" xsi:type="array">
+					<item name="submit_url" path="*/*/save" xsi:type="url"/>
+				</item>
+			</argument>
+		</argument>
+		<argument name="data" xsi:type="array">
+			<item name="js_config" xsi:type="array">
+				<item name="component" xsi:type="string">Magento_Ui/js/form/provider</item>
+			</item>
+		</argument>
+	</dataSource>
+	<fieldset name="General">
+		<argument name="data" xsi:type="array">
+			<item name="config" xsi:type="array">
+				<item name="label" xsi:type="string"/>
+			</item>
+		</argument>
+		<field name="title">
+			<argument name="data" xsi:type="array">
+				<item name="config" xsi:type="array">
+					<item name="dataType" xsi:type="string">text</item>
+					<item name="label" translate="true" xsi:type="string">Title</item>
+					<item name="formElement" xsi:type="string">input</item>
+					<item name="source" xsi:type="string">Configurator</item>
+					<item name="sortOrder" xsi:type="number">10</item>
+					<item name="dataScope" xsi:type="string">title</item>
+					<item name="validation" xsi:type="array">
+						<item name="required-entry" xsi:type="boolean">true</item>
+					</item>
+				</item>
+			</argument>
+		</field>
+		<field name="enable">
+			<argument name="data" xsi:type="array">
+				<item name="options" xsi:type="object">Magento\Config\Model\Config\Source\Yesno</item>
+				<item name="config" xsi:type="array">
+					<item name="dataType" xsi:type="string">bool</item>
+					<item name="label" translate="true" xsi:type="string">Enable</item>
+					<item name="formElement" xsi:type="string">select</item>
+					<item name="source" xsi:type="string">Configurator</item>
+					<item name="sortOrder" xsi:type="number">30</item>
+					<item name="dataScope" xsi:type="string">enable</item>
+					<item name="validation" xsi:type="array">
+						<item name="required-entry" xsi:type="boolean">true</item>
+					</item>
+				</item>
+			</argument>
+		</field>
+		<field name="category_id">
+			<argument name="data" xsi:type="array">
+				<item name="options" xsi:type="object">Balticode\CategoryConfigurator\Model\Config\Source\Category</item>
+				<item name="config" xsi:type="array">
+					<item name="dataType" xsi:type="string">array</item>
+					<item name="label" translate="true" xsi:type="string">Category</item>
+					<item name="formElement" xsi:type="string">select</item>
+					<item name="source" xsi:type="string">Configurator</item>
+					<item name="sortOrder" xsi:type="number">40</item>
+					<item name="dataScope" xsi:type="string">category_id</item>
+					<item name="validation" xsi:type="array">
+						<item name="required-entry" xsi:type="boolean">true</item>
+					</item>
+				</item>
+			</argument>
+		</field>
+		<field name="image_name">
+			<argument name="data" xsi:type="array">
+				<item name="config" xsi:type="array">
+					<item name="dataType" xsi:type="string">string</item>
+					<item name="source" xsi:type="string">Configurator</item>
+					<item name="label" xsi:type="string" translate="true">Image Upload</item>
+					<item name="visible" xsi:type="boolean">true</item>
+					<item name="required" xsi:type="boolean">false</item>
+					<item name="sortOrder" xsi:type="number">50</item>
+					<item name="formElement" xsi:type="string">fileUploader</item>
+					<item name="elementTmpl" xsi:type="string">ui/form/element/uploader/uploader</item>
+					<item name="previewTmpl" xsi:type="string">Magento_Catalog/image-preview</item>
+					<item name="dataScope" xsi:type="string">image_name</item>
+					<item name="allowedExtensions" xsi:type="array">
+						<item name="jpg" xsi:type="string">jpg</item>
+						<item name="jpeg" xsi:type="string">jpeg</item>
+						<item name="gif" xsi:type="string">gif</item>
+						<item name="png" xsi:type="string">png</item>
+					</item>
+					<item name="uploaderConfig" xsi:type="array">
+						<item name="url" xsi:type="url" path="balticode_categoryconfigurator/configurator_image/upload"/>
+					</item>
+				</item>
+			</argument>
+		</field>
+	</fieldset>
+</form>

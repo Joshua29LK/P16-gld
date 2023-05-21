@@ -1,0 +1,55 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * @author Amasty Team
+ * @copyright Copyright (c) 2023 Amasty (https://www.amasty.com)
+ * @package Order Status for Magento 2
+ */-->
+
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Magento\Sales\Model\Order\Config">
+        <plugin name="amasty_order_status_model_order_config"
+                type="Amasty\OrderStatus\Model\Order\Plugin\Config" sortOrder="1"
+                disabled="false"/>
+    </type>
+    <type name="Magento\Sales\Model\Order\Email\Sender\OrderCommentSender">
+        <plugin name="amasty_order_status_model_order_email_sender_plugin_order_comment_sender"
+                type="Amasty\OrderStatus\Model\Order\Email\Sender\Plugin\OrderCommentSender" sortOrder="1"
+                disabled="false"/>
+    </type>
+    <type name="Magento\Sales\Model\Order\Email\Sender\OrderSender">
+        <plugin name="Amasty_OrderStatus::send_status_notification_on_order_send"
+                type="Amasty\OrderStatus\Plugin\Sales\Model\Order\Email\Sender\OrderSender\SendStatusNotificationOnOrderSend"/>
+    </type>
+    <type name="Magento\Sales\Model\Order">
+        <plugin name="Amasty_OrderStatus::register_order_status_from_status_history_comment"
+                type="Amasty\OrderStatus\Plugin\Sales\Model\Order\RegisterOrderStatus" sortOrder="1"
+                disabled="false"/>
+    </type>
+    <type name="Magento\Sales\Model\Order\Status\History">
+        <plugin name="Amasty_OrderStatus::set_is_customer_notified"
+                type="Amasty\OrderStatus\Plugin\Sales\Model\Order\Status\History\SetIsCustomerNotified" sortOrder="1"
+                disabled="false"/>
+    </type>
+    <type name="Magento\Sales\Model\ResourceModel\Order\Status\Collection">
+        <plugin name="amasty_order_status_model_order_status_plugin_collection"
+                type="Amasty\OrderStatus\Model\ResourceModel\Order\Status\Plugin\Collection" sortOrder="1"
+                disabled="false"/>
+    </type>
+    <type name="Amasty\Oaction\Model\Source\State">
+        <plugin name="amasty_order_status_plugin_to_option_after"
+                type="Amasty\OrderStatus\Model\ResourceModel\Order\Status\Plugin\Collection"/>
+    </type>
+    <type name="Magento\Sales\Model\Order\Status">
+        <plugin name="Amasty_OrderStatus::load_amasty_status"
+                type="Amasty\OrderStatus\Plugin\Sales\Model\Order\Status\LoadAmastyStatus" sortOrder="1"
+                disabled="false"/>
+        <plugin name="Amasty_OrderStatus::get_store_labels"
+                type="Amasty\OrderStatus\Plugin\Sales\Model\Order\Status\GetStoreLabels" sortOrder="1"
+                disabled="false"/>
+    </type>
+    <type name="Magento\Sales\Model\Order\StatusLabel">
+        <plugin name="Amasty_OrderStatus::StatusLabel" type="Amasty\OrderStatus\Model\Order\Plugin\StatusLabel"/>
+    </type>
+</config>

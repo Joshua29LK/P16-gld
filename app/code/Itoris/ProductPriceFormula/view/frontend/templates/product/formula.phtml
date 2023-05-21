@@ -1,0 +1,80 @@
+<?php 
+/**
+ * ITORIS
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the ITORIS's Magento Extensions License Agreement
+ * which is available through the world-wide-web at this URL:
+ * http://www.itoris.com/magento-extensions-license.html
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to sales@itoris.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade the extensions to newer
+ * versions in the future. If you wish to customize the extension for your
+ * needs please refer to the license agreement or contact sales@itoris.com for more information.
+ *
+ * @category   ITORIS
+ * @package    ITORIS_M2_PRODUCT_PRICE_FORMULA
+ * @copyright  Copyright (c) 2016 ITORIS INC. (http://www.itoris.com)
+ * @license    http://www.itoris.com/magento-extensions-license.html  Commercial License
+ */
+
+if (!$block->getDataHelper()->isEnabled()) return;
+?>
+<script type="text/javascript">
+    <?php
+        $condition = []; $errors = [];
+        $currentProductId = $block->getCurrentProduct()->getId();
+        $cond = $block->getConditions($currentProductId);
+        foreach ($cond as $productId => $conditionData) {
+            if ($block->getDataHelper()->correctDate($conditionData['active_from'], $conditionData['active_to'])
+                        && $block->getDataHelper()->customerGroup($conditionData['groups'])
+                ) {
+                        $formulaId = $conditionData['formula_id'];
+                        foreach ($conditionData['conditions'] as $key => $value) {
+                            if (is_null($value['condition'])) $conditionData['conditions'][$key]['condition'] = 1;
+                            $conditionData['conditions'][$key]['frontend_total'] = (int)$conditionData['frontend_total'];
+                            $conditionData['conditions'][$key]['apply_to_total'] = (int)$conditionData['apply_to_total'];
+                        }
+                        if (!isset($condition[$formulaId])) $condition[$formulaId] = ['variables' => $conditionData['variables'], 'conditions' => []];
+                        $condition[$formulaId]['conditions'] = $conditionData['conditions'];
+                        foreach($conditionData['disallow_criteria'] as $criteria) $errors[] = $criteria;
+                }
+        }
+        $condition = array_values($condition);
+    ?>
+    window.priceFormulaDefaultProductJsonConfig = <?php echo $block->_objectManager->get('Magento\Catalog\Block\Product\View')->getJsonConfig() ?>;
+    <?php
+        $baseCurrency = $block->_objectManager->create('Magento\Store\Model\StoreManagerInterface')->getStore()->getBaseCurrency();
+        $currentCurrency = $block->_objectManager->create('Magento\Store\Model\StoreManagerInterface')->getStore()->getCurrentCurrency();
+        $scopeConfig = $block->_objectManager->get('Magento\Framework\App\Config\ScopeConfigInterface');
+        $taxCalculator = $block->_objectManager->get('Magento\Tax\Model\Calculation');
+        $isPriceAlreadyInclTax = (int) $scopeConfig->getValue('tax/calculation/price_includes_tax', \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
+        $catalogPriceDisplayTaxMode = (int) $scopeConfig->getValue('tax/display/type', \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
+        $currencyRate = $baseCurrency->getRate($currentCurrency);
+        $currencyRate = $currencyRate > 0 ? $currencyRate : 1;
+        $taxClassId = (int) $block->getCurrentProduct()->getTaxClassId();
+        if ($taxClassId) {
+            $taxRate = $taxCalculator->getRate($taxCalculator->getRateRequest()->setProductClassId($taxClassId)) / 100 + 1;
+        } else $taxRate = 1;
+    ?>
+    require([
+        'jquery',
+        'Magento_Catalog/js/price-utils',
+        'prototype',
+    ], function (jQuery, utils, $) {
+        window._priceUtils = utils;
+        var itorisPriceFormula = Itoris.PriceFormula.initialize(<?php echo json_encode($condition) ?>, <?php echo json_encode($block->getOptions($block->getCurrentProduct())) ?>, <?php echo json_encode($block->specialPrice($block->getCurrentProduct())) ?>, <?php echo json_encode(array_merge(['dummysku' => 0], $block->getDataBySku($block->getCurrentProduct()))) ?>, <?php echo (int)$block->getCurrentProduct()->getId(); ?>, <?php echo str_replace(',', '.', strval($currencyRate)); ?>, {taxRate: <?php echo str_replace(',', '.', strval($taxRate)); ?>, priceAlreadyIncludesTax: <?php echo $isPriceAlreadyInclTax; ?>, displayPriceMode: <?php echo $catalogPriceDisplayTaxMode; ?>}, <?php echo json_encode($block->getTierPrices()) ?>);
+        jQuery.ajax({url: '<?php echo $block->getUrl('ppf/formula/getcustomerinfo'); ?>', success: function(data){
+            if (data.id) {
+                Itoris.PriceFormula.customerData = data;
+                Itoris.PriceFormula.getPriceBox().trigger('reloadPrice');
+            }
+        }, cache: false});
+    });
+    var itorisPriceFormulaErrors = <?php echo json_encode($errors); ?>;
+</script>

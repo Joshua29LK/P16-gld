@@ -1,0 +1,60 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * @author CynoInfotech Team
+ * @package Cynoinfotech_IndexFollow
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+       <tab id="cynoinfotech" translate="label" sortOrder="300">
+            <label>CynoInfotech</label>
+        </tab>		
+		<section id="cynoinfotech_indexfollow" translate="label" type="text" sortOrder="101" showInDefault="1" showInWebsite="1" showInStore="1">
+            <label>Index Follow</label>
+            <tab>cynoinfotech</tab> 
+			<resource>Cynoinfotech_IndexFollow::Config_IndexFollow</resource>
+			
+			<group id='general' translate='label' sortOrder='1' showInDefault='1' showInWebsite='1' showInStore='1'>
+				<label>General Configuration</label>
+				<field id='enable' translate='label' type='select' sortOrder='1' showInDefault='1' showInWebsite='1' showInStore='1'>
+					<label>Enable</label>
+					<source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+				</field>
+			</group>
+			
+			<group id='efcpcp' translate='label' sortOrder='1' showInDefault='1' showInWebsite='1' showInStore='1'>
+				
+				<label>Enable For Products Categories and CMS Pages</label>
+				
+				<field id='product_enable' translate='label' type='select' sortOrder='4' showInDefault='1' showInWebsite='1' showInStore='1'>
+					<label>Enable For Product Page</label>
+					<source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+				</field>
+				
+				<field id='category_enable' translate='label' type='select' sortOrder='8' showInDefault='1' showInWebsite='1' showInStore='1'>
+					<label>Enable For Category Page</label>
+					<source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+				</field>			
+				
+				<field id='cms_enable' translate='label' type='select' sortOrder='12' showInDefault='1' showInWebsite='1' showInStore='1'>
+					<label>Enable For CMS Pages</label>
+					<source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+				</field>
+							
+			</group>
+
+			<group id='iffcu' translate='label' sortOrder='1' showInDefault='1' showInWebsite='1' showInStore='1'>
+				<label>Index Follow For Custom URL</label>
+				<field id='custom_url' translate='label' type='select' sortOrder='1' showInDefault='1' showInWebsite='1' showInStore='1'>
+					<label>Custom URL</label>
+					<frontend_model>Cynoinfotech\IndexFollow\Block\Adminhtml\Form\Field\IndexFollow</frontend_model>
+					<backend_model>Magento\Config\Model\Config\Backend\Serialized\ArraySerialized</backend_model>
+				</field>
+			</group>
+			
+															
+			          
+		</section>
+	</system>
+</config>

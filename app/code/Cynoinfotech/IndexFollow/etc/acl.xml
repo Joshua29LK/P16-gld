@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * @author CynoInfotech Team
+ * @package Cynoinfotech_IndexFollow
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Acl/etc/acl.xsd">
+    <acl>
+		<resources>
+			<resource id="Magento_Backend::admin">					
+					<resource id="Magento_Backend::stores">					
+						<resource id="Magento_Backend::stores_settings">
+							<resource id="Magento_Config::config">
+								<resource id="Cynoinfotech_IndexFollow::Config_IndexFollow" title="Index Follow" />
+							</resource>
+						</resource>
+					</resource>				
+			</resource>
+		</resources>	
+    </acl>
+</config>

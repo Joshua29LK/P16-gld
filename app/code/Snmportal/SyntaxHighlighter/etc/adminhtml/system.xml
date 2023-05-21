@@ -1,0 +1,66 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <section id="cms" translate="label" type="text" sortOrder="1001" showInDefault="1" showInWebsite="1" showInStore="1">
+            <group id="snm_wysiwyg_cm" translate="label" type="text" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>SNM Syntax Highlighter</label>
+                <comment>
+                    <![CDATA[
+                        <a href="https://snm-portal.com/" target="_blank"><img src="//snm-portal.com/media/module/module_snm.png" style="border:none;float:right;padding-left:10px;padding-top:-1rem"></a>
+                        <strong>Copyright © <script>var today=new Date(); document.write(today.getFullYear());</script> </strong>
+                        <br />Homepage: <a href="https://snm-portal.com/" target="_blank">snm-portal.com</a>
+                        <br />Contact: <a href="mailto:contact@snm-portal.com?subject=M2SyntaxHighlighter">contact@snm-portal.com</a>
+                        <br />Website: <a target="_blank" href="https://snm-portal.com/magento2-syntax-highlighter.html">Website SyntaxHighlighter</a>
+                ]]>
+                </comment>
+                <field id="version" translate="label" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Current Version</label>
+                    <frontend_model>Snmportal\SyntaxHighlighter\Block\Adminhtml\Renderer\Config\Version</frontend_model>
+                    <comment>
+                    </comment>
+                </field>
+
+                <field id="enabled" translate="label" type="select" showInDefault="1" showInWebsite="1"
+                       showInStore="1" canRestore="1">
+                    <label>Enable</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <config_path>snmportal_syntaxhighlighter/general/enabled</config_path>
+                </field>
+                <field id="line_wrapping" translate="label" type="select" showInDefault="1" showInWebsite="1"
+                       showInStore="1" canRestore="1">
+                    <label>Use LineWrapping</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <config_path>snmportal_syntaxhighlighter/general/line_wrapping</config_path>
+                </field>
+                <field id="wysi_options" translate="label" showInDefault="1" showInWebsite="1"
+                       showInStore="1" canRestore="1">
+                    <label>Wysiwyg TinyMCE Options</label>
+                    <frontend_model>Snmportal\SyntaxHighlighter\Block\Adminhtml\Form\Field\Wysioptions</frontend_model>
+                    <backend_model>Snmportal\SyntaxHighlighter\Model\Adminhtml\System\Config\Wysioptions</backend_model>
+                    <config_path>snmportal_syntaxhighlighter/general/wysi_options</config_path>
+                    <depends>
+                        <field id="*/*/enabled">1</field>
+                    </depends>
+                </field>
+
+                <field id="bgelements" translate="label" showInDefault="1" showInWebsite="1"
+                       showInStore="1" canRestore="1">
+                    <label>Use for Background Elements</label>
+                    <frontend_model>Snmportal\SyntaxHighlighter\Block\Adminhtml\Form\Field\Bgelements</frontend_model>
+                    <backend_model>Snmportal\SyntaxHighlighter\Model\Adminhtml\System\Config\Bgelements</backend_model>
+                    <config_path>snmportal_syntaxhighlighter/general/bgelements</config_path>
+                    <depends>
+                        <field id="*/*/enabled">1</field>
+                    </depends>
+                </field>
+                <field id="frontend" translate="label" type="select" showInDefault="1" showInWebsite="1"
+                       showInStore="1" canRestore="1">
+                    <label>Add for Frontend</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <config_path>snmportal_syntaxhighlighter/general/frontend</config_path>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>

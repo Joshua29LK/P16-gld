@@ -1,0 +1,77 @@
+"Archived Orders","Archived Orders"
+"Please Select Items","Please Select Items"
+"Orders for archiving is not found!","Orders for archiving is not found!"
+"Module is disabled.","Module is disabled."
+Sales,Sales
+"Orders Archives","Orders Archives"
+"Something went wrong: orders haven't been moved. Check settings of extension and be sure that selected orders match the conditions.","Something went wrong: orders haven't been moved. Check settings of extension and be sure that selected orders match the conditions."
+"Archive Orders","Archive Orders"
+". 's Id's: '",". 's Id's: '"
+"Was Added To Archive","Was Added To Archive"
+"Was Removed Permanently","Was Removed Permanently"
+"Was Removed From Archive","Was Removed From Archive"
+"Orders in not archived!","Orders in not archived!"
+"took less then a second","took less then a second"
+second(s).,second(s).
+minute(s),minute(s)
+"Archive is not registered","Archive is not registered"
+"We can't save the cron expression.","We can't save the cron expression."
+Hourly,Hourly
+"Two Times Per Day","Two Times Per Day"
+Daily,Daily
+Weekly,Weekly
+Monthly,Monthly
+"Are you sure you want to remove from archive this order?","Are you sure you want to remove from archive this order?"
+"Remove From Archive","Remove From Archive"
+"Are you sure you want to archive this order?","Are you sure you want to archive this order?"
+Archiving,Archiving
+"Orders have been archived.","Orders have been archived."
+"Order Archives","Order Archives"
+Order,Order
+"Order Archive","Order Archive"
+"General Settings","General Settings"
+"Enable Orders Archive","Enable Orders Archive"
+"Archive Orders Older Than","Archive Orders Older Than"
+Days,Days
+"Order Status To Apply To","Order Status To Apply To"
+"Archive Frequency","Archive Frequency"
+"Hide Archived Orders on Frontend","Hide Archived Orders on Frontend"
+"Email Notifications","Email Notifications"
+"Notify After Archiving is Complete","Notify After Archiving is Complete"
+"E-mail Template","E-mail Template"
+"Send To E-mail Address","Send To E-mail Address"
+"Force Cron Job Actions","Force Cron Job Actions"
+"Start Archiving","Start Archiving"
+"No Items Found","No Items Found"
+"Order #","Order #"
+Purchased,Purchased
+"Bill-to Name","Bill-to Name"
+"Ship-to Name","Ship-to Name"
+"Order Total","Order Total"
+"Purchase Point","Purchase Point"
+Action,Action
+Edit,Edit
+"All Store Views","All Store Views"
+"Delete Permanently","Delete Permanently"
+"Delete items","Delete items"
+"Are you sure you want to delete permanently this orders? The action is irreversible.","Are you sure you want to delete permanently this orders? The action is irreversible."
+"Print Invoices","Print Invoices"
+"Print Packing Slips","Print Packing Slips"
+"Print Credit Memos","Print Credit Memos"
+"Print All","Print All"
+id,id
+"Purchase Date","Purchase Date"
+"Grand Total (Base)","Grand Total (Base)"
+"Grand Total (Purchased)","Grand Total (Purchased)"
+Status,Status
+"Billing Address","Billing Address"
+"Shipping Address","Shipping Address"
+"Shipping Information","Shipping Information"
+"Customer Email","Customer Email"
+"Customer Group","Customer Group"
+Subtotal,Subtotal
+"Shipping and Handling","Shipping and Handling"
+"Customer Name","Customer Name"
+"Payment Method","Payment Method"
+"Total Refunded","Total Refunded"
+"Add To Archive","Add To Archive"

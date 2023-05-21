@@ -1,0 +1,25 @@
+{
+    "bss_depend_co": {
+        "column": {
+            "dependent_id": true,
+            "depend_value": true,
+            "option_type_id": true,
+            "option_id": true,
+            "increment_id": true,
+            "product_id": true
+        },
+        "index": {
+            "BSS_DEPEND_CO_DEPENDENT_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "BSS_DEPEND_CO_OPT_TYPE_ID_CAT_PRD_OPT_TYPE_VAL_OPT_TYPE_ID": true,
+            "BSS_DEPEND_CO_OPTION_ID_CATALOG_PRODUCT_OPTION_OPTION_ID": true
+        }
+    },
+    "catalog_product_option": {
+        "column": {
+            "bss_dco_require": true
+        }
+    }
+}

@@ -1,0 +1,156 @@
+<?php echo $this->getLayout() ->createBlock('Magento\Cms\Block\Block') ->setBlockId('boven-de-header') ->toHtml(); ?>
+	<div class="header-usps">
+		<div class="container">
+			<?php echo $this->getLayout() ->createBlock('Magento\Cms\Block\Block') ->setBlockId('header-usps') ->toHtml(); ?>
+		</div>
+	</div>
+<div class="header-container header-style-1">
+  	<div class="header-top">
+	<div class="header-middle">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-4 logo-header">
+					<?php echo $block->getChildHtml('logo_theme'); ?>
+				</div>
+				
+				<div class="col-lg-8 header-middle-right">
+					<div class="middle-right-content">
+						<div class="searchbox-header">
+							<?php echo $block->getChildHtml('search-header-pro'); ?>
+						</div>
+						<div class="accountinfo">
+						<a href="/customer/account/login"><i class="fas fa-user"></i></a>
+							<div class="customer-action">
+						
+				<?php						
+					$objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+					$customerSession = $objectManager->create('Magento\Customer\Model\Session');
+ 					$customerSession->getCustomerId();  // get Customer Id
+ 					$customerSession->getCustomerGroupId();
+ 					$customerSession->getCustomer();
+ 					$customerSession->getCustomerData();
+				?>
+					<?php if  ($customerSession->isLoggedIn()) { ?>
+						<div class="myaccount">Mijn account</div>
+						 <div class="dropdown-user">
+						 <div class="user-chevron"></div>
+						 <div class="user-items">
+						 <?php echo $block->getChildHtml('toplinks-header'); ?>
+									</div>
+                                </div>
+								</div>
+                                </div>
+						<style>
+							.customer-action .dropdown-user li a {font-size: 15px;color: #06506f; margin-bottom:10px;font-weight:600}
+							.customer-action .myaccount-link, .customer-action .checkout-link {display:block;}
+						</style>					
+						
+					<?php } else { ?>
+
+						<div class="myaccount">Aanmelden</div>
+						 <div class="dropdown-user">
+						 <div class="user-chevron"></div>
+						 <div class="user-items">
+						 <?php echo $block->getChildHtml('toplinks-header'); ?>
+						 <span>Account bekijken</span>
+						 <li><a href="/customer/account/create">Een account registreren</a></li>
+						 <span>Sneller bestellen</span>
+									</div>
+                                </div>
+								</div>
+                                </div>
+					<?php } ?>	
+
+							<div class="minicart-header">
+								<?php echo $block->getChildHtml('cart-header'); ?>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<div class="header-bottom">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-3 col-md-3 sidebar-megamenu">
+					<div class="megamenu-content-sidebar">
+						<div class="btn-megamenu">
+							<a href="javascript:void(0)" title="<?php echo __('All Categories') ?>"><?php echo __('All Categories') ?></a>
+						</div>
+						
+						<div class="menu-ver-content">
+							<?php echo $this->getLayout() ->createBlock('Magento\Cms\Block\Block') ->setBlockId('menu-verticaal') ->toHtml(); ?>
+						</div>
+					</div>
+					
+					<div class="navigation-mobile-container">
+						<?php if ($_config->getGeneral('responsive_menu') == 'sidebar') { ?>
+    <div class="nav-mobile-container sidebar-type">
+		<div class="btn-mobile">
+			<a id="sidebar-button" class="button-mobile sidebar-nav" title="<?php echo __('Categories') ?>"><i class="fa fa-bars"></i><span class="hidden"><?php echo __('Categories') ?></span></a>
+		</div>     
+            <nav class="navigation-mobile">
+			<div class="login-create">
+				<ul>
+					<li><a href="/customer/account/create">Account aanmaken</a></li>
+					<li><a href="/customer/account/login">Inloggen</a></li>
+				</ul>
+			</div>
+			<div class="menulinks">
+			<ul><?php echo $this->getLayout() ->createBlock('Magento\Cms\Block\Block') ->setBlockId('mobile-links') ->toHtml(); ?></ul>
+			</div>
+                <ul>
+                  <ul><?php echo $this->getLayout() ->createBlock('Magento\Cms\Block\Block') ->setBlockId('mobiel-menu') ->toHtml(); ?></ul>
+                </ul>
+            </nav>
+
+            <script type="text/javascript">
+                require([
+                    'jquery'
+                ], function ($) {
+                    $('#sidebar-button').click(function () {
+                        $('body').toggleClass('navbar-active');
+                        $(this).toggleClass('active');
+                    });
+                });
+            </script>
+	</div>
+<?php } ?>
+    <script type="text/javascript">
+        require([
+            'jquery'
+        ], function ($) {
+            $('.navigation-mobile > ul li').has('ul').append('<span class="touch-button"><span>open</span></span>');
+
+            $('.touch-button').click(function () {
+                $(this).prev().slideToggle(200);
+                $(this).toggleClass('active');
+                $(this).parent().toggleClass('parent-active');
+            });
+        });
+    </script>
+					</div>
+				</div>
+				
+				<div class="col-lg-9 col-md-9 main-megamenu">
+					<?php echo $block->getLayout()->createBlock('Magento\Cms\Block\Block')->setBlockId('megamenu-horizontal')->toHtml(); ?>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script type="text/javascript">
+	require([
+        'jquery'
+    ], function ($) {
+        $(".header-style-1 .header-top .header-top-links .toplinks-wrapper .header.links li").not(".myaccount-link").mouseover(function () {
+            $(".header-style-1 .header-top .header-top-links .toplinks-wrapper .header.links").addClass('toplinks_hover');
+        }).mouseout(function () {
+            $(".header-style-1 .header-top .header-top-links .toplinks-wrapper .header.links").removeClass('toplinks_hover');
+        });
+    });
+</script>
+

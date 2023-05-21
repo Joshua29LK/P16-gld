@@ -1,0 +1,52 @@
+tbody td.amasty_flag_cell {
+    text-align: center;
+    vertical-align: middle;
+}
+
+.amasty-flags-flag-edit .field-image_name img {
+    border: none;
+    position: relative;
+    left: 6px;
+    top: 6px;
+}
+
+.amasty-flags-column-edit .field-apply_flag option {
+    /* do not merge these properties to single 'background' property!!! */
+    background-repeat: no-repeat;
+    background-position: center left;
+    padding-left: 25px;
+    background-size: 20px;
+}
+
+.sales-order-index .amasty_flag_cell [data-assign-allowed="1"] {
+    cursor: pointer;
+}
+
+.amasty-flags-assign {
+    .flags-container {
+        margin: 3rem 0;
+        display: table;
+
+        .flag {
+            display: table-row;
+
+            input[type=text] {
+                width: 30rem;
+                padding: 2px 4px;
+            }
+
+            &:first-child {
+                .note-column {
+                    font-weight: bold;
+                    text-transform: uppercase;
+                }
+            }
+
+            & > * {
+                display: table-cell;
+                vertical-align: middle;
+                padding: 0 7px 7px;
+            }
+        }
+    }
+}

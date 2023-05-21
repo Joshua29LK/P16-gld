@@ -1,0 +1,43 @@
+<!--
+/**
+ * BSS Commerce Co.
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the EULA
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://bsscommerce.com/Bss-Commerce-License.txt
+ *
+ * @category   BSS
+ * @package    Bss_DependentCustomOption
+ * @author     Extension Team
+ * @copyright  Copyright (c) 2017-2020 BSS Commerce Co. ( http://bsscommerce.com )
+ * @license    http://bsscommerce.com/Bss-Commerce-License.txt
+ */
+ -->
+<input type="hidden"   data-bind="attr: {update_depend : multiselectList()}"/>
+<select multiple="true" style="display: block;" class="multiselect-dco"
+        data-bind="
+        options: multiselectListArray,
+        selectedOptions: multiselectedValues(),
+        optionsValue: 'value',
+        optionsText: 'label',
+        event: {change: updateDependChild},
+        attr: {id: multiselectId, 'data-option-id': bssOptionId}"
+></select>
+<input type="hidden" class="bss-depend-option-id" data-bind="value: bssOptionId" />
+<input class="admin__control-text dco-control-input" type="hidden"
+       data-bind="
+        event: {change: userChanges},
+        value: value,
+        hasFocus: focused,
+        valueUpdate: valueUpdate,
+        attr: {
+            name: inputName,
+            form: 'product_form',
+            placeholder: placeholder,
+            'aria-describedby': noticeId,
+            id: uid,
+            disabled: disabled
+    }"/>

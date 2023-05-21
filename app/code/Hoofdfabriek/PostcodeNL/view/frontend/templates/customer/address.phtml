@@ -1,0 +1,39 @@
+<?php /** @var $block Hoofdfabriek\PostcodeNL\Block\Customer\Address */ ?>
+
+<?php if ($block->isEnabled()) : ?>
+    <div id="postcodenl" class="customer-account-fieldset" data-bind="scope:'postcodenl'">
+        <!-- ko template: getTemplate() --><!-- /ko -->
+        <!-- Image loader -->
+        <div id="postcode-loader" style="display: none;">
+            <img src="<?php echo $this->getViewFileUrl('images/loader-1.gif'); ?>" alt="image-icon" width="30" height="25">
+        </div>
+        <!-- Image loader -->
+    </div>
+    <script type="text/x-magento-init">
+    {
+        "#form-validate": {
+            "postcodeNL": {}
+        },
+        "#postcodenl": {
+            "Magento_Ui/js/core/app": {
+               "components": {
+                    "postcodenl": {
+                        "component": "Hoofdfabriek_PostcodeNL/js/view/customer/postcode",
+                        "template": "Hoofdfabriek_PostcodeNL/customer/postcodenl",
+                        "settings": {
+                            "house_number": "<?php echo $block->getHouseNumber() ?>",
+                            "postcode": "<?php echo $block->getAddress()->getPostcode() ?>",
+                            "street": "<?php echo $block->getSteet() ?>",
+                            "city": "<?php echo $block->getAddress()->getCity() ?>",
+                            "street2_housenumber": "<?php echo (int)$block->isSecondLineForHouseNumber() ?>",
+                            "street3_houseaddition": "<?php echo (int)$block->isThirdLineForHouseAddition() ?>",
+                            "url": "<?php echo $block->getUrl('postcodenl/lookup/') ?>"
+                        }
+
+                    }
+                }
+            }
+        }
+    }
+    </script>
+<?php endif; ?>

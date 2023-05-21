@@ -1,0 +1,62 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * BSS Commerce Co.
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the EULA
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://bsscommerce.com/Bss-Commerce-License.txt
+ *
+ * @category   BSS
+ * @package    Bss_DependentCustomOption
+ * @author     Extension Team
+ * @copyright  Copyright (c) 2017-2022 BSS Commerce Co. ( http://bsscommerce.com )
+ * @license    http://bsscommerce.com/Bss-Commerce-License.txt
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <tab id="bss" translate="label" sortOrder="300">
+            <label><![CDATA[Bss Commerce]]></label>
+        </tab>
+        <section id="dependent_co" translate="label" type="text" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="0">
+            <label>Dependent Custom Option</label>
+            <tab>bss</tab>
+            <resource>Bss_DependentCustomOption::config</resource>
+            <group id="general" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="0">
+                <label>General</label>
+                <field id="enable" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
+                    <label>Enable</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment><![CDATA[Version 1.1.4]]></comment>
+                </field>
+                <field id="children_display" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
+                    <label>Display child values</label>
+                    <source_model>Bss\DependentCustomOption\Model\Config\Source\ChildrenDisplay</source_model>
+                </field>
+                <field id="multiple_parent" translate="label" type="select" sortOrder="30" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
+                    <label>Enable child values that have multiple parent values</label>
+                    <source_model>Bss\DependentCustomOption\Model\Config\Source\MultipleParent</source_model>
+                </field>
+            </group>
+            <group id="compatible" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="0" showInStore="0">
+                <label>Recommended Extensions</label>
+                <field id="custom_option_mage_install" translate="label comment" type="label" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Bss Custom Option Image</label>
+                    <frontend_model>Bss\CustomOptionCore\Block\Adminhtml\Module\CustomOptionImage</frontend_model>
+                </field>
+                <field id="absolute_price_quantity_install" translate="label comment" type="label" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Bss Custom Option Absolute Price Quantity</label>
+                    <frontend_model>Bss\CustomOptionCore\Block\Adminhtml\Module\AbsPriceQty</frontend_model>
+                </field>
+                <field id="option_template_install" translate="label comment" type="label" sortOrder="30" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Bss Custom Option Template</label>
+                    <frontend_model>Bss\CustomOptionCore\Block\Adminhtml\Module\CustomOptionTemplate</frontend_model>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>

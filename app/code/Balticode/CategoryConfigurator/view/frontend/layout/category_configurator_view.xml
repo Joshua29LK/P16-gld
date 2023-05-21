@@ -1,0 +1,15 @@
+<?xml version="1.0" ?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="2columns-right" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <head>
+        <css src="Balticode_CategoryConfigurator::css/owl.carousel.min.css"/>
+        <css src="Balticode_CategoryConfigurator::css/owl.theme.default.min.css"/>
+    </head>
+    <body>
+        <referenceContainer name="content">
+            <block as="configurator" class="Balticode\CategoryConfigurator\Block\Configurator\View" name="configurator" template="Balticode_CategoryConfigurator::configurator/view.phtml"/>
+        </referenceContainer>
+        <referenceContainer name="sidebar.additional">
+            <block as="configurator_cart" class="Balticode\CategoryConfigurator\Block\Configurator\Cart" name="configurator_cart" template="Balticode_CategoryConfigurator::configurator/cart.phtml"/>
+        </referenceContainer>
+    </body>
+</page>

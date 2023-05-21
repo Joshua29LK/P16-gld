@@ -1,0 +1,21 @@
+<?xml version="1.0" ?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Acl/etc/acl.xsd">
+	<acl>
+		<resources>
+			<resource id="Magento_Backend::admin">
+				<resource id="Balticode_CategoryConfigurator::Configurator" sortOrder="10" title="Configurator">
+					<resource id="Balticode_CategoryConfigurator::Configurator_save" sortOrder="10" title="Save Configurator"/>
+					<resource id="Balticode_CategoryConfigurator::Configurator_delete" sortOrder="20" title="Delete Configurator"/>
+					<resource id="Balticode_CategoryConfigurator::Configurator_update" sortOrder="30" title="Update Configurator"/>
+					<resource id="Balticode_CategoryConfigurator::Configurator_view" sortOrder="40" title="View Configurator"/>
+				</resource>
+				<resource id="Balticode_CategoryConfigurator::Step" sortOrder="20" title="Step">
+					<resource id="Balticode_CategoryConfigurator::Step_save" sortOrder="10" title="Save Step"/>
+					<resource id="Balticode_CategoryConfigurator::Step_delete" sortOrder="20" title="Delete Step"/>
+					<resource id="Balticode_CategoryConfigurator::Step_update" sortOrder="30" title="Update Step"/>
+					<resource id="Balticode_CategoryConfigurator::Step_view" sortOrder="40" title="View Step"/>
+				</resource>
+			</resource>
+		</resources>
+	</acl>
+</config>

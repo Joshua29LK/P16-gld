@@ -1,0 +1,18 @@
+{
+    "bss_catalog_product_option_type_image": {
+        "column": {
+            "option_type_image_id": false,
+            "image_id": true,
+            "option_type_id": true,
+            "image_url": true,
+            "swatch_image_url": true
+        },
+        "index": {
+            "BSS_CATALOG_PRODUCT_OPTION_TYPE_IMAGE_OPTION_TYPE_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "FK_2EC7E4E638A4C0652297B5EC62784E66": true
+        }
+    }
+}

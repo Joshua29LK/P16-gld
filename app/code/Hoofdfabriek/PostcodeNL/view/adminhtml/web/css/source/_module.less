@@ -1,0 +1,28 @@
+.config-nav-block.hoofdfabriek-tab{
+  strong:before {
+    background: url("Hoofdfabriek_PostcodeNL::images/hoofdfabriek-logo-blue.svg") no-repeat;
+    width: 16px;
+    height: 19px;
+    content: '';
+    display: inline-block;
+    margin-right: 12px;
+    vertical-align: bottom;
+  }
+  .postcodenl-section {
+    .admin__page-nav-link{
+        text-indent: -999px;
+
+      :before {
+        float: left;
+        width: calc(~'100% - 50px');
+        height: 35px;
+        content: ' ';
+        background-image: url("Hoofdfabriek_PostcodeNL::images/postcodenl-logo.svg");
+        background-position: 0 2px;
+        background-repeat: no-repeat;
+        background-size: auto 18px;
+      }
+    }
+
+  }
+}

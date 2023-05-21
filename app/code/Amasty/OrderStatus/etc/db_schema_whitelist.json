@@ -1,0 +1,30 @@
+{
+    "amasty_orderstatus_status": {
+        "column": {
+            "id": true,
+            "alias": true,
+            "status": true,
+            "parent_state": true,
+            "is_active": true,
+            "is_system": true,
+            "notify_by_email": true
+        },
+        "constraint": {
+            "PRIMARY": true
+        }
+    },
+    "amasty_orderstatus_status_template": {
+        "column": {
+            "id": true,
+            "status_id": true,
+            "store_id": true,
+            "template_id": true
+        },
+        "index": {
+            "AMASTY_ORDERSTATUS_STATUS_TEMPLATE_STATUS_ID_STORE_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true
+        }
+    }
+}

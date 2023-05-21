@@ -1,0 +1,85 @@
+<?php
+/** @var \Bss\SwissupEasycatalogimgCustomize\Block\SubcategoriesList $block */
+$_categories = $block->getCategories();
+$_collectionSize = count($_categories);
+if (!$_collectionSize) {
+    return;
+}
+
+$columnsCount = $block->getColumnCount();
+$showImage = $block->getShowImage();
+$height = $block->getImageHeight();
+$width = $block->getImageWidth();
+$maxCategoryCount = $block->getCategoryCount();
+$maxSubcategoryCount = $block->getSubcategoryCount();
+$i = 0;
+?>
+
+<div class="easycatalogimg">
+    <ul class="easycatalogimg-listing easycatalogimg-<?php echo $block->getMode() ?> easycatalogimg-cols-<?php echo $columnsCount ?>">
+        <?php foreach ($_categories as $_category) : ?>
+
+            <?php if ($i++ >= $maxCategoryCount): break; endif; ?>
+
+            <li class="item">
+                <a href="<?php echo $block->getProductUrl($_category) ?>" title="<?php echo $block->escapeHtml($_category->getName()) ?>">
+                        <?php if ($block->getParentCategoryPosition() === 'top') : ?>
+                            <div class="category-title"><p><?php echo $block->escapeHtml($_category->getName()) ?></p></div>
+                        <?php endif ?>
+                        <?php if ($block->getParentCategoryPosition() !== 'top') : ?>
+                            <div class="category-title"><p><?php echo $block->escapeHtml($_category->getName()) ?><p></div>
+                        <?php endif ?>
+                        <div class="category-description-list"><p><?php echo $_category->getData('mk_vanafprijs'); ?></p></div>
+                        <?php
+                        if ($maxSubcategoryCount) :
+                            $j = 0;
+                            $_subcategories = $_category->getSubcategories();
+                            $_count         = count($_subcategories);
+                            // display More link, if more than one subcategory is not shown, otherwise - display last category
+                            $_displayMoreLink = $_count > $maxSubcategoryCount + 1;
+                            if ($_count) : ?>
+                                <ul class="list-subcategories">
+                                    <?php foreach ($_subcategories as $_subcategory) :
+                                        if ($_displayMoreLink && ($j > $maxSubcategoryCount - 1)): ?>
+                                            <li>
+                                                <?php echo __('More in %1...', $block->escapeHtml($_category->getName())); ?>
+                                            </li>
+                                            <?php break;
+                                        endif; ?>
+                                        <li>
+                                            <?php
+                                            echo $block->escapeHtml($_subcategory->getName());
+                                            ?>
+                                        </li>
+                                        <?php $j++; ?>
+                                    <?php endforeach;?>
+                                </ul>
+                            <?php
+                            endif;
+                        endif; ?>
+                    <?php if ($block->getShowImage()) : ?>
+            <?php
+                $style = '';
+                if (!empty($width)) {
+                    $style = 'width: ' . (is_numeric($width) ? $width . 'px' : $width);
+                } else if (!empty($height)) {
+                    $style = 'height: ' . (is_numeric($height) ? $height . 'px' : $height);
+                }
+                $srcset = $this->getImageSrcset($_category, $width, $height);
+            ?>
+            <div style="position:relative; height:20rem; width:auto;">
+			<img alt="<?php echo $block->escapeHtml($_category->getName()) ?>"
+                src="<?php echo $this->getImageSrc($_category, $width, $height) ?>" style="position:absolute;"
+                <?php echo $srcset ? 'srcset="' . $srcset . '"' : '' ?>
+                <?php echo $width  ? 'width="' . $width . '"' : '' ?>
+                <?php echo $height ? 'height="' . $height . '"' : '' ?>
+                <?php echo $style  ? 'style="' . $style . '"' : '' ?>
+            />
+            </div>
+            <?php endif; ?>
+                    
+                </a></li>
+
+        <?php endforeach; ?>
+    </ul>
+</div>

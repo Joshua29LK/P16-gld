@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Magento\Cms\Helper\Page">
+        <plugin name="replace_cms_with_tree_on_page_render" type="Woom\CmsTree\Plugin\Cms\Page\ReplaceCmsWithTreeOnPageRender" />
+    </type>
+    <type name="Magento\Theme\Block\Html\Topmenu">
+        <plugin name="add_menu_cache_tag" disabled="true" />
+        <plugin name="cmstree_add_menu_cache_tag" type="Woom\CmsTree\Plugin\Topmenu" />
+    </type>
+</config>

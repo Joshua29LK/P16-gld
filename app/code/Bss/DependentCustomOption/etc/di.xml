@@ -1,0 +1,51 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * BSS Commerce Co.
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the EULA
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://bsscommerce.com/Bss-Commerce-License.txt
+ *
+ * @category   BSS
+ * @package    Bss_DependentCustomOption
+ * @author     Extension Team
+ * @copyright  Copyright (c) 2017-2020 BSS Commerce Co. ( http://bsscommerce.com )
+ * @license    http://bsscommerce.com/Bss-Commerce-License.txt
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Magento\Catalog\Model\Product\Option\Value">
+        <plugin name="bss-depend-co-value-saved" type="Bss\DependentCustomOption\Plugin\OptionValuePlugin" sortOrder="10"/>
+    </type>
+    <type name="Magento\Catalog\Model\Product\Option">
+        <plugin name="bss-depend-co-saved" type="Bss\DependentCustomOption\Plugin\OptionPlugin" sortOrder="10"/>
+    </type>
+    <preference for="Magento\Catalog\Model\ResourceModel\Product\Option" type="Bss\DependentCustomOption\Model\ResourceModel\Override\Product\Option"/>
+    <preference for="Magento\Catalog\Model\ResourceModel\Product\Option\Value" type="Bss\DependentCustomOption\Model\ResourceModel\Override\Product\Option\Value"/>
+    <type name="Magento\Catalog\Model\ResourceModel\Product\Option\Collection">
+        <plugin name="add-depend-to-collection" type="Bss\DependentCustomOption\Plugin\Option\Collection" sortOrder="10"/>
+    </type>
+    <type name="Magento\Catalog\Model\Product\Type\AbstractType">
+        <plugin name="skip-check-require-custom-option" type="Bss\DependentCustomOption\Plugin\Product" sortOrder="10"/>
+    </type>
+    <preference for="Bss\DependentCustomOption\Api\DependentOptionManagementInterface"
+                type="Bss\DependentCustomOption\Model\DependentOptionManagement" />
+    <preference for="Bss\DependentCustomOption\Api\DependentOptionRepositoryInterface"
+                type="Bss\DependentCustomOption\Model\DependentOptionRepository" />
+    <preference for="Bss\DependentCustomOption\Api\Data\DependentOptionConfigInterface"
+                type="Bss\DependentCustomOption\Model\DependentOptionConfig" />
+    <preference for="Bss\DependentCustomOption\Api\Data\DependentOptionInterface"
+                type="Bss\DependentCustomOption\Model\DependentOption" />
+    <preference for="Bss\DependentCustomOption\Api\Data\DependentOptionValuesInterface"
+                type="Bss\DependentCustomOption\Model\DependentOptionValues" />
+    <preference for="Bss\DependentCustomOption\Api\Data\ProductInterface"
+                type="Bss\DependentCustomOption\Model\Product" />
+    <preference for="Bss\DependentCustomOption\Api\ProductRepositoryInterface"
+                type="Bss\DependentCustomOption\Model\ProductRepository" />
+    <preference for="Bss\DependentCustomOption\Api\Data\ProductSearchResultsInterface"
+                type="Bss\DependentCustomOption\Model\ProductSearchResults" />
+</config>

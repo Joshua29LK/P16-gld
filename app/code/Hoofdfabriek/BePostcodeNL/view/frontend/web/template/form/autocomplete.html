@@ -1,0 +1,92 @@
+<form class="form form-be-autocomplete"
+      data-bind="attr: {'id': element.addressType + '-be-postcodenl'}">
+<fieldset class="fieldset"
+          data-bind="visible: isVisible(), attr: {'id': element.addressType + '-be-postcodenl-fieldset'}">
+    <div class="field required half-width half-start">
+        <label class="label" data-bind="attr: {'for': element.addressType + '-be-postal-area'}">
+            <span data-bind="i18n: 'Postcode of gemeente'"></span>
+        </label>
+        <div class="control">
+            <input class="input-text postal-area"
+                   type="text"
+                   data-bind="
+                   value: municipalityName,
+                   autoCompleteArea: {},
+                   css: {'error': showManual()},
+                   attr: {'id': element.addressType + '-be-postal-area'}"
+                   name="be-postal-area"
+                   data-validate="{required:true}"/>
+        </div>
+    </div>
+    <div class="field required half-width half-end">
+        <label class="label" data-bind="attr: {'for': element.addressType + '-be-street'}">
+            <span data-bind="i18n: 'Street'"></span>
+        </label>
+        <div class="control">
+            <input class="input-text"
+                   type="text"
+                   data-bind="
+                       value: streetName,
+                       autoCompleteStreet: {},
+                       attr: {'id': element.addressType + '-be-street'}"
+                   name="be-street"
+                   data-validate="{required:true}"/>
+
+        </div>
+    </div>
+    <div data-bind="visible: showManual" class="manual">
+        <div role="alert" class="message warning" generated="true">
+            <span data-bind="i18n: 'We cannot make a match with the entered details, please confirm that you filled in the right information. If the details are correct, you can continue with the checkout by entering your adres manually below.'"></span>
+        </div>
+        <div class="field required half-width half-start">
+            <label class="label" data-bind="attr: {'for': element.addressType + '-be-postcode-manual'}">
+                <span data-bind="i18n: 'Postcode'"></span>
+            </label>
+            <div class="control">
+                <input class="input-text "
+                       type="text"
+                       data-bind="
+                            hasFocus: showManual,
+                            value: postcodeManual,
+                            event: { blur: validateSingle },
+                            attr: {'id': element.addressType + '-be-postcode-manual'}"
+                       name="be-postcode-manual"
+                       data-validate="{required:true}"/>
+
+            </div>
+        </div>
+        <div class="field required half-width half-end">
+            <label class="label" data-bind="attr: {'for': element.addressType + '-be-city-manual'}">
+                <span data-bind="i18n: 'City'"></span>
+            </label>
+            <div class="control">
+                <input class="input-text required"
+                       type="text"
+                       data-bind="
+                            value: cityManual,
+                            event: { blur: validateSingle },
+                            attr: {'id': element.addressType + '-be-city-manual'}"
+                       name="be-city-manual"
+                       data-validate="{required:true}"/>
+
+            </div>
+        </div>
+    </div>
+    <div class="field required">
+        <label class="label" data-bind="attr: {'for': element.addressType + '-be-house'}">
+            <span data-bind="i18n: 'Huisnummer'"></span>
+        </label>
+        <div class="control">
+            <input class="input-text"
+                   type="text"
+                   data-bind="
+                        autoCompleteHouse: {},
+                        value: houseNumber,
+                        attr: {'id': element.addressType + '-be-house'}"
+                   name="be-house"
+                   data-validate="{required:true}"/>
+
+        </div>
+    </div>
+</fieldset>
+</form>
