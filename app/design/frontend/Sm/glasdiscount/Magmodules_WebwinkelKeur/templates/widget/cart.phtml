@@ -7,6 +7,6 @@
 ?>
     <?php if ($summary = $block->getSummaryData()) { ?>
                 <p>
-                    <?php echo __('<span class="text"><a href="%2" class="webwinkelkeurPopup" title="Webshop Trustmark" target="_blank">%3 beoordelingen</a></span>', $block->escapeHtml($summary['score']) . ' / ' . (int)$summary['score_max'], $block->escapeUrl($summary['review_url']), (int)$summary['total_reviews']); ?>
+                    <?php echo __('<div style="margin-right:25px; line-height:1.1rem; margin-top:8px;"><p style="font-size: 1.3rem !important;"><strong>Glasdiscount bij WebwinkelKeur</strong></p><span class="text"><a href="%2" class="webwinkelkeurPopup" title="Webshop Trustmark" target="_blank">%3 beoordelingen</a></span></div><div class="review-score"><span>' . $block->escapeHtml($summary['score']) . '</span></div>', $block->escapeHtml($summary['score']) . ' / ' . (int)$summary['score_max'], $block->escapeUrl($summary['review_url']), (int)$summary['total_reviews']); ?>
                 </p>
     <?php } ?>
