@@ -135,7 +135,7 @@
 			<?php echo $block->getChildHtml('', true) ?>
             <?php $levertijd_link = '' . $this->getLayout()->createBlock('Magento\Cms\Block\Block')->setBlockId('link-levertijden')->toHtml() . '' ?>
             <?php if ($stockItem->getData('manage_stock')):
-            $inStock = $productQty > 20 ? '<div class="col-md-5 mt-2" style="color:green;"><span>Op voorraad</span></div>' : (($productQty == 0) ? '<div class="col-md-5 mt-2" style="color:red;"><span>Niet op voorraad</span></div>': '');
+            $inStock = $productQty > 0 ? '<div class="col-md-5 mt-2" style="color:green;"><span>Op voorraad</span></div>' : (($productQty == 0) ? '<div class="col-md-5 mt-2" style="color:red;"><span>Niet op voorraad</span></div>': '');
             echo '<div class="text-center d-flex">' . $inStock . ' <div class="col-md-8 mt-2">' . $levertijd_link . '</div></div>'  ?>
             <?php else: echo '<div class="row text-center"><div class="col-md-10 mt-2">' . $levertijd_link . '</div></div>' ?>
             <?php endif; ?>
