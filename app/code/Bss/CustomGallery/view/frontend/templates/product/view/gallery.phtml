@@ -62,18 +62,13 @@
                 <div class="fotorama__arr__arr"></div>
             </div>
             <div class="fotorama__stage__shaft" tabindex="0" data-gallery-role="stage-shaft">
-                <?php /* @escapeNotVerified */ 
-                // if ($block->hasSpecialPrice()) 
-                ?>
-                    <!-- <div class="gallery-sale-overlay"></div> -->
-                <?php 
-                    // endif; 
-                ?>
                 <?php
                     $_product = $this->getProduct();
-                    if($_product->getPriceInfo()->getPrice('special_price')->getValue())
+                    if($_product->getPriceInfo()->getPrice('special_price')->getValue() && $_product->getTypeId() != 'configurable')
                     {?>
-                    <div class="gallery-sale-overlay"></div>
+                        <div class="gallery-sale-overlay">
+                            <?php echo $_product->getTypeId() ?>
+                        </div>
                     <?php } ?>
                 <div class="fotorama__stage__frame fotorama__active fotorama_vertical_ratio fotorama__loaded fotorama__loaded--img" aria-hidden="false" data-active="true" style="left: 0px;" href="<?php echo $mainImage; ?>">
                     <img src="<?php echo $mainImage; ?>" alt="<?php echo $mainMainImageTitle; ?>" class="fotorama__img" aria-hidden="false">
