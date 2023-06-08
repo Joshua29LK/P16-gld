@@ -115,5 +115,6 @@
         </referenceBlock>
         <referenceContainer name="search-header" remove="true"/>
         <referenceContainer name="search-header-pro" remove="true"/>
+		<referenceBlock name="minicart" remove="false"/>
     </body>
 </page>
