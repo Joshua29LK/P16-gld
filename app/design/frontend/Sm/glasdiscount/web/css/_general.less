@@ -146,11 +146,16 @@ span.bss-tooltip-content {
 		}
 	.product-add-form .box-tocart {margin-top:10px;}
 	p.required {display:none}
-	.price-box {
+	.product-info-main {
 		.price-final_price {display:none}
-		.price-configured_price {float:left;min-width:250px;margin-bottom:20px;}
+		.price-configured_price {float:left;min-width:250px;}
 		.price-wrapper.price-including-tax {margin-top:2px}
-		p.price-as-configured {font-size:12px;}
+        .bundle-info {
+                    .price-wrapper {display:inline-block;}
+                    .prijs-excl {display:block!important}
+                    .prijs-incl {display:block!important}
+                    }
+		p.price-as-configured {display:none}
 		}
 	.bundle.items {margin: 0 0 20px; }
 	}
