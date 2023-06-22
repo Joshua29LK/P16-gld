@@ -96,6 +96,14 @@ body.bss-onestepcheckout {
 	.field[name*="billingAddressshared.pc_postcode_disable"] > label.label > span {display:none;}
 }
 
+.options-list {
+    display: flex;
+}
+
+.choice input {
+    vertical-align: bottom !important;
+}
+
 .block-content.filter-content {
 		input[type="radio"],
 		input[type="checkbox"] {float:left}
@@ -146,16 +154,16 @@ span.bss-tooltip-content {
 		}
 	.product-add-form .box-tocart {margin-top:10px;}
 	p.required {display:none}
-	.product-info-main {
+	.price-info-main {
 		.price-final_price {display:none}
 		.price-configured_price {float:left;min-width:250px;}
 		.price-wrapper.price-including-tax {margin-top:2px}
         .bundle-info {
-                    .price-wrapper {display:inline-block;}
-                    .prijs-excl {display:block!important}
-                    .prijs-incl {display:block!important}
-                    }
-		p.price-as-configured {display:none}
+            .price-wrapper {display:inline-block;}
+            .prijs-excl {display:block!important}
+            .prijs-incl {display:block!important}
+            }
+        p.price-as-configured {display:none}
 		}
 	.bundle.items {margin: 0 0 20px; }
 	}
