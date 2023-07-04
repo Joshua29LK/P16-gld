@@ -215,7 +215,7 @@ define([
                     this.value($('#' + this.multiselectId).val().join(','));
                 }
             }
-            if ($('#' + this.multiselectId+ ' option').length > 0 && !$('#' + this.multiselectId).val()) {
+            if ($('#' + this.multiselectId+ ' option').length > 0 && (!$('#' + this.multiselectId).val() || $('#' + this.multiselectId).val().length == 0)) {
                 this.value('');
             }
         },
