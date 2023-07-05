@@ -16,78 +16,60 @@ $isVisibleProduct = $product->isVisibleInSiteVisibility();
 /** @var \Magento\Msrp\Helper\Data $helper */
 $helper = $this->helper(Magento\Msrp\Helper\Data::class);
 $canApplyMsrp = $helper->isShowBeforeOrderConfirm($product) && $helper->isMinimalPriceLessMsrp($product);
-
-$objectManager = \Magento\Framework\App\ObjectManager::getInstance();
-$cart = $objectManager->get('\Magento\Checkout\Model\Cart');
-$itemQty = $block->escapeHtmlAttr($block->getQty());
-
 ?>
 <div class="cart item">
     <div class="row item-info">
         <div class="col-12 col-lg-7 col-sm-6">
 		<div class="row">
-            <div class="cart-item-details">
-                <?php if ($block->hasProductUrl()) :?>
-                    <a href="<?= $block->escapeUrl($block->getProductUrl()) ?>"
-                    title="<?= $block->escapeHtmlAttr($block->getProductName()) ?>"
-                    tabindex="-1"
-                    class="col-4 pr-0 pl-4 product-item-photo">
-                <?php else :?>
-                    <span class="product-item-photo col-4 pr-0 pl-4">
-                <?php endif;?>
-                <?= $block->getImage($block->getProductForThumbnail(), 'cart_page_product_thumbnail')->toHtml() ?>
-                <?php if ($block->hasProductUrl()) :?>
-                    </a>
-                <?php else :?>
-                    </span>
-                <?php endif; ?>
-                <div class="product-item-details col-8">
-                    <strong class="product-item-name">
-                        <?php if ($block->hasProductUrl()) :?>
-                            <a href="<?= $block->escapeUrl($block->getProductUrl()) ?>"><?= $block->escapeHtml($block->getProductName()) ?></a>
-                        <?php else :?>
-                            <?= $block->escapeHtml($block->getProductName()) ?>
-                        <?php endif; ?>
-                    </strong>
-                    <div>Artikelnummer <?php echo $sku; ?></div>
-                        <?php 
-                        if ($_options = $block->getOptionList()) :?>
-                            <?php if(array_key_exists(3, $_options) && array_key_exists(4, $_options)) : ?>
-                                <?php if ($_options[3]['option_id'] == 8165 && $_options[4]['option_id'] == 8164): ?>
-                                    <div>Totaal gewicht
-                                        <?php echo ((($_options[3]['print_value'] * $_options[4]['print_value'] / 1000000) * 11) * 2.5) * $itemQty ?>
-                                    kg</div>
-                                <?php endif;?>
-                            <?php endif; ?>
-                        <?php endif;?> 
-                    <?php if ($_options = $block->getOptionList()) :?>
-                        <dl class="item-options">
-                            <?php foreach ($_options as $_option) :?>
-                                <?php $_formatedOptionValue = $block->getFormatedOptionValue($_option) ?>
-                                
-                                <dt><?= $block->escapeHtml($_option['label']) ?></dt>
-                                <dd>
-                                    <?php if (isset($_formatedOptionValue['full_view'])) :?>
-                                        <?= $block->escapeHtml($_formatedOptionValue['full_view']) ?>
-                                    <?php else :?>
-                                        <?= $block->escapeHtml($_formatedOptionValue['value'], ['span', 'a']) ?>
-                                    <?php endif; ?>
-                                </dd>
-                            <?php endforeach; ?>
-                        </dl>
-                    <?php endif;?>
-                    <?php if ($messages = $block->getMessages()) :?>
-                        <?php foreach ($messages as $message) :?>
-                            <div class= "cart item message <?= $block->escapeHtmlAttr($message['type']) ?>">
-                                <div><?= $block->escapeHtml($message['text']) ?></div>
-                            </div>
-                        <?php endforeach; ?>
+            <?php if ($block->hasProductUrl()) :?>
+                <a href="<?= $block->escapeUrl($block->getProductUrl()) ?>"
+                   title="<?= $block->escapeHtmlAttr($block->getProductName()) ?>"
+                   tabindex="-1"
+                   class="col-4 pr-0 pl-4 product-item-photo">
+            <?php else :?>
+                <span class="product-item-photo col-4 pr-0 pl-4">
+            <?php endif;?>
+            <?= $block->getImage($block->getProductForThumbnail(), 'cart_page_product_thumbnail')->toHtml() ?>
+            <?php if ($block->hasProductUrl()) :?>
+                </a>
+            <?php else :?>
+                </span>
+            <?php endif; ?>
+            <div class="product-item-details col-8">
+                <strong class="product-item-name">
+                    <?php if ($block->hasProductUrl()) :?>
+                        <a href="<?= $block->escapeUrl($block->getProductUrl()) ?>"><?= $block->escapeHtml($block->getProductName()) ?></a>
+                    <?php else :?>
+                        <?= $block->escapeHtml($block->getProductName()) ?>
                     <?php endif; ?>
-                    <?php $addInfoBlock = $block->getProductAdditionalInformationBlock(); ?>
-                    <?php if ($addInfoBlock) :?>
-                        <?= $addInfoBlock->setItem($_item)->toHtml() ?>
-                    <?php endif;?>
-                </div>
+                </strong>
+                <div>Artikelnummer <?php echo $sku; ?></div>
+                <?php if ($_options = $block->getOptionList()) :?>
+                    <dl class="item-options">
+                        <?php foreach ($_options as $_option) :?>
+                            <?php $_formatedOptionValue = $block->getFormatedOptionValue($_option) ?>
+                            <dt><?= $block->escapeHtml($_option['label']) ?></dt>
+                            <dd>
+                                <?php if (isset($_formatedOptionValue['full_view'])) :?>
+                                    <?= $block->escapeHtml($_formatedOptionValue['full_view']) ?>
+                                <?php else :?>
+                                    <?= $block->escapeHtml($_formatedOptionValue['value'], ['span', 'a']) ?>
+                                <?php endif; ?>
+                            </dd>
+                        <?php endforeach; ?>
+                    </dl>
+                <?php endif;?>
+                <?php if ($messages = $block->getMessages()) :?>
+                    <?php foreach ($messages as $message) :?>
+                        <div class= "cart item message <?= $block->escapeHtmlAttr($message['type']) ?>">
+                            <div><?= $block->escapeHtml($message['text']) ?></div>
+                        </div>
+                    <?php endforeach; ?>
+                <?php endif; ?>
+                <?php $addInfoBlock = $block->getProductAdditionalInformationBlock(); ?>
+                <?php if ($addInfoBlock) :?>
+                    <?= $addInfoBlock->setItem($_item)->toHtml() ?>
+                <?php endif;?>
             </div>
 		</div>
         </div>
@@ -113,13 +95,13 @@ $itemQty = $block->escapeHtmlAttr($block->getQty());
         <?php else :?>
            <div class="col-5 col-lg-2 col-sm-3">
                 <?= $block->getUnitPriceHtml($_item) ?>
-				<div class="item-actions">
-                    <td colspan="4">
-                        <div class="actions-toolbar">
-                            <?= /* @noEscape */ $block->getActions($_item) ?>
-                        </div>
-                    </td>
-                </div>
+				 <div class="item-actions">
+        <td colspan="4">
+            <div class="actions-toolbar">
+                <?= /* @noEscape */ $block->getActions($_item) ?>
+            </div>
+        </td>
+    </div>
             </div>
         <?php endif; ?>
         <div class="col-2 col-sm-1">
