@@ -12,6 +12,7 @@
 $_item = $block->getItem();
 $product = $_item->getProduct();
 $sku = $product->getSku();
+$formattedSku = explode("-", $sku);
 $isVisibleProduct = $product->isVisibleInSiteVisibility();
 /** @var \Magento\Msrp\Helper\Data $helper */
 $helper = $this->helper(Magento\Msrp\Helper\Data::class);
@@ -43,7 +44,7 @@ $canApplyMsrp = $helper->isShowBeforeOrderConfirm($product) && $helper->isMinima
                         <?= $block->escapeHtml($block->getProductName()) ?>
                     <?php endif; ?>
                 </strong>
-                <div>Artikelnummer <?php echo $sku; ?></div>
+                <div>Artikelnummer <?php echo $formattedSku[0]; ?></div>
                 <?php if ($_options = $block->getOptionList()) :?>
                     <dl class="item-options">
                         <?php foreach ($_options as $_option) :?>
