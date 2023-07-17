@@ -1,0 +1,14 @@
+<?php if ($weight = $block->getTotalWeight()):?>
+<tr class="col-0">
+    <td class="label">
+       <strong><?= __('Total Weight')?></strong>
+    </td>
+    <td>
+        <span>
+            <span class="price">
+                <strong><?= $weight?></strong>
+            </span>
+        </span>
+    </td>
+</tr>
+<?php endif;?>

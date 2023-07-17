@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <weight_display>
+            <shopping_cart>
+                <enabled>1</enabled>
+                <label>Total Weight</label>
+            </shopping_cart>
+            <checkout>
+                <enabled>1</enabled>
+                <position>summary</position>
+                <label>Total Cart Weight:</label>
+            </checkout>
+        </weight_display>
+    </default>
+</config>

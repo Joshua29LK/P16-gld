@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="1column" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceBlock name="additional.product.info">
+            <block class="RedChamps\WeightDisplay\Block\Cart\Item" name="product.weight" template="RedChamps_WeightDisplay::cart/item/weight.phtml"/>
+        </referenceBlock>
+        <referenceContainer name="checkout.cart.totals.container">
+            <block class="RedChamps\WeightDisplay\Block\Cart\Total" name="product.total.weight" template="RedChamps_WeightDisplay::cart/total.phtml"/>
+        </referenceContainer>
+    </body>
+</page>

@@ -1,0 +1,10 @@
+<?php if ($weight = $block->getTotalWeight()):?>
+    <tr class="row-totals">
+        <td style="" class="admin__total-mark" colspan="1">
+            <strong><?= __("Total Weight")?></strong>
+        </td>
+        <td style="" class="admin__total-amount">
+            <strong><span class="price"><?= $weight?></span></strong>
+        </td>
+    </tr>
+<?php endif;?>
