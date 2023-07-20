@@ -105,6 +105,7 @@ define([
                 event.stopPropagation();
                 $('input[value='+ $(this).val() +']').click()
             });
+
             var self = this;
             quote.billingAddress.subscribe(function (address) {
                 if (quote.isVirtual()) {
@@ -114,6 +115,8 @@ define([
                 } else {
                     self.isPlaceOrderActionAllowed(address !== null && quote.paymentMethod() != null && quote.shippingMethod() != null);
                 }
+
+
             }, this);
             quote.paymentMethod.subscribe(function (newMethod) {
                 if (quote.isVirtual()) {
@@ -201,6 +204,12 @@ define([
             var buttonPlaceOrder        = $('input#' + self.getCode()).closest('.payment-method').find('.payment-method-content .actions-toolbar:not([style*="display: none"]) button.action.checkout');
             var selectedPaymentMethod   = checkoutData.getSelectedPaymentMethod();
 
+             if ($('#co-billing-form').is(':visible')) {
+                $('.checkout-billing-address button.action.action-update').click();
+                this.isPlaceOrderActionAllowed($('#co-billing-form').validation() && $('#co-billing-form').validation('isValid'));
+                fullScreenLoader.stopLoader();
+                return false;
+            }
             if (billingAddressComponent.isAddressSameAsShipping()) {
                 fullScreenLoader.startLoader();
                 selectBillingAddress(quote.shippingAddress());

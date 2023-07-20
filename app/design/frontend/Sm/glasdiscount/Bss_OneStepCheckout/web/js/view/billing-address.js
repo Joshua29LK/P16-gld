@@ -70,18 +70,38 @@ define([
 
     addressOptions.push(newAddressOption);
 
-    $('body').on('change', '.form-billing-address .field', function(){
-        var hasdata =  true;
-        $('.form-billing-address .field._required').find('input,select').each( function (){
-            if ($(this).val() == '') {
-                hasdata = false;
-            }
-        })
-        if (hasdata) {
-            $('.checkout-billing-address button.action.action-update').click()
+    // $('body').on('change', '.form-billing-address .field', function(){
+    //     var hasdata =  true;
+    //     $('.form-billing-address .field._required').find('input,select').each( function (){
+    //         if ($(this).val() == '') {
+    //             hasdata = false;
+    //         }
+    //     })
+    //     if (hasdata) {
+    //         $('.checkout-billing-address button.action.action-update').click()
+    //     }
+    // })
+    window.formbilling = false;
+    $('body').on('change', '.form-billing-address .field, #billing-address-same-as-shipping-shared', function() {
+        if ($(this).attr('id') == 'billing-address-same-as-shipping-shared' && !$('.field-select-billing').length) {
+            return;
         }
-    })
-    
+        // console.log($('#co-billing-form').validation() && $('#co-billing-form').validation('isValid'))
+        if (!$('#billing-address-same-as-shipping-shared').is(':checked')) {
+            var hasdata = true;
+            $('.form-billing-address .field._required').find('input,select').each(function () {
+                if ($(this).val() == '') {
+                    window.formbilling = false;
+                    hasdata = false;
+                }
+            })
+            if (hasdata) {
+                 window.formbilling = true;
+                $('.checkout-billing-address button.action.action-update').click()
+            }
+        }
+    });
+
     return Component.extend({
         defaults: {
             template: 'Bss_OneStepCheckout/billing-address'
@@ -114,7 +134,7 @@ define([
                     selectedAddress: null,
                     isAddressDetailsVisible: quote.billingAddress() != null,
                     isAddressFormVisible: !customer.isLoggedIn() || addressOptions.length === 1,
-                    isAddressSameAsShipping: false,
+                    isAddressSameAsShipping: true,
                     saveInAddressBook: 1
                 });
 
@@ -122,10 +142,23 @@ define([
                 if (quote.isVirtual() || !quote.shippingAddress()) {
                     this.isAddressSameAsShipping(false);
                 } else {
-                    this.isAddressSameAsShipping(
-                        newAddress != null &&
-                        newAddress.getCacheKey() == quote.shippingAddress().getCacheKey() //eslint-disable-line eqeqeq
-                    );
+                    if (!this.isAddressSameAsShipping() && (newAddress !== null && typeof newAddress === 'object' && !newAddress.regionId && (!newAddress.street || !newAddress['street'][0]))) {
+                        this.isAddressSameAsShipping(true);
+                        window.isAddressSameAsShipping = true;
+                    } else {
+                        this.isAddressSameAsShipping(
+                            $('#billing-address-same-as-shipping-shared').is(':checked') &&
+                            newAddress != null &&
+                            newAddress.getCacheKey() == quote.shippingAddress().getCacheKey() //eslint-disable-line eqeqeq
+                        );
+                        if ($('#billing-address-same-as-shipping-shared').is(':checked') && 
+                            newAddress != null &&
+                            newAddress.getCacheKey() == quote.shippingAddress().getCacheKey()) {
+                            window.isAddressSameAsShipping = true;
+                        } else {
+                            window.isAddressSameAsShipping = false;
+                        }
+                    }
                 }
 
                 if (newAddress != null && newAddress.saveInAddressBook !== undefined) {
@@ -133,9 +166,16 @@ define([
                 } else {
                     this.saveInAddressBook(1);
                 }
-                if ($('#billing-address-same-as-shipping-shared').is(':checked')) {
+                if ((this.isAddressSameAsShipping() && $('#billing-address-same-as-shipping-shared').is(':checked')) ||  window.formbilling ) {
                     this.isAddressDetailsVisible(true);
                 } else {
+                    window.isAddressSameAsShipping = false;
+                    this.isAddressSameAsShipping(false);
+                    this.isAddressDetailsVisible(false);
+                    // quote.billingAddress(null);
+                }
+                if ($('.selected-store-pickup').length &&
+                    !$('.check-store-pickup .billing-address-details').length) {
                     this.isAddressDetailsVisible(false);
                 }
             }, this);
@@ -170,7 +210,12 @@ define([
                 this.isAddressDetailsVisible(false);
             }
             checkoutData.setSelectedBillingAddress(null);
-
+            if (this.isAddressSameAsShipping()) {
+                window.isPlaceOrderDispatched = false;
+                this.isAddressDetailsVisible(true);
+            } else {
+                window.isPlaceOrderDispatched = true;
+            }
             return true;
         },
 
@@ -179,6 +224,9 @@ define([
          */
         updateAddress: function () {
             var addressData, newBillingAddress, update;
+
+            window.isPlaceOrderDispatched = false;
+            this.isAddressDetailsVisible(false);
 
             if (this.selectedAddress() && this.selectedAddress() != newAddressOption) { //eslint-disable-line eqeqeq
                 selectBillingAddress(this.selectedAddress());
@@ -211,6 +259,18 @@ define([
             if (!_.isUndefined(update)) {
                 this.updateAddresses();
             }
+            //Css fix body height when show/hide store pickup
+            this.setHMinHeightAfterRenderBillingDetail();
+        },
+
+        /**
+         * Set min height for body
+         */
+        setHMinHeightAfterRenderBillingDetail: function () {
+            var $payment = $('.bss-onestepcheckout.check-store-pickup').find('#payment');
+            if ($payment.length) {
+                $('.opc-wrapper').css('min-height', $payment.height());
+            }
         },
 
         /**
@@ -220,6 +280,9 @@ define([
             lastSelectedBillingAddress = quote.billingAddress();
             quote.billingAddress(null);
             this.isAddressDetailsVisible(false);
+
+            //Css fix body height when show/hide store pickup
+            this.setHMinHeightAfterRenderBillingDetail();
         },
 
         /**
@@ -237,6 +300,9 @@ define([
                 );
                 this.isAddressDetailsVisible(true);
             }
+
+            //Css fix body height when show/hide store pickup
+            this.setHMinHeightAfterRenderBillingDetail();
         },
 
         /**
@@ -256,6 +322,10 @@ define([
                 this.autoFillAddress('co-billing-form');
             }
             this.isAddressFormVisible(address == newAddressOption); //eslint-disable-line eqeqeq
+            if (address == newAddressOption) {
+                //Css fix body height when show/hide store pickup
+                this.setHMinHeightAfterRenderBillingDetail();
+            }
         },
 
         /**
@@ -332,7 +402,7 @@ define([
                 useRegionId = false,
                 countryElement = false,
                 regionIdElement = false,
-                component = 'checkout.steps.shipping-step.shippingAddress.billing-address-form-shared.form-fields';
+                component = 'checkout.steps.billing-step.payment.payments-list.billing-address-form-shared.form-fields';
             registry.get(component, function (formComponent) {
                 $.each(componentFields, function (index, field) {
                     var element = formComponent.getChild(field);
