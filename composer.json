@@ -13,7 +13,7 @@
         "magento/data-migration-tool": "2.4.5",
         "honl/magento2-nl-nl": "^1.1",
         "friendsofphp/php-cs-fixer": "~2.16.0",
-        "mollie/magento2": "2.24.1",
+        "mollie/magento2": "2.29.1",
         "mirasvit/module-feed": "*",
         "mirasvit/module-cache-warmer": "*",
         "mirasvit/module-search-ultimate": "2.1.10",

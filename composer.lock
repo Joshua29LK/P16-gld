@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b66d8c0facb970a97a0531949e1a64de",
+    "content-hash": "629cc20878e9908b545078c495e79acb",
     "packages": [
         {
             "name": "2tvenom/cborencode",
@@ -17643,16 +17643,16 @@
         },
         {
             "name": "mollie/magento2",
-            "version": "2.24.1",
+            "version": "2.29.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/mollie/magento2.git",
-                "reference": "fec00e26752c80c7e57daaceb5c8147c4904d116"
+                "reference": "5636a71c077059e8b4a4d53da133cd5ddc572618"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mollie/magento2/zipball/fec00e26752c80c7e57daaceb5c8147c4904d116",
-                "reference": "fec00e26752c80c7e57daaceb5c8147c4904d116",
+                "url": "https://api.github.com/repos/mollie/magento2/zipball/5636a71c077059e8b4a4d53da133cd5ddc572618",
+                "reference": "5636a71c077059e8b4a4d53da133cd5ddc572618",
                 "shasum": ""
             },
             "require": {
@@ -17736,9 +17736,9 @@
             ],
             "support": {
                 "issues": "https://github.com/mollie/magento2/issues",
-                "source": "https://github.com/mollie/magento2/tree/v2.24.1"
+                "source": "https://github.com/mollie/magento2/tree/v2.29.1"
             },
-            "time": "2023-04-17T14:56:17+00:00"
+            "time": "2023-07-28T11:44:59+00:00"
         },
         {
             "name": "mollie/mollie-api-php",
