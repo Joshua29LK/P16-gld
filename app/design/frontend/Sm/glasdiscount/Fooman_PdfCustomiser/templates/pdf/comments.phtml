@@ -33,7 +33,7 @@
                 <td><?= /* @noEscape */ $comment['date'] ?><?php if ($comment['label']):
                     ?> | <?= /* @noEscape */ $block->escapeComment($comment['label']) ?><?php
                     endif; ?></td>
-                <td><?= /* @noEscape */ $block->escapeComment($comment['comment']) ?></td>
+                <td><strong><?= /* @noEscape */ $block->escapeComment($comment['comment']) ?></strong></td>
             </tr>
         <?php endforeach; ?>
     </table>
