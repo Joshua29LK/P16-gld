@@ -13,7 +13,7 @@ use Magento\Framework\View\Element\UiComponent\DataProvider\Document;
 
 class Flag extends AbstractModel implements FlagInterface
 {
-    const FLAGS_FOLDER = 'ordergrid/flags';
+    const FLAGS_FOLDER = 'ordergridicons/flags';
     const IMAGE_PLACEHOLDER = 'Amasty_Flags::img/empty.png';
 
     /**
