@@ -18,8 +18,8 @@ define([
             var mainIndex;
 
             if (_.every(data, function (item) {
-                    return _.isObject(item);
-                })
+                return _.isObject(item);
+            })
             ) {
                 mainIndex = _.findIndex(data, function (item) {
                     return item.isMain;
@@ -88,6 +88,11 @@ define([
          * @param {String} element - String selector of gallery DOM element.
          */
         initialize: function (config, element) {
+            /* Fix conflict Bss_ConvertImageWebp */
+            if ($.type(canDisplayWebp) !== "undefined" && canDisplayWebp) {
+                this._replaceImageDataWithWebp(config.data);
+            }
+
             var self = this;
 
             this._super();
@@ -155,6 +160,20 @@ define([
                     }
                 });
             }
+        },
+
+        _replaceImageDataWithWebp: function (imagesData) {
+            if (_.isEmpty(imagesData)) {
+                return;
+            }
+
+            $.each(imagesData, function (key, imageData) {
+                if (imageData['full_webp'] && imageData['img_webp'] && imageData['thumb_webp']) {
+                    imageData['full'] = imageData['full_webp'];
+                    imageData['img'] = imageData['img_webp'];
+                    imageData['thumb'] = imageData['thumb_webp'];
+                }
+            });
         },
 
         /**
@@ -273,7 +292,7 @@ define([
 
                     _.each(_.pairs(breakpoint.conditions), function (pair) {
                         conditions = conditions ? conditions + ' and (' + pair[0] + ': ' + pair[1] + ')' :
-                        '(' + pair[0] + ': ' + pair[1] + ')';
+                            '(' + pair[0] + ': ' + pair[1] + ')';
                     });
                     breakpoints[conditions] = breakpoint.options;
                 });

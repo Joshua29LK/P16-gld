@@ -47,6 +47,8 @@ class PluginBlock extends \Magento\Framework\View\Element\Template
      */
     protected $baseMediaUrl = null;
 
+    protected $replaceUrl;
+
     /**
      * PluginBlock constructor.
      * @param \Magento\Framework\View\Element\Template\Context $context
@@ -130,10 +132,17 @@ class PluginBlock extends \Magento\Framework\View\Element\Template
         foreach ($values as $value) {
             $valueData = $value->getData();
             if ($valueData['swatch_image_url']) {
+                $imgThumb = $this->imageSaving->getMediaBaseUrl().$valueData['swatch_image_url'];
+                $img = $this->imageSaving->getMediaBaseUrl().$valueData['swatch_image_url'];
+                $imgFull = $this->imageSaving->getMediaBaseUrl().$valueData['swatch_image_url'];
+
                 $result[$value->getOptionTypeId()][] = [
-                    'thumb' => $this->imageSaving->getMediaBaseUrl().$valueData['swatch_image_url'],
-                    'img' => $this->imageSaving->getMediaBaseUrl().$valueData['swatch_image_url'],
-                    'full' => $this->imageSaving->getMediaBaseUrl().$valueData['swatch_image_url'],
+                    'thumb' => $imgThumb,
+                    'img' => $img,
+                    'full' => $imgFull,
+                    'thumb_webp' => $this->getWebpUrl($imgThumb),
+                    'img_webp' => $this->getWebpUrl($img),
+                    'full_webp' => $this->getWebpUrl($imgFull),
                     'caption' => '',
                     'position' => 0,
                     'isMain' => false,
@@ -144,6 +153,25 @@ class PluginBlock extends \Magento\Framework\View\Element\Template
             }
         }
         return $this->json->serialize($result);
+    }
+
+    /**
+     * @param $url
+     * @return mixed|string
+     */
+    public function getWebpUrl($url)
+    {
+        try {
+            if (!$this->replaceUrl) {
+                $this->replaceUrl =
+                    \Magento\Framework\App\ObjectManager::getInstance()->get('Bss\ConvertImageWebp\Model\ReplaceUrl');
+            }
+
+            return $this->replaceUrl->replaceUrl($url);
+        } catch (\Exception $e) {
+        }
+
+        return $url;
     }
 
     /**

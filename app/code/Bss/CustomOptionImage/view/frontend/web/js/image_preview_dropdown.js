@@ -124,6 +124,13 @@ define([
         updateGalleryImage: function ($widget, optionValueId) {
             var initialImages = $widget.options.gallery ? $widget.options.gallery.returnCurrentImages() : [];
             var images = $widget.options.swatchUrls[optionValueId];
+
+            /* Compatible Convert image webp */
+            if ($.type(canDisplayWebp) !== "undefined" && canDisplayWebp) {
+                $widget._replaceImageDataWithWebp(initialImages);
+                $widget._replaceImageDataWithWebp(images);
+            }
+
             var imagesToUpdate = images ? $widget._setImageType($.extend(true, [], images)) : [];
             if ($widget.options.gallery) {
                 $.each( $widget.options.gallery.returnCurrentImages(), function( key, value ) {
@@ -145,6 +152,19 @@ define([
                 $widget.options.gallery.first();
             }
 
+        },
+        _replaceImageDataWithWebp: function (imagesData) {
+            if (_.isEmpty(imagesData)) {
+                return;
+            }
+
+            $.each(imagesData, function (key, imageData) {
+                if (imageData['full_webp'] && imageData['img_webp'] && imageData['thumb_webp']) {
+                    imageData['full'] = imageData['full_webp'];
+                    imageData['img'] = imageData['img_webp'];
+                    imageData['thumb'] = imageData['thumb_webp'];
+                }
+            });
         },
         removeSwatchImage: function ($widget) {
             var initialImages = $widget.options.gallery.returnCurrentImages(),
