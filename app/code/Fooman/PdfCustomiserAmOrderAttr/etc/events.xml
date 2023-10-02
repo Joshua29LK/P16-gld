@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
+    <event name="fooman_pdfcustomiser_collect_custom_comments">
+        <observer name="fooman_am_order_attr_comments" instance="Fooman\PdfCustomiserAmOrderAttr\Observer\AddOrderAttributes" />
+    </event>
+</config>
