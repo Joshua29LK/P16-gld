@@ -10,7 +10,7 @@ $weightUnit = explode(" ", $weight);
 if ($weight && $weightUnit[0] > 1):?>
     <dl class="item-options item-weight">
         <dt><?= __("Weight")?></dt>
-        <dd><?= $weight?></dd>
+        <dd><?= round($weight, 2)?></dd>
     </dl>
 <?php endif;?>
 
