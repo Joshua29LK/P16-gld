@@ -1,0 +1,19 @@
+{
+    "name": "fooman/pdfcustomiseramorderattr-m2",
+    "description": "Add Amasty Order Attributes to Fooman PdfCustomiser comments",
+    "version": "1.0.0",
+    "license": "proprietary",
+    "type": "magento2-module",
+    "autoload": {
+        "psr-4": {
+            "Fooman\\PdfCustomiserAmOrderAttr\\": ""
+        },
+        "files": [
+            "registration.php"
+        ]
+    },
+    "require": {
+        "magento/framework": "^101.0 | ^102.0"
+    },
+    "prefer-stable": true
+}
