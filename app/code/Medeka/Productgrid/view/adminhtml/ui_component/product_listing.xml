@@ -1,0 +1,16 @@
+<?xml version="1.0" ?>
+<listing xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+     <listingToolbar name="listing_top">
+         <filters name="listing_filters">
+            <filterSelect name="category_id" provider="${ $.parentName }" component="Magento_Ui/js/form/element/ui-select" template="ui/grid/filters/elements/ui-select">
+                <settings>
+                    <options class="Medeka\Productgrid\Model\Category\Categorylist"/>
+                    <caption translate="true">Select...</caption>
+                    <label translate="true">Category</label>
+                    <dataScope>category_id</dataScope>
+                </settings>
+            </filterSelect>
+        </filters>
+    </listingToolbar>
+    
+</listing>
