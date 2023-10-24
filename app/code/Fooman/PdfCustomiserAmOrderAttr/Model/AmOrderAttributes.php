@@ -37,30 +37,32 @@ class AmOrderAttributes
 
 
     public function getOrderAttributesData($order)
-    {
-        $orderAttributesData = [];
-        $filterAttributeCode = 'klant_referentie'; // Define the attribute code here
-        $entity = $this->entityResolver->getEntityByOrder($order);
-        if ($entity->isObjectNew()) {
-            return [];
-        }
-        $form = $this->createEntityForm($entity, $order);
-        $outputData = $form->outputData(\Magento\Eav\Model\AttributeDataFactory::OUTPUT_FORMAT_HTML);
-    
-        foreach ($outputData as $attributeCode => $data) {
-            if ($attributeCode === $filterAttributeCode && !empty($data)) {
-                $attribute = $form->getAttribute($attributeCode);
-                $orderAttributesData[] = [
-                    'label' => $attribute->getDefaultFrontendLabel(),
-                    'value' => ($attribute->getFrontendInput() === 'html')
-                        ? $data
-                        : nl2br($this->escaper->escapeHtml($data))
-                ];
-            }
-        }
-    
-        return $orderAttributesData;
+{
+    $orderAttributesData = [];
+    $filterAttributeCodes = ['klant_referentie', 'bestelopmerking']; // Define the attribute codes here
+
+    $entity = $this->entityResolver->getEntityByOrder($order);
+    if ($entity->isObjectNew()) {
+        return [];
     }
+
+    $form = $this->createEntityForm($entity, $order);
+    $outputData = $form->outputData(\Magento\Eav\Model\AttributeDataFactory::OUTPUT_FORMAT_HTML);
+
+    foreach ($filterAttributeCodes as $filterAttributeCode) {
+        if (isset($outputData[$filterAttributeCode]) && !empty($outputData[$filterAttributeCode])) {
+            $attribute = $form->getAttribute($filterAttributeCode);
+            $orderAttributesData[] = [
+                'label' => $attribute->getDefaultFrontendLabel(),
+                'value' => ($attribute->getFrontendInput() === 'html')
+                    ? $outputData[$filterAttributeCode]
+                    : nl2br($this->escaper->escapeHtml($outputData[$filterAttributeCode]))
+            ];
+        }
+    }
+
+    return $orderAttributesData;
+}
 
     protected function createEntityForm($entity, $order)
     {
