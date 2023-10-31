@@ -23,6 +23,8 @@
     $stockRegistry = $objectManager->get('Magento\CatalogInventory\Api\StockRegistryInterface');
 
     $stockItem=$stockRegistry->getStockItem($_product->getId());
+    $levertijd = $_product->getAttributeText('levertijd_indicatie');
+    $stockStatus = $_product->getAttributeText('quantity_and_stock_status');
 
 
 ?>
@@ -136,21 +138,21 @@
 			<?php echo $block->getChildHtml('', true) ?>
             <?php $levertijd_link = '' . $this->getLayout()->createBlock('Magento\Cms\Block\Block')->setBlockId('link-levertijden')->toHtml() . '' ?>
             <?php
-                if ($stockItem->getData('manage_stock')) {
-                    if ($productQty > 0 && $productQty < 100) {
-                        $inStock =  '<div class="col-md-6 mt-2" style="color:green;"><span>Op voorraad (' . $productQty . ') stuks </span></div>';
-                    } 
-                    elseif ($productQty < 1 && $productQty > 99) { 
-                        $inStock = '<div class="col-md-6 mt-2" style="color:green;"><span>Op voorraad</span></div>';
-                    } 
-                    else {
-                        $inStock = '<div class="col-md-6 mt-2" style="color:green;"><span>Op voorraad</span></div>';
-                    }
-                    echo '<div class="d-flex">' . $inStock . ' <div class="col-md-9 mt-2">' . $levertijd_link . '</div></div>';
+                if ($productQty > 0 && $productQty < 100) {
+                    $inStock =  '<div class="col-md-6 mt-2" style="color:green;"><span>Op voorraad (' . $productQty . ') stuks </span></div>';
+                } 
+                elseif ($productQty < 1 && $productQty > 99) { 
+                    $inStock = '<div class="col-md-6 mt-2" style="color:green;"><span>Op voorraad</span></div>';
+                } 
+                else {
+                    $inStock = '<div class="col-md-6 mt-2" style="color:green;"><span>Op voorraad</span></div>';
                 }
-                else { 
-                    echo '<div class="row text-center"><div class="col-md-10 mt-2">' . $levertijd_link . '</div></div>';
+
+                if ($levertijd == '') {
+                    $levertijd = 'Actuele levertijd';
                 }
+
+                echo '<div class="d-flex">' . $inStock . ' <div class="col-md-9 mt-2"><i class="fas fa-truck fa-lg" style="color: #004562;"></i><a href="#" id="click-me-levertijd" style="text-decoration:underline;"><strong> ' . $levertijd . '</strong></a>' . $levertijd_link . '</div></div>';
             ?>
         </div>
       </div>
