@@ -37,6 +37,15 @@ if ($block->hasRequiredOptions()) {
 ?>
 <?php if( $maatdouche != '' ) { echo $this->getLayout() ->createBlock('Magento\Cms\Block\Block') ->setBlockId('link-maat-bepalen-douche') ->toHtml(); } else { echo ''; } ?>
 
+<?php
+    $_helper = $this->helper('Magento\Catalog\Helper\Output');
+    $_product = $block->getProduct();
+
+    /* Demo Attributes */
+    $maatdeur = $_product->getAttributeText('glasmaatbinnendeur');
+
+?>
+<?php if( $maatdeur != '' ) { echo $this->getLayout() ->createBlock('Magento\Cms\Block\Block') ->setBlockId('glasmaat_binnendeur') ->toHtml(); } else { echo ''; } ?>
 
     <div class="fieldset" tabindex="0">
         <?= $block->getChildHtml('', true) ?>
