@@ -1,13 +1,17 @@
 <?php
 /**
  * @author Amasty Team
- * @copyright Copyright (c) 2023 Amasty (https://www.amasty.com)
+ * @copyright Copyright (c) Amasty (https://www.amasty.com)
  * @package Advanced Conditions for Magento 2
  */
 
 namespace Amasty\Conditions\Model\Rule\Condition;
 
 use Amasty\Conditions\Model\Constants;
+use Magento\Customer\Model\Customer;
+use Magento\Framework\Api\CustomAttributesDataInterface;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Model\AbstractModel;
 
 /**
  * @method string getAttribute()
@@ -113,7 +117,7 @@ class CustomerAttributes extends \Magento\Rule\Model\Condition\AbstractCondition
 
     /**
      * @return $this
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     public function loadAttributeOptions()
     {
@@ -157,7 +161,7 @@ class CustomerAttributes extends \Magento\Rule\Model\Condition\AbstractCondition
 
     /**
      * @return $this
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     public function getAttributeElement()
     {
@@ -234,7 +238,7 @@ class CustomerAttributes extends \Magento\Rule\Model\Condition\AbstractCondition
 
     /**
      * @return $this
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     public function getValueElement()
     {
@@ -286,7 +290,7 @@ class CustomerAttributes extends \Magento\Rule\Model\Condition\AbstractCondition
 
     /**
      * @return array
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     public function getValueSelectOptions()
     {
@@ -311,22 +315,22 @@ class CustomerAttributes extends \Magento\Rule\Model\Condition\AbstractCondition
     /**
      * Validate Address Rule Condition
      *
-     * @param \Magento\Framework\Model\AbstractModel $model
+     * @param AbstractModel $model
      *
      * @return bool
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
-    public function validate(\Magento\Framework\Model\AbstractModel $model)
+    public function validate(AbstractModel $model): bool
     {
         $customer = $model;
-        if (!$customer instanceof \Magento\Customer\Model\Customer) {
+        if (!$customer instanceof Customer) {
             $customer = $model->getQuote()->getCustomer();
             if (!$customer->getId()) {
                 $customer = $this->customerSession->getCustomer();
             }
 
             $attr = $this->getAttribute();
-            $allAttr = $customer instanceof \Magento\Customer\Model\Customer
+            $allAttr = $customer instanceof Customer
                 ? $customer->getData()
                 : $customer->__toArray();
             $this->addCustomAttributes($allAttr, $model);
@@ -363,18 +367,27 @@ class CustomerAttributes extends \Magento\Rule\Model\Condition\AbstractCondition
         return parent::validate($customer);
     }
 
-    /**
-     * @param $allAttr
-     * @param $customer
-     */
-    private function addCustomAttributes(&$allAttr, $customer)
+    private function addCustomAttributes(array &$allAttr, AbstractModel $model): void
     {
-        if ($this->address->isAdvancedConditions($customer)) {
-            $customAttributes = $customer->getExtensionAttributes()->getAdvancedConditions()->getCustomAttributes();
-            if ($customAttributes) {
-                foreach ($customAttributes as $customAttribute) {
-                    $allAttr[$customAttribute->getAttributeCode()] = $customAttribute->getValue();
-                }
+        $customAttributes = [];
+        if ($this->address->isAdvancedConditions($model)) {
+            $advancedAttributes = $model->getExtensionAttributes()->getAdvancedConditions()->getCustomAttributes();
+            if (!empty($advancedAttributes)) {
+                $customAttributes = array_merge($customAttributes, $advancedAttributes);
+            }
+        }
+
+        if ($model instanceof CustomAttributesDataInterface && !empty($model->getCustomAttributes())) {
+            $customAttributes = array_merge($customAttributes, $model->getCustomAttributes());
+        }
+
+        if (empty($customAttributes)) {
+            return;
+        }
+
+        foreach ($customAttributes as $customAttribute) {
+            if (!isset($allAttr[$customAttribute->getAttributeCode()])) {
+                $allAttr[$customAttribute->getAttributeCode()] = $customAttribute->getValue();
             }
         }
     }

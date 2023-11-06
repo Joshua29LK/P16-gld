@@ -1,7 +1,7 @@
 <?php
 /**
  * @author Amasty Team
- * @copyright Copyright (c) 2023 Amasty (https://www.amasty.com)
+ * @copyright Copyright (c) Amasty (https://www.amasty.com)
  * @package Advanced Conditions for Magento 2
  */
 
@@ -47,9 +47,9 @@ class ChooserGrid extends \Magento\Backend\App\Action
      */
     public function execute()
     {
-        $resultPage = $this->resultFactory->create(ResultFactory::TYPE_PAGE);
+        $resultPage = $this->resultFactory->create(ResultFactory::TYPE_LAYOUT);
         $this->builder->build();
-        
+
         return $resultPage;
     }
 }

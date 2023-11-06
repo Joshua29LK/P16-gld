@@ -7,8 +7,9 @@
 //  --------------------------------------------
 
 & when (@media-common = true) {
+    /* phpcs:ignore Magento2.Less.ClassNaming.NotAllowedSymbol */
     .adminhtml-system_config-edit .ambase-page-title {
-        color: #303030;
+        color: @ambase__page-title__color;
         font-size: 18px;
         font-weight: bold;
         letter-spacing: -.03em;
@@ -24,7 +25,7 @@
 
         .ambase-button {
             border-radius: 4px;
-            color: #fff;
+            color: @color-white;
             padding: 10px 15px;
             position: relative;
             text-decoration: none;
@@ -38,7 +39,7 @@
             }
 
             &:hover {
-                background-color: #ba4000;
+                background-color: @color-phoenix-brown-almost;
             }
 
             &:after {
@@ -54,15 +55,15 @@
 
         .ambase-button.-blue {
             & {
-                background-color: #fff;
-                border: 1px solid #007bdb;
-                color: #303030;
+                background-color: @color-white;
+                border: 1px solid @color-blue-pure;
+                color: @color-gray19;
                 margin-left: 10px;
                 padding-right: 43px;
             }
 
             &:hover {
-                background-color: #c8e8ff;
+                background-color: @ambase__button-hover__color;
             }
 
             &:after {
@@ -77,14 +78,16 @@
         }
     }
 
+    /* phpcs:ignore Magento2.Less.ClassNaming.NotAllowedSymbol */
     .ambase-tab-container > .admin__page-nav-title._collapsible {
         padding-right: 10rem;
     }
 
+    /* phpcs:ignore Magento2.Less.ClassNaming.NotAllowedSymbol */
     .ambase-tab-container > .admin__page-nav-title:before {
-        background: #eb5202;
+        background: @ambase__orange-color;
         border-radius: 4px;
-        color: #fff;
+        color: @color-white;
         font-size: 16px;
         font-weight: bold;
         height: 26px;
@@ -99,8 +102,8 @@
 
     .ambase-grid-buttons {
         .ambase-button {
-            background-color: #f7faff;
-            border: 1px solid #c9dbfd;
+            background-color: @ambase__grid-button__color;
+            border: 1px solid @ambase__grid-button__border-color;
             border-radius: 5px;
             box-sizing: border-box;
             font-weight: 400;
@@ -111,8 +114,8 @@
 
         .ambase-button.-active,
         .ambase-button:hover {
-            background-color: #5f92f7;
-            color: #fff;
+            background-color: @ambase__grid-button__color-hover;
+            color: @color-white;
         }
 
         .ambase-counter:before {
@@ -126,7 +129,7 @@
 
     .ambase-products-table {
         & {
-            background: #fff;
+            background: @color-white;
             border-radius: 6px;
             box-shadow: 0 2px 13px rgba(95, 146, 247, .13);
             margin-top: 30px;
@@ -136,7 +139,7 @@
 
         .ambase-thead .ambase-tr,
         .ambase-tbody .ambase-tr:not(:last-child) {
-            border-bottom: 1px solid #e6e6e6;
+            border-bottom: 1px solid @ambase__products-table__border-color;
         }
 
         .ambase-tbody {
@@ -146,7 +149,7 @@
         }
 
         .ambase-th {
-            color: #adadad;
+            color: @ambase__products-table__header-color;
         }
 
         .ambase-td,
@@ -163,16 +166,16 @@
 
     .ambase-products-table,
     .ambase-menu-container {
-        .ambase-plan:before {
-            content: '(';
-        }
-
-        .ambase-plan:after {
-            content: ')';
-        }
-
         .ambase-plan {
             font-weight: bold;
+
+            &:before {
+                content: '(';
+            }
+
+            &:after {
+                content: ')';
+            }
         }
     }
 
@@ -223,6 +226,7 @@
         }
 
         .ambase-version.-update {
+            color: @ambase__orange-color;
             padding-left: 26px;
         }
 
@@ -237,6 +241,7 @@
         margin-bottom: 5px;
     }
 
+    /* phpcs:ignore Magento2.Less.AvoidId.IdSelectorUsage */
     .accordion .config #row_cron_configuration .value {
         width: 70%;
     }

@@ -1,7 +1,7 @@
 <?php
 /**
  * @author Amasty Team
- * @copyright Copyright (c) 2023 Amasty (https://www.amasty.com)
+ * @copyright Copyright (c) Amasty (https://www.amasty.com)
  * @package Advanced Conditions for Magento 2
  */
 
@@ -34,7 +34,7 @@ class ProductPlugin
             array_merge(
                 $subject->getAttributeOption(),
                 [
-                    'quote_item_sku' => __('Custom Options SKU'),
+                    'parent::quote_item_sku' => __('Custom Options SKU'),
                     'quote_item_row_total_incl_tax' => __('Row total in cart with tax')
                 ]
             )
