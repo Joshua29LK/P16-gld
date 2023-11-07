@@ -1,7 +1,7 @@
 <?php
 /**
  * @author Amasty Team
- * @copyright Copyright (c) 2023 Amasty (https://www.amasty.com)
+ * @copyright Copyright (c) Amasty (https://www.amasty.com)
  * @package Advanced Conditions for Magento 2
  */
 
@@ -12,8 +12,12 @@ use Amasty\Conditions\Model\AddressFactory;
 use Amasty\Conditions\Model\Constants;
 use Magento\Config\Model\Config\Source\Locale\Currency;
 use Magento\Directory\Model\Config\Source\Country;
+use Magento\Framework\App\Area;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\ProductMetadataInterface;
+use Magento\Framework\App\State;
 use Magento\Payment\Model\Config\Source\Allmethods;
+use Magento\Quote\Model\Quote;
 use Magento\Rule\Model\Condition\AbstractCondition;
 use Magento\Rule\Model\Condition\Context;
 use Magento\Store\Model\StoreManagerInterface;
@@ -66,6 +70,11 @@ class Address extends AbstractCondition
      */
     private $storeManager;
 
+    /**
+     * @var State
+     */
+    private $state;
+
     public function __construct(
         Context $context,
         ProductMetadataInterface $productMetadata,
@@ -75,7 +84,8 @@ class Address extends AbstractCondition
         \Amasty\Conditions\Model\Address $address,
         AddressFactory $addressFactory,
         StoreManagerInterface $storeManager,
-        array $data = []
+        array $data = [],
+        State $state = null // TODO move to not optional
     ) {
         $this->productMetadata = $productMetadata;
         $this->country = $country;
@@ -84,6 +94,7 @@ class Address extends AbstractCondition
         $this->address = $address;
         $this->addressFactory = $addressFactory;
         $this->storeManager = $storeManager;
+        $this->state = $state ?? ObjectManager::getInstance()->get(State::class);
         parent::__construct($context, $data);
     }
 
@@ -390,12 +401,21 @@ class Address extends AbstractCondition
                 'shipping_address_line' => $address->getStreet(),
                 'custom_attributes' => $address->getCustomAttributes(),
                 'billing_address_country' => $quote->getBillingAddress()->getCountryId(),
-                'currency' => $this->storeManager->getStore()->getCurrentCurrency()->getCode()
+                'currency' => $this->getCurrencyCode($quote)
             ];
             $addressModel->setData($advancedConditionData);
 
             $extensionAttributes->setAdvancedConditions($addressModel);
         }
+    }
+
+    private function getCurrencyCode(Quote $quote): string
+    {
+        if ($this->state->getAreaCode() === Area::AREA_ADMINHTML) {
+            return $quote->getQuoteCurrencyCode() ?: $this->storeManager->getStore()->getCurrentCurrency()->getCode();
+        }
+
+        return $this->storeManager->getStore()->getCurrentCurrency()->getCode();
     }
 
     /**
