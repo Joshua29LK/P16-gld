@@ -15,7 +15,7 @@
  *
  * @category 	Anowave
  * @package 	Anowave_Ec
- * @copyright 	Copyright (c) 2022 Anowave (http://www.anowave.com/)
+ * @copyright 	Copyright (c) 2023 Anowave (http://www.anowave.com/)
  * @license  	http://www.anowave.com/license-agreement/
  */
 
@@ -26,6 +26,13 @@ use Magento\Framework\Event\Observer as EventObserver;
 
 class Refund
 {
+    /**
+     * No category fallback 
+     * 
+     * @var string
+     */
+    const FALLBACK_No_CATEGORY = 'Not set';
+    
     /**
      * @var \Anowave\Ec4\Helper\Data
      */
@@ -67,6 +74,11 @@ class Refund
     protected $state;
     
     /**
+     * @var \Magento\Framework\App\RequestInterface
+     */
+    protected $request;
+    
+    /**
      * Constructor 
      * 
      * @param \Anowave\Ec4\Helper\Data $helper
@@ -86,7 +98,8 @@ class Refund
         \Magento\Catalog\Model\CategoryRepository $categoryRepository,
         \Magento\Catalog\Model\ResourceModel\Eav\AttributeFactory $attribute,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\Framework\App\State $state
+        \Magento\Framework\App\State $state,
+        \Magento\Framework\App\RequestInterface $request
     )
     {
         /**
@@ -144,6 +157,13 @@ class Refund
          * @var \Magento\Framework\App\State $state
          */
         $this->state = $state;
+        
+        /**
+         * Set request 
+         * 
+         * @var \Anowave\Ec4\Plugin\Refund $request
+         */
+        $this->request = $request;
     }
     
     /**
@@ -160,10 +180,19 @@ class Refund
         {
             return $proceed($observer);
         }
+        
+        /**
+         * Get credit memo details 
+         * 
+         * @var array $creditmemo
+         */
+        $creditmemo = $this->request->getParam('creditmemo');
        
-        if ($this->refund($observer->getPayment()->getOrder()))
+        if ($this->refund($observer->getPayment()->getOrder(), $creditmemo))
         {
-            $this->messageManager->addSuccessMessage("Refund for order {$observer->getPayment()->getOrder()->getIncrementId()} tracked to Google Analytics 4 {$this->helper->getMeasurementId()} successfully.");
+            $store = (int) $observer->getPayment()->getOrder()->getStoreId();
+            
+            $this->messageManager->addSuccessMessage("Refund for order {$observer->getPayment()->getOrder()->getIncrementId()} tracked to Google Analytics 4 {$this->helper->getMeasurementId($store)} successfully.");
             
             return true;
         }
@@ -177,11 +206,34 @@ class Refund
      * @param \Magento\Sales\Model\Order $order
      * @return boolean
      */
-    public function refund(\Magento\Sales\Model\Order $order)
+    public function refund(\Magento\Sales\Model\Order $order, array $creditmemo = [])
     {
-        $measurement_id         = $this->helper->getMeasurementId();
-        $measurement_api_secret = $this->helper->getMeasurementApiSecret();
+        /**
+         * Get store 
+         * 
+         * @var int $store
+         */
+        $store = (int) $order->getStoreId();
+
+        /**
+         * Get measurement id 
+         * 
+         * @var string $measurement_id
+         */
+        $measurement_id = $this->helper->getMeasurementId($store);
         
+        /**
+         * Get measurement secret
+         * 
+         * @var string $measurement_api_secret
+         */
+        $measurement_api_secret = $this->helper->getMeasurementApiSecret($store);
+        
+        /**
+         * Get payload
+         * 
+         * @var \Closure $payload
+         */
         $payload = function(array $events = []) use ($measurement_id, $measurement_api_secret)
         {
             return
@@ -213,8 +265,9 @@ class Refund
                     $address = $order->getShippingAddress();
                 }
                 
+                $products = $this->getProducts($order, $creditmemo);
                 
-                foreach($this->getProducts($order) as $product)
+                foreach($products as $product)
                 {
                     $item =
                     [
@@ -243,6 +296,10 @@ class Refund
                             
                             $item["item_category{$index}"] = $category;
                         }
+                    }
+                    else 
+                    {
+                        $item['item_category'] = __(static::FALLBACK_No_CATEGORY);
                     }
                     
                     
@@ -282,10 +339,7 @@ class Refund
                 curl_setopt($analytics, CURLOPT_SSL_VERIFYHOST, 0);
                 curl_setopt($analytics, CURLOPT_SSL_VERIFYPEER, 0);
                 curl_setopt($analytics, CURLOPT_USERAGENT,		'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.13) Gecko/20080311 Firefox/2.0.0.13');
-                curl_setopt($analytics, CURLOPT_POSTFIELDS,     utf8_encode
-                (
-                    json_encode($data)
-                ));
+                curl_setopt($analytics, CURLOPT_POSTFIELDS,     mb_convert_encoding(json_encode($data, JSON_UNESCAPED_UNICODE), 'UTF-8', mb_list_encodings()));
 
                 try
                 {
@@ -311,97 +365,127 @@ class Refund
         return false;
     }
     
-    public function getProducts(\Magento\Sales\Model\Order $order) : array 
+    /**
+     * Get products 
+     * 
+     * @param \Magento\Sales\Model\Order $order
+     * @param array $creditmemo
+     * @return array
+     */
+    public function getProducts(\Magento\Sales\Model\Order $order, array $creditmemo = []) : array 
     {
+        /**
+         * Get products 
+         * 
+         * @var array $products
+         */
         $products = [];
         
+        /**
+         * Map 
+         * 
+         * @var array $map
+         */
+        $map = [];
+        
+        foreach ($creditmemo['items'] as $identifier => $entity)
+        {
+            if ((int) $entity['qty'] > 0)
+            {
+                $map[(int) $identifier] = (int) $entity['qty'];
+            }
+        }
+
         foreach ($order->getAllVisibleItems() as $item)
         {
-            $collection = [];
-            
-            if ($item->getProduct())
+            if (array_key_exists($item->getId(), $map))
             {
-                $entity = $this->productFactory->create()->load
-                (
-                    $item->getProduct()->getId()
-                );
+                $collection = [];
                 
-                $collection = $entity->getCategoryIds();
-            }
-            
-            if ($collection)
-            {
-                $category = $this->categoryRepository->get(end($collection));
-            }
-            else
-            {
-                $category = null;
-            }
-            
-            /**
-             * Get product name
-             */
-            $args = new \stdClass();
-            
-            $args->id 	= $this->helper->getBaseHelper()->getIdentifierItem($item);
-            $args->name = $item->getName();
-            
-            /**
-             * Product variant(s)
-             *
-             * @var []
-             */
-            $variant = [];
-            
-            if ('configurable' === $item->getProductType())
-            {
-                $options = (array) $item->getProductOptions();
-                
-                if (isset($options['info_buyRequest']))
+                if ($item->getProduct())
                 {
-                    $info = new \Magento\Framework\DataObject($options['info_buyRequest']);
+                    $entity = $this->productFactory->create()->load
+                    (
+                        $item->getProduct()->getId()
+                    );
                     
-                    /**
-                     * Construct variant
-                     */
-                    foreach ((array) $info->getSuperAttribute() as $id => $option)
+                    $collection = $entity->getCategoryIds();
+                }
+                
+                if ($collection)
+                {
+                    $category = $this->categoryRepository->get(end($collection));
+                }
+                else
+                {
+                    $category = null;
+                }
+                
+                /**
+                 * Get product name
+                 */
+                $args = new \stdClass();
+                
+                $args->id 	= $this->helper->getBaseHelper()->getIdentifierItem($item);
+                $args->name = $item->getName();
+                
+                /**
+                 * Product variant(s)
+                 *
+                 * @var []
+                 */
+                $variant = [];
+                
+                if ('configurable' === $item->getProductType())
+                {
+                    $options = (array) $item->getProductOptions();
+                    
+                    if (isset($options['info_buyRequest']))
                     {
-                        /**
-                         * Load attribute model
-                         *
-                         * @var \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attribute
-                         */
-                        $attribute = $this->attribute->create()->load($id);
+                        $info = new \Magento\Framework\DataObject($options['info_buyRequest']);
                         
-                        if ($attribute->usesSource())
+                        /**
+                         * Construct variant
+                         */
+                        foreach ((array) $info->getSuperAttribute() as $id => $option)
                         {
-                            $variant[] = join(\Anowave\Ec\Helper\Data::VARIANT_DELIMITER_ATT,
-                            [
-                                $this->escape($attribute->getFrontendLabel()),
-                                $this->escape($attribute->getSource()->getOptionText($option))
-                            ]);
+                            /**
+                             * Load attribute model
+                             *
+                             * @var \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attribute
+                             */
+                            $attribute = $this->attribute->create()->load($id);
+                            
+                            if ($attribute->usesSource())
+                            {
+                                $variant[] = join(\Anowave\Ec\Helper\Data::VARIANT_DELIMITER_ATT,
+                                [
+                                    $this->escape($attribute->getFrontendLabel()),
+                                    $this->escape($attribute->getSource()->getOptionText($option))
+                                ]);
+                            }
                         }
                     }
                 }
+                
+                $data =
+                [
+                    'name' 		=> $this->escape($args->name),
+                    'id'		=> $this->escape($args->id),
+                    'price' 	=> $item->getPrice(),
+                    'quantity' 	=> $map[$item->getId()],
+                    'variant'	=> join(\Anowave\Ec\Helper\Data::VARIANT_DELIMITER, $variant)
+                ];
+                
+                if ($category)
+                {
+                    $data['category'] = $this->escape($category->getName());
+                }
+                
+                $products[] = $data;
             }
-            
-            $data =
-            [
-                'name' 		=> $this->escape($args->name),
-                'id'		=> $this->escape($args->id),
-                'price' 	=> $item->getPrice(),
-                'quantity' 	=> $item->getQtyOrdered(),
-                'variant'	=> join(\Anowave\Ec\Helper\Data::VARIANT_DELIMITER, $variant)
-            ];
-            
-            if ($category)
-            {
-                $data['category'] = $this->escape($category->getName());
-            }
-            
-            $products[] = $data;
         }
-
+        
         return $products;
     }
     

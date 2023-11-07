@@ -15,7 +15,7 @@
  *
  * @category 	Anowave
  * @package 	Anowave_Ec
- * @copyright 	Copyright (c) 2022 Anowave (https://www.anowave.com/)
+ * @copyright 	Copyright (c) 2023 Anowave (https://www.anowave.com/)
  * @license  	https://www.anowave.com/license-agreement/
  */
 
@@ -38,6 +38,20 @@ class Tax implements \Magento\Framework\Option\ArrayInterface
 	const INCL_TAX 	= 1;
 	
 	/**
+	 * Excluding tax & including shipping 
+	 * 
+	 * @var integer
+	 */
+	const EXCL_TAX_INCL_SHIPPING = 2;
+	
+	/**
+	 * Incl tax & excluding shipping 
+	 * 
+	 * @var integer
+	 */
+	const INCL_TAX_EXCL_SHIPPING = 3;
+	
+	/**
 	 * @return []
 	 */
 	public function toOptionArray()
@@ -46,12 +60,20 @@ class Tax implements \Magento\Framework\Option\ArrayInterface
 		[
 			[
 				'value' => self::EXCL_TAX, 
-				'label' => __('Excluding tax & shipping')
+				'label' => __('Excluding both Tax & Shipping')
 			],
 			[
 				'value' => self::INCL_TAX, 
-				'label' => __('Including tax & shipping')
-			]
+				'label' => __('Including both Tax & Shipping')
+			],
+		    [
+		        'value' => self::INCL_TAX_EXCL_SHIPPING,
+		        'label' => __('Including Tax but Excluding shipping')
+		    ],
+		    [
+		        'value' => self::EXCL_TAX_INCL_SHIPPING,
+		        'label' => __('Excluding Tax but Including shipping')
+		    ]
 		];
 	}
 }

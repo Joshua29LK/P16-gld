@@ -15,7 +15,7 @@
  *
  * @category 	Anowave
  * @package 	Anowave_Ec
- * @copyright 	Copyright (c) 2022 Anowave (https://www.anowave.com/)
+ * @copyright 	Copyright (c) 2023 Anowave (https://www.anowave.com/)
  * @license  	https://www.anowave.com/license-agreement/
  */
 
@@ -186,7 +186,7 @@ class Update implements ObserverInterface
 							
 							$push =
 							[
-								'event' => 'addToCart',
+							    'event' => \Anowave\Ec\Helper\Constants::EVENT_ADD_TO_CART,
 								'ecommerce' =>
 								[
 									'add' =>
@@ -205,7 +205,7 @@ class Update implements ObserverInterface
 							
 							$push =
 							[
-								'event' => 'removeFromCart',
+							    'event' => \Anowave\Ec\Helper\Constants::EVENT_REMOVE_FROM_CART,
 								'ecommerce' =>
 								[
 									'remove' =>

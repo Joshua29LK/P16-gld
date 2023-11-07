@@ -43,7 +43,7 @@ class Builder
 	 * @param \Magento\Backend\Model\Menu $menu
 	 * @return \Magento\Backend\Model\Menu
 	 */
-	public function afterGetResult(\Magento\Backend\Model\Menu\Builder\Interceptor $interceptor, \Magento\Backend\Model\Menu $menu) 
+	public function afterGetResult(\Magento\Backend\Model\Menu\Builder $interceptor, \Magento\Backend\Model\Menu $menu)
 	{
 		try 
 		{	

@@ -15,7 +15,7 @@
  *
  * @category 	Anowave
  * @package 	Anowave_Ec
- * @copyright 	Copyright (c) 2022 Anowave (https://www.anowave.com/)
+ * @copyright 	Copyright (c) 2023 Anowave (https://www.anowave.com/)
  * @license  	https://www.anowave.com/license-agreement/
  */
 
@@ -100,14 +100,22 @@ class Newsletter implements ObserverInterface
 	        $subscribed = 1 === (int) $subscribed;
 	    }   
 	    
+	    $email = $this->request->getParam('email');
+	    
 	    if ($subscribed)
 	    {
+	        /**
+	         * Get email
+	         * 
+	         * @var string $email
+	         */
 	        $this->session->setNewsletterEvent($this->jsonHelper->encode(
             [
                 'event' 			=>    'newsletterSubmit',
                 'eventCategory' 	=> __('Newsletter'),
                 'eventAction' 		=> __('Submit'),
                 'eventLabel' 		=> __('Subscribe'),
+                'eventEmail'        => filter_var($email, FILTER_VALIDATE_EMAIL) ? $email : null,
                 'eventValue' 		=> 1
             ]));
 	    }
@@ -119,6 +127,7 @@ class Newsletter implements ObserverInterface
                 'eventCategory' 	=> __('Newsletter'),
                 'eventAction' 		=> __('Submit'),
                 'eventLabel' 		=> __('Unsubscribe'),
+                'eventEmail'        => filter_var($email, FILTER_VALIDATE_EMAIL) ? $email : null,
                 'eventValue' 		=> 1
             ]));
 	    }

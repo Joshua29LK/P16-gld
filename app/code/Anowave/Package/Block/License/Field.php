@@ -32,9 +32,23 @@ class Field extends \Magento\Config\Block\System\Config\Form\Field
 	 * @see \Magento\Config\Block\System\Config\Form\Field::_getElementHtml()
 	 */
 	protected function _getElementHtml(AbstractElement $element)
-	{
+	{   
 		$content = parent::_getElementHtml($element);
 		
-		return $content. $this->getLayout()->createBlock('Anowave\Package\Block\License')->setTemplate('license.phtml')->setData([])->toHtml();
+		/**
+		 * Get frontend model arguments 
+		 * 
+		 * @var [] $frontend
+		 */
+		$frontend = $element->getOriginalData();
+		
+		/**
+		 * Get package
+		 * 
+		 * @var Ambiguous $package
+		 */
+		$package = $frontend['package'] ?? '';
+		
+		return $content. $this->getLayout()->createBlock('Anowave\Package\Block\License')->setTemplate('license.phtml')->setData(['package' => $package])->toHtml();
     }
 }

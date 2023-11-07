@@ -15,7 +15,7 @@
  *
  * @category 	Anowave
  * @package 	Anowave_Ec4
- * @copyright 	Copyright (c) 2022 Anowave (http://www.anowave.com/)
+ * @copyright 	Copyright (c) 2023 Anowave (http://www.anowave.com/)
  * @license  	http://www.anowave.com/license-agreement/
  */
 
@@ -80,7 +80,7 @@ class Detail implements ObserverInterface
         
         $response = $observer->getTransport()->getResponse();
         
-        foreach ($response['ecommerce']['detail']['products'] as &$product)
+        foreach ($response['ecommerce']['items'] as &$product)
         {
             $product['affiliation'] = $affiliation;
         }

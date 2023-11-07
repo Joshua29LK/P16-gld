@@ -15,7 +15,7 @@
  *
  * @category 	Anowave
  * @package 	Anowave_Ec4
- * @copyright 	Copyright (c) 2022 Anowave (http://www.anowave.com/)
+ * @copyright 	Copyright (c) 2023 Anowave (http://www.anowave.com/)
  * @license  	http://www.anowave.com/license-agreement/
  */
 
@@ -47,7 +47,7 @@ class Data extends \Anowave\Package\Helper\Package
      * Config path
      * @var string
      */
-    protected $config = 'ec4/general/license';
+    protected $config = 'ec/ec4/license';
     
     /**
      * @var \Anowave\Ec\Helper\Data
@@ -55,18 +55,61 @@ class Data extends \Anowave\Package\Helper\Package
     protected $baseHelper;
     
     /**
+     * @var \Magento\Checkout\Model\Session\Proxy
+     */
+    protected $proxy;
+    
+    /**
+     * @var \Magento\SalesRule\Api\RuleRepositoryInterface
+     */
+    protected $ruleRepositoryInterface;
+    
+    /**
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     */
+    protected $scopeConfig;
+    
+    /**
      * Constructor 
      * 
      * @param \Magento\Framework\App\Helper\Context $context
      * @param \Anowave\Ec\Helper\Data $baseHelper
+     * @param \Magento\Checkout\Model\Session\Proxy $proxy
+     * @param \Magento\SalesRule\Api\RuleRepositoryInterface $ruleRepositoryInterface
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      */
     public function __construct
     (
         \Magento\Framework\App\Helper\Context $context,
-        \Anowave\Ec\Helper\Data $baseHelper
+        \Anowave\Ec\Helper\Data $baseHelper,
+        \Magento\Checkout\Model\Session\Proxy $proxy,
+        \Magento\SalesRule\Api\RuleRepositoryInterface $ruleRepositoryInterface,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
     )
     {
         $this->baseHelper = $baseHelper;
+        
+        /**
+         * Set proxy 
+         * 
+         * @var \Magento\Checkout\Model\Session\Proxy $proxy
+         */
+        $this->proxy = $proxy;
+        
+        /**
+         * Set rule repository interface 
+         * 
+         * @var \Magento\SalesRule\Api\RuleRepositoryInterface $ruleRepositoryInterface
+         */
+        $this->ruleRepositoryInterface = $ruleRepositoryInterface;
+        
+        /**
+         * Set scope config 
+         * 
+         * @var \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+         */
+        $this->scopeConfig = $scopeConfig;
+        
         
         parent::__construct($context);
     }
@@ -78,7 +121,54 @@ class Data extends \Anowave\Package\Helper\Package
      */
     public function isGA4Enabled() : bool
     {
-        return 1 === $this->filter((int) $this->getConfig('ec4/general/active'));
+        return 1 === $this->filter((int) $this->getConfig('ec/ec4/active'));
+    }
+    
+    /**
+     * Get quote details 
+     * 
+     * @return array
+     */
+    public function getQuoteDetails() : array
+    {
+        /**
+         * Quote array
+         * 
+         * @var array $quote
+         */
+        $quote = [];
+        
+        try 
+        {
+            /**
+             * Get applies rules
+             *
+             * @var array $rules
+             */
+            $rules = explode(chr(44), (string) $this->proxy->getQuote()->getAppliedRuleIds());
+            
+            if ($rules)
+            {
+                $coupon = [];
+                
+                $coupon[] = $this->proxy->getQuote()->getCouponCode();
+                
+                foreach ($rules as $rule_id)
+                {
+                    $rule = $this->ruleRepositoryInterface->getById($rule_id);
+                }
+                
+                if ($coupon)
+                {
+                    $coupon = join(chr(44), $coupon);
+                    
+                    $quote['coupon'] = $coupon;
+                }
+            }
+        }
+        catch (\Exception $e){}
+
+        return $quote;
     }
     
     /**
@@ -100,6 +190,11 @@ class Data extends \Anowave\Package\Helper\Package
      */
     public function getMeasurementId(int $store = 0) : string
     {
+        if ($store)
+        {
+            return (string) $this->scopeConfig->getValue($this->getMeasurementIdConfig(), \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $store);
+        }
+            
         return (string) $this->getConfig($this->getMeasurementIdConfig());
     }
     
@@ -108,8 +203,13 @@ class Data extends \Anowave\Package\Helper\Package
      *
      * @return string
      */
-    public function getMeasurementApiSecret() : string
+    public function getMeasurementApiSecret(int $store = 0) : string
     {
+        if ($store)
+        {
+            return (string) $this->scopeConfig->getValue('ec/api/google_gtm_ua4_measurement_api_secret', \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $store);
+        }
+        
         return (string) $this->getConfig('ec/api/google_gtm_ua4_measurement_api_secret');
     }
     

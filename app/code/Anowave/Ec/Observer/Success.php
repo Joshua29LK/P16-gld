@@ -15,7 +15,7 @@
  *
  * @category 	Anowave
  * @package 	Anowave_Ec
- * @copyright 	Copyright (c) 2022 Anowave (https://www.anowave.com/)
+ * @copyright 	Copyright (c) 2023 Anowave (https://www.anowave.com/)
  * @license  	https://www.anowave.com/license-agreement/
  */
 
@@ -61,15 +61,27 @@ class Success implements ObserverInterface
 	protected $transactionCollectionFactory;
 	
 	/**
-	 * Constructor 
-	 * 
-	 * @param \Magento\Framework\View\LayoutInterface $layout
-	 * @param \Anowave\Ec\Helper\Affiliation $affiliation
-	 * @param \Magento\Framework\Event\ManagerInterface $eventManager
-	 * @param \Anowave\Ec\Helper\Data $helper
-	 * @param \Anowave\Ec\Model\TransactionFactory $transactionFactory
-	 * @param \Anowave\Ec\Model\ResourceModel\Transaction\CollectionFactory $transactionCollectionFactory
+	 * @var \Magento\Framework\Stdlib\CookieManagerInterface
 	 */
+	protected $cookieManager;
+	
+	/**
+	 * @var \Anowave\Ec\Model\Api\Measurement\Protocol
+	 */
+	protected $protocol;
+	
+    /**
+     * Constructor 
+     * 
+     * @param \Magento\Framework\View\LayoutInterface $layout
+     * @param \Anowave\Ec\Helper\Affiliation $affiliation
+     * @param \Magento\Framework\Event\ManagerInterface $eventManager
+     * @param \Anowave\Ec\Helper\Data $helper
+     * @param \Anowave\Ec\Model\TransactionFactory $transactionFactory
+     * @param \Anowave\Ec\Model\ResourceModel\Transaction\CollectionFactory $transactionCollectionFactory
+     * @param \Magento\Framework\Stdlib\CookieManagerInterface $cookieManager
+     * @param \Anowave\Ec\Model\Api\Measurement\Protocol $protocol
+     */
 	public function __construct
 	(
 		\Magento\Framework\View\LayoutInterface $layout,
@@ -77,7 +89,9 @@ class Success implements ObserverInterface
 		\Magento\Framework\Event\ManagerInterface $eventManager,
 		\Anowave\Ec\Helper\Data $helper,
 	    \Anowave\Ec\Model\TransactionFactory $transactionFactory,
-	    \Anowave\Ec\Model\ResourceModel\Transaction\CollectionFactory $transactionCollectionFactory
+	    \Anowave\Ec\Model\ResourceModel\Transaction\CollectionFactory $transactionCollectionFactory,
+	    \Magento\Framework\Stdlib\CookieManagerInterface $cookieManager,
+	    \Anowave\Ec\Model\Api\Measurement\Protocol $protocol
 	) 
 	{
 		/**
@@ -119,6 +133,20 @@ class Success implements ObserverInterface
 		 * @var \Anowave\Ec\Model\ResourceModel\Transaction\CollectionFactory $transactionCollectionFactory
 		 */
 		$this->transactionCollectionFactory = $transactionCollectionFactory;
+		
+		/**
+		 * Set cookie manager 
+		 * 
+		 * @var \Magento\Framework\Stdlib\CookieManagerInterface $cookieManager
+		 */
+		$this->cookieManager = $cookieManager;
+		
+		/**
+		 * Set protocol 
+		 * 
+		 * @var \Anowave\Ec\Observer\Success $protocol
+		 */
+		$this->protocol = $protocol;
 	}
 	
 	/**
@@ -155,9 +183,16 @@ class Success implements ObserverInterface
     		             */
     		            $transaction->setEcTrack(\Anowave\Ec\Helper\Constants::FLAG_TRACKED);
     		            
-    		            if (isset($_COOKIE['_ga']))
+    		            /**
+    		             * Get _ga cookie
+    		             * 
+    		             * @var string $ga
+    		             */
+    		            $ga = $this->get_gaCookie();
+    		            
+    		            if ($ga)
     		            {
-    		                $transaction->setEcCookieGa($_COOKIE['_ga']);
+    		                $transaction->setEcCookieGa($ga);
     		            }
     		            
     		            $transaction->save();
@@ -166,24 +201,75 @@ class Success implements ObserverInterface
 		    }
 		    catch (\Exception $e){}
 		    
-			if (!$this->helper->isBetaMode())
-			{
-				$block->setOrderIds($order_ids);
-			}
-			else 
-			{
-				/**
-				 * Get orders collection
-				 *
-				 * @var array $orders
-				 */
-				$orders = $this->helper->getOrdersCollection($order_ids);
-				
-				if ($orders)
-				{
-					$block->setOrderIds($order_ids);
-				}
-			}
+		    if ($this->helper->useMeasurementProtocolOnly())
+		    {
+		        /**
+		         * Track serve-side
+		         */
+		        $this->trackServerSide($order_ids);
+		    }
+		    else 
+		    {
+		        /**
+		         * Get orders collection
+		         *
+		         * @var array $orders
+		         */
+		        $orders = $this->helper->getOrdersCollection($order_ids);
+		        
+		        if ($orders)
+		        {
+		            $block->setOrderIds($order_ids);
+		        }
+		    }
 		}
+	}
+	
+	/**
+	 * Track transaction using server-side call (Measurement Protocol)
+	 * 
+	 * @param array $order_ids
+	 */
+	public function trackServerSide(array $order_ids = [])
+	{
+	    /**
+	     * Get _ga cookie 
+	     * 
+	     * @var string $ga
+	     */
+	    $ga = $this->get_gaCookie();
+	    
+	    if ($ga)
+	    {
+	        $cid = substr($ga, 6);
+	        
+	        if ($cid)
+	        {
+	            /**
+	             * Set client ID
+	             */
+	            $this->protocol->setCID($cid);
+	            
+	            /**
+	             * Track each order separately
+	             */
+	            foreach ($order_ids as $id)
+	            {
+	                $this->protocol->purchaseById($id);
+	            }
+	        }
+	    }
+	    
+	    return true;
+	}
+	
+	/**
+	 * Get Google Analytics (_ga) cookie 
+	 * 
+	 * @return string
+	 */
+	private function get_gaCookie() : string
+	{
+	    return (string) $this->cookieManager->getCookie('_ga');
 	}
 }

@@ -15,7 +15,7 @@
  *
  * @category 	Anowave
  * @package 	Anowave_Ec
- * @copyright 	Copyright (c) 2022 Anowave (https://www.anowave.com/)
+ * @copyright 	Copyright (c) 2023 Anowave (https://www.anowave.com/)
  * @license  	https://www.anowave.com/license-agreement/
  */
 
@@ -44,6 +44,11 @@ class UpdateItemQty extends \Magento\Checkout\Controller\Sidebar\UpdateItemQty
 	protected $categoryRepository;
 	
 	/**
+	 * @var \Magento\Catalog\Model\ResourceModel\Eav\AttributeFactory
+	 */
+	protected $attribute;
+	
+	/**
 	 * @var int
 	 */
 	private $previousQuantity = 0;
@@ -70,7 +75,8 @@ class UpdateItemQty extends \Magento\Checkout\Controller\Sidebar\UpdateItemQty
 		\Magento\Checkout\Model\Cart $cart,
 		\Anowave\Ec\Helper\Data $dataHelper,
 		\Magento\Catalog\Model\ProductRepository $productRepository,
-		\Magento\Catalog\Model\CategoryRepository $categoryRepository
+		\Magento\Catalog\Model\CategoryRepository $categoryRepository,
+	    \Magento\Catalog\Model\ResourceModel\Eav\AttributeFactory $attribute
 	) 
 	{
 		parent::__construct($context, $sidebar, $logger, $jsonHelper);
@@ -97,6 +103,13 @@ class UpdateItemQty extends \Magento\Checkout\Controller\Sidebar\UpdateItemQty
 		 * @var \Magento\Catalog\Model\CategoryRepository $categoryRepository
 		 */
 		$this->categoryRepository = $categoryRepository;
+		
+		/**
+		 * Set attribute factory
+		 * 
+		 * @var \Magento\Catalog\Model\ResourceModel\Eav\AttributeFactory $attribute
+		 */
+		$this->attribute = $attribute;
 	}
 	
 	public function execute()
@@ -169,13 +182,119 @@ class UpdateItemQty extends \Magento\Checkout\Controller\Sidebar\UpdateItemQty
     			$item->getProductId()
     		);
     		
-    		$products = 
+    		$buyRequest = $item->getProductOptionByCode('info_buyRequest');
+    		
+    		
+    		/**
+    		 * Check if buy request is set
+    		 */
+    		if ($buyRequest)
+    		{
+    		    /**
+    		     * Get info buy request
+    		     *
+    		     * @var \Magento\Framework\DataObject
+    		     */
+    		    $info = new \Magento\Framework\DataObject($buyRequest);
+    		}
+    		else
+    		{
+    		    /**
+    		     * Try to obtain buy request as custom option
+    		     *
+    		     * @var []
+    		     */
+    		    $buyRequest = $item->getProduct()->getCustomOption('info_buyRequest');
+    		    
+    		    if (isset($buyRequest['value']))
+    		    {
+    		        if (false === $value = @unserialize($buyRequest['value']))
+    		        {
+    		            $value = @json_decode($buyRequest['value'], true);
+    		        }
+    		        
+    		        if ($value)
+    		        {
+    		            $info = new \Magento\Framework\DataObject($value);
+    		        }
+    		    }
+    		    else
+    		    {
+    		        $info = new \Magento\Framework\DataObject([]);
+    		    }
+    		}
+    		
+    		$variant = [];
+    		
+    		if (isset($info) && $info->getSuperAttribute())
+    		{
+    		    /**
+    		     * Construct variant
+    		     */
+    		    foreach ((array) $info->getSuperAttribute() as $id => $option)
+    		    {
+    		        $attribute = $this->attribute->create()->load($id);
+    		        
+    		        if ($attribute->usesSource())
+    		        {
+    		            $name = $this->dataHelper->getAttributeLabel($attribute);
+    		            $text = $attribute->getSource()->getOptionText($option);
+    		            
+    		            if ($this->dataHelper->useDefaultValues())
+    		            {
+    		                /**
+    		                 * Get current store
+    		                 *
+    		                 * @var int
+    		                 */
+    		                $currentStore = $attribute->getSource()->getAttribute()->getStoreId();
+    		                
+    		                /**
+    		                 * Change default store
+    		                 */
+    		                $attribute->getSource()->getAttribute()->setStoreId(0);
+    		                
+    		                /**
+    		                 * Get text
+    		                 *
+    		                 * @var string
+    		                 */
+    		                $text = $attribute->getSource()->getOptionText($option);
+    		                
+    		                /**
+    		                 * Restore store
+    		                 */
+    		                $attribute->getSource()->getAttribute()->setStoreId($currentStore);
+    		            }
+    		            
+    		            $variant[] = join(\Anowave\Ec\Helper\Data::VARIANT_DELIMITER_ATT, array($name, $text));
+    		            
+    		        }
+    		    }
+    		}
+    		
+    		$variant = join(\Anowave\Ec\Helper\Data::VARIANT_DELIMITER, $variant);
+    		
+    		/**
+    		 * Define items array 
+    		 * 
+    		 * @var array $items
+    		 */
+    		$items = [];
+    		
+    		/**
+    		 * Define item
+    		 */
+    		$item = 
     		[
-    			'id'  		=> $this->dataHelper->getIdentifier($product),
-    			'name' 		=> $item->getName(),
-    			'quantity' 	=> $item->getQty(),
-    			'price'		=> $item->getPrice(),
-    			'brand'		=> $this->dataHelper->getBrand($product)
+    		    'item_id'  		=> $this->dataHelper->getIdentifier($product),
+    		    'item_name'     => $product->getName(),
+    		    'item_brand'    => $this->dataHelper->getBrand($product),
+    		    'item_variant'  => $variant,
+    		    'quantity' 	    => $product->getQty(),
+    		    'price'		    => $product->getPrice(),
+    		    'currency'      => $this->dataHelper->getCurrency(),
+    		    'index'         => 0
     		];
 
     		/**
@@ -203,7 +322,7 @@ class UpdateItemQty extends \Magento\Checkout\Controller\Sidebar\UpdateItemQty
     			/**
     			 * Set category name
     			 */
-    			$products['category'] = $this->dataHelper->getCategory($category);
+    			$item = $this->dataHelper->assignCategory($category, $item);
     			
     			/**
     			 * Get category 
@@ -221,51 +340,49 @@ class UpdateItemQty extends \Magento\Checkout\Controller\Sidebar\UpdateItemQty
     		$current = (int) $this->previousQuantity;
     		
     		/**
+    		 * Get list
+    		 */
+    		$list = $list ? $list : __('Default list');
+    		
+    		$item['item_list_id'] = $list;
+    		$item['item_list_name'] = $list;
+    		
+    		/**
     		 * Determine whether product is added or deducted
     		 */
     		if ($current > $quantity)
     		{
-    			$products['quantity'] = ($current - $quantity);
+    			$item['quantity'] = ($current - $quantity);
     			
     			$data =
     			[
-    				'event' 	=> 'removeFromCart',
+    			    'event' 	=> \Anowave\Ec\Helper\Constants::EVENT_REMOVE_FROM_CART,
     				'ecommerce' =>
     				[
-    					'remove' =>
-    					[
-    					    'actionField' => 
-    					    [
-    					        'list' => $list ? $list : __('Default list')
-    					    ],
-    						'products' =>
-    						[
-    							$products
-    						]
-    					]
+    				    'item_list_id'   => $list, 
+    				    'item_list_name' => $list,
+    				    'items'          => 
+    				    [
+    				        $item
+    				    ]
     				]
     			];
     		}
     		else 
     		{
-    			$products['quantity'] = ($quantity - $current);
+    			$item['quantity'] = ($quantity - $current);
     			
     			$data =
     			[
-    				'event' 	=> 'addToCart',
+    			    'event' 	=> \Anowave\Ec\Helper\Constants::EVENT_ADD_TO_CART,
     				'ecommerce' =>
     				[
-    					'add' =>
-    					[
-    					    'actionField' =>
-    					    [
-    					        'list' => $list ? $list : __('Default list')
-    					    ],
-    						'products' =>
-    						[
-    							$products
-    						]
-    					]
+    				    'item_list_id'      => $list,
+    				    'item_list_name'    => $list,
+    					'items' => 
+    				    [
+    				        $item
+    				    ]
     				]
     			];
     		}

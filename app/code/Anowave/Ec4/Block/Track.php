@@ -15,7 +15,7 @@
  *
  * @category 	Anowave
  * @package 	Anowave_Ec4
- * @copyright 	Copyright (c) 2022 Anowave (http://www.anowave.com/)
+ * @copyright 	Copyright (c) 2023 Anowave (http://www.anowave.com/)
  * @license  	http://www.anowave.com/license-agreement/
  */
 
@@ -43,6 +43,8 @@ class Track extends \Anowave\Ec\Block\Track
      * @param \Magento\Directory\Model\CurrencyFactory $currencyFactory
      * @param \Magento\Framework\Registry $registry
      * @param \Anowave\Ec\Helper\Affiliation $affiliation
+     * @param \Magento\Framework\Filesystem\Driver\File $driverFile
+     * @param \Psr\Log\LoggerInterface $logger
      * @param array $data
      */
     public function __construct
@@ -54,13 +56,15 @@ class Track extends \Anowave\Ec\Block\Track
         \Magento\Directory\Model\CurrencyFactory $currencyFactory,
         \Magento\Framework\Registry $registry,
         \Anowave\Ec\Helper\Affiliation $affiliation,
+        \Magento\Framework\Filesystem\Driver\File $driverFile,
+        \Psr\Log\LoggerInterface $logger,
         array $data = []
     )
     {
         $this->registry = $registry;
         $this->affiliation = $affiliation;
         
-        parent::__construct($context, $helper, $dataLayer, $protocol, $currencyFactory);
+        parent::__construct($context, $helper, $dataLayer, $protocol, $currencyFactory, $driverFile, $logger);
     }
     
     public function getViewCart() : string
@@ -70,29 +74,48 @@ class Track extends \Anowave\Ec\Block\Track
         $payload = 
         [
             'event' => 'view_cart',
-            'currency' => $this->getHelper()->getCurrency(),
             'ecommerce' => 
             [
+                'currency' => $this->getHelper()->getCurrency(),
+                'value' => 0,
                 'items' => []
             ]
         ];
         
+        /**
+         * Cart value
+         * 
+         * @var integer $value
+         */
+        $value = 0;
+        
+        /**
+         * Item array 
+         * 
+         * @var array $items
+         */
         $items = [];
         
+        /**
+         * Default starting position
+         * 
+         * @var integer $index
+         */
         $index = 1;
         
         foreach ($checkout->products as $product)
         {
             $item = 
             [
-                'item_id'           => $product['id'],
-                'item_name'         => $product['name'],
-                'item_list_id'      => $product['list'],
-                'item_list_name'    => $product['list'],
+                'item_id'           => $product['item_id'],
+                'item_name'         => $product['item_name'],
+                'item_list_id'      => $product['item_list_id'],
+                'item_list_name'    => $product['item_list_name'],
                 'price'             => $product['price'],
                 'quantity'          => $product['quantity'],
                 'currency'          => $this->getHelper()->getCurrency(),
-                'item_brand'        => $product['brand'],
+                'item_brand'        => $product['item_brand'],
+                'category'          => $product['category'],
                 'index'             => $index++
             ];
             
@@ -101,9 +124,9 @@ class Track extends \Anowave\Ec\Block\Track
                 $item['affiliation'] = $this->affiliation->getAffiliation();
             }
             
-            if (isset($product['variant']))
+            if (isset($product['item_variant']))
             {
-                $item['item_variant'] = $product['variant'];
+                $item['item_variant'] = $product['item_variant'];
             }
             
             foreach ($this->getItemCategories($product['category']) as $key => $category)
@@ -112,10 +135,42 @@ class Track extends \Anowave\Ec\Block\Track
             }
             
             $items[] = $item;
+            
+            $value += ((float) $item['price'] * (float) $product['quantity']);
         }
         
+        /**
+         * Set value
+         */
+        $payload['ecommerce']['value'] = $value;
+        
+        /**
+         * Set items
+         */
         $payload['ecommerce']['items'] = $items;
         
+        /**
+         * Create transport object
+         *
+         * @var \Magento\Framework\DataObject $transport
+         */
+        $transport = new \Magento\Framework\DataObject
+        (
+            [
+                'payload' => $payload
+            ]
+        );
+        
+        /**
+         * Notify others for schema
+         */
+        $this->getHelper()->getEventManager()->dispatch('ec_view_cart', ['transport' => $transport]);
+        
+        /**
+         * Update payload
+         */
+        $payload = $transport->getPayload();
+
         return $this->getHelper()->getJsonHelper()->encode($payload);
     }
     
@@ -129,7 +184,7 @@ class Track extends \Anowave\Ec\Block\Track
     {
         $map = [];
         
-        $categories = explode(chr(47), $category);
+        $categories = explode(chr(47), (string) $category);
         
         $map['item_category'] = array_shift($categories);
         
@@ -139,7 +194,7 @@ class Track extends \Anowave\Ec\Block\Track
             
             foreach ($categories as $category)
             {
-                $map['item_category_' . (++$index)] = $category;
+                $map['item_category' . (++$index)] = $category;
             }
         }
         

@@ -15,7 +15,7 @@
  *
  * @category 	Anowave
  * @package 	Anowave_Ec
- * @copyright 	Copyright (c) 2022 Anowave (https://www.anowave.com/)
+ * @copyright 	Copyright (c) 2023 Anowave (https://www.anowave.com/)
  * @license  	https://www.anowave.com/license-agreement/
  */
 
@@ -30,13 +30,18 @@ class Checkout extends Facebook
     {
         $checkout = $observer->getTransport()->getCheckout();
 
+        /**
+         * Content ids array 
+         * 
+         * @var array $content_ids
+         */
         $content_ids = [];
         
-        foreach ($checkout['push']['ecommerce']['checkout']['products'] as $entity)
+        foreach ($checkout['payload']['ecommerce']['items'] as $entity)
         {
-            $content_ids[] = $entity['id'];
+            $content_ids[] = $entity['item_id'];
         }
 
-        $this->helper->getFacebookConversionsApi()->trackInitiateCheckout($content_ids, $checkout['push']['ecommerce']['currencyCode'], $checkout['total']);
+        $this->helper->getFacebookConversionsApi()->trackInitiateCheckout($content_ids, $checkout['payload']['currency'], $checkout['total']);
     }
 }

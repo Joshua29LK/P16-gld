@@ -4,22 +4,29 @@
     {
     	(() => 
     	{
-    		let map = {};
+    		let map = {}, trace = {};
     
     		document.querySelectorAll('[data-widget]').forEach((element) => 
             {
                 let widget = element.dataset.widget;
-                
-            	let entity = 
+
+                let entity = 
     			{
-    				id: 				   element.dataset.id,
-    				name: 				   element.dataset.name,
-    				category:			   element.dataset.category,
-    				brand:				   element.dataset.brand,
-    				list:				   element.dataset.list,
-    				price:		parseFloat(element.dataset.price),
-    				position: 	parseFloat(element.dataset.position)
-            	};
+    					
+    				item_id: 		element.dataset.id,
+    				item_name: 		element.dataset.name,
+    				item_list_name: element.dataset.list,
+    				item_list_id:	element.dataset.list,
+    				item_brand: 	element.dataset.brand,
+    				category:		element.dataset.category,
+    				price: 			parseFloat(element.dataset.price),
+    				index: 			parseFloat(element.dataset.position),
+    				currency:		AEC.GA4.currency,
+    				quantity: 		1,
+    				google_business_vertical: 'retail'
+    			};
+
+                Object.assign(entity, entity, AEC.GA4.augmentCategories(entity));
 
             	let attributes = element.dataset.attributes;
                 
@@ -34,26 +41,36 @@
         	    if (!map.hasOwnProperty(widget))
         	    {
             	    map[widget] = [];
+            	    
+            	    map[widget].trace = {};
+            	    map[widget].entry = [];
+            	    map[widget].item_list_id = '';
+            	    map[widget].item_list_name = '';
         	    }
 
-        	    map[widget].push(entity);
+        	    if (!map[widget].trace.hasOwnProperty(element.dataset.id))
+        	    {
+        	    	map[widget].trace[element.dataset.id] = true;
+            	    
+            	    map[widget].entry.push(entity);
+
+            	    map[widget].item_list_id 	= entity.item_list_id;
+            	    map[widget].item_list_name 	= entity.item_list_name;
+        	    } 
             });
 
     		Object.entries(map).forEach(([key, value]) => 
 	        {
-		        if (value.length)
+		        if (value.entry.length)
 		        {
     		        let data = 
     			    {
-    					event: 'widgetViewNonInteractive',
+    					event: 'view_item_list',
     					ecommerce:
     					{
-    						actionField:
-    						{
-    							list: 		  value.find(Boolean).category,
-    							currencyCode: <?php echo json_encode($block->getHelper()->getCurrency()) ?>
-    						},
-    						impressions: value
+    						item_list_id: 	value.item_list_id,
+    						item_list_name: value.item_list_name,
+    						items: 			value.entry
     					}
     				};
 

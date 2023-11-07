@@ -15,7 +15,7 @@
  *
  * @category 	Anowave
  * @package 	Anowave_Ec
- * @copyright 	Copyright (c) 2022 Anowave (https://www.anowave.com/)
+ * @copyright 	Copyright (c) 2023 Anowave (https://www.anowave.com/)
  * @license  	https://www.anowave.com/license-agreement/
  */
 
@@ -44,12 +44,8 @@ class Impression implements \Magento\Framework\Option\ArrayInterface
 		return 
 		[
 			[
-				'value' => static::MODEL_PRE_RENDER, 
-				'label' => __('Set dataLayer[] impressions before Pageview')
-			],
-			[
 				'value' => static::MODEL_POST_RENDER, 
-				'label' => __('Set dataLayer[] impressions after Pageview (requires additional tag/trigger)')
+				'label' => __('Set dataLayer[] impressions after Pageview')
 			]
 		];
 	}

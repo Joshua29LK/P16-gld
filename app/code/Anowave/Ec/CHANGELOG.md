@@ -2,7 +2,608 @@
 
 All notable changes to this project will be documented in this file.
 
-## [102.0.2.8084] - 20/06/2022
+### SEE app/code/Anowave/Ec4/CHANGELOG.md for future updates involving BOTH Anowave_Ec and Anowave_Ec4 packages
+
+Older versions
+
+## [103.7.5.8084] - 06/10/2023
+
+### Fixed
+
+- Fixed a small JS error (extra ';') character causing issues with compressed code.
+
+## [103.7.4] - 05/10/2023
+
+### Fixed
+
+- Fixed JS error related to price reload in grouped products
+
+## [103.7.3] - 05/10/2023
+
+### Added
+
+- Added ability to set tax settings for items[] array for all events (see Stores -> Configuration -> Anowave -> Google Tag Manager GA4 -> Tax Preferences -> Payload product item price)
+
+## [103.7.2] - 05/10/2023
+
+### Fixed
+
+- Fixed compatibility with Anowave_Ec4
+- Added better license key popup 
+
+## [103.7.1] - 03/10/2023
+
+### Changed
+
+- Shifted most of the code from Anowave_Ec4 (small-addon) to Anowave_Ec
+
+### Removed
+
+- Remove previous UA3 specifications and pushes. Old payload structure is no longer available
+- Removed most of the JS dispatched events in the GA4 module in favour of direct dataLayer[] initialization at render.
+- Removed checkout step option indexes which do not work anymore. 
+
+## [103.7.0] - 27/09/2023
+
+### Added
+
+- Added 2 new tax calculation options:
+
+a) Including Tax but Excluding shipping
+b) Excluding Tax but Including shipping
+
+## [103.6.9] - 21/09/2023
+
+### Fixed
+
+- Added better compatibility with Anowave_Ec4 modules. Removed license key from Anowave_Ec in favour of Anowave_Ec4. License key is now added only in Stores -> Configuration -> Anowave -> Google Tag Manager GA4 menu
+
+## [103.6.8] - 20/09/2023
+
+### Fixed
+
+- Fixed compatibility with third party modules used in widgets
+
+## [103.6.7] - 05/09/2023
+
+### Fixed
+
+- Fixed minor PHP 8.2 issue  (Exception: Deprecated Functionality: DOMElement::setAttribute(): Passing null to parameter #2 ($value) of type string is deprecated in ~/app/code/Anowave/Ec/Block/Plugin.php on line 2246)
+
+## [103.6.6] - 24/07/2023
+
+### Added
+
+- Added ability to change ecomm_prodid[] in case of URL hash pre-selection
+
+## [103.6.5] - 24/07/2023
+
+### Added
+
+- Added ability to track selected customizable options into items[] array
+
+## [103.6.4] - 24/07/2023
+
+### Fixed
+
+- Fixed GDRP/Google Consent not setting all consent to 'granted' in Generic mode
+
+## [103.6.3] - 24/07/2023
+
+### Fixed
+
+- Added Google Consent implementation for Generic mode consent
+
+## [103.6.2] - 24/07/2023
+
+### Fixed
+
+- Removed unnecessary view_item_list event firing on related producst when there are no related products
+
+## [103.6.1] - 24/07/2023
+
+### Fixed
+
+- Fixed gtag() related JS error occuring in GDRP (Generic mode)
+
+## [103.6.0] - 17/07/2023
+
+### Changed
+
+Change scope of \app\code\Anowave\Ec\Block\Plugin.php::getDom() to PUBLIC
+
+## [103.5.9] - 10/07/2023
+
+### Fixed
+
+- Added missing 'list' parameter in purchase payload
+
+## [103.5.8] - 30/06/2023
+
+### Fixed
+
+- Fixed PHP 8.2 related issue with refunds (deprecated utf8_encode)
+
+## [103.5.7] - 30/06/2023
+
+### Fixed
+
+- Added missing view_item_list event for Related/Upsell products on product detail page
+
+## [103.5.6] - 29/06/2023
+
+### Fixed
+
+- Fixed Anowave_Package compatibility with PHP 8.2
+
+## [103.5.5] - 15/06/2023
+
+### Fixed
+
+- Moved some hardcoded event names into Helper/Constants class
+- Removed some redundant code related to DOMDocument manipulation
+
+## [103.5.4] - 15/06/2023
+
+### Fixed
+
+- Removed jQuery(document).dataPost() widget dependency
+
+## [103.5.3] - 15/06/2023
+
+### Fixed
+
+- Fixed PHP 8.2/Magento 2.4.6-p1 compatibility issue related to mb_convert_encoding() using HTML-ENTITIES
+
+## [103.5.2] - 12/06/2023
+
+### Added
+
+- Added missing addToCompare event tracking in categories
+
+## [103.5.1] - 06/06/2023
+
+### Fixed
+
+- Fixed mixed namespaces in \vendor\FacebookAds
+
+## [103.5.0] - 02/06/2023
+
+### Added
+
+- Added ability to add radius to GDRP dialog for better visual
+
+### Fixed
+
+- Fixed an issue related background color of GDRP not changing
+
+## [103.4.9] - 01/06/2023
+
+### Fixed
+
+- Fixed an issue with unassigned categories (detached from any root)
+
+## [103.4.8] - 01/06/2023
+
+### Fixed
+
+- Added PHP 8.2 support
+
+## [103.4.7] - 26/05/2023
+
+### Fixed
+
+- Fixed a rare JS error related to recent update
+
+### Removed
+
+- Removed some unused code
+
+## [103.4.6] - 26/05/2023
+
+### Fixed
+
+- Fixed small JS error related to gtag() consent decline
+
+## [103.4.5] - 24/05/2023
+
+### Fixed
+
+- Fixed 'purchase' event not being GDRP compliant
+
+## [103.4.4] - 23/05/2023
+
+### Added
+
+- Added gtag('consent') support based on our GDRP solution. It is now possible to update gtag() consent using the GDRP feature in segmented mode.
+
+## [103.4.3] - 23/05/2023
+
+### Fixed
+
+- Fixed unescaped quotes in data-swatch attributes (rare case when attribute names contain single/doble quotes)
+
+## [103.4.2] - 18/05/2023
+
+### Removed
+
+- Removed checkout option tracking triggering on cart page (due to shipping estimation). checkoutOption/add_shipping_info now triggers on CHECKOUT ONLY.
+
+## [103.4.1] - 15/05/2023
+
+### Fixed
+
+- Fixed Warning: Undefined variable $category_name in app/code/Anowave/Ec/Block/Plugin.php on line 714
+
+## [103.4.0] - 14/05/2023
+
+### Fixed
+
+- Fixed some events not being GDRP compliant (view_cart)
+
+### Added
+
+- Added custom dispatched event 'ec.consent' to allow third parties to modify consent returned from AEC.CookieConsent.getConsent() method. 
+
+Developer ref: (how to use this event). 
+
+AEC.EventDispatcher.on('ec.consent', consent => 
+{
+	constent = '<your own value here>';
+});
+
+## [103.3.9] - 11/05/2023
+
+### Added
+
+- Minor performance updates
+
+## [103.3.8] - 09/05/2023
+
+### Added
+
+- Added extended support for some checkout modifications
+
+## [103.3.7] - 08/05/2023
+
+### Fixed
+
+- Specific (view_item, view_item_list) events made GDRP compliant
+
+## [103.3.6] - 12/04/2023
+
+### Fixed
+
+- Small code cleanup
+
+## [103.3.5] - 23/03/2023
+
+### Fixed
+
+- Fixed add_to_wishlist/add_to_compare events not being GDRP compliant
+
+## [103.3.4] - 21/03/2023
+
+### Fixed
+
+- Fixed an issue related to custom checkbox options  ('customize') event
+
+## [103.3.3] - 02/02/2023
+
+### Fixed
+
+- Fixed multi-store category issue
+
+## [103.3.2] - 02/02/2023
+
+### Fixed
+
+- Restored add to cart validation for setups supporting jQuery()
+
+## [103.3.1] - 02/02/2023
+
+### Fixed
+
+- Fixed compilation issue related to GDRP consent log
+
+## [103.3.0] - 23/01/2023
+
+### Added
+
+- Minor code updates
+- Changed custom cache tags to 1f94
+
+## [103.2.9] - 23/01/2023
+
+### Added
+
+- Added event_source_url parameter for FCAPI
+
+## [103.2.8] - 20/01/2023
+
+### Added
+
+- Added dataLayer[] reset feature e.g. dataLayer.push({ ecommerce: null }); prior to any new push. Option can be enabled in Stores -> Configuraton -> Anowave Extensions -> Google Tag Manager -> Enhanced Ecommerce Tracking Preferences -> Reset dataLayer[] object
+
+## [103.2.7] - 20/01/2023
+
+### Added
+
+- Minor code cleanup and compatibility updates with Anowave_Ec4 related to promotions
+
+## [103.2.6] - 20/01/2023
+
+### Added
+
+- Added 'ec.cookie.promotion.entity' dispatched event to allow for promotion modification by third party scripts
+
+## [103.2.5] - 20/01/2023
+
+### Added
+
+- Added promotion tracking compatibility with Anowave_Ec4
+
+## [103.2.4] - 12/01/2023
+
+### Fixed
+
+- Fixed an issue related to wrong category in a multi-store environment
+
+## [103.2.3] - 11/01/2023
+
+### Fixed
+
+- Minor code cleanup
+
+## [103.2.2] - 11/01/2023
+
+### Fixed
+
+- Fixed Error: Call to a member function getRegionCode() on string in vendor/anowave/ec/Helper/Data.php
+
+## [103.2.1] - 09/01/2023
+
+### Fixed
+
+- Fixed error: Exception #0 (Exception): Deprecated Functionality: preg_replace(): Passing null to parameter #3 ($subject) of type array|string is deprecated in /home/kuiperspro/domains/kuipersnautic.nl/public_html/app/code/Anowave/Ec/Helper/Data.php on line 5559
+
+## [103.2.0] - 05/01/2023
+
+### Fixed
+
+- Fixed an issue with duplicate data caused by private fallback feature enabled
+- Added maximum interval time for FB pixel load listener
+
+## [103.1.9] - 05/01/2023
+
+### Changed
+
+- Added new AEC.CookieConsent.getConsent() method to overcome a few issues related to Varnish
+
+## [103.1.8] - 05/01/2023
+
+### Changed
+
+- Optimized JS code in app/code/Anowave/Ec/view/frontend/web/js/ec.js
+
+## [103.1.7] - 19/12/2022
+
+### Added
+
+- Added missing FCAPI UserData(['state'])
+
+## [103.1.6] - 14/12/2022
+
+### Fixed
+
+- Fixed CSRF issue with datalayer controller.
+
+## [103.1.5] - 09/12/2022
+
+### Changed
+
+- Set 'region' from getRegionId() to getRegionCode() in enhanced_conversion_data variable
+
+## [103.1.4] - 28/11/2022
+
+### Fixed
+
+- Fixed compatibility issue with Anowave_Ec4
+
+## [103.1.3] - 21/11/2022
+
+### Added
+
+- Added ability to track transactions via server-side implementation ONLY (Using Google Analytics Measurement Protocol)
+
+## [103.1.2] - 17/11/2022
+
+### Fixed
+
+- Fixed an issue with sidebar remove event missing 'list' parameter
+- Fixed custom cache tags 1f94
+
+## [103.1.1] - 03/11/2022
+
+### Fixed
+
+- Fixed an issue with brand in case of multiselect brand attribute
+
+## [103.1.0] - 01/11/2022
+
+### Changed
+
+- Added custom stock dimension index in checkout products array[]
+
+## [103.0.9] - 25/10/2022
+
+### Fixed
+
+- Fixed wrong ec.js file included in the downloadable ZIP.
+
+## [103.0.8] - 18/10/2022
+
+### Fixed
+
+- Fixed missing form_key for ViewContent request (CAPI)
+
+## [103.0.7] - 12/10/2022
+
+### Fixed
+
+- Fixed CAPI ViewContent request occuring while API isn't enabled.
+
+## [103.0.6] - 12/10/2022
+
+### Fixed
+
+- Fixed PHP 8.1 error: Exception: Deprecated Functionality: addcslashes(): Passing null to parameter #1 ($string) of type string
+
+
+## [103.0.5] - 11/10/2022
+
+### Changed
+
+- Shifted CAPI ViewContent event to fire using a client-based request to overcome FPC issues
+
+## [103.0.4] - 06/10/2022
+
+### Changed
+
+- Changed AEC.ajax() method name to AEC.add()
+- ec.js cleanup
+
+## [103.0.3] - 04/10/2022
+
+### Added
+
+- Added bundle[] to purchase payload (in case of bundle purchase)
+
+## [103.0.2] - 28/09/2022
+
+### Fixed
+
+- Fixed PHP 8.1 error e.g. Deprecated Functionality: usort(): 
+
+### Added
+
+- Added ae_ec_log table to log some actions that occur in the background (such as Facebook Conversion API tracking etc.). Accessible in Admin -> Reports -> Logs
+
+## [103.0.1] - 28/09/2022
+
+### Fixed
+
+- Fixed GA4 compatibility with add_to_wishlist event from categories
+
+## [103.0.0] - 27/09/2022
+
+### Fixed
+
+- Fixed performance issues related to category loading
+
+## [102.1.9] - 09/09/2022
+
+### Added
+
+- Added 'customize' event pushed into dataLayer[] object whenever a customizable product option is selected/checked
+
+## [102.1.8] - 09/09/2022
+
+### Fixed
+
+- Fixed some wrong dates in CHANGELOG.md
+
+## [102.1.7] - 08/09/2022
+
+### Fixed
+
+- Fixed an exception triggered when credit memos are created for orders with deleted products
+
+## [102.1.6] - 08/09/2022
+
+### Added
+
+Added 'login' event dataLayer[] pusg after successful login
+
+## [102.1.5] - 07/09/2022
+
+### Added
+
+Added 'eventEmail' with customer email in newsletterSubscribe event
+
+## [102.1.4] - 05/09/2022
+
+### Fixed
+
+- Fixed duplicate impressions for widgets with multiple selectors
+
+## [102.1.3] - 15/08/2022
+
+### Fixed
+
+- Updated consistency of 'list' attribute in checkout and other parts of the site
+
+## [102.1.2] - 10/08/2022
+
+### Fixed
+
+- Fixed wrong error message in Plugin/OrderService.php
+
+## [102.1.1] - 09/08/2022
+
+### Fixed
+
+- Fixed wrong visitorLifetimeValue due to picking orders with status cancelled, fraud etc.
+
+## [102.1.0] - 05/08/2022
+
+### Added
+
+- Added *.facebook.com in form-action policy (csp_whitelist.xml)
+
+## [102.0.9] - 29/07/2022
+
+### Added
+
+- Added extended compatibility with Hyva compatibility module
+
+## [102.0.8] - 26/07/2022
+
+### Fixed
+
+- Fixed a search results page issue related to a third party module custom cache tags 1f94
+
+## [102.0.7] - 22/07/2022
+
+### Fixed
+
+- Fixed scope config errror in config screen
+
+## [102.0.6] - 07/07/2022
+
+### Fixed
+
+- Fixed Anowave_Package composer.json issue
+
+## [102.0.5] - 07/07/2022
+
+### Fixed
+
+- Fixed invalid checkout redirect on mobile (Safari/Chrome)
+
+## [102.0.4] - 05/07/2022
+
+### Fixed
+
+- Changed constructor parameters of DepresonalizePlugin from factory to direct model instance. Caused some session issues on some setups
+
+## [102.0.3] - 29/06/2022
+
+### Added
+
+- Added extended support for some third party modules
+
+## [102.0.2] - 20/06/2022
 
 ### Fixed
 
@@ -354,7 +955,7 @@ payload =
 
 - Added IP exclusion list. Suitable for disabling module for specific IPs (for cache warmers etc.)
 
-## [101.4.5] - 01/12/2022
+## [101.4.5] - 01/12/2021
 
 ### Removed
 
@@ -370,43 +971,43 @@ payload =
 - Removed jQuery() dependency in \app\code\Anowave\Ec\view\frontend\templates\events.phtml
 - Added xmlhttprequest listener (via PerformanceObserver) to re-apply click listeners for dynamically loaded content (via AJAX)
 
-## [101.4.4(3)] - 26/11/2022
+## [101.4.4(3)] - 26/11/2021
 
 ### Changed
 
 - Added indexes to ae_ec table to perform better in sales order grid
 
-## [101.4.2] - 26/11/2022
+## [101.4.2] - 26/11/2021
 
 ### Changed
 
 - Moved self-assessment statistics to separate modal dialog to avoid inflating dashboard with charts
 
-## [101.4.1] - 26/11/2022
+## [101.4.1] - 26/11/2021
 
 ### Fixed
 
 - Fixed a compilation error related to recent update (statistics)
 
-## [101.4.0] - 25/11/2022
+## [101.4.0] - 25/11/2021
 
 ### Fixed
 
 - Fixed better compatibility with Anowave_Ec4 (Measurement Protocol 4 implementation)
 
-## [101.3.9] - 25/11/2022
+## [101.3.9] - 25/11/2021
 
 ### Added
 
 - Updated self-assessment charts, added order type
 
-## [101.3.8] - 25/11/2022
+## [101.3.8] - 25/11/2021
 
 ### Fixed
 
 - Fixed wrong 'currentStore' value for direct add to cart tracking from categories
 
-## [101.3.7] - 25/11/2022
+## [101.3.7] - 25/11/2021
 
 ### Added
 
@@ -416,7 +1017,7 @@ payload =
 
 - Better compatibility with Anowave_Ec4 (https://www.anowave.com/marketplace/magento-2-extensions/magento-2-google-analytics-4-enhanced-ecommerce-tracking-gtm/) extension
 
-## [101.3.6] - 24/11/2022
+## [101.3.6] - 24/11/2021
 
 ### Added
 
@@ -432,45 +1033,45 @@ payload =
 
 - Fixed an issue with configurable child products when "Use simple SKU(s)" option is turned on
 
-## [101.3.5] - 23/11/2022
+## [101.3.5] - 23/11/2021
 
 ### Added
 
 - Added new column UA/GA4 in sales grid to mark orders that were tracked in GA (on success page)
 
-## [101.3.4] - 10/11/2022
+## [101.3.4] - 10/11/2021
 
 ### Fixed
 
 - Fixed wrong pagination for some themes
 - Added ProductView model to extend support for deferred scripts
 
-## [101.3.3] - 04/11/2022
+## [101.3.3] - 04/11/2021
 
 ### Fixed
 
 - Removed a die() statement left from debugging.
 
 
-## [101.3.2] - 03/11/2022
+## [101.3.2] - 03/11/2021
 
 ### Fixed
 
 - Fixed minor issue with upsell products related warning.
 
-## [101.3.1] - 22/10/2022
+## [101.3.1] - 22/10/2021
 
 ### Fixed
 
 - Fixed an issue with $_SERVER['HTTP_HOST'] throwing errors in cronjobs
 
-## [101.3.0] - 18/10/2022
+## [101.3.0] - 18/10/2021
 
 ### Fixed
 
 - Small code updates
 
-## [101.2.9] - 18/10/2022
+## [101.2.9] - 18/10/2021
 
 ### Changed
 
@@ -481,32 +1082,32 @@ payload =
 - Added Facebook Conversions API test_event_code to allow for proper debugging and testing
 - Improved event deduplication
 
-## [101.2.8] - 15/10/2022
+## [101.2.8] - 15/10/2021
 
 ### Fixed
 
 - Fixed missing shipping method tracking caused by recent update
 
-## [101.2.7] - 15/10/2022
+## [101.2.7] - 15/10/2021
 
 ### Added
 
 - Added Facebook Conversions API support (Supported events: ViewContent, AddToCart, InitiateCheckout, Purchase)
 - Added Event Deduplication support between Conversions API and Pixel
 
-## [101.2.6] - 13/10/2022
+## [101.2.6] - 13/10/2021
 
 ### Fixed
 
 - Fixed wrong price for grouped product detail view. (Was excl. tax, now incl. tax)
 
-## [101.2.5] - 13/10/2022
+## [101.2.5] - 13/10/2021
 
 ### Added
 
 - Added support for enhanced conversions (only for gtag.js based conversion tracking). If enabled, the module will create a global variable: enhanced_conversion_data
 
-## [101.2.4] - 13/10/2022
+## [101.2.4] - 13/10/2021
 
 ### Added
 
@@ -521,25 +1122,25 @@ facebook_latest_uuid =>
 	event: 'AddToCart'
 }
 
-## [101.2.3] - 12/10/2022
+## [101.2.3] - 12/10/2021
 
 ### Changed
 
 ### Added Facebook Pixel load listener to handle lazy consent-dependable pixel actions.
 
-## [101.2.2] - 27/09/2022
+## [101.2.2] - 27/09/2021
 
 ### Fixed
 
 - Fixed wrong AdWords Conversion Tracking value when no  currency is set in AdWords Configuration section
 
-## [101.2.1] - 23/09/2022
+## [101.2.1] - 23/09/2021
 
 ### Fixed
 
 - Minor issues related to some setup with multi-store category tree
 
-## [101.2.0] - 08/09/2022
+## [101.2.0] - 08/09/2021
 
 ### Fixed
 
@@ -553,98 +1154,98 @@ e.g.
 
 dataLayer = { event: 'summary', eventTrigger: ['ec.cookie.remove.item.data','ec.cookie.update.item.data','ec.cookie.add.data'], items:[] }
 
-## [101.1.9] - 30/08/2022
+## [101.1.9] - 30/08/2021
 
 ### Fixed
 
 - Fixed compatibility with GA4 module (https://www.anowave.com/marketplace/magento-2-extensions/magento-2-google-analytics-4-enhanced-ecommerce-tracking-gtm/)
 
-## [101.1.8] - 30/08/2022
+## [101.1.8] - 30/08/2021
 
 ### Fixed
 
 - Fixed wrong conversion currency/revenue data in previous Google AdWords Conversion tracking (does not happen with gtag.js implementation)
 
-## [101.1.7] - 18/08/2022
+## [101.1.7] - 18/08/2021
 
 ### Fixed
 
 - Added AEC.Const check in select-payment-method mixin to support a case when module is disabled from admin panel
 
-## [101.1.6] - 16/08/2022
+## [101.1.6] - 16/08/2021
 
 ### Fixed
 
 - Fixed wrong content_ids[] (FB pixel) when Use simple SKU's enabled + Use first child sku
 
-## [101.1.5] - 10/08/2022
+## [101.1.5] - 10/08/2021
 
 ### Fixed
 
 - Fixed a wrong category chain in product detail page for some themes (very rare case)
 
-## [101.1.4] - 06/08/2022
+## [101.1.4] - 06/08/2021
 
 ### Fixed
 
 - Fixed wrong return value in \app\code\Anowave\Ec\view\frontend\web\js\sidebar.js
 
-## [101.1.3] - 30/07/2022
+## [101.1.3] - 30/07/2021
 
 ### Fixed
 
 - Changed global 'data' variable in checkout.phtml to 'checkout_data' to reduce conflicts with other modules defining global 'data' variable
 
-## [101.1.2] - 27/07/2022
+## [101.1.2] - 27/07/2021
 
 ### Fixed
 
 - Sorted child products for first variant SKU to set the lowest possible price
 
-## [101.1.1] - 26/07/2022
+## [101.1.1] - 26/07/2021
 
 ### Fixed
 
 - Minor code optimisation
 
-## [101.1.0] - 26/07/2022
+## [101.1.0] - 26/07/2021
 
 ### Added
 
 - Added "Use first variant SKU(s)" option. If enabled, the module will push the first variant SKU on product detail page instead of the configurable SKU. This allows for better ecomm_prodid[] matches.
 - Added 'variant_id' in success payload to allow for accessing the variant SKU of a configurable product 
 
-## [101.0.9] - 14/07/2022
+## [101.0.9] - 14/07/2021
 
 ### Added
 
 - Added "ACCEPT ALL" menu in Cookie popup
 
-## [101.0.8] - 14/07/2022
+## [101.0.8] - 14/07/2021
 
 ### Fixed
 
 - Fixed wrong error message related to missing ae_ec table
 
-## [101.0.7] - 02/07/2022
+## [101.0.7] - 02/07/2021
 
 ### Fixed
 
 - Fixed an issue related to widgets and PageBuilder. 
 
-## [101.0.6] - 30/06/2022
+## [101.0.6] - 30/06/2021
 
 ### Fixed
 
 - Fixed duplicate impression data caused by multiple productClick events in Search results
 
-## [101.0.5] - 30/06/2022
+## [101.0.5] - 30/06/2021
 
 ### Fixed
 
 - Fixed duplicate impressions list caused by multiple productClick events
 
-## [101.0.4] - 24/06/2022
+## [101.0.4] - 24/06/2021
 
 ### Changed (IMPORTANT)
 
@@ -659,206 +1260,206 @@ These are mandatory for transaction tracking to work properly
 
 - Fixed multi-shipping tracking
 
-## [101.0.3] - 22/06/2022
+## [101.0.3] - 22/06/2021
 
 ### Fixed
 
 - Added 'list' parameter to product[] collection in categories and search results. actionField.list seems to not work despite documentation from Google.
 
-## [101.0.2] - 21/06/2022
+## [101.0.2] - 21/06/2021
 
 ### Fixed
 
 - Remove optional chaining for wider browser support (SAFARI < 12)
 
-## [101.0.1] - 14/06/2022
+## [101.0.1] - 14/06/2021
 
 ### Fixed
 
 - Minor pre-release fixes
 
-## [101.0.0] - 14/06/2022
+## [101.0.0] - 14/06/2021
 
 ### Added
 
 - Added transaction track table ae_ec
 - Disabled order cancel for orders that were not sent to GA in the first place
 
-## [100.9.8] - 14/06/2022
+## [100.9.8] - 14/06/2021
 
 ### Fixed
 
 - Fixed small footer JS issue
 
-## [100.9.7] - 24/05/2022
+## [100.9.7] - 24/05/2021
 
 ### Fixed
 
 - Fixed a small issue in \app\code\Anowave\Ec\Plugin\JsFooterPlugin.php related to API calls compatibility
 
-## [100.9.6] - 18/05/2022
+## [100.9.6] - 18/05/2021
 
 ### Fixed
 
 - Implemented better compatibility with Anowave_Ec4
 
-## [100.9.5] - 13/05/2022
+## [100.9.5] - 13/05/2021
 
 ### Fixed
 
 - Fixed a small JS bug
 
-## [100.9.4] - 11/05/2022
+## [100.9.4] - 11/05/2021
 
 ### Fixed
 
 - Fixed a small JS error occuring when module is not enabled (from config) but GTM snippet is present
 
-## [100.9.3] - 23/04/2022
+## [100.9.3] - 23/04/2021
 
 ### Fixed
 
 - Reduced some jQuery usage. Improved script performance.
 
-## [100.9.2] - 19/04/2022
+## [100.9.2] - 19/04/2021
 
 ### Fixed
 
 - Small fixes related to merge/bundle/minify/move_to_bottom
 
-## [100.9.1] - 19/04/2022
+## [100.9.1] - 19/04/2021
 
 ### Fixed
 
 - Updated cookiewidget
 
-## [100.9.0] - 19/04/2022
+## [100.9.0] - 19/04/2021
 
 ### Added
 
 - Improved GDPR visual / added better-looking checkboxes
 
-## [100.8.9] - 19/04/2022
+## [100.8.9] - 19/04/2021
 
 ### Fixed
 
 - Fixed 'Search' event not firing correctly with GDPR
 
-## [100.8.8] - 19/04/2022
+## [100.8.8] - 19/04/2021
 
 ### Fixed
 
 - Fixed 'InitateCheckout' event not firing correctly with GDRP
 
-## [100.8.7] - 18/04/2022
+## [100.8.7] - 18/04/2021
 
 ### Fixed
 
 - Fixed FB Pixel / GDPR compatibility issue
 
-## [100.8.6] - 18/04/2022
+## [100.8.6] - 18/04/2021
 
 ### Fixed
 
 - Fixed a problem related to ec_cache
 
-## [100.8.5] - 07/04/2022
+## [100.8.5] - 07/04/2021
 
 ### Fixed
 
 - Fixed invalid GTIN parameters in Customer Reviews
 
-## [100.8.4] - 07/04/2022
+## [100.8.4] - 07/04/2021
 
 ### Fixed
 
 - Fixed FB pixel not working if consent mode is not enabled.
 
-## [100.8.3] - 05/04/2022
+## [100.8.3] - 05/04/2021
 
 ### Fixed
 
 - Fixed caching issue with GDPR widget
 
-## [100.8.2] - 25/03/2022
+## [100.8.2] - 25/03/2021
 
 ### Fixed
 
 - Fixed an autoloading composer issue
 
-## [100.8.1] - 24/03/2022
+## [100.8.1] - 24/03/2021
 
 ### Fixed
 
 - Fixed minor issue related to composer 2
 
-## [100.8.0] - 24/03/2022
+## [100.8.0] - 24/03/2021
 
 ### Added
 
 - Added a 'placeOrder' event when button is clicked
 
-## [100.7.9] - 24/03/2022
+## [100.7.9] - 24/03/2021
 
 ### Fixed
 
 - Fixed 'composer dump-autoload -o' warning messages (API)(psr-0 compatibility with Composer 2)
 
-## [100.7.8] - 04/03/2022
+## [100.7.8] - 04/03/2021
 
 ### Fixed
 
 - Fixed mixin applying chain (sidebar.js)
 
-## [100.7.7] - 22/02/2022
+## [100.7.7] - 22/02/2021
 
 ### Changed
 
 - Changed FB pixel to load after consent is granted
 
-## [100.7.6] - 17/02/2022
+## [100.7.6] - 17/02/2021
 
 ### Fixed
 
 - Removed a var_dump()
 
-## [100.7.5] - 17/02/2022
+## [100.7.5] - 17/02/2021
 
 ### Fixed
 
 - Updated composer.json version
 
-## [100.7.4] - 17/02/2022
+## [100.7.4] - 17/02/2021
 
 ### Fixed
 
 - Fixed fbq() grant sequence
 
-## [100.7.3] - 11/02/2022
+## [100.7.3] - 11/02/2021
 
 ### Fixed
 
 - Fixed a small issue with fbq()
 
-## [100.7.2] - 10/02/2022
+## [100.7.2] - 10/02/2021
 
 ### Fixed
 
 - Fixed fbq('grant') & fbq('revoke') not firing on subsequent requests
 
-## [100.7.1] - 02/02/2022
+## [100.7.1] - 02/02/2021
 
 ### Fixed
 
 - Added data-attributes to impression payload
 
-## [100.7.0] - 02/02/2022
+## [100.7.0] - 02/02/2021
 
 ### Added
 
 - Added visitorLifetimeOrders to reflect number of orders placed by current logged customer
 
-## [100.6.9] - 31/01/2022
+## [100.6.9] - 31/01/2021
 
 ### Fixed
 

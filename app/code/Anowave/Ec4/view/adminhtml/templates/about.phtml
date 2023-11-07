@@ -2,58 +2,55 @@
 	<a href="javascript:void(0)" data-ga4-guide="true">User Guide</a>
 </div>
 <div data-ga4-guide-content="true" style="display:none">
-    <p>Anowave_Ec4 module works on top of our Anowave_Ec module, it's designed to modify the dataLayer[] object as per GA4 specification (<a href="https://developers.google.com/tag-manager/ecommerce-ga4" target="_blank">https://developers.google.com/tag-manager/ecommerce-ga4)</a></p>
-    
-    <p><strong>When installed:</strong></p>
-    
-    <ol>
-    	<li>A new field called Measurement ID appears in Google Tag Manager API configuration section. This is obtained from Google Analytics 4 and it's in the following format: G-XXXXXXXXXX</li>
-    	<li>A 3 new checkboxes appear that allow you to: 
-    		<p>
-    			a) Create GA4 variables
-                b) Create GA4 triggers
-                c) Create GA4 tags (creates also the Google Analytics 4 configuration tag)
-    		</p>
-    	</li>
-    	<li>
-    		<p><strong>Google Analytics 4 Configuration tag</strong></p>
-    		<p>
-    			The Google Analytics: GA4 Configuration tag initializes Google Analytics for your Google Analytics 4 property on a particular page. It handles behavior such as setting of Google Analytics cookies, sending automatic and enhanced measurement events, and declaration of common settings. This is in effect what tracks Pageviews and installs Google Analytics 4 on your site
-    		</p>
-    	</li>
-    	<li>
-    		<p><strong>dataLayer[] modifications</strong></p>
-    		<p>dataLayer[] object gets modified as per GA4 specification (https://developers.google.com/tag-manager/ecommerce-ga4)</p>
-    	</li>
-    	<li>
-    		<p><strong>To our understanding</strong></p>
-    		<p>It's better to create a new empty container and use the API to configure it for GA4 by clicking only the GA4 checkboxes from our API, this will create the GA4 variables, triggers and tags including the Google Analytics 4 Configuration tag. Having the container inflated with the old tags is not a mistake, however they may not fire or if some of them fired it could duplicate and/or corrupt data.</p>
-    	</li>
-    	<li>
-    		<p><strong>There are certain limitations of GA4</strong> (due to being in beta mode probably) which you have to be aware of: </p>
-    		<p>
-    			a) You can no longer track checkout in terms of checkout steps. There are a few events dispatched: begin_checkout, add_payment_info, add_shipping_info<br />
-    			b) Product list attribution no longer works, it's simply not available yet in GA4<br />
-    			c) There are no more product-scoped dimensions. 
-    		</p>
-    	</li>
-    	<li>
-    		<p><strong>Running GA4 and UA in parallel</strong></p>
-    		<p>When you activate GA4, UA will not work properly simply because dataLayer[] object is modified to match the GA4 specification in terms of event names, however we have designed the dataLayer[] to hold the data required by both UA and the GA4.</p>
-    		<p>To run them both, a change is required in the triggers for UA tags. Since GA4 events are different, some of the event based tags in UA will not fire automatically.</p>
-    		<p>For example addToCart in UA is add_to_cart in GA4. Thus Event Equals Add To Cart trigger will not fire. To get the EE Add To Cart trigger working, you must change its trigger from Event Equals Add To Cart to GA4 Event Equals Add To Cart. The same logic applies for other tags such as EE Remove From Cart etc.</p>
-    		<p>Tag changes required: </p>
-    		<p>
-    			1. EE Add To Cart tag must be changed to fire on GA4 Event Equals Add To Cart trigger <br />
-                2. EE Remove From Cart tag must be changed to fire on GA4 Event Equals Remove From Cart<br />
-                3. EE Product Click tag must be changed to fire on GA4 Event Equals Select Item<br />
-                4. EE Async Impression tag must be changed to fire on GA4 Event Equals View Item List<br />
-                5. EE Promotion view tag must be changed to fire on GA4 Event Equals Select Promotion<br />
-                6. EE Promotion Click tag must be changed to fire on GA4 Event Equals View Promotion
-    		</p>
-    		<p>If you plan to have GA4 and UA configured in separate containers, it is possible to add both snippets in the GTM head field from the configuration. This will load them both on frontend.</p>
-    	</li>
-    </ol>       
+	<p><strong>Step 1 - Activation &amp; Licensing</strong></p>
+	<ol>
+		<li>Enable both modules e.g. Google Tag Manager and Google Tag Manager GA4 by setting Enable dropdown to 'Yes' for both.</li>
+		<li>Add license key only in Stores -> Configuration -> Anowave -> Google Tag Manager GA4 (this same page). The main module will activate automatically.</li>
+	</ol>
+	<p><strong>Step 2 - Adding GTM snippet</strong></p>
+	<ol>
+		<li>Go to <a href="https://tagmanager.google.com/#/home" target="_blank">GTM</a> -> (Pick a container) -> Admin -> Install Google Tag Manager</li>
+		<li>Copy both HEAD and BODY snippets and insert them in Stores -> Configuration -> Anowave -> Google Tag Manager -> Google Tag Manager Code (Head) &amp; Google Tag Manager Code (Body) respectively.</li>
+	</ol>
+	<p><strong>Step 3 - Configure GTM Container using the built-in API</strong></p>
+	<ol>
+		<li>Go to Stores -> Configuration -> Anowave -> Google Tag Manager -> Google Tag Manager <sup>API</sup> section</li>
+		<li>Insert your GA4 Measurement ID (obtained from your Google Analytics 4 property settings)</li>
+		<li>Insert your GTM Account ID (available in <a href="https://tagmanager.google.com/#/home" target="_blank">GTM</a> -> (Pick a container) -> Admin -> Account Settings</li>
+		<li>Once added, Save config. Once config is Saved, click 'Sign in with Google'</li>
+		<li>Authorize the application with permissions to create and edit tags, triggers and variables</li>
+		<li>
+			Once process is over, you shall see the config screen again but now with 3 different checkboxes available that allow you to configure your container automatically.<br />
+        	<svg width="300" height="80" xmlns="http://www.w3.org/2000/svg">
+            	<style>
+                    g text { font-size:12px; }
+                </style>
+            	<g transform="translate(0,10)">
+            		<rect x="1" y="1" width="15" height="15" fill="transparent" stroke="rgb(200,200,200,1)" />
+            		<text x="25" y="12">Create variables (Google Analytics 4)</text>
+            		<path d="M3 8 L8 12 L14 4" stroke="rgba(0,0,0,1)" fill="transparent" filter="drop-shadow(1px 1px 1px rgb(0 0 0 / 0.2))" />
+            	</g>
+            	<g transform="translate(0,30)">
+            		<rect x="1" y="1" width="15" height="15" fill="transparent" stroke="rgb(200,200,200,1)" />
+            		<text x="25" y="12">Create triggers (Google Analytics 4)</text>
+            		<path d="M3 8 L8 12 L14 4" stroke="rgba(0,0,0,1)" fill="transparent" filter="drop-shadow(1px 1px 1px rgb(0 0 0 / 0.2))" />
+            	</g>
+            	<g transform="translate(0,50)">
+            		<rect x="1" y="1" width="15" height="15" fill="transparent" stroke="rgb(200,200,200,1)" />
+            		<text x="25" y="12">Create tags (Google Analytics 4)</text>
+            		<path d="M3 8 L8 12 L14 4" stroke="rgba(0,0,0,1)" fill="transparent" filter="drop-shadow(1px 1px 1px rgb(0 0 0 / 0.2))" />
+            	</g>
+            </svg>
+		</li>
+		<li>Select ALL checkboxes and click "Save config". Once done, you shall see a confirmation that GTM container is configured successfully.</li>
+		<li>Go to <a href="https://tagmanager.google.com/#/home" target="_blank">GTM</a> -> (Pick a container) -> Click 'PUBLISH' so changes could take effect.</li>
+	</ol>
+	<p><strong>Step 4 - Advanced Configuration</strong></p>
+	<ol>
+		<li>
+			For detailed User Guide go to <a href="https://www.anowave.com/marketplace/magento-2-extensions/magento-2-google-analytics-4-enhanced-ecommerce-tracking-gtm/" target="_blank">Magento 2 Google Analytics 4 Enhanced Ecommerce Tracking </a> -> User Guide & Documentation
+		</li>
+	</ol>
 </div>
 <script>
 	require(['jquery','Magento_Ui/js/modal/modal'],function($,modal)

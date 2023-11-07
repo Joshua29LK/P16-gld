@@ -15,7 +15,7 @@
  *
  * @category 	Anowave
  * @package 	Anowave_Ec
- * @copyright 	Copyright (c) 2022 Anowave (https://www.anowave.com/)
+ * @copyright 	Copyright (c) 2023 Anowave (https://www.anowave.com/)
  * @license  	https://www.anowave.com/license-agreement/
  */
 
@@ -67,9 +67,9 @@ class Refund implements ObserverInterface
 	 * @var \Magento\Framework\App\Config\ScopeConfigInterface
 	 */
 	protected $scopeConfig;
-	
+
 	/**
-	 * Constructor 
+	 * Constructor
 	 * 
 	 * @param \Magento\Framework\View\Element\BlockFactory $blockFactory
 	 * @param \Anowave\Ec\Helper\Data $helper
@@ -78,6 +78,7 @@ class Refund implements ObserverInterface
 	 * @param \Magento\Catalog\Model\ProductFactory $productFactory
 	 * @param \Magento\Catalog\Model\CategoryRepository $categoryRepository
 	 * @param \Magento\Catalog\Model\ResourceModel\Eav\AttributeFactory $attribute
+	 * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
 	 */
 	public function __construct
 	(
@@ -171,7 +172,7 @@ class Refund implements ObserverInterface
 	    {
 	        return true;
 	    }
-
+	    
 		if ($order->getTotalRefunded() > 0)
 		{
 			if ($order->getIsVirtual())
@@ -333,10 +334,7 @@ class Refund implements ObserverInterface
 					$payload["pr{$key}qt"] = $product['quantity'];
 				}
 				
-				curl_setopt($analytics, CURLOPT_POSTFIELDS, utf8_encode
-				(
-					http_build_query($payload)
-				));
+				curl_setopt($analytics, CURLOPT_POSTFIELDS, mb_convert_encoding(http_build_query($payload),'UTF-8', mb_list_encodings()));
 			}
 			
 			try

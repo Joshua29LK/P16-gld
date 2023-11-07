@@ -1,6 +1,6 @@
 <script data-ommit="true">
 
-	var info = <?php echo $block->getMultiCheckoutPush($block->getStep()) ?>, data = info.push;
+	AEC.Checkout.data = <?php echo $block->getMultiCheckoutPush($block->getStep()) ?>;
 
 	(function(google_tag_params)
 	{
@@ -19,23 +19,23 @@
 		
 		<?php endif ?>
 		
-	})(info.google_tag_params);
+	})(AEC.Checkout.getData().google_tag_params);
 
 	<?php
 	/**
-	 * Set default checkout data
+	 * Flag checkout
 	 */
 	?>
-	
-	AEC.Checkout.data = data;
 
+	AEC.Checkout.init = true;
+			
 	<?php
 	/**
 	 * Initial checkout step
 	 */
 	?>
 
-	AEC.Cookie.checkout(data).push(dataLayer);
+	AEC.Cookie.checkout(AEC.Checkout.getPayload()).push(dataLayer);
 
 	<?php
 	/**
@@ -45,11 +45,11 @@
 	
 	<?php if ($block->getHelper()->facebook()):?>
 	
-    	var content_ids = [], content_length = data.ecommerce.checkout.products.length;
+    	var content_ids = [], content_length = AEC.Checkout.getPayload().ecommerce.items.length;
     
-    	for (var i = 0, l = data.ecommerce.checkout.products.length; i < l; i++)
+    	for (var i = 0, l = AEC.Checkout.getPayload().ecommerce.items.length; i < l; i++)
     	{
-    		content_ids.push(data.ecommerce.checkout.products[i].id);
+    		content_ids.push(AEC.Checkout.getPayload().ecommerce.items[i].item_id);
     	}
     
     	(function(callback)
@@ -64,7 +64,7 @@
     		}
     	})
     	(
-    		(function(info, content_ids, content_length)
+    		(function(content_ids, content_length)
     		{
     			return function()
     			{
@@ -72,7 +72,7 @@
     				{
     					fbq("track", "InitiateCheckout", 
         				{
-        					value:			info.total,
+        					value:			AEC.Checkout.getData().total,
         					content_type:	'product',
         					content_name: 	'checkout',
         					content_ids:	content_ids,
@@ -82,7 +82,7 @@
         				{ eventID: AEC.UUID.generate({ event: 'InitiateCheckout' }) });
     				});
     			}
-    		})(info,content_ids,content_length)
+    		})(content_ids,content_length)
     	);
 	
 	<?php endif ?>

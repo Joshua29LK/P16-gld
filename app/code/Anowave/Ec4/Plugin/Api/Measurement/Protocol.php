@@ -15,7 +15,7 @@
  *
  * @category 	Anowave
  * @package 	Anowave_Ec
- * @copyright 	Copyright (c) 2022 Anowave (http://www.anowave.com/)
+ * @copyright 	Copyright (c) 2023 Anowave (http://www.anowave.com/)
  * @license  	http://www.anowave.com/license-agreement/
  */
 
@@ -25,7 +25,6 @@ use Magento\Framework\App\Response\Http;
 
 class Protocol
 {
-    
     /**
      * @var \Anowave\Ec4\Helper\Data
      */
@@ -46,6 +45,22 @@ class Protocol
      */
     protected $state;
     
+    /**
+     * @var \Magento\Sales\Model\OrderFactory
+     */
+    protected $orderFactory;
+    
+    /**
+     * @var \Anowave\Ec\Logger\Logger
+     */
+    protected $logger;
+    
+    /**
+     * Put in debug mode
+     * 
+     * @var string
+     */
+    private $debug = false;
     
     /**
      * Constructor 
@@ -54,13 +69,17 @@ class Protocol
      * @param \Magento\Framework\Message\ManagerInterface $messageManager
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Framework\App\State $state
+     * @param \Magento\Sales\Model\OrderFactory $orderFactory
+     * @param \Anowave\Ec\Logger\Logger $logger
      */
     public function __construct
     (
         \Anowave\Ec4\Helper\Data $helper,
         \Magento\Framework\Message\ManagerInterface $messageManager,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\Framework\App\State $state
+        \Magento\Framework\App\State $state,
+        \Magento\Sales\Model\OrderFactory $orderFactory,
+        \Anowave\Ec\Logger\Logger $logger
     )
     {
         /**
@@ -90,6 +109,19 @@ class Protocol
          * @var \Magento\Framework\App\State $state
          */
         $this->state = $state;
+        
+        /**
+         * 
+         * @var \Magento\Sales\Model\OrderFactory $orderFactory
+         */
+        $this->orderFactory = $orderFactory;
+        
+        /**
+         * Set logger 
+         * 
+         * @var \Anowave\Ec4\Plugin\Api\Measurement\Protocol $logger
+         */
+        $this->logger = $logger;
     }
     
     /**
@@ -102,9 +134,9 @@ class Protocol
      * @return array
      */
     public function aroundPurchase(\Anowave\Ec\Model\Api\Measurement\Protocol $interceptor, callable $proceed, \Magento\Sales\Model\Order $order, $reverse = false)
-    {
-        $measurement_id         = $this->helper->getMeasurementId();
-        $measurement_api_secret = $this->helper->getMeasurementApiSecret();
+    { 
+        $measurement_id         = $this->getOrderMeasurementId($order);
+        $measurement_api_secret = $this->getOrderMeasurementApiSecret($order);
         
         /**
          * Get client id 
@@ -134,18 +166,27 @@ class Protocol
             $index = 1;
             
             /**
+             * List name
+             * 
+             * @var \Magento\Framework\Phrase $list
+             */
+            $list = __('Admin orders');
+            
+            /**
              * Loop products
              */
             foreach ($interceptor->getProducts($order) as $product)
             {
                 $item = 
                 [
-                    'index'         =>          $index,
-                    'item_id'       =>          @$product['id'],
-                    'item_name'     =>          @$product['name'],
-                    'item_brand'    => (string) @$product['brand'],
-                    'price'         => (float)  @$product['price'],
-                    'quantity'      => (int)    @$product['quantity']
+                    'index'             =>          $index,
+                    'item_id'           => (string) @$product['id'],
+                    'item_list_id'      => (string)  $list,
+                    'item_list_name'    => (string)  $list,
+                    'item_name'         => (string) @$product['name'],
+                    'item_brand'        => (string) @$product['brand'],
+                    'price'             => (float)  @$product['price'],
+                    'quantity'          => (int)    @$product['quantity']
                 ];
                 
                 /**
@@ -158,7 +199,7 @@ class Protocol
                     $item['price'] *= -1;
                 }
                 
-                $categories = explode(chr(47), @$product['category']);
+                $categories = explode(chr(47), (string) @$product['category']);
                 
                 if ($categories)
                 {
@@ -197,7 +238,7 @@ class Protocol
                             'tax'	         => (float) $order->getTaxAmount(),
                             'affiliation'    => $this->helper->getBaseHelper()->escape
                             (
-                                $this->helper->getBaseHelper()->getStoreName()
+                                $order->getStore()->getName()
                             ),
                             'items' => $items,
                             'traffic_type' => $this->state->getAreaCode()
@@ -213,7 +254,10 @@ class Protocol
                 $data['events'][0]['params']['tax']      *= -1;
             }
 
-            $analytics = curl_init("https://www.google-analytics.com/mp/collect?measurement_id={$measurement_id}&api_secret={$measurement_api_secret}");
+            $analytics = curl_init
+            (
+                $this->getGateway($measurement_id, $measurement_api_secret)
+            );
             
             curl_setopt($analytics, CURLOPT_HEADER, 		0);
             curl_setopt($analytics, CURLOPT_RETURNTRANSFER, 1);
@@ -221,10 +265,7 @@ class Protocol
             curl_setopt($analytics, CURLOPT_SSL_VERIFYHOST, 0);
             curl_setopt($analytics, CURLOPT_SSL_VERIFYPEER, 0);
             curl_setopt($analytics, CURLOPT_USERAGENT,		'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.13) Gecko/20080311 Firefox/2.0.0.13');
-            curl_setopt($analytics, CURLOPT_POSTFIELDS,     utf8_encode
-            (
-                json_encode($data)
-            ));
+            curl_setopt($analytics, CURLOPT_POSTFIELDS,     mb_convert_encoding(json_encode($data, JSON_UNESCAPED_UNICODE), 'UTF-8', mb_list_encodings()));
             
             try
             {
@@ -234,26 +275,172 @@ class Protocol
                 {
                     $this->messageManager->addNoticeMessage(json_encode($data, JSON_PRETTY_PRINT));
                 }
-
+                
                 if (!curl_error($analytics) && $response)
                 {
                     return $interceptor;
                 }
             }
-            catch (\Exception $e) {}
+            catch (\Exception $e) 
+            {
+                $this->logger->info($e->getMessage());
+            }
         }
-
+        
         return $proceed($order, $reverse);
     }
     
     /**
-     * Get UA-ID
+     * Around fallback 
+     * 
+     * @param \Anowave\Ec\Model\Api\Measurement\Protocol $interceptor
+     * @param callable $proceed
+     * @param array $params
+     * @return \Anowave\Ec\Model\Api\Measurement\Protocol|unknown
+     */
+    public function aroundFallback(\Anowave\Ec\Model\Api\Measurement\Protocol $interceptor, callable $proceed, array $params = [])
+    {
+        if (isset($params['data']) && is_array($params['data']) && count($params['data']) > 0)
+        {
+            $data = reset($params['data']);
+            
+            switch ($data['event'])
+            {
+                case \Anowave\Ec4\Model\Api::GA4_EVENT_VIEW_ITEM:
+                    
+                    return $this->track($interceptor, \Anowave\Ec4\Model\Api::GA4_EVENT_VIEW_ITEM, $data['ecommerce']);
+                    
+                case \Anowave\Ec4\Model\Api::GA4_EVENT_VIEW_ITEM_LIST:
+                    
+                    return $this->track($interceptor, \Anowave\Ec4\Model\Api::GA4_EVENT_VIEW_ITEM_LIST, $data['ecommerce']);
+                    
+                    break;
+                    
+                case \Anowave\Ec4\Model\Api::GA4_EVENT_PURCHASE:
+                    
+                    $order = $this->orderFactory->create()->loadByIncrementId($data['ecommerce']['purchase']['transaction_id']);
+                    
+                    if ($order && $order->getId())
+                    {
+                        return $interceptor->purchase($order);
+                    }
+                    
+                    break;
+                    
+            }
+        }
+        
+        return $proceed($params);
+    }
+    
+    /**
+     * Track event 
+     * 
+     * @param string $event
+     * @param array $payload
+     */
+    public function track(\Anowave\Ec\Model\Api\Measurement\Protocol $interceptor, string $event = '', array $params = [])
+    {
+        $measurement_id         = $this->getOrderMeasurementId();
+        $measurement_api_secret = $this->getOrderMeasurementApiSecret();
+        
+        /**
+         * Get client id
+         *
+         * @var Ambiguous $cid
+         */
+        $cid = $interceptor->getCID();
+        
+        $payload = function(array $events = []) use ($measurement_id, $measurement_api_secret, $cid)
+        {
+            return
+            [
+                'client_id' => $cid,
+                'events'    => $events
+            ];
+        };
+        
+        if (!$params || !isset($params['items']))
+        {
+            $this->logger->info('Missing items[] array from parameters');
+            
+            return false;
+        }
+        
+        if ($measurement_id && $measurement_api_secret)
+        {
+            $args = 
+            [
+                'name' => $event,
+                'params' =>
+                [
+                    'items'    => $params['items']
+                ]
+            ];
+            
+            if (isset($params['currency']))
+            {
+                $args['params']['currency'] = $params['currency'];
+            }
+            
+            if (isset($params['value']))
+            {
+                $args['params']['value'] = $params['value'];
+            }
+            
+            $data = $payload([$args]);
+            
+            $analytics = curl_init
+            (
+                $this->getGateway($measurement_id, $measurement_api_secret)
+            );
+            
+            curl_setopt($analytics, CURLOPT_HEADER, 		0);
+            curl_setopt($analytics, CURLOPT_RETURNTRANSFER, 1);
+            curl_setopt($analytics, CURLOPT_POST, 			1);
+            curl_setopt($analytics, CURLOPT_SSL_VERIFYHOST, 0);
+            curl_setopt($analytics, CURLOPT_SSL_VERIFYPEER, 0);
+            curl_setopt($analytics, CURLOPT_USERAGENT,		'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.13) Gecko/20080311 Firefox/2.0.0.13');
+            curl_setopt($analytics, CURLOPT_POSTFIELDS,     mb_convert_encoding(json_encode($data, JSON_UNESCAPED_UNICODE), 'UTF-8', mb_list_encodings()));
+            
+            try
+            {
+                $response = curl_exec($analytics);
+                
+                if ($this->debug)
+                {
+                    $this->logger->info($response);
+                }
+                
+                if ($this->helper->getBaseHelper()->useDebugMode())
+                {
+                    $this->messageManager->addNoticeMessage(json_encode($data, JSON_PRETTY_PRINT));
+                }
+
+                if (!curl_error($analytics) && $response)
+                {
+                    return true;
+                }
+            }
+            catch (\Exception $e) 
+            {
+                $this->logger->info($e->getMessage());
+            }
+        }
+        
+        return false;
+    }
+    
+    /**
+     * Get Measurement ID
      *
      * @param \Magento\Sales\Model\Order $order
      * @return string
      */
     public function afterGetUA(\Anowave\Ec\Model\Api\Measurement\Protocol $interceptor, $result, \Magento\Sales\Model\Order $order = null)
     {
+        $measurement_id = null;
+        
         if ($order && $order->getId())
         {
             return trim
@@ -264,10 +451,63 @@ class Protocol
         
         return trim
         (
-            $this->helper->getConfig
-            (
-                $this->helper->getMeasurementIdConfig()
-            )
+            (string) $this->helper->getConfig($this->helper->getMeasurementIdConfig())
         );
+    }
+
+    /**
+     * Get measurement ID from order
+     *
+     * @param \Magento\Sales\Model\Order $order
+     * @return string
+     */
+    protected function getOrderMeasurementId(\Magento\Sales\Model\Order $order = null) : string
+    {
+        if ($order)
+        {
+            return trim
+            (
+                (string) $this->scopeConfig->getValue($this->helper->getMeasurementIdConfig(), \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $order->getStore())
+            );
+        }
+        
+        return trim
+        (
+            (string) $this->helper->getConfig($this->helper->getMeasurementIdConfig(), \Magento\Store\Model\ScopeInterface::SCOPE_STORE)
+        );
+    }
+    
+    /**
+     * Get measurement secret from order
+     *
+     * @param \Magento\Sales\Model\Order $order
+     * @return string
+     */
+    protected function getOrderMeasurementApiSecret(\Magento\Sales\Model\Order $order = null) : string
+    {
+        if ($order)
+        {
+            return trim
+            (
+                (string) $this->scopeConfig->getValue('ec/api/google_gtm_ua4_measurement_api_secret', \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $order->getStore())
+            );
+        }
+        
+        return trim
+        (
+            (string) $this->scopeConfig->getValue('ec/api/google_gtm_ua4_measurement_api_secret', \Magento\Store\Model\ScopeInterface::SCOPE_STORE)
+        );
+    }
+    
+    /**
+     * Get measurement protocol gateway 
+     * 
+     * @param sring $measurement_id
+     * @param string $measurement_api_secret
+     * @return string
+     */
+    private function getGateway(string $measurement_id = '', string $measurement_api_secret = '') : string
+    {
+        return sprintf("https://www.google-analytics.com/%smp/collect?measurement_id=%s&api_secret=%s", ($this->debug ? 'debug/' : ''), $measurement_id, $measurement_api_secret);
     }
 }

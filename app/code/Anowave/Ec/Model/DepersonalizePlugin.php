@@ -15,7 +15,7 @@
  *
  * @category 	Anowave
  * @package 	Anowave_Ec
- * @copyright 	Copyright (c) 2022 Anowave (https://www.anowave.com/)
+ * @copyright 	Copyright (c) 2023 Anowave (https://www.anowave.com/)
  * @license  	https://www.anowave.com/license-agreement/
  */
 
@@ -76,7 +76,7 @@ class DepersonalizePlugin
 	 * 
 	 * @param DepersonalizeChecker $depersonalizeChecker
 	 * @param \Magento\Framework\Session\SessionManagerInterface $session
-	 * @param \Magento\Customer\Model\SessionFactory $customerSessionFactory
+	 * @param \Magento\Customer\Model\Session $customerSession
 	 * @param \Magento\Customer\Model\CustomerFactory $customerFactory
 	 * @param \Magento\Customer\Model\Visitor $visitor
 	 * @param \Magento\Framework\Registry $registry
@@ -86,7 +86,7 @@ class DepersonalizePlugin
 	(
 		DepersonalizeChecker $depersonalizeChecker,
 		\Magento\Framework\Session\SessionManagerInterface $session,
-		\Magento\Customer\Model\SessionFactory $customerSessionFactory,
+		\Magento\Customer\Model\Session $customerSession,
 		\Magento\Customer\Model\CustomerFactory $customerFactory,
 		\Magento\Customer\Model\Visitor $visitor,
 		\Magento\Framework\Registry $registry,
@@ -105,7 +105,7 @@ class DepersonalizePlugin
 		 * 
 		 * @var \Magento\Customer\Model\Session $customerSession
 		 */
-		$this->customerSession = $customerSessionFactory->create();
+		$this->customerSession = $customerSession;
 		
 		/**
 		 * Set customer factory 
@@ -144,7 +144,7 @@ class DepersonalizePlugin
 	 * @return \Magento\Framework\View\LayoutInterface
 	 */
 	public function afterGenerateXml(\Magento\Framework\View\LayoutInterface $subject, $result)
-	{	
+	{	  
 		if (is_null($this->registry->registry('cache_session_customer_id')) && 0 < (int) $this->customerSession->getCustomerId())
 		{
 			$this->registry->register('cache_session_customer_id', (int) $this->customerSession->getCustomerId());

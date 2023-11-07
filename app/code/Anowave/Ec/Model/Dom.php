@@ -15,7 +15,7 @@
  *
  * @category 	Anowave
  * @package 	Anowave_Ec
- * @copyright 	Copyright (c) 2022 Anowave (https://www.anowave.com/)
+ * @copyright 	Copyright (c) 2023 Anowave (https://www.anowave.com/)
  * @license  	https://www.anowave.com/license-agreement/
  */
 
@@ -44,6 +44,14 @@ if (version_compare(phpversion(), '8.0.0', '<'))
     	 */
     	public function loadHTML($source, $options = null)
     	{
+    	    /**
+    	     * Convert encoding
+    	     */
+    	    $source = mb_convert_encoding($source, 'HTML-ENTITIES', 'UTF-8');
+    	    
+    	    /**
+    	     * Enable extenral errors
+    	     */
     		if (function_exists('libxml_use_internal_errors'))
     		{
     			libxml_use_internal_errors(true);
@@ -56,12 +64,30 @@ if (version_compare(phpversion(), '8.0.0', '<'))
     		
     		return parent::loadHTML($source, $options);
     	}
+    	
+    	/**
+    	 * Save HTML
+    	 *
+    	 * {@inheritDoc}
+    	 * @see DOMDocument::saveHTML()
+    	 */
+    	public function saveHTML(\DOMNode $node = null) : string
+    	{
+    	    return html_entity_decode(parent::saveHTML(), ENT_COMPAT, 'UTF-8');
+    	}
     }
 }
 else
 {
     class Dom extends \DOMDocument
     {
+        /**
+         * Convert map 
+         * 
+         * @var array
+         */
+        private $map = [0x80, 0x10FFFF, 0, ~0];        
+        
         /**
          * Creates a new DOMDocument object
          *
@@ -81,6 +107,14 @@ else
          */
         public function loadHTML($source, int $options = 0)
         {
+            /**
+             * Encode to UTF-8
+             */
+            $source = $this->utf($source);
+
+            /**
+             * Enable extenral errors
+             */
             if (function_exists('libxml_use_internal_errors'))
             {
                 libxml_use_internal_errors(true);
@@ -92,6 +126,33 @@ else
             }
             
             return parent::loadHTML($source, $options);
+        }
+        
+        /**
+         * Save HTML 
+         * 
+         * {@inheritDoc}
+         * @see DOMDocument::saveHTML()
+         */
+        public function saveHTML(\DOMNode $node = null) : string
+        {
+            return html_entity_decode(parent::saveHTML(), ENT_COMPAT, 'UTF-8');
+        }
+        
+        /**
+         * Encode string 
+         * 
+         * @param string $string
+         * @return string
+         */
+        public function utf($source) : string
+        {
+            if (version_compare(phpversion(), '8.2.0', '<'))
+            {
+                return mb_convert_encoding($source, 'HTML-ENTITIES', 'utf-8');
+            }
+
+            return htmlspecialchars_decode(mb_encode_numericentity( htmlentities( $source, ENT_COMPAT, 'UTF-8' ), $this->map, 'UTF-8' ));
         }
     }
 }

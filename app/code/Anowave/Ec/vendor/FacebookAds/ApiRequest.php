@@ -25,7 +25,6 @@
 namespace Anowave\Ec\vendor\FacebookAds;
 
 use Anowave\Ec\vendor\FacebookAds\Cursor;
-use Anowave\Ec\vendor\FacebookAds\AbstractObject;
 
 class ApiRequest {
   protected $api;

@@ -6,18 +6,51 @@
 		 * AdWords Dynamic Remarketing
 		 */
 		?>
-		
-		window.google_tag_params.ecomm_pagetype 	= '<?php echo $data->google_tag_params['ecomm_pagetype'] ?>';
-		window.google_tag_params.ecomm_category 	= '<?php echo $data->google_tag_params['ecomm_category'] ?>';
-		window.google_tag_params.ecomm_prodid		= '<?php echo $data->google_tag_params['ecomm_prodid'] ?>';
-		window.google_tag_params.ecomm_totalvalue 	=  <?php echo $data->google_tag_params['ecomm_totalvalue'] ?>;
-		window.google_tag_params.returnCustomer 	=  <?php echo $block->getHelper()->getIsReturnCustomer() ?>;
+
+		<?php if (true): ?>
+
+			(params => 
+			{
+				window.google_tag_params.ecomm_pagetype 	= params.ecomm_pagetype;
+	    		window.google_tag_params.ecomm_category 	= params.ecomm_category;
+
+	    		window.google_tag_params.ecomm_prodid		= (pid => 
+				{
+					if(window.location.hash)
+					{
+						let hash = window.location.hash.substring(1);
+
+						Object.entries(AEC.CONFIGURABLE_SIMPLES).forEach(([key, configurable]) => 
+						{
+							Object.entries(configurable.configurations).forEach(([key, value]) => 
+							{
+								let compare = [value.value,value.label].join('=');
+
+								if (-1 !== hash.indexOf(compare))
+								{
+									pid = configurable.id;
+								}
+							});
+						});	
+					}
+
+					return pid;
+					
+				})(params.ecomm_prodid);
+
+	    		window.google_tag_params.ecomm_totalvalue 	= params.ecomm_totalvalue;
+
+			})(<?php echo json_encode($data->google_tag_params) ?>);
+
+    		window.google_tag_params.returnCustomer 	=  <?php echo $block->getHelper()->getIsReturnCustomer() ?>;
+
+    	<?php endif ?>
 
 		<?php if ($block->getHelper()->supportDynx()): ?>
 
-		window.google_tag_params.dynx_pagetype 		= 'offerdetail';
-		window.google_tag_params.dynx_itemid 		= window.google_tag_params.ecomm_prodid;
-		window.google_tag_params.dynx_totalvalue 	= window.google_tag_params.ecomm_totalvalue;
+    		window.google_tag_params.dynx_pagetype 		= 'offerdetail';
+    		window.google_tag_params.dynx_itemid 		= window.google_tag_params.ecomm_prodid;
+    		window.google_tag_params.dynx_totalvalue 	= window.google_tag_params.ecomm_totalvalue;
 		
 		<?php endif ?>
 		
@@ -27,16 +60,113 @@
 		 */
 		?>
 
-		AEC.Cookie.detail(<?php echo $data->push ?>).push(dataLayer, false);
+		(payload => 
+		{
+			AEC.CookieConsent.queue(() => 
+			{
+				AEC.Cookie.detail(payload).push(dataLayer);
+				
+			}).process();
 
-		<?php
-		/**
-		 * Private browser fallback
-		 */
-		?>
+			<?php
+			/**
+			 * Private browser fallback
+			 */
+			?>
+			
+			dataLayerTransport.push(payload);
 
-		dataLayerTransport.push(<?php echo $data->push ?>);
+            <?php if ($block->getHelper()->supportFacebookConversionsApi()): ?>
+            
+                (async data => 
+                {
+                	AEC.Request.post(AEC.url('datalayer/index/facebook'), { payload: data, form_key: <?php echo json_encode($block->getHelper()->getFormKey()) ?>}, response => 
+                	{
+                		return true;
+                	});
+                	
+                })(payload);
+            
+            <?php endif ?>
+
+            document.addEventListener("DOMContentLoaded", () => 
+            {
+            	let items = (function()
+            	{
+            		var items = [], trace = {};
+            
+            		document.querySelectorAll('[data-event=<?php echo \Anowave\Ec\Helper\Constants::EVENT_PRODUCT_CLICK ?>]').forEach(element => 
+            		{
+            			let entity = 
+            			{
+            					
+            				item_id: 		element.dataset.id,
+            				item_name: 		element.dataset.name,
+            				item_list_name: element.dataset.list,
+            				item_list_id:	element.dataset.list,
+            				item_brand: 	element.dataset.brand,
+            				category:		element.dataset.category,
+            				price: 			parseFloat(element.dataset.price),
+            				index: 			parseFloat(element.dataset.position),
+            				currency:		AEC.GA4.currency,
+            				quantity: 		1,
+            				remarketingFacebookId: element.dataset.remarketingFacebookId,
+            				remarketingAdwordsId:  element.dataset.remarketingAdwordsId,
+            				google_business_vertical: 'retail',
+            				<?php echo $block->getHelper()->getStockDimensionIndex(true) ?>: element.dataset['<?php echo $block->getHelper()->getStockDimensionIndex(true) ?>']
+            			};
+
+            			Object.assign(entity, entity, AEC.GA4.augmentCategories(entity));
+            
+                    	var attributes = element.dataset.attributes;
+            
+                    	if (attributes)
+            	        {
+                	        Object.entries(JSON.parse(attributes)).forEach(([key, value]) => 
+                	        {
+                    	        entity[key] = value;
+                	        });
+                	    }
+
+                	    if (!trace.hasOwnProperty(entity.item_id))
+                	    {
+                    	    trace[entity.item_id] = true;
+                    	    
+            				items.push(entity);
+                	    }
+                	});
+            
+            		return items;
+            	})();
+
+            	if (items.length)
+            	{
+            		let data = <?php echo json_encode
+                	(
+                	    [
+                	        'currency' => $block->getHelper()->getCurrency(),
+                	        'ecommerce' =>
+                	        [
+                	            'item_list_id'     => __('Mixed Products'),
+                	            'item_list_name'   => __('Mixed Products')
+                	        ],
+                	        'event' => \Anowave\Ec\ViewModel\ProductList::EVENT
+                	    ]
+            	    ) ?>;
+
+            	    data.ecommerce['items'] = items;
+
+            	    AEC.CookieConsent.queue(() => 
+        			{
+            			AEC.Cookie.impressions(data).push(dataLayer);
+            			
+        			}).process();
+            	}
+            });
+            
+		})(<?php echo $data->payload ?>);
 		
+
 		<?php
 		/**
 		 * Grouped product map
@@ -47,23 +177,28 @@
 
 		<?php if ($block->getHelper()->facebook()): ?>
 
-    		if (AEC.Const.COOKIE_DIRECTIVE)
-    		{
-    			AEC.CookieConsent.queue(() => 
-    			{
-    				AEC.EventDispatcher.on('ec.facebook.loaded', () => 
-    				{
-    					fbq('track', 'ViewContent', <?php echo $data->fbq ?>, { eventID: AEC.UUID.generate({ event: 'ViewContent' }) });
-        			});
-    			});
-    		}
-    		else 
-    		{
-    			AEC.EventDispatcher.on('ec.facebook.loaded', () => 
+			(() => 
+			{
+				let callback = () => 
 				{
 					fbq('track', 'ViewContent', <?php echo $data->fbq ?>, { eventID: AEC.UUID.generate({ event: 'ViewContent' }) });
-    			});
-    		}
+				}; 
+
+				if (AEC.Const.COOKIE_DIRECTIVE)
+	    		{
+	    			AEC.CookieConsent.queue(() => 
+	    			{
+	    				AEC.EventDispatcher.on('ec.facebook.loaded', callback);
+	    			});
+	    		}
+	    		else 
+	    		{
+	    			AEC.EventDispatcher.on('ec.facebook.loaded', callback);
+	    		}
+	    		
+			})();
+
+    		
 
 		<?php endif ?>
 	</script>

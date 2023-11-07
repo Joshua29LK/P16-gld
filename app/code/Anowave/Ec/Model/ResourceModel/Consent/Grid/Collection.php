@@ -15,7 +15,7 @@
  *
  * @category 	Anowave
  * @package 	Anowave_Ec
- * @copyright 	Copyright (c) 2022 Anowave (https://www.anowave.com/)
+ * @copyright 	Copyright (c) 2023 Anowave (https://www.anowave.com/)
  * @license  	https://www.anowave.com/license-agreement/
  */
 
@@ -62,10 +62,10 @@ abstract class Collection extends \Anowave\Ec\Model\ResourceModel\Consent\Collec
         LoggerInterface $logger,
         FetchStrategyInterface $fetchStrategy,
         EventManagerInterface $eventManager,
-        $mainTable,
-        $eventPrefix,
-        $eventObject,
-        $resourceModel,
+        $mainTable = 'ae_ec_gdpr',
+        $eventPrefix = 'track_consent_grid_collection',
+        $eventObject = 'consent_grid_collection',
+        $resourceModel = 'Anowave\Ec\Model\ResourceModel\Consent',
         AdapterInterface $connection = null,
         AbstractDb $resource = null,
         $model = 'Magento\Framework\View\Element\UiComponent\DataProvider\Document'

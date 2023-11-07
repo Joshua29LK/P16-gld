@@ -5,11 +5,9 @@
 			<api>
 				<measurement_id_type>0</measurement_id_type>
 			</api>
-		</ec>
-		<ec4>
-			<preferences>
+			<ec4>
 				<conversion_event><![CDATA[purchase]]></conversion_event>
-			</preferences>
-		</ec4>
+			</ec4>
+		</ec>
 	</default>
 </config>

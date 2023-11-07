@@ -15,7 +15,7 @@
  *
  * @category 	Anowave
  * @package 	Anowave_Ec4
- * @copyright 	Copyright (c) 2022 Anowave (http://www.anowave.com/)
+ * @copyright 	Copyright (c) 2023 Anowave (http://www.anowave.com/)
  * @license  	http://www.anowave.com/license-agreement/
  */
 
@@ -65,7 +65,7 @@ class Config extends \Magento\Framework\View\Element\Template
      */
     public function getConversionEvent() : string
     {
-        $conversion_event = (string) $this->helper->getConfig('ec4/preferences/conversion_event');
+        $conversion_event = (string) $this->helper->getConfig('ec/ec4/conversion_event');
         
         if (!$conversion_event)
         {
@@ -73,6 +73,16 @@ class Config extends \Magento\Framework\View\Element\Template
         }
         
         return $conversion_event; 
+    }
+    
+    /**
+     * Get quote details
+     * 
+     * @return array
+     */
+    public function getQuoteDetails() : array
+    {
+        return $this->helper->getQuoteDetails();
     }
     
     public function getHelper()

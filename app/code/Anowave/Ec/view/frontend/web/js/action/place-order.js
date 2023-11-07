@@ -14,7 +14,7 @@
  *
  * @category 	Anowave
  * @package 	Anowave_Ec
- * @copyright 	Copyright (c) 2022 Anowave (https://www.anowave.com/)
+ * @copyright 	Copyright (c) 2023 Anowave (https://www.anowave.com/)
  * @license  	https://www.anowave.com/license-agreement/
  */
 
@@ -26,24 +26,22 @@ define(['mage/utils/wrapper'], function (wrapper)
     {
         return wrapper.wrap(placeOrderAction, function (originalAction, paymentData, messageContainer) 
         {
-        	if ('undefined' !== typeof AEC.Checkout.data && 'undefined' !== typeof AEC.Const && 'undefined' !== typeof AEC.Const.CHECKOUT_STEP_ORDER)
+        	if ('undefined' !== typeof AEC.Checkout.getData() && 'undefined' !== typeof AEC.Const && 'undefined' !== typeof AEC.Const.CHECKOUT_STEP_ORDER)
         	{
         		(data => 
         		{
-        			/**
-            		 * Set step
-            		 */
-            		data.ecommerce.checkout.actionField.step = AEC.Const.CHECKOUT_STEP_ORDER;
-            		
-            		/**
-            		 * Push checkout step
-            		 */
-            		AEC.Cookie.checkout(data).push(dataLayer);
-            		
+        			let payload = 
             		/**
             		 * Push a place order event
             		 */
-            		dataLayer.push({ event: 'placeOrder' });
+            		dataLayer.push(
+    				{ 
+    					event: 'placeOrder',
+    					ecommerce:
+    					{
+    						items: AEC.Checkout.getPayload().ecommerce.items
+    					}
+					});
             		
         		})(AEC.Checkout.data);
         	}

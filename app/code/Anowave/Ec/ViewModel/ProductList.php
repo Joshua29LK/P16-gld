@@ -15,7 +15,7 @@
  *
  * @category 	Anowave
  * @package 	Anowave_Ec
- * @copyright 	Copyright (c) 2022 Anowave (https://www.anowave.com/)
+ * @copyright 	Copyright (c) 2023 Anowave (https://www.anowave.com/)
  * @license  	https://www.anowave.com/license-agreement/
  */
 
@@ -27,7 +27,7 @@ use Magento\Catalog\Model\Product;
 
 class ProductList implements \Magento\Framework\View\Element\Block\ArgumentInterface
 {
-    const EVENT = 'impression';
+    const EVENT = 'view_item_list';
     
     /**
      * @var \Anowave\Ec\Helper\Data
@@ -82,11 +82,8 @@ class ProductList implements \Magento\Framework\View\Element\Block\ArgumentInter
             [
                 'ecommerce' => 
                 [
-                    'currencyCode' => $this->helper->getCurrency(),
-                    'actionField' => 
-                    [
-                        'list' => $this->helper->getCategoryList($category)
-                    ]
+                    'item_list_id'   => $this->helper->getCategoryList($category),
+                    'item_list_name' => $this->helper->getCategoryList($category),
                 ],
                 'event' => static::EVENT
             ];
@@ -113,11 +110,8 @@ class ProductList implements \Magento\Framework\View\Element\Block\ArgumentInter
             [
                 'ecommerce' =>
                 [
-                    'currencyCode' => $this->helper->getCurrency(),
-                    'actionField' =>
-                    [
-                        'list' => __('Search results')
-                    ]
+                    'item_list_id'   => __("Search results"),
+                    'item_list_name' => __("Search results"),
                 ],
                 'event' => static::EVENT
             ];

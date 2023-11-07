@@ -57,5 +57,10 @@
                 <value id="facebook" type="host">*.facebook.com</value>
             </values>
         </policy>
+        <policy id="form-action">
+            <values>
+                <value id="facebook" type="host">*.facebook.com</value>
+            </values>
+        </policy>
     </policies>
 </csp_whitelist>

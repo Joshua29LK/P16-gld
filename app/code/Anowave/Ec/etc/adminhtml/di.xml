@@ -26,4 +26,7 @@
     <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
 	   <plugin name="ec" type="Anowave\Ec\Plugin\DataProviderCollection" sortOrder="1" />
 	</type>
+	<type name="Anowave\Package\Block\License\Field">
+	   <plugin name="ec" type="Anowave\Ec\Plugin\License" sortOrder="1" />
+	</type>
 </config>

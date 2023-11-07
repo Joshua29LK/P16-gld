@@ -15,13 +15,20 @@
  *
  * @category 	Anowave
  * @package 	Anowave_Ec
- * @copyright 	Copyright (c) 2022 Anowave (https://www.anowave.com/)
+ * @copyright 	Copyright (c) 2023 Anowave (https://www.anowave.com/)
  * @license  	https://www.anowave.com/license-agreement/
  */
  
 namespace Anowave\Ec\Controller\Index;
 
-class Datalayer extends \Magento\Framework\App\Action\Action
+use Magento\Framework\App\Action\HttpPostActionInterface;
+use Magento\Framework\App\Action\HttpGetActionInterface;
+use Magento\Framework\App\CsrfAwareActionInterface;
+use Magento\Framework\App\RequestInterface;
+use Magento\Framework\App\Request\InvalidRequestException;
+
+
+class Datalayer extends \Magento\Framework\App\Action\Action implements CsrfAwareActionInterface, HttpPostActionInterface, HttpGetActionInterface
 {
 	/**
 	 * @var \Magento\Framework\Controller\Result\JsonFactory
@@ -110,5 +117,27 @@ class Datalayer extends \Magento\Framework\App\Action\Action
 		}
 
 		return $result->setData($response);
+	}
+	
+	/**
+	 * Create CSRF Exception
+	 *
+	 * {@inheritDoc}
+	 * @see \Magento\Framework\App\CsrfAwareActionInterface::createCsrfValidationException()
+	 */
+	public function createCsrfValidationException(RequestInterface $request): ? InvalidRequestException
+	{
+	    return null;
+	}
+	
+	/**
+	 * Validate for CSRF
+	 *
+	 * {@inheritDoc}
+	 * @see \Magento\Framework\App\CsrfAwareActionInterface::validateForCsrf()
+	 */
+	public function validateForCsrf(RequestInterface $request): ? bool
+	{
+	    return true;
 	}
 }

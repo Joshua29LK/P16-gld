@@ -3,27 +3,34 @@
     <script data-ommit="true">
 
         var payload = <?php echo $block->getProductList()->getImpressionPayload($block->getLayout()->getBlock('category.products.list')) ?>; 
-    	
-    	payload.ecommerce['impressions'] = (function()
+
+    	payload.ecommerce['currency'] = AEC.currencyCode;
+    	payload.ecommerce['items'] = (function()
     	{
-    		var impressions = [], trace = {};
+    		var items = [], trace = {};
     
-    		document.querySelectorAll('[data-event=productClick]').forEach((element) => 
+    		document.querySelectorAll('[data-event=<?php echo \Anowave\Ec\Helper\Constants::EVENT_PRODUCT_CLICK ?>]').forEach(element => 
     		{
-    			var entity = 
-    			{
-    				id: 				   element.dataset.id,
-    				name: 				   element.dataset.name,
-    				category:			   element.dataset.category,
-    				brand:				   element.dataset.brand,
-    				list:				   element.dataset.list,
-    				price:		parseFloat(element.dataset.price),
-    				position: 	parseFloat(element.dataset.position),
+    			let entity = 
+    			{	
+    				item_id: 		element.dataset.id,
+    				item_name: 		element.dataset.name,
+    				item_list_name: element.dataset.list,
+    				item_list_id:	element.dataset.list,
+    				item_brand: 	element.dataset.brand,
+    				category: 		element.dataset.category,
+    				price: 			parseFloat(element.dataset.price),
+    				index: 			parseFloat(element.dataset.position),
+    				currency:		AEC.GA4.currency,
+    				quantity: 		1,
     				remarketingFacebookId: element.dataset.remarketingFacebookId,
     				remarketingAdwordsId:  element.dataset.remarketingAdwordsId,
+    				google_business_vertical: 'retail',
     				<?php echo $block->getHelper()->getStockDimensionIndex(true) ?>: element.dataset['<?php echo $block->getHelper()->getStockDimensionIndex(true) ?>']
-            	};
-    
+    			};
+
+                Object.assign(entity, entity, AEC.GA4.transformCategories(element.dataset.category));
+
             	var attributes = element.dataset.attributes;
     
             	if (attributes)
@@ -34,24 +41,28 @@
         	        });
         	    }
 
-        	    if (!trace.hasOwnProperty(entity.id))
+        	    if (!trace.hasOwnProperty(entity.item_id))
         	    {
-            	    trace[entity.id] = true;
+            	    trace[entity.item_id] = true;
             	    
-    				impressions.push(entity);
+    				items.push(entity);
         	    }
         	});
     
-    		return impressions;
+    		return items;
     	})();
-    
+
     	(function(payload, payload_max_size)
         {
     		var payloadSize = AEC.getPayloadSize(payload);
     		
     		if (payload_max_size > payloadSize)
     		{
-    			AEC.Cookie.impressions(payload).push(dataLayer, false);
+    			AEC.CookieConsent.queue(() => 
+    			{
+        			AEC.Cookie.impressions(payload).push(dataLayer);
+        			
+    			}).process();
     
     			<?php
     			/**
@@ -63,7 +74,7 @@
     		}
     		else 
     		{
-    			var chunks = AEC.getPayloadChunks(payload.ecommerce.impressions, Math.ceil(payload.ecommerce.impressions.length/Math.ceil(payloadSize/payload_max_size)));
+    			var chunks = AEC.getPayloadChunks(payload.ecommerce.items, Math.ceil(payload.ecommerce.items.length/Math.ceil(payloadSize/payload_max_size)));
     
     			var lazyPush = function(chunks)
     			{
@@ -71,8 +82,8 @@
     				{
     					var chunk = chunks.shift(), chunkPush = Object.assign({}, payload);
     
-    					chunkPush['event'] 					= 'impression';
-    					chunkPush.ecommerce['impressions']  = chunk;
+    					chunkPush['event'] 					= 'view_item_list';
+    					chunkPush.ecommerce['items']  		= chunk;
     					chunkPush['eventCallback'] 			= (function(chunks)
     					{
     						return function()
@@ -137,7 +148,7 @@
         			});
         		}
         		
-            })({ content_ids: payload.ecommerce.impressions.map(function(impression){ return impression.id; }), content_type: 'product', content_name: <?php echo $block->getProductList()->getCurrentCategoryName() ?>, content_category: <?php echo $block->getProductList()->getCurrentCategoryName() ?> });
+            })({ content_ids: payload.ecommerce.items.map(function(item){ return item.item_id; }), content_type: 'product', content_name: <?php echo $block->getProductList()->getCurrentCategoryName() ?>, content_category: <?php echo $block->getProductList()->getCurrentCategoryName() ?> });
     	
     	<?php endif ?>
     

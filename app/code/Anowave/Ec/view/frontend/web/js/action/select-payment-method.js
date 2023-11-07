@@ -14,7 +14,7 @@
  *
  * @category 	Anowave
  * @package 	Anowave_Ec
- * @copyright 	Copyright (c) 2022 Anowave (https://www.anowave.com/)
+ * @copyright 	Copyright (c) 2023 Anowave (https://www.anowave.com/)
  * @license  	https://www.anowave.com/license-agreement/
  */
 
@@ -26,9 +26,9 @@ define(['mage/utils/wrapper', 'Magento_Checkout/js/model/quote'], function(wrapp
     {
         return wrapper.wrap(paymentMethod, function (originalAction, method) 
         {
-        	if ('undefined' !== typeof dataLayer && 'undefined' !== typeof AEC.Const && 'undefined' !== typeof AEC.Checkout.data)	
+        	if ('undefined' !== typeof dataLayer && 'undefined' !== typeof AEC.Const && 'undefined' !== typeof AEC.Checkout.getData())	
         	{
-	        	(function(dataLayer, paymentMethod, data)
+	        	(function(dataLayer, paymentMethod)
 	    		{
 	    			/**
 	        		 * Empty default payment method by default
@@ -62,7 +62,7 @@ define(['mage/utils/wrapper', 'Magento_Checkout/js/model/quote'], function(wrapp
 		    	        		{
 		    	        			label.forEach(element => 
 		    	        			{
-		    	        				let span = element.querySelector('span');
+		    	        				let span = element.querySelector('span[data-bind="text: getTitle()"]');
 		    	        				
 		    	        				if (span)
 		    	        				{
@@ -81,11 +81,11 @@ define(['mage/utils/wrapper', 'Magento_Checkout/js/model/quote'], function(wrapp
 	        		
 	        		if ("undefined" !== typeof fbq)
 	        		{
-	        			var content_ids = [], content_length = data.ecommerce.checkout.products.length;
+	        			var content_ids = [], content_length = AEC.Checkout.getPayload().ecommerce.items.length;
 
-	        			for (var i = 0, l = data.ecommerce.checkout.products.length; i < l; i++)
+	        			for (var i = 0, l = AEC.Checkout.getPayload().ecommerce.items.length; i < l; i++)
 	        			{
-	        				content_ids.push(data.ecommerce.checkout.products[i].id);
+	        				content_ids.push(AEC.Checkout.getPayload().ecommerce.items[i].item_id);
 	        			}
 	        			
 	        			(function(callback)
@@ -100,13 +100,13 @@ define(['mage/utils/wrapper', 'Magento_Checkout/js/model/quote'], function(wrapp
 	        				}
 	        			})
 	        			(
-	        				(function(info, content_ids, content_length)
+	        				(function(content_ids, content_length)
 	        				{
 	        					return function()
 	        					{
 	        						fbq("track", "AddPaymentInfo", 
 	        						{
-	        							value:			info.total,
+	        							value:			AEC.Checkout.getData().total,
 	        							content_name: 	'checkout',
 	        							content_ids:	content_ids,
 	        							num_items:		content_length,
@@ -115,11 +115,11 @@ define(['mage/utils/wrapper', 'Magento_Checkout/js/model/quote'], function(wrapp
 	        						}, 
 	        						{ eventID: AEC.UUID.generate({ event: 'AddPaymentInfo'}) });
 	        					}
-	        				})(info,content_ids,content_length)
+	        				})(content_ids,content_length)
 	        			);
 	        		}
 	
-	    		})(dataLayer, method, AEC.Checkout.data);
+	    		})(dataLayer, method);
         	}
         	
             return originalAction(method);
