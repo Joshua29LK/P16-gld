@@ -3,7 +3,7 @@
     if (AEC.GA4)
     {
         ((cart_payload) => 
-        {
+        {	  
             <?php
             /**
              * Datalayer push
@@ -28,8 +28,16 @@
                     });
                 }
             }
-            
-            dataLayer.push(cart_payload);
+
+            (data => 
+            {
+           	 	AEC.CookieConsent.queue(function()
+ 	            {
+ 	            	dataLayer.push(data);
+ 	                
+ 	            }).process();
+ 	            
+            })(cart_payload);
 
             <?php
             /**

@@ -15,18 +15,15 @@
  *
  * @category 	Anowave
  * @package 	Anowave_Ec
- * @copyright 	Copyright (c) 2022 Anowave (https://www.anowave.com/)
+ * @copyright 	Copyright (c) 2023 Anowave (https://www.anowave.com/)
  * @license  	https://www.anowave.com/license-agreement/
  */
 
 namespace Anowave\Ec\Block;
 
-use Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Boolean;
-
 class Plugin
 {
     /**
-     * Track block 
      * @var string
      */
     const BLOCK = 'Anowave\Ec\Block\Track';
@@ -36,32 +33,19 @@ class Plugin
 	 *
 	 * @var \Anowave\Ec\Helper\Data
 	 */
-	protected $_helper = null;
+	protected $helper = null;
 	
 	/**
-	 * Config
-	 *
-	 * @var \Magento\Framework\App\Config\ScopeConfigInterface
-	 */
-	protected $_coreConfig = null;
-	
-	/**
-	 * Core registry
-	 *
 	 * @var \Magento\Framework\Registry
 	 */
-	protected $_coreRegistry = null;
+	protected $registry = null;
 	
 	/**
-	 * ProductRepository
-	 * 
 	 * @var \Magento\Catalog\Api\ProductRepositoryInterface
 	 */
 	protected $productRepository = null;
 	
 	/**
-	 * CategoryRepository
-	 * 
 	 * @var \Magento\Catalog\Model\CategoryRepository
 	 */
 	protected $categoryRepository;
@@ -87,7 +71,6 @@ class Plugin
 	protected $swatchTypeChecker;
 	
 	/**
-	 * 
 	 * @var \Anowave\Ec\Model\Apply
 	 */
 	protected $canApply = false;
@@ -103,12 +86,20 @@ class Plugin
 	protected $dataLayer = null;
 	
 	/**
+	 * @var \Anowave\Ec\Helper\Dom
+	 */
+	protected $dom;
+
+	/**
+	 * @var \Magento\Catalog\Api\ProductCustomOptionRepositoryInterface
+	 */
+	protected $customOptionRepository;
+	
+	/**
 	 * Constructor 
 	 * 
-	 * @param \Magento\Framework\App\Config\ScopeConfigInterface $coreConfig
 	 * @param \Magento\Framework\Registry $registry
 	 * @param \Anowave\Ec\Helper\Data $helper
-	 * @param \Magento\Checkout\Model\Cart $cart
 	 * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
 	 * @param \Magento\Catalog\Model\CategoryRepository $categoryRepository
 	 * @param \Anowave\Ec\Model\Apply $apply
@@ -118,10 +109,11 @@ class Plugin
 	 * @param \Anowave\Ec\Helper\Bridge $bridge
 	 * @param \Magento\CatalogInventory\Model\Stock\StockItemRepository $stockItemRepository
 	 * @param \Anowave\Ec\Model\SwatchAttributeType $swatchTypeChecker
+	 * @param \Anowave\Ec\Helper\Dom $dom
+	 * @param \Magento\Catalog\Api\ProductCustomOptionRepositoryInterface $customOptionRepository
 	 */
 	public function __construct
 	(
-		\Magento\Framework\App\Config\ScopeConfigInterface $coreConfig,
 		\Magento\Framework\Registry $registry, 
 		\Anowave\Ec\Helper\Data $helper,
 		\Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
@@ -132,29 +124,25 @@ class Plugin
 		\Anowave\Ec\Helper\Attributes $attributes,
 		\Anowave\Ec\Helper\Bridge $bridge,
 		\Magento\CatalogInventory\Model\Stock\StockItemRepository $stockItemRepository,
-		\Anowave\Ec\Model\SwatchAttributeType $swatchTypeChecker
+		\Anowave\Ec\Model\SwatchAttributeType $swatchTypeChecker,
+	    \Anowave\Ec\Helper\Dom $dom,
+	    \Magento\Catalog\Api\ProductCustomOptionRepositoryInterface $customOptionRepository
 	) 
 	{	
 		/**
 		 * Set helper 
 		 * 
-		 * @var \Anowave\Ec\Helper\Data $_helper
+		 * @var \Anowave\Ec\Helper\Data $helper
 		 */
-		$this->_helper = $helper;
+		$this->helper = $helper;
 		
-		/**
-		 * Set Core config
-		 * 
-		 * @var \Magento\Framework\App\Config\ScopeConfigInterface $_coreConfig
-		 */
-		$this->_coreConfig = $coreConfig;
 		
 		/**
 		 * Set registry 
 		 * 
-		 * @var \Magento\Framework\Registry $_coreRegistry
+		 * @var \Magento\Framework\Registry $registry
 		 */
-		$this->_coreRegistry = $registry;
+		$this->registry = $registry;
 		
 		/**
 		 * Set product repository
@@ -191,7 +179,7 @@ class Plugin
 		 */
 		$this->canApply = $apply->canApply
 		(
-			$this->_helper->filter(static::BLOCK)
+			$this->helper->filter(static::BLOCK)
 		);
 		
 		/**
@@ -219,6 +207,20 @@ class Plugin
 		 * @var \Anowave\Ec\Helper\Bridge $bridge
 		 */
 		$this->bridge = $bridge;
+		
+		/**
+		 * Set DOM helper 
+		 * 
+		 * @var \Anowave\Ec\Helper\Dom $dom
+		 */
+		$this->dom = $dom;
+		
+		/**
+		 * Set custom option repository 
+		 * 
+		 * @var \Magento\Catalog\Api\ProductCustomOptionRepositoryInterface $customOptionRepository
+		 */
+		$this->customOptionRepository = $customOptionRepository;
 	}
 	
 	/**
@@ -231,24 +233,26 @@ class Plugin
 	 */
 	public function afterToHtml($block, $content) 
 	{
-		if ($this->_helper->isActive() && $this->canApply)
+		if ($this->helper->isActive() && $this->canApply)
 		{
 			switch($block->getNameInLayout())
 			{
 				case 'product.info.addtocart':
 				case 'product.info.addtocart.additional':
-				case 'product.info.addtocart.bundle':
-																					return $this->augmentAddCartBlock($block, $content);
+				case 'product.info.addtocart.bundle':                               return $this->augmentAddCartBlock($block, $content);
 				case 'category.products.list': 										return $this->augmentListBlock($block, $content);
+				case 'related':
 				case 'catalog.product.related':										return $this->augmentListRelatedBlock($block, $content);
 				case 'checkout.cart.crosssell':
 				case 'catalog.product.crosssell':									return $this->augmentListCrossSellBlock($block, $content);
 				case 'product.info.upsell':											return $this->augmentListUpsellBlock($block, $content);
-				case 'view.addto.wishlist':											return $this->augmentWishlistBlock($block, $content);
+				case 'view.addto.wishlist':	
+				case 'product.info.addtowishlist':                                  return $this->augmentWishlistBlock($block, $content);
 				case 'wishlist_sidebar':											return $this->augmentWishlistSidebarBlock($block, $content);
 				case 'view.addto.compare':											return $this->augmentCompareBlock($block, $content);
 				case 'checkout.cart':												return $this->augmentCartBlock($block, $content);
 				case 'checkout.root': 												return $this->augmentCheckoutBlock($block, $content);
+				case 'product_list_toolbar':                                        return $this->augmentToolbarBlock($block, $content);
 				case 'checkout.cart.item.renderers.simple.actions.remove':
 				case 'checkout.cart.item.renderers.bundle.actions.remove':
 				case 'checkout.cart.item.renderers.virtual.actions.remove':
@@ -283,10 +287,33 @@ class Plugin
 		return $content .= $block->getLayout()->createBlock(static::BLOCK)->setTemplate('checkout.phtml')->setData
 		(
 			[
-				'checkout_push' => $this->_helper->getCheckoutPush($block, $this->_coreRegistry)
+				'checkout_push' => $this->helper->getCheckoutPush($block, $this->registry)
 			]
 		)
 		->toHtml();
+	}
+	
+	/**
+	 * Modify toolbar block 
+	 * 
+	 * @param \Magento\Catalog\Block\Product\ProductList\Toolbar $block
+	 * @param string $content
+	 * @return string
+	 */
+	public function augmentToolbarBlock(\Magento\Catalog\Block\Product\ProductList\Toolbar $block, $content)
+	{
+	    list($doc, $dom) = $this->getDom();
+	    
+	    $dom->loadHTML($content);
+	    
+	    $query = new \DOMXPath($dom);
+	    
+	    foreach ($query->query('.//a[contains(@class,"modes-mode")]') as $element)
+	    {
+	        $element->setAttribute('data-event', \Anowave\Ec\Helper\Constants::EVENT_SWITCH_MODE);
+	    }
+	    
+	    return $this->dom->getDOMContent($dom, $doc);
 	}
 	
 	/**
@@ -302,7 +329,7 @@ class Plugin
 		return $content .= $block->getLayout()->createBlock(static::BLOCK)->setTemplate('cart.phtml')->setData
 		(
 			[
-				'cart_push' => $this->_helper->getCartPush($block, $this->_coreRegistry)
+				'cart_push' => $this->helper->getCartPush($block, $this->registry)
 			]
 		)
 		->toHtml();
@@ -329,6 +356,11 @@ class Plugin
 			return $cache;
 		}
 		
+		if ($this->helper->usePlaceholders())
+		{
+		    $placeholders = $this->applyPlaceholders($content);
+		}
+		
 		/**
 		 * Retrieve list of impression product(s)
 		 *
@@ -348,10 +380,9 @@ class Plugin
 			$products[] = $product;
 		}
 		
-		$doc = new \Anowave\Ec\Model\Dom('1.0','utf-8');
-		$dom = new \Anowave\Ec\Model\Dom('1.0','utf-8');
+		list($doc, $dom) = $this->getDom();
 		
-		$dom->loadHTML(mb_convert_encoding($content, 'HTML-ENTITIES', 'UTF-8'));
+		$dom->loadHTML($content);
 		
 		$query = new \DOMXPath($dom);
 		
@@ -362,6 +393,13 @@ class Plugin
 		 */
 		$position = 1;
 		
+		$list = __($block->getTitle())->__toString();
+		
+		if (!$list)
+		{
+		    $list = __('New products List');
+		}
+		
 		/**
 		 * Default category 
 		 * 
@@ -369,38 +407,19 @@ class Plugin
 		 */
 		$category = __('New products')->__toString();
 		
-		/**
-		 * Impression push
-		 * 
-		 * @var array $impressions
-		 */
-		$impressions = 
-		[
-			'event' 	=> 'widgetViewNonInteractive',
-			'ecommerce' => 
-			[
-				'currencyCode' 	=> $this->_helper->getCurrency(),
-				'actionField'	=> 
-				[
-					'list' => $category
-				],
-				'impressions' 	=> []
-			]
-		];
-		
-		foreach ($query->query($this->_helper->getListWidgetSelector()) as $key => $element)
+		foreach ($query->query($this->helper->getListWidgetSelector()) as $key => $element)
 		{
 			if (isset($products[$key]))
 			{
-				foreach ($query->query($this->_helper->getListWidgetClickSelector(), $element) as $a)
+				foreach ($query->query($this->helper->getListWidgetClickSelector(), $element) as $a)
 				{
 					$click = $a->getAttribute('onclick');
 					
 					$this->setAttributes($a, $products[$key],
 				    [
-				        'data-event'       => 'productClick',
+				        'data-event'       => \Anowave\Ec\Helper\Constants::EVENT_PRODUCT_CLICK,
 				        'data-category'    => $category,
-				        'data-list'        => $category,
+				        'data-list'        => $list,
 				        'data-position'    => $position,
 				        'data-block'       => $block->getNameInLayout(),
 				        'data-widget'      => $block->getCacheKey(),
@@ -422,33 +441,20 @@ class Plugin
 					/**
 					 * Notify others
 					 */
-					$this->_helper->getEventManager()->dispatch('ec_get_widget_click_attributes', ['transport' => $transport]);
+					$this->helper->getEventManager()->dispatch('ec_get_widget_click_attributes', ['transport' => $transport]);
 					
 					/**
 					 * Get response
 					 */
 					$attributes = $transport->getAttributes();
 
-					$a->setAttribute('data-attributes', $this->_helper->getJsonHelper()->encode($attributes));
-					
-					$impressions['ecommerce']['impressions'][] = 
-					[
-					    'id' 			=> $this->_helper->getIdentifier($products[$key]),
-						'name' 			=> $products[$key]->getName(),
-						'price' 		=> $this->_helper->getPrice($products[$key]),
-						'category' 		=> $category,
-						'list' 			=> $category,
-						'brand' 		=> $this->_helper->getBrand($products[$key]),
-						'quantity' 		=> 1,
-						'position' 		=> $position,
-						'store' 		=> $this->_helper->getStoreName()
-					];
+					$a->setAttribute('data-attributes', $this->helper->getJsonHelper()->encode($attributes));
 				}
 				
 				/**
 				 * Apply direct "Add to cart" tracking for listings
 				 */
-				if ('' !== $selector = $this->_helper->getListWidgetCartCategorySelector())
+				if ('' !== $selector = $this->helper->getListWidgetCartCategorySelector())
 				{
 					if (!in_array($products[$key]->getTypeId(),[\Magento\ConfigurableProduct\Model\Product\Type\Configurable::TYPE_CODE,\Magento\GroupedProduct\Model\Product\Type\Grouped::TYPE_CODE]))
 					{
@@ -458,9 +464,9 @@ class Plugin
 							
 							$this->setAttributes($a, $products[$key],
 						    [
-						        'data-event'       => 'addToCart',
+						        'data-event'       => \Anowave\Ec\Helper\Constants::EVENT_ADD_TO_CART,
 						        'data-category'    => $category,
-						        'data-list'        => $category,
+						        'data-list'        => $list,
 						        'data-position'    => $position,
 						        'data-block'       => $block->getNameInLayout(),
 						        'data-widget'      => $block->getCacheKey(),
@@ -482,14 +488,14 @@ class Plugin
 							/**
 							 * Notify others
 							 */
-							$this->_helper->getEventManager()->dispatch('ec_get_widget_add_list_attributes', ['transport' => $transport]);
+							$this->helper->getEventManager()->dispatch('ec_get_widget_add_list_attributes', ['transport' => $transport]);
 							
 							/**
 							 * Get response
 							 */
 							$attributes = $transport->getAttributes();
 							
-							$a->setAttribute('data-attributes', $this->_helper->getJsonHelper()->encode($attributes));
+							$a->setAttribute('data-attributes', $this->helper->getJsonHelper()->encode($attributes));
 						}
 					}
 				}
@@ -498,8 +504,16 @@ class Plugin
 			$position++;
 		}
 		
-		$content = $this->getDOMContent($dom, $doc);
+		$content = $this->dom->getDOMContent($dom, $doc);
 
+		if ($this->helper->usePlaceholders())
+		{
+		    if (isset($placeholders))
+		    {
+		        $content = $this->restorePlaceholders($content, $placeholders);
+		    }
+		}
+		
 		/**
 		 * Save cache
 		 */
@@ -516,7 +530,7 @@ class Plugin
 	 * @return string
 	 */
 	public function augmentWidgetListBlock(\Magento\CatalogWidget\Block\Product\ProductsList $block, $content)
-	{ 
+	{  
 		/**
 		 * Load cache
 		 *
@@ -527,6 +541,11 @@ class Plugin
 		if ($cache)
 		{
 			return $cache;
+		}
+		
+		if ($this->helper->usePlaceholders())
+		{
+		    $placeholders = $this->applyPlaceholders($content);
 		}
 		
 		/**
@@ -540,7 +559,14 @@ class Plugin
 		
 		if (!$collection)
 		{
-			return $content;
+		    $block->setProductCollection($block->createCollection());
+		    
+		    $collection = $block->getProductCollection();
+		    
+		    if (!$collection)
+		    {
+		        return $content;
+		    }
 		}
 		
 		foreach ($collection as $product)
@@ -548,10 +574,9 @@ class Plugin
 			$products[] = $product;
 		}
 		
-		$doc = new \Anowave\Ec\Model\Dom('1.0','utf-8');
-		$dom = new \Anowave\Ec\Model\Dom('1.0','utf-8');
+		list($doc, $dom) = $this->getDom();
 		
-		$dom->loadHTML(mb_convert_encoding($content, 'HTML-ENTITIES', 'UTF-8'));
+		$dom->loadHTML($content);
 		
 		$query = new \DOMXPath($dom);
 		
@@ -567,51 +592,70 @@ class Plugin
 		 *
 		 * @var \Magento\Framework\Phrase $category
 		 */
-		$category = __($block->getTitle())->__toString();
+		$list = __($block->getTitle())->__toString();
 		
-		if (!$category)
+		if (!$list)
 		{
-		    $category = __('Homepage Product List');
+		    $list = __('Homepage Product List');
 		}
 		
-		/**
-		 * Impression push
-		 *
-		 * @var array $impressions
-		 */
-		$impressions =
-		[
-			'event' 	=> 'widgetViewNonInteractive',
-			'ecommerce' =>
-			[
-				'currencyCode' 	=> $this->_helper->getCurrency(),
-				'actionField'	=>
-				[
-					'list' => $category
-				],
-				'impressions' 	=> []
-			]
-		];
-		
-		foreach ($query->query($this->_helper->getListWidgetSelector()) as $key => $element)
+		foreach ($query->query($this->helper->getListWidgetSelector()) as $key => $element)
 		{
 			if (isset($products[$key]))
 			{
-				foreach ($query->query($this->_helper->getListWidgetClickSelector(), $element) as $a)
+			    /**
+			     * Get all product categories
+			     */
+			    $categories = $this->helper->getCurrentStoreProductCategories($products[$key]);
+			    
+			    if (!$categories)
+			    {
+			        if (null !== $root = $this->helper->getStoreRootDefaultCategoryId())
+			        {
+			            $categories[] = $root;
+			        }
+			    }
+			    
+			    if ($categories)
+			    {
+			        /**
+			         * Load last category
+			         */
+			        
+			        $category = $this->categoryRepository->get
+			        (
+			            end($categories)
+		            );
+			    }
+			    else
+			    {
+			        $category = null;
+			    }
+			    
+			    if ($category)
+			    {
+			        $category_name = $this->helper->getCategoryDetailList($products[$key], $category);
+			    }
+			    else
+			    {
+			        $category_name = $list;
+			    }
+			    
+				foreach ($query->query($this->helper->getListWidgetClickSelector(), $element) as $a)
 				{
 					$click = $a->getAttribute('onclick');
 					
 					$this->setAttributes($a, $products[$key],
 				    [
-				        'data-event'       => 'productClick',
-				        'data-category'    => $category,
-				        'data-list'        => $category,
+				        'data-event'       => \Anowave\Ec\Helper\Constants::EVENT_PRODUCT_CLICK,
+				        'data-category'    => $category_name,
+				        'data-list'        => $list,
 				        'data-position'    => $position,
 				        'data-block'       => $block->getNameInLayout(),
 				        'data-widget'      => $block->getCacheKey(),
 				        'data-click'       => $click
 				    ]);
-				
+
 					/**
 					 * Create transport object
 					 *
@@ -627,33 +671,20 @@ class Plugin
 					/**
 					 * Notify others
 					 */
-					$this->_helper->getEventManager()->dispatch('ec_get_widget_click_attributes', ['transport' => $transport]);
+					$this->helper->getEventManager()->dispatch('ec_get_widget_click_attributes', ['transport' => $transport]);
 					
 					/**
 					 * Get response
 					 */
 					$attributes = $transport->getAttributes();
 					
-					$a->setAttribute('data-attributes', $this->_helper->getJsonHelper()->encode($attributes));
-					
-					$impressions['ecommerce']['impressions'][] =
-					[
-					    'id' 			=> $this->_helper->getIdentifier($products[$key]),
-						'name' 			=> $products[$key]->getName(),
-						'price' 		=> $this->_helper->getPrice($products[$key]),
-						'category' 		=> $category,
-						'list' 			=> $category,
-						'brand' 		=> $this->_helper->getBrand($products[$key]),
-						'quantity' 		=> 1,
-						'position' 		=> $position,
-						'store' 		=> $this->_helper->getStoreName()
-					];
+					$a->setAttribute('data-attributes', $this->helper->getJsonHelper()->encode($attributes));
 				}
 				
 				/**
 				 * Apply direct "Add to cart" tracking for listings
 				 */
-				if ('' !== $selector = $this->_helper->getListWidgetCartCategorySelector())
+				if ('' !== $selector = $this->helper->getListWidgetCartCategorySelector())
 				{
 					if (!in_array($products[$key]->getTypeId(),[\Magento\ConfigurableProduct\Model\Product\Type\Configurable::TYPE_CODE,\Magento\GroupedProduct\Model\Product\Type\Grouped::TYPE_CODE]))
 					{    
@@ -663,9 +694,9 @@ class Plugin
 							
 							$this->setAttributes($a, $products[$key],
 						    [
-						        'data-event'       => 'addToCart',
-						        'data-category'    => $category,
-						        'data-list'        => $category,
+						        'data-event'       => \Anowave\Ec\Helper\Constants::EVENT_ADD_TO_CART,
+						        'data-category'    => $category_name,
+						        'data-list'        => $list,
 						        'data-position'    => $position,
 						        'data-block'       => $block->getNameInLayout(),
 						        'data-widget'      => $block->getCacheKey(),
@@ -687,14 +718,14 @@ class Plugin
 							/**
 							 * Notify others
 							 */
-							$this->_helper->getEventManager()->dispatch('ec_get_widget_add_list_attributes', ['transport' => $transport]);
+							$this->helper->getEventManager()->dispatch('ec_get_widget_add_list_attributes', ['transport' => $transport]);
 							
 							/**
 							 * Get response
 							 */
 							$attributes = $transport->getAttributes();
 							
-							$a->setAttribute('data-attributes', $this->_helper->getJsonHelper()->encode($attributes));
+							$a->setAttribute('data-attributes', $this->helper->getJsonHelper()->encode($attributes));
 						}
 					}
 				}
@@ -703,7 +734,15 @@ class Plugin
 			$position++;
 		}
 		
-		$content = $this->getDOMContent($dom, $doc);
+		$content = $this->dom->getDOMContent($dom, $doc);
+		
+		if ($this->helper->usePlaceholders())
+		{
+		    if (isset($placeholders))
+		    {
+		        $content = $this->restorePlaceholders($content, $placeholders);
+		    }
+		}
 		
 		/**
 		 * Save cache
@@ -745,7 +784,7 @@ class Plugin
 			$products[] = $product;
 		}
 		
-		if ($this->_helper->usePlaceholders())
+		if ($this->helper->usePlaceholders())
 		{
 			$placeholders = $this->applyPlaceholders($content);
 		}
@@ -753,10 +792,9 @@ class Plugin
 		/**
 		 * Append tracking
 		 */
-		$doc = new \Anowave\Ec\Model\Dom('1.0','utf-8');
-		$dom = new \Anowave\Ec\Model\Dom('1.0','utf-8');
+		list($doc, $dom) = $this->getDom();
 		
-		$dom->loadHTML(mb_convert_encoding($content, 'HTML-ENTITIES', 'UTF-8'));
+		$dom->loadHTML($content);
 
 		$query = new \DOMXPath($dom);
 		
@@ -797,11 +835,11 @@ class Plugin
 		}
 		catch (\Exception $e)
 		{
-		    $page = (int) $this->_helper->getRequest()->getParam('p');
+		    $page = (int) $this->helper->getRequest()->getParam('p');
 		    
 		    if ($page)
 		    {
-		        $size = (int) $this->_helper->getConfig('catalog/frontend/grid_per_page');
+		        $size = (int) $this->helper->getConfig('catalog/frontend/grid_per_page');
 		        
 		        if ($size && $page)
 		        {
@@ -819,7 +857,7 @@ class Plugin
 		    $position = 1;
 		}
 
-		foreach ($query->query($this->_helper->getListSelector()) as $key => $element)
+		foreach ($query->query($this->helper->getListSelector()) as $key => $element)
 		{
 			if (isset($products[$key]))
 			{
@@ -828,20 +866,38 @@ class Plugin
 				 *  
 				 * @var object
 				 */
-				$category = $this->_coreRegistry->registry('current_category');
+				$category = $this->registry->registry('current_category');
+				
+				if (!$category)
+				{
+				    $categories = (array) $products[$key]->getCategoryIds();
+				    
+				    if (!$categories)
+				    {
+				        $categories[] = $this->helper->getStoreRootDefaultCategoryId();
+				    }
+				    
+				    if ($categories)
+				    {
+				        $category = $this->categoryRepository->get
+				        (
+				            end($categories)
+			            );
+				    }
+				}
 
 				/**
 				 * Add data-* attributes used for tracking dynamic values
 				 */
-				foreach ($query->query($this->_helper->getListClickSelector(), $element) as $a)
+				foreach ($query->query($this->helper->getListClickSelector(), $element) as $a)
 				{
 					$click = $a->getAttribute('onclick');
 						
 					$this->setAttributes($a, $products[$key], 
 					[
-					    'data-event'       => 'productClick',
-					    'data-category'    => $this->_helper->getCategory($category),
-					    'data-list'        => $this->_helper->getCategoryList($category),
+					    'data-event'       => \Anowave\Ec\Helper\Constants::EVENT_PRODUCT_CLICK,
+					    'data-category'    => $this->helper->getCategory($category),
+					    'data-list'        => $this->helper->getCategoryList($category),
 					    'data-position'    => $position,
 					    'data-click'       => $click
 					]);
@@ -861,34 +917,77 @@ class Plugin
 					/**
 					 * Notify others
 					 */
-					$this->_helper->getEventManager()->dispatch('ec_get_click_attributes', ['transport' => $transport]);
+					$this->helper->getEventManager()->dispatch('ec_get_click_attributes', ['transport' => $transport]);
 					
 					/**
 					 * Get response
 					 */
 					$attributes = $transport->getAttributes();
 					
-					$a->setAttribute('data-attributes', $this->_helper->getJsonHelper()->encode($attributes));
+					$a->setAttribute('data-attributes', $this->helper->getJsonHelper()->encode($attributes));
 				}
+				
+				/**
+				 * Create transport object
+				 *
+				 * @var \Magento\Framework\DataObject $transport
+				 */
+				$transport = new \Magento\Framework\DataObject
+				(
+				    [
+				        'attributes' =>
+				        [
+				            'id'     => $this->helper->getIdentifier($products[$key]),
+				            'name'   => $products[$key]->getName(),
+				            'price'  => $this->helper->getPrice
+				            (
+				                $products[$key]
+			                )
+				        ],
+				        'product' => $products[$key]
+				    ]
+			    );
+				
+				/**
+				 * Notify others
+				 */
+				$this->helper->getEventManager()->dispatch('ec_get_add_wishlist_attributes', ['transport' => $transport]);
+				
 				
 				/**
 				 * Apply direct "Add to Wishlist" tracking for listings
 				 */
-				foreach ($query->query($this->_helper->getListWishlistSelector(), $element) as $a)
+				foreach ($query->query($this->helper->getListWishlistSelector(), $element) as $a)
 				{
 				    $this->setAttributes($a, $products[$key],
 			        [
-			            'data-event'       => 'addToWishlist',
-			            'data-category'    => $this->_helper->getCategory($category),
-			            'data-list'        => $this->_helper->getCategoryList($category),
-			            'data-position'    => $position
+			            'data-event'             => \Anowave\Ec\Helper\Constants::EVENT_ADD_TO_WISHLIST,
+			            'data-event-attributes'  => $this->helper->getJsonHelper()->encode($transport->getAttributes(), JSON_UNESCAPED_UNICODE | JSON_HEX_APOS),
+			            'data-category'          => $this->helper->getCategory($category),
+			            'data-list'              => $this->helper->getCategoryList($category),
+			            'data-position'          => $position
 			        ]);
+				}
+				
+				/**
+				 * Apply direct "Add to Compare" tracking for listings
+				 */
+				foreach ($query->query($this->helper->getListCompareSelector(), $element) as $a)
+				{
+				    $this->setAttributes($a, $products[$key],
+				        [
+				            'data-event'             => \Anowave\Ec\Helper\Constants::EVENT_ADD_TO_COMPARE,
+				            'data-event-attributes'  => $this->helper->getJsonHelper()->encode($transport->getAttributes(), JSON_UNESCAPED_UNICODE | JSON_HEX_APOS),
+				            'data-category'          => $this->helper->getCategory($category),
+				            'data-list'              => $this->helper->getCategoryList($category),
+				            'data-position'          => $position
+				        ]);
 				}
 				
 				/**
 				 * Apply direct "Add to cart" tracking for listings
 				 */
-				if ('' !== $selector = $this->_helper->getCartCategorySelector())
+				if ('' !== $selector = $this->helper->getCartCategorySelector())
 				{
 					/**
 					 * Skip tracking for configurable and grouped products from listings
@@ -904,8 +1003,8 @@ class Plugin
 						
 							$this->setAttributes($a, $products[$key],
 						    [
-						        'data-category'    => $this->_helper->getCategory($category),
-						        'data-list'        => $this->_helper->getCategoryList($category),
+						        'data-category'    => $this->helper->getCategory($category),
+						        'data-list'        => $this->helper->getCategoryList($category),
 						        'data-position'    => $position,
 						        'data-click'       => $click
 						    ]);
@@ -937,19 +1036,19 @@ class Plugin
 											[
 												'attribute_id' 		=> $attribute->getProductAttribute()->getAttributeId(),
 												'attribute_code' 	=> $attribute->getProductAttribute()->getAttributeCode(),
-												'attribute_label' 	=> $this->_helper->useDefaultValues() ? $attribute->getProductAttribute()->getFrontendLabel() : $attribute->getProductAttribute()->getStoreLabel()
+												'attribute_label' 	=> $this->helper->useDefaultValues() ? $attribute->getProductAttribute()->getFrontendLabel() : $attribute->getProductAttribute()->getStoreLabel()
 											];
 										}
 									}
 									
 									if ($swatch)
 									{
-										$a->setAttribute('data-event','addToCartSwatch');
+									    $a->setAttribute('data-event', \Anowave\Ec\Helper\Constants::EVENT_ADD_TO_CART_SWATCH);
 										
 										/**
 										 * Product has swatch attributes only
 										 */
-										$a->setAttribute('data-swatch', $this->_helper->getJsonHelper()->encode($swatch_attributes));
+										$a->setAttribute('data-swatch', $this->helper->getJsonHelper()->encode($swatch_attributes, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP | JSON_UNESCAPED_UNICODE));
 									}
 									
 								}
@@ -957,7 +1056,7 @@ class Plugin
 							}
 							else 
 							{
-								$a->setAttribute('data-event','addToCart');
+							    $a->setAttribute('data-event',\Anowave\Ec\Helper\Constants::EVENT_ADD_TO_CART);
 							}
 							
 							/**
@@ -975,14 +1074,14 @@ class Plugin
 							/**
 							 * Notify others
 							 */
-							$this->_helper->getEventManager()->dispatch('ec_get_add_list_attributes', ['transport' => $transport]);
+							$this->helper->getEventManager()->dispatch('ec_get_add_list_attributes', ['transport' => $transport]);
 							
 							/**
 							 * Get response
 							 */
 							$attributes = $transport->getAttributes();
 							
-							$a->setAttribute('data-attributes', $this->_helper->getJsonHelper()->encode($attributes));
+							$a->setAttribute('data-attributes', $this->helper->getJsonHelper()->encode($attributes));
 						}
 					}
 				}
@@ -991,9 +1090,9 @@ class Plugin
 			$position++;
 		}
 		
-		$content = $this->getDOMContent($dom, $doc);
+		$content = $this->dom->getDOMContent($dom, $doc);
 		
-		if ($this->_helper->usePlaceholders())
+		if ($this->helper->usePlaceholders())
 		{
 			if (isset($placeholders))
 			{
@@ -1058,27 +1157,26 @@ class Plugin
 		/**
 		 * Append tracking
 		 */
-		$doc = new \Anowave\Ec\Model\Dom('1.0','utf-8');
-		$dom = new \Anowave\Ec\Model\Dom('1.0','utf-8');
+		list($doc, $dom) = $this->getDom();
 		
-		$dom->loadHTML(mb_convert_encoding($content, 'HTML-ENTITIES', 'UTF-8'));
+		$dom->loadHTML($content);
 		
 		$query = new \DOMXPath($dom);
 		
 		$position = 1;
 		
-		foreach ($query->query($this->_helper->getListCrossSellSelector()) as $key => $element)
+		foreach ($query->query($this->helper->getListCrossSellSelector()) as $key => $element)
 		{
 			if (isset($products[$key]))
 			{
 				/**
 				 * Get all product categories
 				 */
-				$categories = $this->_helper->getCurrentStoreProductCategories($products[$key]);
+				$categories = $this->helper->getCurrentStoreProductCategories($products[$key]);
 				
 				if (!$categories)
 				{
-					if (null !== $root = $this->_helper->getStoreRootDefaultCategoryId())
+					if (null !== $root = $this->helper->getStoreRootDefaultCategoryId())
 					{
 						$categories[] = $root;
 					}
@@ -1103,13 +1201,13 @@ class Plugin
 				/**
 				 * Add data-* attributes used for tracking dynamic values
 				 */
-				foreach ($query->query($this->_helper->getListClickSelector(), $element) as $a)
+				foreach ($query->query($this->helper->getListClickSelector(), $element) as $a)
 				{
 					$click = $a->getAttribute('onclick');
 					
 					$this->setAttributes($a, $products[$key],
 				    [
-				        'data-event'       => 'productClick',
+				        'data-event'       => \Anowave\Ec\Helper\Constants::EVENT_PRODUCT_CLICK,
 				        'data-list'        => \Anowave\Ec\Helper\Constants::LIST_CROSS_SELL,
 				        'data-position'    => $position,
 				        'data-block'       => $block->getNameInLayout(),
@@ -1118,7 +1216,7 @@ class Plugin
 
 					if ($category)
 					{
-						$a->setAttribute('data-category', $this->_helper->getCategoryDetailList($products[$key], $category));
+						$a->setAttribute('data-category', $this->helper->getCategoryDetailList($products[$key], $category));
 					}
 					
 					/**
@@ -1136,20 +1234,20 @@ class Plugin
 					/**
 					 * Notify others
 					 */
-					$this->_helper->getEventManager()->dispatch('ec_get_click_list_attributes', ['transport' => $transport]);
+					$this->helper->getEventManager()->dispatch('ec_get_click_list_attributes', ['transport' => $transport]);
 					
 					/**
 					 * Get response
 					 */
 					$attributes = $transport->getAttributes();
 					
-					$a->setAttribute('data-attributes', $this->_helper->getJsonHelper()->encode($attributes));
+					$a->setAttribute('data-attributes', $this->helper->getJsonHelper()->encode($attributes));
 				}
 				
 				/**
 				 * Track "Add to cart" from Related products
 				 */
-				if ('' !== $selector = $this->_helper->getCartCategorySelector())
+				if ('' !== $selector = $this->helper->getCartCategorySelector())
 				{
 					foreach (@$query->query($selector, $element) as $a)
 					{
@@ -1157,8 +1255,8 @@ class Plugin
 						
 						$this->setAttributes($a, $products[$key],
 					    [
-					        'data-event'       => 'addToCart',
-					        'data-category'    => $this->_helper->getCategory($category),
+					        'data-event'       => \Anowave\Ec\Helper\Constants::EVENT_ADD_TO_CART,
+					        'data-category'    => $this->helper->getCategory($category),
 					        'data-list'        => \Anowave\Ec\Helper\Constants::LIST_RELATED,
 					        'data-position'    => $position,
 					        'data-block'       => $block->getNameInLayout(),
@@ -1180,14 +1278,14 @@ class Plugin
 						/**
 						 * Notify others
 						 */
-						$this->_helper->getEventManager()->dispatch('ec_get_add_list_attributes', ['transport' => $transport]);
+						$this->helper->getEventManager()->dispatch('ec_get_add_list_attributes', ['transport' => $transport]);
 						
 						/**
 						 * Get response
 						 */
 						$attributes = $transport->getAttributes();
 						
-						$a->setAttribute('data-attributes', $this->_helper->getJsonHelper()->encode($attributes));
+						$a->setAttribute('data-attributes', $this->helper->getJsonHelper()->encode($attributes));
 					}
 				}
 			}
@@ -1195,7 +1293,7 @@ class Plugin
 			$position++;
 		}
 		
-		$content = $this->getDOMContent($dom, $doc);
+		$content = $this->dom->getDOMContent($dom, $doc);
 		
 		/**
 		 * Save cache
@@ -1250,27 +1348,26 @@ class Plugin
 		/**
 		 * Append tracking
 		 */
-		$doc = new \Anowave\Ec\Model\Dom('1.0','utf-8');
-		$dom = new \Anowave\Ec\Model\Dom('1.0','utf-8');
+		list($doc, $dom) = $this->getDom();
 		
-		$dom->loadHTML(mb_convert_encoding($content, 'HTML-ENTITIES', 'UTF-8'));
+		$dom->loadHTML($content);
 		
 		$query = new \DOMXPath($dom);
 		
 		$position = 1;
 		
-		foreach ($query->query($this->_helper->getListSelector()) as $key => $element)
+		foreach ($query->query($this->helper->getListSelector()) as $key => $element)
 		{
 			if (isset($products[$key]))
 			{
 				/**
 				 * Get all product categories
 				 */
-				$categories = $this->_helper->getCurrentStoreProductCategories($products[$key]);
+				$categories = $this->helper->getCurrentStoreProductCategories($products[$key]);
 				
 				if (!$categories)
 				{
-					if (null !== $root = $this->_helper->getStoreRootDefaultCategoryId())
+					if (null !== $root = $this->helper->getStoreRootDefaultCategoryId())
 					{
 						$categories[] = $root;
 					}
@@ -1295,13 +1392,13 @@ class Plugin
 				/**
 				 * Add data-* attributes used for tracking dynamic values
 				 */
-				foreach ($query->query($this->_helper->getListClickSelector(), $element) as $a)
+				foreach ($query->query($this->helper->getListClickSelector(), $element) as $a)
 				{
 					$click = $a->getAttribute('onclick');
 				
 					$this->setAttributes($a, $products[$key],
 				    [
-				        'data-event'       => 'productClick',
+				        'data-event'       => \Anowave\Ec\Helper\Constants::EVENT_PRODUCT_CLICK,
 				        'data-list'        => \Anowave\Ec\Helper\Constants::LIST_RELATED,
 				        'data-position'    => $position,
 				        'data-block'       => $block->getNameInLayout(),
@@ -1310,7 +1407,7 @@ class Plugin
 
 					if ($category)
 					{
-						$a->setAttribute('data-category', $this->_helper->getCategoryDetailList($products[$key], $category));
+						$a->setAttribute('data-category', $this->helper->getCategoryDetailList($products[$key], $category));
 					}
 					
 					/**
@@ -1328,20 +1425,20 @@ class Plugin
 					/**
 					 * Notify others
 					 */
-					$this->_helper->getEventManager()->dispatch('ec_get_click_list_attributes', ['transport' => $transport]);
+					$this->helper->getEventManager()->dispatch('ec_get_click_list_attributes', ['transport' => $transport]);
 					
 					/**
 					 * Get response
 					 */
 					$attributes = $transport->getAttributes();
 					
-					$a->setAttribute('data-attributes', $this->_helper->getJsonHelper()->encode($attributes));
+					$a->setAttribute('data-attributes', $this->helper->getJsonHelper()->encode($attributes));
 				}
 
 				/**
 				 * Track "Add to cart" from Related products
 				 */
-				if ('' !== $selector = $this->_helper->getCartCategorySelector())
+				if ('' !== $selector = $this->helper->getCartCategorySelector())
 				{
 					foreach (@$query->query($selector, $element) as $a)
 					{
@@ -1349,8 +1446,8 @@ class Plugin
 						
 						$this->setAttributes($a, $products[$key],
 					    [
-					        'data-event'       => 'addToCart',
-					        'data-category'    => $this->_helper->getCategory($category),
+					        'data-event'       => \Anowave\Ec\Helper\Constants::EVENT_ADD_TO_CART,
+					        'data-category'    => $this->helper->getCategory($category),
 					        'data-list'        => \Anowave\Ec\Helper\Constants::LIST_RELATED,
 					        'data-position'    => $position,
 					        'data-block'       => $block->getNameInLayout(),
@@ -1372,14 +1469,14 @@ class Plugin
 						/**
 						 * Notify others
 						 */
-						$this->_helper->getEventManager()->dispatch('ec_get_add_list_attributes', ['transport' => $transport]);
+						$this->helper->getEventManager()->dispatch('ec_get_add_list_attributes', ['transport' => $transport]);
 						
 						/**
 						 * Get response
 						 */
 						$attributes = $transport->getAttributes();
 						
-						$a->setAttribute('data-attributes', $this->_helper->getJsonHelper()->encode($attributes));
+						$a->setAttribute('data-attributes', $this->helper->getJsonHelper()->encode($attributes));
 					}
 				}
 			}
@@ -1387,7 +1484,7 @@ class Plugin
 			$position++;
 		}
 		
-		$content = $this->getDOMContent($dom, $doc);
+		$content = $this->dom->getDOMContent($dom, $doc);
 		
 		/**
 		 * Save cache
@@ -1408,16 +1505,15 @@ class Plugin
 		/**
 		 * Append tracking
 		 */
-		$doc = new \Anowave\Ec\Model\Dom('1.0','utf-8');
-		$dom = new \Anowave\Ec\Model\Dom('1.0','utf-8');
+	    list($doc, $dom) = $this->getDom();
 		
-		$dom->loadHTML(mb_convert_encoding($content, 'HTML-ENTITIES', 'UTF-8'));
+		$dom->loadHTML($content);
 		
 		$query = new \DOMXPath($dom);
 		
-		foreach ($query->query($this->_helper->getWishlistSelector()) as $key => $element)
+		foreach ($query->query($this->helper->getWishlistSelector()) as $key => $element)
 		{
-			$element->setAttribute('data-event','addToWishlist');
+		    $element->setAttribute('data-event', \Anowave\Ec\Helper\Constants::EVENT_ADD_TO_WISHLIST);
 			
 			if ($this->getCurrentProduct())
 			{
@@ -1432,9 +1528,9 @@ class Plugin
 			        [
 			            'attributes' => 
 			            [
-			                'id'     => $this->_helper->getIdentifier($this->getCurrentProduct()),
+			                'id'     => $this->helper->getIdentifier($this->getCurrentProduct()),
 			                'name'   => $this->getCurrentProduct()->getName(),
-			                'price'  => $this->_helper->getPrice
+			                'price'  => $this->helper->getPrice
 			                (
 			                    $this->getCurrentProduct()
 		                    )
@@ -1446,21 +1542,21 @@ class Plugin
 			    /**
 			     * Notify others
 			     */
-			    $this->_helper->getEventManager()->dispatch('ec_get_add_wishlist_attributes', ['transport' => $transport]);
+			    $this->helper->getEventManager()->dispatch('ec_get_add_wishlist_attributes', ['transport' => $transport]);
 			   
 			    /**
 			     * Set event attributes
 			     */
-			    $element->setAttribute('data-event-attributes', $this->_helper->getJsonHelper()->encode($transport->getAttributes(), JSON_UNESCAPED_UNICODE | JSON_HEX_APOS));
+			    $element->setAttribute('data-event-attributes', $this->helper->getJsonHelper()->encode($transport->getAttributes(), JSON_UNESCAPED_UNICODE | JSON_HEX_APOS));
 			  
 			    /**
 			     * Set event label
 			     */
-				$element->setAttribute('data-event-label', $this->_helper->escapeDataArgument($this->getCurrentProduct()->getName()));
+				$element->setAttribute('data-event-label', $this->helper->escapeDataArgument($this->getCurrentProduct()->getName()));
 			}
 		}
 		
-		return $this->getDOMContent($dom, $doc);
+		return $this->dom->getDOMContent($dom, $doc);
 	}
 	
 	/**
@@ -1485,16 +1581,15 @@ class Plugin
 		/**
 		 * Append tracking
 		 */
-		$doc = new \Anowave\Ec\Model\Dom('1.0','utf-8');
-		$dom = new \Anowave\Ec\Model\Dom('1.0','utf-8');
+	    list($doc, $dom) = $this->getDom();
 		
-		$dom->loadHTML(mb_convert_encoding($content, 'HTML-ENTITIES', 'UTF-8'));
+		$dom->loadHTML($content);
 		
 		$query = new \DOMXPath($dom);
 		
-		foreach ($query->query($this->_helper->getCompareSelector()) as $key => $element)
+		foreach ($query->query($this->helper->getCompareSelector()) as $key => $element)
 		{
-			$element->setAttribute('data-event','addToCompare');
+		    $element->setAttribute('data-event', \Anowave\Ec\Helper\Constants::EVENT_ADD_TO_COMPARE);
 			
 			if ($this->getCurrentProduct())
 			{
@@ -1508,9 +1603,9 @@ class Plugin
 			        [
 			            'attributes' =>
 			            [
-			                'id'     => $this->_helper->getIdentifier($this->getCurrentProduct()),
+			                'id'     => $this->helper->getIdentifier($this->getCurrentProduct()),
 			                'name'   => $this->getCurrentProduct()->getName(),
-			                'price'  => $this->_helper->getPrice
+			                'price'  => $this->helper->getPrice
 			                (
 			                    $this->getCurrentProduct()
 		                    )
@@ -1522,18 +1617,18 @@ class Plugin
 			    /**
 			     * Notify others
 			     */
-			    $this->_helper->getEventManager()->dispatch('ec_get_add_compare_attributes', ['transport' => $transport]);
+			    $this->helper->getEventManager()->dispatch('ec_get_add_compare_attributes', ['transport' => $transport]);
 			    
 			    /**
 			     * Set event attributes
 			     */
-			    $element->setAttribute('data-event-attributes', $this->_helper->getJsonHelper()->encode($transport->getAttributes(), JSON_UNESCAPED_UNICODE | JSON_HEX_APOS));
+			    $element->setAttribute('data-event-attributes', $this->helper->getJsonHelper()->encode($transport->getAttributes(), JSON_UNESCAPED_UNICODE | JSON_HEX_APOS));
 			    
-				$element->setAttribute('data-event-label', $this->_helper->escapeDataArgument($this->getCurrentProduct()->getName()));
+				$element->setAttribute('data-event-label', $this->helper->escapeDataArgument($this->getCurrentProduct()->getName()));
 			}
 		}
 		
-		return $this->getDOMContent($dom, $doc);
+		return $this->dom->getDOMContent($dom, $doc);
 	}
 	
 	/**
@@ -1581,27 +1676,26 @@ class Plugin
 		/**
 		 * Append tracking
 		 */
-		$doc = new \Anowave\Ec\Model\Dom('1.0','utf-8');
-		$dom = new \Anowave\Ec\Model\Dom('1.0','utf-8');
+		list($doc, $dom) = $this->getDom();
 		
-		$dom->loadHTML(mb_convert_encoding($content, 'HTML-ENTITIES', 'UTF-8'));
+		$dom->loadHTML($content);
 		
 		$query = new \DOMXPath($dom);
 		
 		$position = 1;
 		
-		foreach ($query->query($this->_helper->getListSelector()) as $key => $element)
+		foreach ($query->query($this->helper->getListSelector()) as $key => $element)
 		{
 			if (isset($products[$key]))
 			{
 				/**
 				 * Get all product categories
 				 */
-				$categories = $this->_helper->getCurrentStoreProductCategories($products[$key]);
+				$categories = $this->helper->getCurrentStoreProductCategories($products[$key]);
 				
 				if (!$categories)
 				{
-					if (null !== $root = $this->_helper->getStoreRootDefaultCategoryId())
+					if (null !== $root = $this->helper->getStoreRootDefaultCategoryId())
 					{
 						$categories[] = $root;
 					}
@@ -1625,21 +1719,22 @@ class Plugin
 				/**
 				 * Add data-* attributes used for tracking dynamic values
 				 */
-				foreach ($query->query($this->_helper->getListClickSelector(), $element) as $a)
+				foreach ($query->query($this->helper->getListClickSelector(), $element) as $a)
 				{
 					$click = $a->getAttribute('onclick');
 					
 					$this->setAttributes($a, $products[$key],
 				    [
-				        'data-event'       => 'productClick',
+				        'data-event'       => \Anowave\Ec\Helper\Constants::EVENT_PRODUCT_CLICK,
 				        'data-position'    => $position,
+				        'data-list'        => $this->helper->getCategoryList($category),
 				        'data-block'       => $block->getNameInLayout(),
 				        'data-click'       => $click
 				    ]);
 					
 					if ($category)
 					{
-						$a->setAttribute('data-category', $this->_helper->getCategoryDetailList($products[$key], $category));
+						$a->setAttribute('data-category', $this->helper->getCategoryDetailList($products[$key], $category));
 					}
 					
 					/**
@@ -1657,20 +1752,20 @@ class Plugin
 					/**
 					 * Notify others
 					 */
-					$this->_helper->getEventManager()->dispatch('ec_get_click_list_attributes', ['transport' => $transport]);
+					$this->helper->getEventManager()->dispatch('ec_get_click_list_attributes', ['transport' => $transport]);
 					
 					/**
 					 * Get response
 					 */
 					$attributes = $transport->getAttributes();
 					
-					$a->setAttribute('data-attributes', $this->_helper->getJsonHelper()->encode($attributes));
+					$a->setAttribute('data-attributes', $this->helper->getJsonHelper()->encode($attributes));
 				}
 				
 				/**
 				 * Track "Add to cart" from Related products
 				 */
-				if ('' !== $selector = $this->_helper->getCartCategorySelector())
+				if ('' !== $selector = $this->helper->getCartCategorySelector())
 				{
 					foreach (@$query->query($selector, $element) as $a)
 					{
@@ -1678,10 +1773,10 @@ class Plugin
 						
 						$this->setAttributes($a, $products[$key],
 					    [
-					        'data-event'       => 'productClick',
+					        'data-event'       => \Anowave\Ec\Helper\Constants::EVENT_PRODUCT_CLICK,
 					        'data-position'    => $position,
-					        'data-category'    => $this->_helper->getCategory($category),
-					        'data-list'        => $this->_helper->getCategoryList($category),
+					        'data-category'    => $this->helper->getCategory($category),
+					        'data-list'        => $this->helper->getCategoryList($category),
 					        'data-block'       => $block->getNameInLayout(),
 					        'data-click'       => $click
 					    ]);
@@ -1701,14 +1796,14 @@ class Plugin
 						/**
 						 * Notify others
 						 */
-						$this->_helper->getEventManager()->dispatch('ec_get_add_list_attributes', ['transport' => $transport]);
+						$this->helper->getEventManager()->dispatch('ec_get_add_list_attributes', ['transport' => $transport]);
 						
 						/**
 						 * Get response
 						 */
 						$attributes = $transport->getAttributes();
 						
-						$a->setAttribute('data-attributes', $this->_helper->getJsonHelper()->encode($attributes));
+						$a->setAttribute('data-attributes', $this->helper->getJsonHelper()->encode($attributes));
 					}
 				}
 			}
@@ -1716,7 +1811,7 @@ class Plugin
 			$position++;
 		}
 		
-		$content = $this->getDOMContent($dom, $doc);
+		$content = $this->dom->getDOMContent($dom, $doc);
 		
 		/**
 		 * Save cache
@@ -1740,10 +1835,9 @@ class Plugin
 		/**
 		 * Append tracking
 		 */
-		$doc = new \Anowave\Ec\Model\Dom('1.0','utf-8');
-		$dom = new \Anowave\Ec\Model\Dom('1.0','utf-8');
+	    list($doc, $dom) = $this->getDom();
 		
-		@$dom->loadHTML(mb_convert_encoding($content, 'HTML-ENTITIES', 'UTF-8'));
+		@$dom->loadHTML($content);
 		
 		/**
 		 * Modify DOM
@@ -1751,37 +1845,37 @@ class Plugin
 		
 		$x = new \DOMXPath($dom);
 		
-		foreach ($x->query($this->_helper->getDeleteSelector()) as $element)
+		foreach ($x->query($this->helper->getDeleteSelector()) as $element)
 		{
 			/**
 			 * Get all product categories
 			 */
-			$categories = $this->_helper->getCurrentStoreProductCategories($block->getItem()->getProduct());
+			$categories = $this->helper->getCurrentStoreProductCategories($block->getItem()->getProduct());
 			
 			if (!$categories)
 			{
-				if (null !== $root = $this->_helper->getStoreRootDefaultCategoryId())
+				if (null !== $root = $this->helper->getStoreRootDefaultCategoryId())
 				{
 					$categories[] = $root;
 				}
 			}
 
-			if (!$this->_helper->useSimples())
+			if (!$this->helper->useSimples())
 			{
-				$element->setAttribute('data-id', $this->_helper->escapeDataArgument($block->getItem()->getProduct()->getSku()));
+				$element->setAttribute('data-id', $this->helper->escapeDataArgument($block->getItem()->getProduct()->getSku()));
 			}
 			else 
 			{
-				$element->setAttribute('data-id', $this->_helper->escapeDataArgument($block->getItem()->getSku()));
+				$element->setAttribute('data-id', $this->helper->escapeDataArgument($block->getItem()->getSku()));
 			}
 			
-			$element->setAttribute('data-name', 		  $this->_helper->escapeDataArgument($block->getItem()->getProduct()->getName()));
-			$element->setAttribute('data-price', 		  $this->_helper->escapeDataArgument($this->_helper->getPrice($block->getItem()->getProduct())));
-			$element->setAttribute('data-brand', 		  $this->_helper->escapeDataArgument($this->_helper->getBrand($block->getItem()->getProduct())));
+			$element->setAttribute('data-name', 		  $this->helper->escapeDataArgument($block->getItem()->getProduct()->getName()));
+			$element->setAttribute('data-price', 		  $this->helper->escapeDataArgument($this->helper->getPrice($block->getItem()->getProduct())));
+			$element->setAttribute('data-brand', 		  $this->helper->escapeDataArgument($this->helper->getBrand($block->getItem()->getProduct())));
 			$element->setAttribute('data-quantity', (int) $block->getItem()->getQty());
-			$element->setAttribute('data-event', 		  'removeFromCart');
+			$element->setAttribute('data-event', 		  \Anowave\Ec\Helper\Constants::EVENT_REMOVE_FROM_CART);
 
-			if ($element->getAttribute('data-post') && $this->_helper->getUseRemoveConfirm())
+			if ($element->getAttribute('data-post') && $this->helper->getUseRemoveConfirm())
 			{
 				/**
 				 * Get current data post
@@ -1811,8 +1905,8 @@ class Plugin
 					end($categories)
 				);
 				
-				$element->setAttribute('data-category', 	$this->_helper->getCategoryDetailList($block->getItem()->getProduct(), $category));
-				$element->setAttribute('data-list', 		$this->_helper->getCategoryDetailList($block->getItem()->getProduct(), $category));
+				$element->setAttribute('data-category', 	$this->helper->getCategoryDetailList($block->getItem()->getProduct(), $category));
+				$element->setAttribute('data-list', 		$this->helper->getCategoryDetailList($block->getItem()->getProduct(), $category));
 			}
 			
 			/**
@@ -1832,18 +1926,18 @@ class Plugin
 			/**
 			 * Notify others
 			 */
-			$this->_helper->getEventManager()->dispatch('ec_get_remove_attributes', ['transport' => $transport]);
+			$this->helper->getEventManager()->dispatch('ec_get_remove_attributes', ['transport' => $transport]);
 			
 			/**
 			 * Get response
 			 */
 			$attributes = $transport->getAttributes();
 			
-			$element->setAttribute('data-attributes', $this->_helper->getJsonHelper()->encode($attributes));
+			$element->setAttribute('data-attributes', $this->helper->getJsonHelper()->encode($attributes));
 		}
 		
 		
-		return $this->getDOMContent($dom, $doc);
+		return $this->dom->getDOMContent($dom, $doc);
 	}
 	
 	
@@ -1857,30 +1951,34 @@ class Plugin
 	 */
 	public function augmentAddCartBlock($block, $content)
 	{
-		$doc = new \Anowave\Ec\Model\Dom('1.0','utf-8');
-		$dom = new \Anowave\Ec\Model\Dom('1.0','utf-8');
+		list($doc, $dom) = $this->getDom();
 		
-		@$dom->loadHTML(mb_convert_encoding($content, 'HTML-ENTITIES', 'UTF-8'));
+		if ($this->helper->usePlaceholders())
+		{
+		    $placeholders = $this->applyPlaceholders($content);
+		}
+		
+		@$dom->loadHTML($content);
 		
 		$x = new \DOMXPath($dom);
 
-		foreach ($x->query($this->_helper->getCartSelector()) as $element)
+		foreach ($x->query($this->helper->getCartSelector()) as $element)
 		{
-			$category = $this->_coreRegistry->registry('current_category');
+			$category = $this->registry->registry('current_category');
 			
 			if (!$category)
 			{
 				/**
 				 * Get all product categories
 				 */
-				$categories = $this->_helper->getCurrentStoreProductCategories($block->getProduct());
+				$categories = $this->helper->getCurrentStoreProductCategories($block->getProduct());
 				
 				/**
 				 * Cases when product does not exist in any category
 				 */
 				if (!$categories)
 				{
-					$categories[] = $this->_helper->getStoreRootDefaultCategoryId();
+					$categories[] = $this->helper->getStoreRootDefaultCategoryId();
 				}
 					
 				/**
@@ -1904,9 +2002,9 @@ class Plugin
 		     */
 			$this->setAttributes($element, $block->getProduct(),
 		    [
-		        'data-category' => $this->_helper->getCategory($category),
-		        'data-list'     => $this->_helper->getCategoryDetailList($block->getProduct(), $category),
-		        'data-event'    => 'addToCart',
+		        'data-category' => $this->helper->getCategory($category),
+		        'data-list'     => $this->helper->getCategoryDetailList($block->getProduct(), $category),
+		        'data-event'    => \Anowave\Ec\Helper\Constants::EVENT_ADD_TO_CART,
 		        'data-click'    => $click
 		    ]);
 			
@@ -1923,7 +2021,7 @@ class Plugin
 			}
 			catch (\Exception $e){}
 
-			if ('grouped' == $block->getProduct()->getTypeId())
+			if (\Magento\GroupedProduct\Model\Product\Type\Grouped::TYPE_CODE == $block->getProduct()->getTypeId())
 			{
 				$element->setAttribute('data-grouped',1);
 			}
@@ -1932,6 +2030,19 @@ class Plugin
 			{
 				$element->setAttribute('data-configurable',1);
 			}
+			
+			$options = [];
+			
+			foreach ($this->customOptionRepository->getList($block->getProduct()->getSku()) as $option)
+			{
+			    $options[$option->getOptionId()] = $option->getTitle();
+			}
+			
+			if ($options)
+			{
+			    $element->setAttribute('data-options', $this->helper->getJsonHelper()->encode($options));
+			}
+			
 			
 			/**
 			 * Create transport object
@@ -1949,57 +2060,27 @@ class Plugin
 			/**
 			 * Notify others
 			 */
-			$this->_helper->getEventManager()->dispatch('ec_get_add_attributes', ['transport' => $transport]);
+			$this->helper->getEventManager()->dispatch('ec_get_add_attributes', ['transport' => $transport]);
 			
 			/**
 			 * Get response
 			 */
 			$attributes = $transport->getAttributes();
 			
-			$element->setAttribute('data-attributes', $this->_helper->getJsonHelper()->encode($attributes));
+			$element->setAttribute('data-attributes', $this->helper->getJsonHelper()->encode($attributes));
 		}
 
-		return $this->getDOMContent($dom, $doc);
-	}
-	
-	/**
-	 * Retrieves body
-	 *
-	 * @param \Anowave\Ec\Model\Dom $dom
-	 * @param \Anowave\Ec\Model\Dom $doc
-	 * @param string $decode
-	 */
-	public function getDOMContent(\Anowave\Ec\Model\Dom $dom, \Anowave\Ec\Model\Dom $doc, $debug = false, $originalContent = '')
-	{
-		try
-		{
-			$head = $dom->getElementsByTagName('head')->item(0);
-			$body = $dom->getElementsByTagName('body')->item(0);
-			
-			if ($head instanceof \DOMElement)
-			{
-				foreach ($head->childNodes as $child)
-				{
-					$doc->appendChild($doc->importNode($child, true));
-				}
-			}
+		$content =  $this->dom->getDOMContent($dom, $doc);
 		
-			if ($body instanceof \DOMElement)
-			{
-				foreach ($body->childNodes as $child)
-				{
-					$doc->appendChild($doc->importNode($child, true));
-				}
-			}
-		}
-		catch (\Exception $e)
+		if ($this->helper->usePlaceholders())
 		{
-			
+		    if (isset($placeholders))
+		    {
+		        $content = $this->restorePlaceholders($content, $placeholders);
+		    }
 		}
-
-		$content = $doc->saveHTML();
 		
-		return html_entity_decode($content, ENT_COMPAT, 'UTF-8');
+		return $content;
 	}
 	
 	/**
@@ -2007,7 +2088,7 @@ class Plugin
 	 */
 	public function getCurrentProduct()
 	{
-		return $this->_coreRegistry->registry('current_product');
+		return $this->registry->registry('current_product');
 	}
 	
 	/**
@@ -2018,7 +2099,7 @@ class Plugin
 	 */
 	public function augmentAmp($block, $content)
 	{
-		if (!$this->_helper->supportAmp())
+		if (!$this->helper->supportAmp())
 		{
 			return $content;
 		}
@@ -2028,10 +2109,9 @@ class Plugin
 		 */
 		if (false !== strpos($content, 'amp-analytics'))
 		{
-			$doc = new \Anowave\Ec\Model\Dom('1.0','utf-8');
-			$dom = new \Anowave\Ec\Model\Dom('1.0','utf-8');
+		    list($doc, $dom) = $this->getDom();
 				
-			@$dom->loadHTML(mb_convert_encoding($content, 'HTML-ENTITIES', 'UTF-8'));
+			@$dom->loadHTML($content);
 				
 			$x = new \DOMXPath($dom);
 				
@@ -2048,13 +2128,13 @@ class Plugin
 					/**
 					 * Enhanced Ecommerce parameters
 					*/
-					$params->nodeValue = $this->_helper->getJsonHelper()->encode($this->getAmpVariables($node, $block));
+					$params->nodeValue = $this->helper->getJsonHelper()->encode($this->getAmpVariables($node, $block));
 						
 					$params = $node->appendChild($params);
 				}
 			}
 			
-			return $this->getDOMContent($dom, $doc);
+			return $this->dom->getDOMContent($dom, $doc);
 		}
 		
 		return $content;
@@ -2081,7 +2161,7 @@ class Plugin
 		/**
 		 * Get visitor data
 		 */
-		$vars['vars']['visitor'] = json_decode($this->_helper->getVisitorPush($block), true);
+		$vars['vars']['visitor'] = json_decode($this->helper->getVisitorPush($block), true);
 		
 		/**
 		 * Read persistent dataLayer
@@ -2107,33 +2187,33 @@ class Plugin
 	    foreach 
 	    (
     	    [
-    	        'data-id'                          => $this->_helper->getIdentifier($product),
+    	        'data-id'                          => $this->helper->getIdentifier($product),
     	        'data-simple-id'                   => $product->getSku(),
-    	        'data-remarketing-adwords-id'      => $this->_helper->getAdwordsRemarketingId($product),
-    	        'data-remarketing-facebook-id'     => $this->_helper->getFacebookRemarketingId($product),
+    	        'data-remarketing-adwords-id'      => $this->helper->getAdwordsRemarketingId($product),
+    	        'data-remarketing-facebook-id'     => $this->helper->getFacebookRemarketingId($product),
     	        'data-name'                        => $product->getName(),
-    	        'data-price'                       => $this->_helper->getPrice($product),
-    	        'data-store'                       => $this->_helper->getStoreName(),
-    	        'data-brand'                       => $this->_helper->getBrand($product),
-    	        'data-use-simple'                  => $this->_helper->useSimples() ? 1 : 0,
+    	        'data-price'                       => $this->helper->getPrice($product),
+    	        'data-store'                       => $this->helper->getStoreName(),
+    	        'data-brand'                       => $this->helper->getBrand($product),
+    	        'data-use-simple'                  => $this->helper->useSimples() ? 1 : 0,
     	        'data-quantity'                    => 1
     	    ] 
         as  $attribute => $value)
 	    {
-	        $element->setAttribute($attribute, $this->_helper->escapeDataArgument($value));
+	        $element->setAttribute($attribute, $this->helper->escapeDataArgument($value));
 	    }
 	    
 	    /**
 	     * Set stock index dimension
 	     */
-	    $element->setAttribute("data-{$this->_helper->getStockDimensionIndex(true)}", $this->_helper->getStock($product));
+	    $element->setAttribute("data-{$this->helper->getStockDimensionIndex(true)}", $this->helper->getStock($product));
 	    
 	    /**
 	     * Set custom attributes
 	     */
 	    foreach ($attributes as $attribute => $value)
 	    {
-	        $element->setAttribute($attribute, $value);
+	        $element->setAttribute($attribute, (string) $value);
 	    }
 	    
 	    if (0)
@@ -2148,6 +2228,20 @@ class Plugin
 	}
 	
 	/**
+	 * Get DOM wrappers
+	 * 
+	 * @return array
+	 */
+	public function getDom() : array
+	{
+	    return 
+	    [
+	        new \Anowave\Ec\Model\Dom('1.0','utf-8'), 
+	        new \Anowave\Ec\Model\Dom('1.0','utf-8')
+	    ];
+	}
+	
+	/**
 	 * Get placeholders
 	 *
 	 * @param string $content
@@ -2159,11 +2253,11 @@ class Plugin
 		/**
 		 * Match inline JS scripts
 		 */
-		preg_match_all('/<script\s?(type="text\/javascript")?>.*?<\/script>/ims', $content, $matches);
+	    preg_match_all('/<script\s?([^>]*?)>.*?<\/script>/ims', $content, $matches);
 		
 		if ($matches)
 		{
-			$placeholders = array();
+			$placeholders = [];
 			
 			foreach ($matches[0] as $key => $match)
 			{

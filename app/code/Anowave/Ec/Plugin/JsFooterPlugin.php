@@ -15,7 +15,7 @@
  *
  * @category 	Anowave
  * @package 	Anowave_Ec
- * @copyright 	Copyright (c) 2022 Anowave (https://www.anowave.com/)
+ * @copyright 	Copyright (c) 2023 Anowave (https://www.anowave.com/)
  * @license  	https://www.anowave.com/license-agreement/
  */
 
@@ -189,19 +189,10 @@ class JsFooterPlugin
         [
             'data-ommit',
             'www.googletagmanager.com/gtm.js',
-            'require.js',
-            'require.min.js',
-            'requirejs-min-resolver.js',
-            'requirejs-min-resolver.min.js',
-            'requirejs-config.js',
-            'requirejs-config.min.js',
-            'mixins.js',
-            'mixins.min.js',
             'ec.js',
             'ec.min.js',
             'ec4.js',
-            'ec4.min.js',
-            'var BASE_URL'
+            'ec4.min.js'
         ];
         
         /**

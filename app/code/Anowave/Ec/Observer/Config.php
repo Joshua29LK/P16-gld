@@ -15,7 +15,7 @@
  *
  * @category 	Anowave
  * @package 	Anowave_Ec
- * @copyright 	Copyright (c) 2022 Anowave (https://www.anowave.com/)
+ * @copyright 	Copyright (c) 2023 Anowave (https://www.anowave.com/)
  * @license  	https://www.anowave.com/license-agreement/
  */
 
@@ -182,6 +182,7 @@ class Config implements ObserverInterface
 				}
 			}
 
+			
 			/**
 			 * Create transport object
 			 *
@@ -263,6 +264,11 @@ class Config implements ObserverInterface
 			$this->_messageManager->addErrorMessage('It seems you are using older version of GTM snippet. Please update using the splitted version provided by Google Tag Manager otherwise tracking may not work.');
 		}
 		
+		if (1 === (int) $this->scope->getConfig('ec/gmp/use_measurement_protocol_only'))
+		{
+		    $this->_messageManager->addWarningMessage('You have opted to track transactions via server-side implementation ONLY. purchase event will not be pushed into dataLayer[] object on success page.');
+		}
+		
 		$addons = 
 		[
 			'Amasty_Checkout' => 
@@ -293,9 +299,6 @@ class Config implements ObserverInterface
 		{
 		    $this->_messageManager->addWarningMessage("Current payload model may not work correctly in Magento 2.4. Change impression payload model to After Pageview in Enhanced Ecommerce Tracking preferences section below.");
 		}
-		
-		$this->_messageManager->addNoticeMessage("As of version 101.0.4 (using {$this->_helper->getVersion()}) transactions are tracked via purchase event. Remember to run your API again to ensure that all required tags and triggers are set.");
-		
 		
 		/**
 		 * Check if ae_table exists

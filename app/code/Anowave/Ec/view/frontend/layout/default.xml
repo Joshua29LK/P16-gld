@@ -6,8 +6,6 @@
 		    <block class="Anowave\Ec\Block\Track" name="ec_header" as="ec_header" template="header.phtml" />
             <block class="Anowave\Ec\Block\Track" name="ec_purchase" as="ec_purchase" template="purchase.phtml" >
             	<block class="Anowave\Ec\Block\Track" name="ec_datalayer" as="ec_datalayer" template="datalayer.phtml" />
-            	<block class="Anowave\Ec\Block\Track" name="ec_impressions" as="ec_impressions" template="impression.phtml" />
-            	<block class="Anowave\Ec\Block\Track" name="ec_search" as="ec_search" template="search.phtml" />
             	<block class="Anowave\Ec\Block\Track" name="ec_detail" as="ec_detail" template="detail.phtml" />
             	<block class="Anowave\Ec\Block\Track" name="ec_cookie" as="ec_cookie" template="cookie.phtml" />
             </block>

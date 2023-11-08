@@ -1,11 +1,9 @@
 var AEC = (function()
 {
 	return {
-		debug: false,
-		eventCallback: true,
-		ajax: function(context, dataLayer)
+		add: function(context, dataLayer)
 		{
-			let element = context, qty = 1, variant = [], variant_attribute_option = [], products = [];
+			let element = context, qty = 1, variant = [], variant_attribute_option = [], items = [];
 
 			document.querySelectorAll('input[name=qty]:checked, [name=qty]').forEach(element => 
 			{
@@ -19,16 +17,23 @@ var AEC = (function()
 				qty = 1;
 			}
 			
+			if ('undefined' !== typeof jQuery)
+			{
+				var form = jQuery(context).closest('form');
+
+				if (form.length)
+				{
+					if (!form.valid())
+					{
+						return true;
+					}
+				}
+			}
+			
 			if (!AEC.gtm())
 			{
-				/**
-				 * Invoke original click event(s)
-				 */
 				if (element.dataset.click)
 				{
-					/**
-					 * Track time 
-					 */
 					AEC.Time.track(dataLayer, AEC.Const.TIMING_CATEGORY_ADD_TO_CART, element.dataset.name, element.dataset.category);
 					
 					eval(element.dataset.click);
@@ -62,9 +67,29 @@ var AEC = (function()
 							}
 						}
 					}
+					
+					if (attribute.matches('input') && -1 != attribute.type.indexOf('radio'))
+					{
+						if (attribute.parentNode.classList.contains('swatch-option-selected') || attribute.checked)
+						{
+							Object.entries(AEC.SUPER).forEach(([key, super_attribute]) => 
+							{
+								if (-1 != attribute.name.indexOf("super_attribute[" + super_attribute.id + "]"))
+								{
+									let variant = {
+										id: 	super_attribute.id,
+										text:	super_attribute.label,
+										option: attribute.value
+									};
+									
+									variants.push(variant);
+									
+								}
+							});
+						}
+					}
 				});
 				
-
 				/**
 				 * Colour Swatch support
 				 */
@@ -114,6 +139,11 @@ var AEC = (function()
 					});
 				}
 				
+				if (!variants.length)
+				{
+					AEC.EventDispatcher.trigger('ec.variants', variants);
+				}
+				
 				var SUPER_SELECTED = [];
 
 				for (i = 0, l = variants.length; i < l; i++)
@@ -126,20 +156,25 @@ var AEC = (function()
 
 							if (AEC.useDefaultValues)
 							{
-								AEC.SUPER[a].options.forEach((index, option) => 
+								AEC.SUPER[a].options.forEach(option => 
 								{
 									if (parseInt(option.value_index) == parseInt(variants[i].option))
 									{
-										text = option.admin_label;
+										if (option.hasOwnProperty('admin_label'))
+										{
+											text = option.admin_label;
+										}
+										else if (option.hasOwnProperty('store_label'))
+										{
+											text = option.store_label;
+										}
+										
 									}
 								});
 							}
 							
 							variant.push([AEC.SUPER[a].label,text].join(AEC.Const.VARIANT_DELIMITER_ATT));
 
-							/**
-							 * Push selected options
-							 */
 							variant_attribute_option.push(
 							{
 								attribute: 	variants[i].id,
@@ -151,14 +186,8 @@ var AEC = (function()
 				
 				if (!variant.length)
 				{
-					/**
-					 * Invoke original click event(s)
-					 */
 					if (element.dataset.click)
 					{
-						/**
-						 * Track time 
-						 */
 						AEC.Time.track(dataLayer, AEC.Const.TIMING_CATEGORY_ADD_TO_CART, element.dataset.name, element.dataset.category);
 						
 						eval(element.dataset.click);
@@ -180,15 +209,19 @@ var AEC = (function()
 						{
 							if (qty)
 							{
-								products.push(
+								let item = 
 								{
-									'name': 		window.G[u].name,
-									'id': 		    window.G[u].sku,
-									'price': 		window.G[u].price,
-									'category': 	window.G[u].category,
-									'brand':		window.G[u].brand,
-									'quantity': 	qty
-								});
+									'item_name': 		window.G[u].name,
+									'item_id': 		    window.G[u].sku,
+									'price': 			window.G[u].price,
+									'category': 		window.G[u].category,
+									'item_brand':		window.G[u].brand,
+									'quantity': 		qty
+								};
+								
+								Object.assign(item, item, AEC.GA4.transformCategories(element.dataset.category));
+								
+								items.push(item);
 							}
 						})(Math.abs(field.value));
 					}
@@ -196,62 +229,75 @@ var AEC = (function()
 			}
 			else
 			{
-				products.push(
+				let item = 
 				{
-					'name': 		element.dataset.name,
-					'id': 		    1 === parseInt(element.dataset.useSimple) ? element.dataset.simpleId : element.dataset.id,
-					'price': 		element.dataset.price,
-					'category': 	element.dataset.category,
-					'brand':		element.dataset.brand,
-					'variant':		variant.join(AEC.Const.VARIANT_DELIMITER),
-					'quantity': 	qty
-				});
+					'item_name': 		element.dataset.name,
+					'item_id': 		    1 === parseInt(element.dataset.useSimple) ? element.dataset.simpleId : element.dataset.id,
+					'price': 			element.dataset.price,
+					'item_brand':		element.dataset.brand,
+					'item_variant':		variant.join(AEC.Const.VARIANT_DELIMITER),
+					'category':			element.dataset.category,
+					'quantity': 		qty,
+					'currency':			AEC.currencyCode,
+					'index': 			0
+				};
+				
+				Object.assign(item, item, AEC.GA4.transformCategories(element.dataset.category));
+				
+				items.push(item);
 			}
 			
-			for (i = 0, l = products.length; i < l; i++)
+			for (i = 0, l = items.length; i < l; i++)
 			{
-				(function(product)
+				(function(item)
 				{
 					Object.entries(AEC.parseJSON(element.dataset.attributes)).forEach(([key, value]) => 
 					{
-						product[key] = value;
+						item[key] = value;
 					});
+					
+					let options = [];
+					
+					Object.entries(AEC.parseJSON(element.dataset.options)).forEach(([key, name]) => 
+					{
+						let option = document.querySelector('[name="options[' + key + ']"]'), value = null;
+						
+						switch(true)
+						{
+							case option instanceof HTMLInputElement: 
+							case option instanceof HTMLTextAreaElement: value = option.value;
+								break;
+							case option instanceof HTMLSelectElement: value = option.options[option.selectedIndex].text;
+								break;
+						}
+						
+						if (value)
+						{
+							options.push({ name: name, value: value });
+						}
+						
+					});
+					
+					if (options.length)
+					{
+						item['options'] = options;
+					}
 
-				})(products[i]);
+				})(items[i]);
 			}
 			
 			var data = 
 			{
-				'event': 'addToCart',
+				'event':'add_to_cart',
 				'eventLabel': element.dataset.name,
 				'ecommerce': 
 				{
-					'currencyCode': AEC.currencyCode,
-					'add': 
-					{
-						'actionField': 
-						{
-							'list': element.dataset.list
-						},
-						'products': products
-					},
-					'options': variant_attribute_option
+					'currency': 		AEC.currencyCode,
+					'item_list_id': 	element.dataset.list,
+					'item_list_name': 	element.dataset.list,
+					'items': 			items,
+					'options': 			variant_attribute_option
 				},
-				'eventCallback': function() 
-				{
-					if (AEC.eventCallback)
-					{
-						if (element.dataset.event)
-						{
-							element.trigger(element.dataset.event);
-						}
-						
-						if (element.dataset.click)
-						{
-							eval(element.dataset.click);
-						}
-					}
-		     	},
 				'currentStore': element.dataset.store
 			};
 			
@@ -275,17 +321,17 @@ var AEC = (function()
 			 */
 			if (AEC.localStorage)
 			{
-				(function(products)
+				(function(items)
 				{
-					for (var i = 0, l = products.length; i < l; i++)
+					for (var i = 0, l = items.length; i < l; i++)
 					{
 						AEC.Storage.reference().set(
 						{
-							id: 	  products[i].id,
-							category: products[i].category
+							id: 		items[i].item_id,
+							category: 	items[i].category
 						});
 					}
-				})(products);
+				})(items);
 			}
 			
 			/**
@@ -297,15 +343,15 @@ var AEC = (function()
 			{
 				if ("undefined" !== typeof fbq)
 				{
-					(function(product, products, fbq)
+					(function(product, items, fbq)
 					{
 						var content_ids = [], price = 0;
 						
-						for (i = 0, l = products.length; i < l; i++)
+						for (i = 0, l = items.length; i < l; i++)
 						{
-							content_ids.push(products[i].id);
+							content_ids.push(items[i].item_id);
 			
-							price += parseFloat(products[i].price);
+							price += parseFloat(items[i].price);
 						}
 						
 						(function(callback)
@@ -342,13 +388,10 @@ var AEC = (function()
 							})(product, content_ids, price)
 						);
 
-					})(element.dataset.name, products, fbq);
+					})(element.dataset.name, items, fbq);
 				}
 			}
 			
-			/**
-			 * Invoke original click event(s)
-			 */
 			if (element.dataset.click)
 			{
 				eval(element.dataset.click);
@@ -356,7 +399,7 @@ var AEC = (function()
 			
 			return true;
 		},
-		ajaxSwatch: function(context,dataLayer)
+		addSwatch: function(context,dataLayer)
 		{	
 			var element = context;
 			
@@ -380,44 +423,40 @@ var AEC = (function()
 					
 					var variant = [[attributes[0].attribute_label, option.getAttribute('aria-label')].join(AEC.Const.VARIANT_DELIMITER_ATT)].join(AEC.Const.VARIANT_DELIMITER);
 					
-					var products = 
-					[
-						{
-							'name': 		element.dataset.name,
-							'id': 		    element.dataset.id,
-							'price': 		element.dataset.price,
-							'category': 	element.dataset.category,
-							'brand':		element.dataset.brand,
-							'variant':		variant,
-							'quantity': 	1
-						}
-					];
+					let items = [];
 					
-					var data = 
+					let item =  
 					{
-						'event': 'addToCart',
-						'eventLabel': element.dataset.name,
-						'ecommerce': 
-						{
-							'currencyCode': AEC.currencyCode,
-							'add': 
-							{
-								'actionField': 
-								{
-									'list': element.dataset.list
-								},
-								'products': products
-							}
-						},
-						'currentStore': element.dataset.store
+						'item_name': 		element.dataset.name,
+						'item_id': 		    element.dataset.id,
+						'price': 			element.dataset.price,
+						'category': 		element.dataset.category,
+						'item_brand':		element.dataset.brand,
+						'item_variant':		variant,
+						'item_list_name': 	element.dataset.list,
+						'item_list_id': 	element.dataset.list,
+						'quantity': 		1,
+						'index':			element.dataset.position
 					};
 					
-					AEC.EventDispatcher.trigger('ec.add.swatch.data', data);
+					Object.assign(item, item, AEC.GA4.transformCategories(element.dataset.category));
 					
 					/**
 					 * Track event
 					 */
-					AEC.Cookie.add(data).push(dataLayer);
+					AEC.Cookie.add(
+					{
+						'event': 			'add_to_cart',
+						'currency':			AEC.currencyCode,
+						'eventLabel': 		element.dataset.name,
+						'item_list_id': 	element.dataset.list,
+						'item_list_name': 	element.dataset.list,
+						'ecommerce': 
+						{
+							'items': [item]
+						},
+						'currentStore': element.dataset.store
+					}).push(dataLayer);
 	
 					/**
 					 * Track time 
@@ -428,186 +467,12 @@ var AEC = (function()
 			
 			return true;
 		},
-		ajaxList:function(context,dataLayer)
-		{
-			var element = context, products = [];
-		
-			if (!AEC.gtm())
-			{
-				/**
-				 * Invoke original click event(s)
-				 */
-				if (element.dataset.click)
-				{
-					/**
-					 * Track time 
-					 */
-					AEC.Time.track(dataLayer, AEC.Const.TIMING_CATEGORY_ADD_TO_CART, element.dataset.name, element.dataset.category);
-					
-					eval(element.dataset.click);
-				}
-				
-				return true;
-			}
-
-			products.push(
-			{
-				'name': 		element.dataset.name,
-				'id': 		    element.dataset.id,
-				'price': 		element.dataset.price,
-				'category': 	element.dataset.category,
-				'brand':		element.dataset.brand,
-				'position':		element.dataset.position,
-				'quantity': 	1
-			});
-			
-			/**
-			 * Affiliation attributes
-			 */
-			for (i = 0, l = products.length; i < l; i++)
-			{
-				(product => 
-				{
-					
-					Object.entries(AEC.parseJSON(element.dataset.attributes)).forEach(([key, value]) => 
-					{
-						product[key] = value;
-					});
-					
-				})(products[i]);	
-			}
-
-			var data = 
-			{
-				'event': 'addToCart',
-				'eventLabel': element.dataset.name,
-				'ecommerce': 
-				{
-					'currencyCode': AEC.currencyCode,
-					'add': 
-					{
-						'actionField': 
-						{
-							'list': element.dataset.list
-						},
-						'products': products
-					}
-				},
-				'eventCallback': function() 
-				{
-					if (AEC.eventCallback)
-					{
-						if (element.dataset.event)
-						{
-							element.trigger(element.dataset.event);
-						}
-						
-						if (element.dataset.click)
-						{
-							eval(element.dataset.click);
-						}
-					}
-		     	},
-				'currentStore': element.dataset.store
-			};
-
-			this.EventDispatcher.trigger('ec.add.list.data', data);
-			
-			/**
-			 * Track event
-			 */
-			AEC.Cookie.add(data).push(dataLayer);
-
-			/**
-			 * Save backreference
-			 */
-			if (AEC.localStorage)
-			{
-				(function(products)
-				{
-					for (var i = 0, l = products.length; i < l; i++)
-					{
-						AEC.Storage.reference().set(
-						{
-							id: 	  products[i].id,
-							category: products[i].category
-						});
-					}
-				})(products);
-			}
-
-			/**
-			 * Track time 
-			 */
-			AEC.Time.track(dataLayer, AEC.Const.TIMING_CATEGORY_ADD_TO_CART, element.dataset.name, element.dataset.category);
-			
-			if (AEC.facebook)
-			{
-				if ("undefined" !== typeof fbq)
-				{
-					(function(product, products, fbq)
-					{
-						var content_ids = [], price = 0;
-						
-						for (i = 0, l = products.length; i < l; i++)
-						{
-							content_ids.push(products[i].id);
-			
-							price += parseFloat(products[i].price);
-						}
-						
-						(function(callback)
-						{
-							if (AEC.Const.COOKIE_DIRECTIVE)
-							{
-								AEC.CookieConsent.queue(callback).process();
-							}
-							else 
-							{
-								callback.apply(window,[]);
-							}
-						})
-						(
-							(function(product, content_ids, price)
-							{
-								return function()
-								{
-									fbq('track', 'AddToCart', 
-									{
-										content_name: 	product,
-										content_ids: 	content_ids,
-										content_type: 	'product',
-										value: 			price,
-										currency: 		AEC.currencyCode
-									}, 
-									{ eventID: AEC.UUID.generate({ event: 'AddToCart'}) });
-								}
-							})(product, content_ids, price)
-						);
-
-					})(element.dataset.name, products, fbq);
-				}
-			}
-			
-			/**
-			 * Invoke original click event(s)
-			 */
-			if (element.dataset.click)
-			{
-				eval(element.dataset.click);
-			}
-
-			return true;
-		},
 		click: function(context,dataLayer)
 		{
 			var element = context;
 			
 			if (!AEC.gtm())
 			{
-				/**
-				 * Track time 
-				 */
 				AEC.Time.track(dataLayer, AEC.Const.TIMING_CATEGORY_PRODUCT_CLICK, element.dataset.name, element.dataset.category);
 
 				return true;
@@ -615,13 +480,14 @@ var AEC = (function()
 
 			var item = 
 			{
-				'name': 		element.dataset.name,
-				'id': 			element.dataset.id,
+				'item_name': 	element.dataset.name,
+				'item_id': 		element.dataset.id,
 				'price': 		element.dataset.price,
-				'category': 	element.dataset.category,
-				'brand':		element.dataset.brand,
+				'item_brand':	element.dataset.brand,
 				'quantity': 	element.dataset.quantity,
-				'position':		element.dataset.position
+				'index':		element.dataset.position,
+				'category':		element.dataset.category,
+				'currency':		AEC.currencyCode
 			};
 			
 			Object.entries(AEC.parseJSON(element.dataset.attributes)).forEach(([key, value]) => 
@@ -629,83 +495,25 @@ var AEC = (function()
 				item[key] = value;
 			});
 			
+			Object.assign(item, item, AEC.GA4.augmentCategories(item));
+			
 			var data = 
 			{
-				'event': 'productClick',
-				'eventLabel': element.dataset.name,
+				'event': 			'select_item',
+				'eventLabel': 		element.dataset.name,
+				'item_list_id': 	element.dataset.list, 
+				'item_list_name': 	element.dataset.list,
 				'ecommerce': 
 				{
-					'click': 
-					{
-						'actionField': 
-						{
-							'list': element.dataset.list
-						},
-						'products': 
-						[
-							item
-						]
-					}
+					'items': 
+					[
+						item
+					]
 				},
-				'eventCallback': function() 
-				{
-					if (AEC.eventCallback)
-					{
-						if (element.dataset.event)
-						{
-							element.trigger(element.dataset.event);
-						}
-						
-						if (element.dataset.click)
-						{
-							eval(element.dataset.click);
-						}
-						else if (element.matches('a'))
-						{
-							document.location = element.getAttribute('href');
-						}
-						else if (element.matches('img') && element.parentNode.matches('a'))
-						{
-							document.location = element.parentNode.getAttribute('href');
-						}
-						else 
-						{
-							return true;
-						}
-					}
-		     	},
-		     	'eventTarget': (function(element)
-    	     	{
-    	     		/**
-    	     		 * Default target
-    	     		 */
-    	     		var target = 'Default';
-    	     		
-    	     		/**
-    	     		 * Check if element is anchor
-    	     		 */
-    	     		if (element.matches('a'))
-    	     		{
-    	     			target = 'Link';
-    	     			
-    	     			if (element.querySelector('img'))
-    	     			{
-    	     				target = 'Image';
-    	     			}
-    	     		}
-    	     		
-    	     		if (element.matches('button'))
-    	     		{
-    	     			target = 'Button';
-    	     		}
-    	     		
-    	     		return target;
-    	     		
-    	     	})(element), 'currentStore': element.dataset.store	
+    	     	'currentStore': element.dataset.store	
 			};
 			
-			AEC.EventDispatcher.trigger('ec.click.data', data);
-			
+
 			/**
 			 * Push data
 			 */
@@ -720,21 +528,9 @@ var AEC = (function()
 			{
 				eval(element.dataset.click);
 			}
-			
-			if (AEC.eventCallback)
-			{
-				return false;
-			}
-			
+
 			return true;
 		},
-		/**
-		 * Track "Remove From Cart" event
-		 *
-		 * @param (domelement) context
-		 * @param (object) dataLayer
-		 * @return boolean
-		 */
 		remove: function(context, dataLayer)
 		{
 			var element = context;
@@ -746,12 +542,13 @@ var AEC = (function()
 
 			var item = 
 			{
-				'name': 		element.dataset.name,
-				'id': 			element.dataset.id,
+				'item_name': 	element.dataset.name,
+				'item_id': 		element.dataset.id,
 				'price': 		element.dataset.price,
 				'category': 	element.dataset.category,
-				'brand':		element.dataset.brand,
-				'quantity': 	element.dataset.quantity	
+				'item_brand':	element.dataset.brand,
+				'quantity': 	element.dataset.quantity,
+				'currency': 	AEC.currencyCode
 			};
 			
 			Object.entries(AEC.parseJSON(element.dataset.attributes)).forEach(([key, value]) => 
@@ -759,23 +556,20 @@ var AEC = (function()
 				item[key] = value;
 			});
 			
+			Object.assign(item, item, AEC.GA4.augmentCategories(item));
+			
 			var data = 
 			{
-				'event': 'removeFromCart',
+				'event': 'remove_from_cart',
 				'eventLabel': element.dataset.name,
 				'ecommerce': 
 				{
-					'remove': 
-					{   
-						'actionField': 
-						{
-							'list': element.dataset.list
-						},
-						'products': 
-						[
-							item
-						]
-					}
+					'item_list_id':  element.dataset.list,
+					'item_list_name':  element.dataset.list,
+					'items': 
+					[
+						item
+					],
 				}
 			};
 			
@@ -806,7 +600,39 @@ var AEC = (function()
 								/**
 								 * Execute standard data-post
 								 */
-				            	jQuery(document).dataPost('postData', AEC.parseJSON(element.dataset.postAction));
+								(params => 
+								{
+									let form = document.createElement("form");
+									
+					                form.setAttribute('method', 'post');
+					                form.setAttribute('action', params.action);
+					                
+					                let formKey = jQuery.cookie('form_key');
+					                
+					                if (formKey)
+					                {
+					                	params.data['form_key'] = formKey;
+					                }
+					                
+					                Object.entries(params.data).forEach(([name, value]) => 
+									{
+										let input = document.createElement('input');
+								
+										input.setAttribute('type', 'text');
+										input.setAttribute('name',  name);
+										input.setAttribute('value', value);
+										
+										form.append(input);
+									});
+					                
+					                document.querySelector("body").appendChild(form);
+					                
+					                /**
+					                 * Submit form
+					                 */
+					                form.submit();
+									
+								})(AEC.parseJSON(element.dataset.postAction))
 				            },
 				            cancel: function()
 				            {
@@ -849,18 +675,20 @@ var AEC = (function()
 				return true;
 			}
 			
-			let data = 
-			{
-				event: 		element.dataset.event,
-				eventLabel: element.dataset.eventLabel
-			};
-			
-			AEC.EventDispatcher.trigger('ec.add.wishlist', data, { attributes: element.dataset.eventAttributes });
+			let attributes = JSON.parse(element.dataset.eventAttributes);
 			
 			/**
-			 * Push data
+			 * Track event
 			 */
-			dataLayer.push(data);
+			AEC.Cookie.wishlist(
+			{
+				event: 		element.dataset.event,
+				eventLabel: element.dataset.eventLabel,
+				ecommerce: 
+				{
+					items: attributes.items
+				}
+			}).push(dataLayer);
 
 			return true;
 		},
@@ -878,18 +706,17 @@ var AEC = (function()
 				return true;
 			}
 			
-			let data = 
+			let attributes = JSON.parse(element.dataset.eventAttributes);
+
+			AEC.Cookie.compare(
 			{
 				event: 		element.dataset.event,
-				eventLabel: element.dataset.eventLabel
-			};
-			
-			AEC.EventDispatcher.trigger('ec.add.compare', data, { attributes: element.dataset.eventAttributes } );
-
-			/**
-			 * Push data
-			 */
-			dataLayer.push(data);
+				eventLabel: element.dataset.eventLabel,
+				ecommerce: 
+				{
+					items: attributes.items
+				}
+			}).push(dataLayer);
 			
 			return true;
 		},
@@ -1045,9 +872,6 @@ var AEC = (function()
 				{
 					this.track(dataLayer, category, variable, label);
 
-					/**
-					 * Reset time
-					 */
 					time = new Date().getTime();
 				}
 			}
@@ -1131,13 +955,34 @@ var AEC = (function()
 		Checkout: (function()
 		{
 			return {
+				init: false,
 				data: {},
 				tracked: {},
+				getData: function()
+				{
+					return this.data;
+				},
+				getPayload: function()
+				{
+					if (this.data && this.data.hasOwnProperty('payload'))
+					{
+						return this.data.payload;
+					}
+					
+					return {
+						error: 'Missing checkout payload data'
+					}
+				},
 				step: function(previous, current, currentCode)
 				{
+					if (!this.init)
+					{
+						return this.fail('Step tracking requires a checkout page.');
+					}
+					
 					if (this.data && this.data.hasOwnProperty('ecommerce'))
 					{	
-						this.data.ecommerce.checkout.actionField.step = ++current;
+						this.data.ecommerce['step'] = ++current;
 
 						/**
 						 * Notify listeners
@@ -1158,6 +1003,12 @@ var AEC = (function()
 					{
 						return this;
 					}
+					
+					if (!this.init)
+					{
+						return this.fail('Step option tracking requires a checkout page.');
+					}
+					
 					
 					if (!option.toString().length)
 					{
@@ -1191,16 +1042,28 @@ var AEC = (function()
 					AEC.Cookie.checkoutOption(data).push(dataLayer);
 					
 					return this;
+				},
+				fail: function(message)
+				{
+					console.log(message);
+					
+					return this;
 				}
+				
 			}
 		})(),
-		Cookie: (function() //This is an experimental feature to overcome FPC (Full Page Cache) related issues (beta)
+		Cookie: (function()
 		{
 			return {
 				data: null,
 				privateData: null,
 				reset: function()
 				{
+					if (AEC.reset)
+					{
+						dataLayer.push({ ecommerce: null });
+					}
+					
 					return dataLayer;
 				},
 				push: function(dataLayer, consent)
@@ -1250,9 +1113,6 @@ var AEC = (function()
 					
 					return this;
 				},
-				/**
-				 * Augment products array [] and map category with localStorage reference
-				 */
 				augment: function(products)
 				{
 					/**
@@ -1266,7 +1126,7 @@ var AEC = (function()
 						{
 							for (var a = 0, b = reference.length; a < b; a++)
 							{
-								if (products[i].id.toString().toLowerCase() === reference[a].id.toString().toLowerCase())
+								if (products[i].item_id.toString().toLowerCase() === reference[a].id.toString().toLowerCase())
 								{
 									products[i].category = reference[a].category;
 								}
@@ -1289,7 +1149,7 @@ var AEC = (function()
 					AEC.EventDispatcher.trigger('ec.cookie.add.data', data);
 					
 					this.data = data;
-					
+
 					return this;
 				},
 				remove: function(data)
@@ -1300,9 +1160,25 @@ var AEC = (function()
 					
 					if (AEC.localStorage)
 					{
-						this.data.ecommerce.remove.products = this.augment(this.data.ecommerce.remove.products);
+						this.data.ecommerce.items = this.augment(this.data.ecommerce.items);
 					}
 
+					return this;
+				},
+				compare: function(data)
+				{
+					AEC.EventDispatcher.trigger('ec.cookie.compare.data', data);
+					
+					this.data = data;
+					
+					return this;
+				},
+				wishlist: function(data)
+				{
+					AEC.EventDispatcher.trigger('ec.cookie.wishlist.data', data);
+					
+					this.data = data;
+					
 					return this;
 				},
 				update: function(data)
@@ -1347,10 +1223,10 @@ var AEC = (function()
 					AEC.EventDispatcher.trigger('ec.cookie.purchase.data', data);
 					
 					this.data = data;
-					
+
 					if (AEC.localStorage)
 					{
-						this.data.ecommerce.purchase.products = this.augment(this.data.ecommerce.purchase.products);
+						this.data.ecommerce.purchase.items = this.augment(this.data.ecommerce.purchase.items);
 					}
 					
 					return this;
@@ -1371,7 +1247,7 @@ var AEC = (function()
 					
 					if (AEC.localStorage)
 					{
-						this.data.ecommerce.checkout.products = this.augment(this.data.ecommerce.checkout.products);
+						this.data.ecommerce.items = this.augment(this.data.ecommerce.items);
 					}
 					
 					return this;
@@ -1392,9 +1268,12 @@ var AEC = (function()
 					
 					return this;
 				},
-				promotionClick: function(data)
+				promotionClick: function(data, element)
 				{
-					AEC.EventDispatcher.trigger('ec.cookie.promotion.click', data);
+					AEC.EventDispatcher.trigger('ec.cookie.promotion.click', data, 
+				   {
+						element: element
+				   });
 					
 					this.data = data;
 					
@@ -1509,7 +1388,7 @@ var AEC = (function()
 				{
 					event = typeof event !== 'undefined' ? event : AEC.Const.COOKIE_DIRECTIVE_CONSENT_GRANTED_EVENT;
 					
-					if (this.chain.hasOwnProperty(event) && 1 == AEC.Cookie.get(event))
+					if (this.chain.hasOwnProperty(event) && this.getConsent(event))
 					{
 						for (a = 0, b = this.chain[event].length; a < b; a++)
 						{
@@ -1521,6 +1400,45 @@ var AEC = (function()
 				
 					return this;
 				},
+				getConsent: function(event)
+				{
+					let consent = !AEC.Const.COOKIE_DIRECTIVE ? true : 1 == AEC.Cookie.get(event);
+					
+					/**
+					 * Notify third parties for consent
+					 */
+					AEC.EventDispatcher.trigger('ec.consent', consent);
+					
+					return consent;
+				},
+				acceptGoogleConsent: function(segments)
+				{
+					if ('function' === typeof gtag)
+					{
+						const consentMode = true === AEC.Const.COOKIE_DIRECTIVE_SEGMENT_MODE ? 
+						{
+							ad_storage: 				-1 !== segments.indexOf('cookieConsentMarketingGranted')	? 'granted' : 'denied',
+							security_storage:			-1 !== segments.indexOf('cookieConsentGranted')				? 'granted' : 'denied',
+							functionality_storage:		-1 !== segments.indexOf('cookieConsentGranted')			   	? 'granted' : 'denied',
+							personalization_storage:	-1 !== segments.indexOf('cookieConsentPreferencesGranted') 	? 'granted' : 'denied',
+							analytics_storage:			-1 !== segments.indexOf('cookieConsentAnalyticsGranted')	? 'granted' : 'denied'
+						} : 
+						{
+							ad_storage: 				'granted',
+							security_storage:			'granted',
+							functionality_storage:		'granted',
+							personalization_storage:	'granted',
+							analytics_storage:			'granted'
+						}
+						
+						
+						gtag('consent','updated',consentMode);
+						
+				        localStorage.setItem('consentMode', JSON.stringify(consentMode));
+					}
+					
+					return this;
+				},
 				acceptConsent: function(event)
 				{
 					return this.dispatch({ event:event });
@@ -1528,6 +1446,26 @@ var AEC = (function()
 				declineConsent: function(event)
 				{
 					return this.dispatch({ event:event });
+				},
+				declineGoogleConsent: function()
+				{
+					if ('function' === typeof gtag)
+					{
+						const consentMode = 
+						{
+							ad_storage: 				'denied',
+							security_storage:			'denied',
+							functionality_storage:		'denied',
+							personalization_storage:	'denied',
+							analytics_storage:			'denied'
+						};
+						
+						gtag('consent','updated',consentMode);
+						
+				        localStorage.setItem('consentMode', JSON.stringify(consentMode));
+					}
+					
+					return this;
 				},
 				getConsentDialog: function(dataLayer, endpoints)
 				{
@@ -1564,6 +1502,10 @@ var AEC = (function()
 	
 									var grant = [...directive.querySelectorAll('[name="cookie[]"]:checked')].map(element => { return element.value });
 
+									grant.unshift('cookieConsentGranted');
+									
+									AEC.CookieConsent.acceptGoogleConsent(grant);
+
 									AEC.Request.post(endpoints.cookie, { cookie: grant }, response => 
 									{
 										Object.keys(response).forEach(event => 
@@ -1590,7 +1532,11 @@ var AEC = (function()
 									element.parentNode.removeChild(element.previousElementSibling);
 
 									var grant = [...directive.querySelectorAll('[name="cookie[]"]:checked')].map(element => { return element.value });
+									
+									grant.unshift('cookieConsentGranted');
 
+									AEC.CookieConsent.acceptGoogleConsent(grant);
+									
 									AEC.Request.post(endpoints.cookie, { cookie: grant }, response => 
 									{
 										Object.keys(response).forEach(event => 
@@ -1607,6 +1553,8 @@ var AEC = (function()
 							{
 								element.addEventListener('click', event => 
 								{
+									AEC.CookieConsent.declineGoogleConsent();
+									
 									AEC.Request.post(endpoints.cookie, { decline: true }, response => 
 									{
 										Object.keys(response).forEach(event => 
@@ -1626,13 +1574,19 @@ var AEC = (function()
 						{
 							(segments => 
 							{
+								let grant = [];
+								
 								for (i = 0, l = segments.length; i < l;i++)
 								{
 									if (1 == AEC.Cookie.get(segments[i]))
 									{
 										AEC.CookieConsent.acceptConsent(segments[i]);	
+										
+										grant.push(segments[i]);
 									}
 								}
+								
+								AEC.CookieConsent.acceptGoogleConsent(grant);
 								
 							})(AEC.Const.COOKIE_DIRECTIVE_SEGMENT_MODE_EVENTS);
 						}
@@ -1674,6 +1628,7 @@ var AEC = (function()
 							set: function(reference)
 							{
 								var current = storage.get('category.add') || [];
+								
 								
 								var exists = (function(current, reference)
 								{
@@ -1794,6 +1749,10 @@ var AEC = (function()
 			}
 	
 			return chunks;
+		},
+		url: function(url)
+		{
+			return [this.Const.URL, url].join('');
 		},
 		EventDispatcher: (function()
 		{
@@ -1924,6 +1883,12 @@ var AEC = (function()
 				{
 					event = event || {};
 					
+					let uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) 
+					{
+					    var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+					    return v.toString(16);
+					});
+					
 					if (-1 == ['AddToCart'].indexOf(event))
 					{
 						try 
@@ -1938,19 +1903,13 @@ var AEC = (function()
 								{
 									if (event.event === current.event)
 									{
-										return current.uuid;
+										uuid = current.uuid;
 									}
 								}
 							}
 						}
 						catch (e){}
 					}
-					
-					let uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) 
-					{
-					    var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
-					    return v.toString(16);
-					});
 					
 					event['uuid'] = uuid;
 					

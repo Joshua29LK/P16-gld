@@ -9,46 +9,50 @@
 	            {
 	                var promotions = [], position = 0;
 	
-	                document.querySelectorAll('[data-promotion]').forEach((promotion) => 
+	                document.querySelectorAll('[data-promotion]').forEach(promotion => 
 	                {
-	                    promotions.push(
-                        {
-                            id:      	promotion.dataset.promotionId,
-                            name:    	promotion.dataset.promotionName,
-                            creative:	promotion.dataset.promotionCreative,
-                            position:	promotion.dataset.promotionPosition
-                        });
+						let entity =
+						{
+							promotion_id: 	promotion.dataset.promotionId,
+							promotion_name: promotion.dataset.promotionName,
+							creative_name:	promotion.dataset.promotionCreative,
+							creative_slot:	promotion.dataset.promotionPosition
+                        };
+
+	                	AEC.EventDispatcher.trigger('ec.cookie.promotion.entity', entity, 
+	    	            {
+		    	            element: promotion
+		    	        });
+
+	                    promotions.push(entity);
 
 	                    promotion.addEventListener('click', (event) => 
 	                    {
 	                    	var data = 
 	                        {
-                       			'event': 'promotionClick',
+                       			'event': 'select_promotion',
                                 'ecommerce': 
                                 {
-                                    'promoClick': 
-                                    {
-                                        'promotions':
-                                        [
-                                            {
-                                                'id':       event.target.dataset.promotionId,
-                                                'name':     event.target.dataset.promotionName,
-                                                'creative': event.target.dataset.promotionCreative,
-                                                'position': event.target.dataset.promotionPosition
-                                            }
-                                        ]
-                                    }
+                                    'items':
+                                    [
+                                    	{
+                                    		promotion_id: 	event.target.dataset.promotionId,
+                							promotion_name: event.target.dataset.promotionName,
+                							creative_name:	event.target.dataset.promotionCreative,
+                							creative_slot:	event.target.dataset.promotionPosition
+                                    	}
+                                    ]
                                 }
 			                };
 			                
-                            AEC.Cookie.promotionClick(data).push(dataLayer);
+                            AEC.Cookie.promotionClick(data, promotion).push(dataLayer);
 
                             /**
                              * Save persistent data
                              */
                             AEC.Persist.push(AEC.Persist.CONST_KEY_PROMOTION,
 	                        {
-    	                        'promotion':data.ecommerce.promoClick.promotions[0]
+    	                        'promotion': data.ecommerce.items[0]
     	                    });
 		                });
 	                });
@@ -57,13 +61,10 @@
 	                {
 		                AEC.Cookie.promotion(
 				        {
-	                        'event':'promoViewNonInteractive',
+	                        'event':'view_promotion',
                             'ecommerce':
                             {
-                                'promoView':
-                                {
-                                    'promotions': promotions
-                                }
+                                'items': promotions
                             }
                         }).push(dataLayer);
 	                }

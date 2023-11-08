@@ -15,7 +15,7 @@
  *
  * @category 	Anowave
  * @package 	Anowave_Ec
- * @copyright 	Copyright (c) 2022 Anowave (https://www.anowave.com/)
+ * @copyright 	Copyright (c) 2023 Anowave (https://www.anowave.com/)
  * @license  	https://www.anowave.com/license-agreement/
  */
 
@@ -190,25 +190,26 @@ class Sidebar
                     $item->getProductId()
                 );
                 
+                $items = [];
+                
+                $item = 
+                [
+                    'item_id'  		=> ($this->dataHelper->useSimples() ? $this->dataHelper->getIdentifierItem($item) : $this->dataHelper->getIdentifier($product)),
+                    'item_name' 	=> $item->getName(),
+                    'quantity' 		=> $item->getQty(),
+                    'price'			=> $item->getPriceInclTax(),
+                    'base_price' 	=> $item->getProduct()->getPrice(),
+                    'item_brand'    => $this->dataHelper->getBrand($product),
+                    'currency'      => $this->dataHelper->getCurrency(),
+                    'index'         => 0
+                ];
+                
                 $data =
                 [
-                    'event' 	=> 'removeFromCart',
+                    'event' 	=> \Anowave\Ec\Helper\Constants::EVENT_REMOVE_FROM_CART,
                     'ecommerce' =>
                     [
-                        'remove' =>
-                        [
-                            'products' =>
-                            [
-                                [
-                                    'id'  			=> ($this->dataHelper->useSimples() ? $this->dataHelper->getIdentifierItem($item) : $this->dataHelper->getIdentifier($product)),
-                                    'name' 			=> $item->getName(),
-                                    'quantity' 		=> $item->getQty(),
-                                    'price'			=> $item->getPriceInclTax(),
-                                    'base_price' 	=> $item->getProduct()->getPrice(),
-                                    'brand'			=> $this->dataHelper->getBrand($product)
-                                ]
-                            ]
-                        ]
+                        'currency' => $this->dataHelper->getCurrency()
                     ]
                 ];
                 
@@ -216,6 +217,14 @@ class Sidebar
                  * Get all product categories
                  */
                 $categories = $this->dataHelper->getCurrentStoreProductCategories($product);
+                
+                /**
+                 * Default list
+                 * 
+                 * @var string $list
+                 */
+                $list = null;
+                
                 
                 if ($categories)
                 {
@@ -228,18 +237,62 @@ class Sidebar
                     );
                     
                     /**
-                     * Set category name
+                     * Assign item categori
                      */
-                    $data['ecommerce']['remove']['products'][0]['category'] = $this->dataHelper->getCategory($category);
+                    $item = $this->dataHelper->assignCategory($category, $item);
+
                     
                     /**
-                     * Set action field
+                     * Get list 
+                     * 
+                     * @var strin $list
                      */
-                    $data['ecommerce']['remove']['actionField'] =
-                    [
-                        'list' => $this->dataHelper->getCategoryList($category)
-                    ];
+                    $list = $this->dataHelper->getCategoryList($category);
+                    
+                    /**
+                     * Set list id
+                     */
+                    $item['item_list_id'] = $list;
+                    
+                    /**
+                     * Set list name
+                     */
+                    $item['item_list_name'] = $list;
                 }
+                else 
+                {
+                    $list = __('Unlisted');
+                    
+                    $item['item_list_id'] = $list;
+                    
+                    /**
+                     * Set list id
+                     */
+                    $item['item_list_id'] = $list;
+                    
+                    /**
+                     * Set list name
+                     */
+                    $item['item_list_name'] = $list;
+                }
+                
+                /**
+                 * Update list id
+                 */
+                $data['ecommerce']['item_list_id'] = $list;
+                
+                /**
+                 * Update list name
+                 */
+                $data['ecommerce']['item_list_name'] = $list;
+                
+                /**
+                 * Update items
+                 */
+                $data['ecommerce']['items'] = 
+                [
+                    $item
+                ];
                 
                 $response['remove'] = true;
                  

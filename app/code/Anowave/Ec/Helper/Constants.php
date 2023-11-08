@@ -15,7 +15,7 @@
  *
  * @category 	Anowave
  * @package 	Anowave_Ec
- * @copyright 	Copyright (c) 2022 Anowave (https://www.anowave.com/)
+ * @copyright 	Copyright (c) 2023 Anowave (https://www.anowave.com/)
  * @license  	https://www.anowave.com/license-agreement/
  */
 
@@ -25,6 +25,138 @@ use Anowave\Package\Helper\Package;
 
 class Constants extends \Anowave\Package\Helper\Package
 {
+    /**
+     * Add to cart event
+     * 
+     * @var string
+     */
+    const EVENT_ADD_TO_CART = 'add_to_cart';
+    
+    /**
+     * Add to wishlist event
+     * 
+     * @var string
+     */
+    const EVENT_ADD_TO_WISHLIST = 'add_to_wishlist';
+    
+    /**
+     * Add to compare event 
+     * 
+     * @var string
+     */
+    const EVENT_ADD_TO_COMPARE = 'add_to_compare';
+    
+    /**
+     * Add to cart swatch 
+     * 
+     * @var string
+     */
+    const EVENT_ADD_TO_CART_SWATCH = 'add_to_cart_swatch';
+    
+    /**
+     * Remove from cart event
+     * 
+     * @var string
+     */
+    const EVENT_REMOVE_FROM_CART = 'remove_from_cart';
+    
+    /**
+     * Product click event 
+     * 
+     * @var string
+     */
+    const EVENT_PRODUCT_CLICK = 'select_item';
+    
+    /**
+     * Checkout event
+     * 
+     * @var string
+     */
+    const EVENT_CHECKOUT = 'checkout';
+    
+    /**
+     * Checkout option event
+     * 
+     * @var string
+     */
+    const EVENT_CHECKOUT_OPTION = 'checkoutOption';
+    
+    /**
+     * List grid mode event 
+     * 
+     * @var string
+     */
+    const EVENT_SWITCH_MODE = 'switchMode';
+    
+    /**
+     * Promotion click event
+     */
+    const EVENT_PROMOTION_CLICK = 'promotionClick';
+    
+    /**
+     * Promotion view event 
+     * 
+     * @var string
+     */
+    const EVENT_PROMOTION_VIEW_NON_INTERACTIVE = 'promoViewNonInteractive';
+    
+    /**
+     * Widget view event
+     * 
+     * @var string
+     */
+    const EVENT_WIDGET_VIEW_NON_INTERACTIVE = 'widgetViewNonInteractive';
+    
+    /**
+     * Remarketing tag event 
+     * 
+     * @var string
+     */
+    const EVENT_FIRE_REMARKETING_TAG = 'fireRemarketingTag';
+    
+    /**
+     * Impression event 
+     * 
+     * @var string
+     */
+    const EVENT_IMPRESSION = 'impression';
+    
+    /**
+     * Purchase event
+     *
+     * @var string
+     */
+    const EVENT_PURCHASE = 'purchase';
+    
+    /**
+     * Virtual variant view event
+     *
+     * @var string
+     */
+    const EVENT_VIRTUAL_VARIANT_VIEW = 'virtualVariantView';
+    
+    /**
+     * Performance event
+     *
+     * @var string
+     */
+    const EVENT_PERFORMANCE = 'performance';
+    
+    /**
+     * Social int event
+     *
+     * @var string
+     */
+    const EVENT_SOCIAL_INT = 'socialInt';
+    
+    /**
+     * Track time event
+     *
+     * @var string
+     */
+    const EVENT_TRACK_TIME = 'trackTime';
+    
+    
 	/**
 	 * Checkout shipping step 
 	 * 
@@ -118,11 +250,18 @@ class Constants extends \Anowave\Package\Helper\Package
 	const XPATH_LIST_CLICK_SELECTOR = 'div/a';
 	
 	/**
-	 * Impression item click selector
+	 * Impression item wishlist selector
 	 *
 	 * @var string
 	 */
 	const XPATH_LIST_WISHLIST_SELECTOR = 'div/a';
+	
+	/**
+	 * Impression item add to compare selector
+	 *
+	 * @var string
+	 */
+	const XPATH_LIST_COMPARE_SELECTOR = 'div/a';
 	
 	/**
 	 * Cross list impression item selector

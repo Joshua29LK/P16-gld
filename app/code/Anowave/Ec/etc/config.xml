@@ -3,6 +3,7 @@
 	<default>
 		<ec>
 			<general>
+				<active>1</active>
 				<code_split>1</code_split>
 			</general>
 			<facebook>
@@ -36,7 +37,7 @@
 					<![CDATA[div/a[contains(@class,"product-item-photo")]]]>
 				</list_widget_click>
 				<list_widget_cart>
-					<![CDATA[div/div/div/div/div/button[contains(@class,"tocart")]]]>
+					<![CDATA[div/div/div/div/div/form/button[contains(@class,"tocart")]]]>
 				</list_widget_cart>
 				<click>
 					<![CDATA[div/a]]>
@@ -50,8 +51,12 @@
 				<list_wishlist>
 					<![CDATA[div/div/div/div/div/a[contains(@class,"towishlist")]]]>
 				</list_wishlist>
+				<list_compare>
+					<![CDATA[div/div/div/div/div/a[contains(@class,"tocompare")]]]>
+				</list_compare>
 				<beta_placeholders>0</beta_placeholders>
 				<debug>0</debug>
+				<encoding>1</encoding>
 			</selectors>
 			<options>
 				<identifier>sku</identifier>
@@ -63,9 +68,10 @@
 				<use_local_storage>1</use_local_storage>
 				<use_detail_list>0</use_detail_list>
 				<use_private_fallback>0</use_private_fallback>
-				<impression_payload_model>0</impression_payload_model>
+				<impression_payload_model>1</impression_payload_model>
 				<use_summary>0</use_summary>
 				<use_reset>0</use_reset>
+				<use_brand_attribute_delimiter><![CDATA[,]]></use_brand_attribute_delimiter>
 			</options>
 			<adwords>
 				<gtag>0</gtag>
@@ -97,6 +103,7 @@
 				<content_background_color>
 					<![CDATA[#ffffff]]>
 				</content_background_color>
+				<content_border_radius>8</content_border_radius>
 				<content_text_color>
 					<![CDATA[#000000]]>
 				</content_text_color>
@@ -129,12 +136,14 @@
 			<tax>
 				<revenue>1</revenue>
 				<revenue_product>0</revenue_product>
+				<payload_product>1</payload_product>
 				<ecomm_totalvalue>1</ecomm_totalvalue>
 			</tax>
 			<beta>
 				<mode>0</mode>
 			</beta>
 			<gmp>
+				<use_measurement_protocol_only>0</use_measurement_protocol_only>
 				<use_measurement_protocol>0</use_measurement_protocol>
 				<use_measurement_protocol_cancel>0</use_measurement_protocol_cancel>
 				<use_measurement_protocol_refund>1</use_measurement_protocol_refund>

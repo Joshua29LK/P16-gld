@@ -62,7 +62,21 @@ class License extends \Magento\Framework\View\Element\Template
 		{
 			return parse_url($this->_storeManager->getStore($store)->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_WEB), PHP_URL_HOST);
 		}
+		elseif (null !== $website = $this->request->getParam('website'))
+		{
+		    return parse_url($this->_storeManager->getWebsite($website)->getDefaultStore()->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_WEB), PHP_URL_HOST);
+		}
 		
 		return $_SERVER['HTTP_HOST'];
+	}
+	
+	/**
+	 * Get package 
+	 * 
+	 * @return string
+	 */
+	public function getPackage()
+	{
+	    return $this->getData('package');
 	}
 }

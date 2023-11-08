@@ -15,7 +15,7 @@
  *
  * @category 	Anowave
  * @package 	Anowave_Ec
- * @copyright 	Copyright (c) 2022 Anowave (https://www.anowave.com/)
+ * @copyright 	Copyright (c) 2023 Anowave (https://www.anowave.com/)
  * @license  	https://www.anowave.com/license-agreement/
  */
 
@@ -44,11 +44,11 @@ class Purchase extends Facebook
          */
         $content_ids = [];
         
-        foreach ($response['ecommerce']['purchase']['products'] as $product)
+        foreach ($response['ecommerce']['purchase']['items'] as $product)
         {
-            $content_ids[] = $product['id'];
+            $content_ids[] = $product['item_id'];
         }
         
-        $this->helper->getFacebookConversionsApi()->trackPurchase($order, $content_ids, $response['ecommerce']['currencyCode'], $response['ecommerce']['purchase']['actionField']['revenue']);
+        $this->helper->getFacebookConversionsApi()->trackPurchase($order, $content_ids, $response['ecommerce']['purchase']['currency'], $response['ecommerce']['purchase']['value']);
     }
 }

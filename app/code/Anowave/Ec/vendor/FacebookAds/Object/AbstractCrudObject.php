@@ -63,8 +63,8 @@ class AbstractCrudObject extends AbstractObject {
     // two integer connected by an underscore, like "123_456"
 
     $int_id = $id;
-    if (strpos($id, 'act_') === 0) {
-      $int_id = substr($id, 4);
+    if (strpos((string) $id, 'act_') === 0) {
+      $int_id = substr((string) $id, 4);
     }
     $split_by_underscore = explode('_', (string) $id);
     $is_regular_id = sizeof($split_by_underscore) == 2 &&

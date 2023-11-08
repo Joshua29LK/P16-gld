@@ -2,7 +2,328 @@
 
 All notable changes to this project will be documented in this file.
 
-REQUIRES Anowave_Ec (## [100.5.8.8084] or higher)
+## [200.2.7.8084] - 01/11/2023
+
+### Fixed
+
+- Fixed wrong payload in Search results
+
+## [200.2.6] - 01/11/2023
+
+### Fixed
+
+- Fixed small JS error triggering for swatches only
+
+## [200.2.5] - 24/10/2023
+
+### Fixed
+
+- Fixed FCAPI notice issue
+
+## [200.2.4] - 20/10/2023
+
+### Fixed
+
+- Fixed a JS issue related to old UA
+- Fixed an issue related to Ad-Blocker Fallback feature (new GA4 specs).
+
+## [200.2.3] - 19/10/2023
+
+### Fixed
+
+- Fixed wrong host message for store view config scope
+
+## [200.2.2] - 17/10/2023
+
+### Changed
+
+- Module is now pulling measurement client id from _ga() cookie or generating randome one if cookie isn't set
+
+## [200.2.1] - 16/10/2023
+
+### Fixed
+
+- Fixed compilation issue
+
+## [200.2.0] - 16/10/2023
+
+### Fixed
+
+- Fixed a typo in config
+
+## [200.1.9] - 16/10/2023
+
+### Fixed
+
+- Fixed minor Measurement Protocol issues
+
+## [200.1.8] - 11/10/2023
+
+### Added
+
+- Added discount amount in purchase payload
+
+## [200.1.7] - 11/10/2023
+
+### Fixed
+
+- Fixed a nasty issue with DataPatch related to table prefixes
+
+## [200.1.6] - 11/10/2023
+
+### Fixed
+
+- Added missing item_list_id and item_list_name parameters for server-side (Measurement Protocol) transaction tracking.
+
+## [200.1.5] - 05/10/2023
+
+### Fixed
+
+- Fixed a small typo
+
+## [200.1.4] - 05/10/2023
+
+### Fixed
+
+- Fixed a small JS error (extra ';') character causing issues with compressed code. (ec.js)
+
+## [200.1.3] - 05/10/2023
+
+### Fixed
+
+- Updated Anowave_Ec to version ## [103.7.4] - 05/10/2023 (see app/code/Anowave/Ec/CHANGELOG.md for more details)
+
+
+## [200.1.2] - 05/10/2023
+
+### Added
+
+- Added Patch to copy existing license keys to new config path
+
+## [200.1.1] - 05/10/2023
+
+### Added
+
+- Updated Anowave_Ec to version ## [103.7.3] - 05/10/2023 (see app/code/Anowave/Ec/CHANGELOG.md for more details)
+
+## [200.1.0] - 05/10/2023
+
+### IMPORTANT
+
+- After updating to 200.1.0 check if license keys work, check if GTM snippet is still loaded on page to ensure that tracking will continue working
+
+### MAJOR CHANGES
+
+- Removed former UA (GA3) payload pushes in favour of the new GA4 pushes
+- Removed JS dataLayer[] modifications (no longer needed because payload produced by Anowave_Ec is now GA4 only)
+
+
+### Merged
+
+- Merged configurations into single configuration screen
+- Replaced MAGE2-GTM license with the one from MAGE2-GTMGA4 license
+- Added a patch to copy existing license keys related to MAGE2-GTM into MAGE2-GTMGA4 to prevent tracking interuptions
+
+## [200.0.4] - 27/09/2023
+
+### Changed
+
+- Remove most of the dataLayer[] alternations which were based on JS
+
+## [200.0.3] - 27/09/2023
+
+### Added
+
+- Updated Anowave_Ec module (added 2 new tax calculation options)
+
+(see app/code/Anowave/Ec/CHANGELOG.md for more information)
+
+## [200.0.2] - 21/09/2023
+
+### Fixed
+
+- Updated Anowave_Ec package
+
+## [200.0.1] - 20/09/2023
+
+### Fixed
+
+- Updated Anowave_Ec module (see app/code/Anowave/Ec/CHANGELOG.md for more information) 
+
+## [200.0.0] - 20/09/2023
+
+### Merged 
+
+- Merged Anowave_Ec and Anowave_Ec4 into single downloadable ZIP file. All updates will be delivered to Anowave_Ec4 package from now on.
+
+## [100.9.0] - 07/09/2023
+
+### Fixed
+
+- Fixed small JS error in case when product isn't assigned to any category
+
+## [100.8.9] - 04/08/2023
+
+### Added
+
+- Added support for new customer acquisition reporting (https://support.google.com/google-ads/answer/12077475)
+
+## [100.8.8] - 20/07/2023
+
+### Fixed
+
+- Added missing item_list_id and item_list_name attributes for add_to_wishlist event
+
+## [100.8.7] - 20/07/2023
+
+### Fixed
+
+- Fixed wrong Measurement ID for multi-store refunds
+
+## [100.8.6] - 10/07/2023
+
+### Fixed
+
+- Added missing item_list_id and item_list_name in purchase payload
+
+## [100.8.5] - 30/06/2023
+
+### Fixed
+
+- Fixed PHP 8.2 related issue with refunds (deprecated utf8_encode)
+
+## [100.8.4] - 06/06/2023
+
+### Fixed
+
+- Fixed Anowave_Ec compatibility issue
+
+## [100.8.3] - 01/06/2023
+
+### Fixed
+
+- Added PHP 8.2 support
+
+## [100.8.2] - 25/05/2023
+
+### Fixed
+
+- Added string cast to some null values
+
+## [100.8.1] - 25/05/2023
+
+### Fixed
+
+- Fixed a few PHP8 compatibility issues
+
+## [100.8.0] - 24/05/2023
+
+### Added
+
+- Added custom event 'ec_view_cart' to allow third parties to modify view_cart payload
+
+## [100.7.9] - 24/05/2023
+
+### Fixed
+
+- Performance updates
+
+## [100.7.8] - 24/05/2023
+
+### Fixed
+
+- JS code cleanup
+
+## [100.7.7] - 24/05/2023
+
+### Fixed
+
+- Added ability to import user-scoped properties from UA to GA4 items[] array
+
+## [100.7.6] - 14/05/2023
+
+### Fixed
+
+- Fixed GDRP compliance
+
+## [100.7.5] - 18/04/2023
+
+### Fixed
+
+- Fixed a multi-store issue related to admin orders going to wrong Measurement ID
+
+## [100.7.4] - 28/03/2023
+
+### Fixed
+
+- Fixed wrong 'value' parameter linked to begin_checkout event
+
+## [100.7.3] - 01/03/2023
+
+### Fixed
+
+- Added mising 'value' parameter to begin_checkout
+
+## [100.7.2] - 22/02/2023
+
+### Fixed
+
+- Replaced coupon rule name with coupon code in begin_checkout payload
+
+## [100.7.1] - 20/02/2023
+
+### Fixed
+
+- Added missing 'value' parameter to view_cart event
+- Moved 'currency' parameter to ecommerce[] in view_cart event
+
+## [100.7.0] - 09/02/2023
+
+### Fixed
+
+- Removed last underscore from item_category[N] (replaced item_category_[N] to item_category[N]) where N is the catgeory level 
+
+## [100.6.9] - 03/02/2023
+
+### Added
+
+- Added google_business_vertical to items[] array
+
+## [100.6.8] - 02/02/2023
+
+### Fixed
+
+- Small bug fix
+
+## [100.6.7] - 02/02/2023
+
+### Added
+
+- Added missing 'coupon' & 'currency' values for begin_checkout, add_payment_info, add_shipping_info events
+
+## [100.6.6] - 23/01/2023
+
+### Fixed
+
+- Fixed wrong 'affiliation' parameter for admin orders
+
+## [100.6.5] - 20/01/2023
+
+### Fixed
+
+- Fixed promotion tracking issue related to items[] array
+
+## [100.6.4] - 20/01/2023
+
+### Added
+
+- Added promotion tracking (BETA)
+
+## [100.6.3] - 19/01/2023
+
+### Fixed
+
+- Fixed an issue with refunds when product isn't added to any category
 
 ## [100.6.2] - 16/12/2022
 
@@ -28,7 +349,7 @@ REQUIRES Anowave_Ec (## [100.5.8.8084] or higher)
 
 - Fixed Uncaught TypeError: reference is null error
 
-## [100.5.8.8084] - 30/11/2022
+## [100.5.8] - 30/11/2022
 
 ### Fixed
 

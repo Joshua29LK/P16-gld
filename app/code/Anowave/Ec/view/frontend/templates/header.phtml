@@ -24,15 +24,6 @@
 
 <script data-ommit="true">
 
-	/**
-	 * Magento 2 Google Tag Manager Enhanced Ecommerce (UA) Tracking
-	 *
-	 * @version <?php echo $block->getHelper()->getVersion() ?>	
-	 * @author Anowave
-	 * @see https://www.anowave.com/marketplace/magento-2-extensions/magento-2-google-tag-manager-enhanced-ecommerce-ua-tracking/
-	 * @copyright 2022 Anowave
-	 */
-
 	window.dataLayer = window.dataLayer || [];
 
 	<?php
@@ -41,7 +32,7 @@
 	 */
 	?>
 	
-	window.AEC = window.AEC || {};
+	window.AEC = window.AEC || { version: <?php echo json_encode($block->getHelper()->getVersion()) ?>	};
 
 	<?php
 	/**
@@ -89,7 +80,6 @@
 	?>
 
 	AEC.Const.COOKIE_DIRECTIVE 								= <?php echo json_encode($block->getHelper()->supportCookieDirective()) ?>;
-	AEC.Const.COOKIE_DIRECTIVE_CONSENT_GRANTED  			= <?php echo json_encode($block->getHelper()->isCookieConsentAccepted()) ?>;
 	AEC.Const.COOKIE_DIRECTIVE_SEGMENT_MODE 				= <?php echo json_encode($block->getHelper()->getCookieDirectiveIsSegmentMode()) ?>;
 	AEC.Const.COOKIE_DIRECTIVE_SEGMENT_MODE_EVENTS			= <?php echo json_encode($block->getHelper()->getCookieDirectiveConsentSegments()) ?>;	
 	AEC.Const.COOKIE_DIRECTIVE_CONSENT_GRANTED_EVENT 		= <?php echo json_encode(\Anowave\Ec\Helper\Constants::COOKIE_CONSENT_GRANTED_EVENT) ?>;
@@ -97,11 +87,19 @@
 
 	<?php
 	/**
+	 * Check if cookie consent is granded
+	 */
+	?>
+	
+	AEC.Const.COOKIE_DIRECTIVE_CONSENT_GRANTED = AEC.CookieConsent.getConsent(<?php echo json_encode(\Anowave\Ec\Helper\Constants::COOKIE_CONSENT_GRANTED_EVENT) ?>);
+
+	<?php
+	/**
 	 * Category add redirect event
 	 */
 	?>
 	
-	AEC.Const.CATALOG_CATEGORY_ADD_TO_CART_REDIRECT_EVENT 	= <?php echo json_encode(\Anowave\Ec\Helper\Constants::CATALOG_CATEGORY_ADD_TO_CART_REDIRECT_EVENT) ?>;
+	AEC.Const.CATALOG_CATEGORY_ADD_TO_CART_REDIRECT_EVENT = <?php echo json_encode(\Anowave\Ec\Helper\Constants::CATALOG_CATEGORY_ADD_TO_CART_REDIRECT_EVENT) ?>;
 
 	<?php
 	/**
@@ -114,6 +112,7 @@
 		confirm: 			 <?php echo $block->getHelper()->useRemoveConfirm() ?>,
 		confirmRemoveTitle:  <?php echo $block->getHelper()->getJsonHelper()->encode(__('Are you sure?')) ?>,
 		confirmRemove: 		 <?php echo $block->getHelper()->getJsonHelper()->encode(__('Are you sure you would like to remove this item from the shopping cart?')) ?>
+
 	};
 			
 	AEC.storeName 			= <?php echo $block->getHelper()->getJsonHelper()->encode($block->getHelper()->getStoreName()) ?>;
@@ -121,7 +120,6 @@
 	AEC.useDefaultValues 	= <?php echo $block->getHelper()->getJsonHelper()->encode($block->getHelper()->useDefaultValues()) ?>;
 	AEC.facebook 			= <?php echo $block->getHelper()->getJsonHelper()->encode($block->getHelper()->facebook()) ?>;
 	AEC.facebookInitParams 	= <?php echo $block->getHelper()->getJsonHelper()->encode($block->getHelper()->getFacebookAdvancedMatchingParameters()) ?>;
-	AEC.eventCallback		= <?php echo $block->getHelper()->getEventCallback() ?>;
 
 	<?php
 	/**
@@ -170,6 +168,14 @@
 	?>
 
 	AEC.reset = <?php echo $block->getHelper()->getJsonHelper()->encode($block->getHelper()->useReset()) ?>;
+
+	<?php 
+	/**
+	 * Get price render tax type
+	 */
+	?>
+
+	AEC.tax = <?php echo $block->getHelper()->getJsonHelper()->encode($block->getHelper()->getPriceRenderTaxType()) ?>;
 	
 </script>
 <?php if ($this->getHelper()->facebook()): ?>
@@ -215,6 +221,13 @@
             			AEC.EventDispatcher.trigger('ec.facebook.loaded', {});
     
             			clearInterval(loop);
+            		}
+
+            		if (time > 100)
+            		{
+                		console.log('Failed to detect ec.facebook.loaded event.');
+
+                		clearInterval(loop);
             		}
 
             	}, 100);

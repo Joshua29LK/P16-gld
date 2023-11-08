@@ -15,7 +15,7 @@
  *
  * @category 	Anowave
  * @package 	Anowave_Ec
- * @copyright 	Copyright (c) 2022 Anowave (https://www.anowave.com/)
+ * @copyright 	Copyright (c) 2023 Anowave (https://www.anowave.com/)
  * @license  	https://www.anowave.com/license-agreement/
  */
 
@@ -23,7 +23,7 @@ namespace Anowave\Ec\Helper;
 
 use Anowave\Package\Helper\Package;
 
-class Dom extends \Anowave\Package\Helper\Package
+class Dom
 {
 	/**
 	 * Retrieves body
@@ -55,13 +55,8 @@ class Dom extends \Anowave\Package\Helper\Package
 				}
 			}
 		}
-		catch (\Exception $e)
-		{
-				
-		}
-	
-		$content = $doc->saveHTML();
-	
-		return html_entity_decode($content, ENT_COMPAT, 'UTF-8');
+		catch (\Exception $e) {}
+
+		return $doc->saveHTML();
 	}
 }

@@ -1,15 +1,39 @@
 <script data-ommit="true">
 
+	<?php 
 	/**
  	 * Define dataLayer[] object
 	 */
+	?>
+	
 	window.dataLayer = window.dataLayer || [];
 
+	<?php if ($block->getHelper()->supportCookieDirective()): ?>
+	
+    	function gtag()
+    	{
+    		dataLayer.push(arguments);
+    	};
+
+    	if (null === localStorage.getItem('consentMode'))
+    	{
+    		gtag('consent', 'default', <?php echo $block->getHelper()->getGoogleBuiltinConsent() ?>);
+    	}
+    	else 
+    	{
+        	gtag('consent', 'default', JSON.parse(localStorage.getItem('consentMode')));
+    	}
+  
+    <?php endif ?>
+
+	<?php 
 	/**
 	 * Define transport layer to use as fallback in case of Ad-Blockers
 	 * 
 	 * @copyright Anowave
 	 */
+	?>
+	
 	var dataLayerTransport = (function()
 	{
 		var data = [];

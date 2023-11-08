@@ -15,7 +15,7 @@
  *
  * @category 	Anowave
  * @package 	Anowave_Ec4
- * @copyright 	Copyright (c) 2022 Anowave (http://www.anowave.com/)
+ * @copyright 	Copyright (c) 2023 Anowave (http://www.anowave.com/)
  * @license  	http://www.anowave.com/license-agreement/
  */
 
@@ -71,13 +71,15 @@ class Attributes implements ObserverInterface
 	        $category = $this->helper->getCategoryRepository()->get($this->helper->getStoreRootDefaultCategoryId());
 	    }
 
-	    $category_array = explode(chr(47),$this->helper->getCategory($category));
+	    $category_array = explode(chr(47), (string) $this->helper->getCategory($category));
 	    
 	    $item = 
 	    [
-	        'item_id'   => $observer->getTransport()->getProduct()->getSku(),
-	        'item_name' => $observer->getTransport()->getProduct()->getName(),
-	        'price'     => $this->helper->getPrice
+	        'item_id'          => $observer->getTransport()->getProduct()->getSku(),
+	        'item_name'        => $observer->getTransport()->getProduct()->getName(),
+	        'item_list_id'     => $this->helper->getCategoryList($category),
+	        'item_list_name'   => $this->helper->getCategoryList($category),
+	        'price'            => $this->helper->getPrice
 	        (
 	            $observer->getTransport()->getProduct()
             ),
@@ -92,7 +94,7 @@ class Attributes implements ObserverInterface
 	        
     	    foreach ($category_array as $category)
     	    {
-    	        $item["item_category_{$index}"] = $category;
+    	        $item["item_category{$index}"] = $category;
     	        
     	        $index++;
     	    }

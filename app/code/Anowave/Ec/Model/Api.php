@@ -15,7 +15,7 @@
  *
  * @category 	Anowave
  * @package 	Anowave_Ec
- * @copyright 	Copyright (c) 2022 Anowave (https://www.anowave.com/)
+ * @copyright 	Copyright (c) 2023 Anowave (https://www.anowave.com/)
  * @license  	https://www.anowave.com/license-agreement/
  */
 
@@ -948,7 +948,7 @@ class Api
 							(
 								'type' 	=> 'template',
 								'key' 	=> 'arg1',
-								'value' => 'addToCart'
+							    'value' => \Anowave\Ec\Helper\Constants::EVENT_ADD_TO_CART
 							)
 						)
 					)
@@ -975,7 +975,7 @@ class Api
 							(
 								'type' 	=> 'template',
 								'key' 	=> 'arg1',
-								'value' => 'removeFromCart'
+							    'value' => \Anowave\Ec\Helper\Constants::EVENT_REMOVE_FROM_CART
 							)
 						)
 					)
@@ -1002,7 +1002,7 @@ class Api
 							(
 								'type' 	=> 'template',
 								'key' 	=> 'arg1',
-								'value' => 'productClick'
+							    'value' => \Anowave\Ec\Helper\Constants::EVENT_PRODUCT_CLICK
 							)
 						)
 					)
@@ -1029,7 +1029,7 @@ class Api
 							(
 								'type' 	=> 'template',
 								'key' 	=> 'arg1',
-								'value' => 'promotionClick'
+							    'value' => \Anowave\Ec\Helper\Constants::EVENT_PROMOTION_CLICK
 							)
 						)
 					)
@@ -1056,7 +1056,7 @@ class Api
 							(
 								'type' 	=> 'template',
 								'key' 	=> 'arg1',
-								'value' => 'promoViewNonInteractive'
+							    'value' => \Anowave\Ec\Helper\Constants::EVENT_PROMOTION_VIEW_NON_INTERACTIVE
 							)
 						)
 					)
@@ -1083,7 +1083,7 @@ class Api
 							(
 								'type' 	=> 'template',
 								'key' 	=> 'arg1',
-								'value' => 'widgetViewNonInteractive'
+							    'value' => \Anowave\Ec\Helper\Constants::EVENT_WIDGET_VIEW_NON_INTERACTIVE
 							)
 						)
 					)
@@ -1110,7 +1110,7 @@ class Api
 							(
 								'type' 	=> 'template',
 								'key' 	=> 'arg1',
-								'value' => 'checkout'
+							    'value' => \Anowave\Ec\Helper\Constants::EVENT_CHECKOUT
 							)
 						)
 					)
@@ -1137,7 +1137,7 @@ class Api
 							(
 								'type' 	=> 'template',
 								'key' 	=> 'arg1',
-								'value' => 'checkoutOption'
+							    'value' => \Anowave\Ec\Helper\Constants::EVENT_CHECKOUT_OPTION
 							)
 						)
 					)
@@ -1164,7 +1164,7 @@ class Api
 							(
 								'type' 	=> 'template',
 								'key' 	=> 'arg1',
-								'value' => 'socialInt'
+							    'value' => \Anowave\Ec\Helper\Constants::EVENT_SOCIAL_INT
 							)
 						)
 					)
@@ -1191,7 +1191,7 @@ class Api
 							(
 								'type' 	=> 'template',
 								'key' 	=> 'arg1',
-								'value' => 'fireRemarketingTag'
+							    'value' => \Anowave\Ec\Helper\Constants::EVENT_FIRE_REMARKETING_TAG
 							)
 						)
 					)
@@ -1218,7 +1218,7 @@ class Api
 							(
 								'type' 	=> 'template',
 								'key' 	=> 'arg1',
-								'value' => 'trackTime'
+							    'value' => \Anowave\Ec\Helper\Constants::EVENT_TRACK_TIME
 							)
 						)
 					)
@@ -1245,7 +1245,7 @@ class Api
 							(
 								'type' 	=> 'template',
 								'key' 	=> 'arg1',
-								'value' => 'impression'
+							    'value' => \Anowave\Ec\Helper\Constants::EVENT_IMPRESSION
 							)
 						)
 					)
@@ -1272,7 +1272,7 @@ class Api
 		                    (
 		                        'type' 	=> 'template',
 		                        'key' 	=> 'arg1',
-		                        'value' => 'purchase'
+		                        'value' => \Anowave\Ec\Helper\Constants::EVENT_PURCHASE
 		                    )
 		                )
 		            )
@@ -1299,7 +1299,7 @@ class Api
 							(
 								'type' 	=> 'template',
 								'key' 	=> 'arg1',
-								'value' => 'virtualVariantView'
+							    'value' => \Anowave\Ec\Helper\Constants::EVENT_VIRTUAL_VARIANT_VIEW
 							)
 						)
 					)
@@ -1326,7 +1326,7 @@ class Api
 							(
 								'type' 	=> 'template',
 								'key' 	=> 'arg1',
-								'value' => 'addToWishlist'
+							    'value' => \Anowave\Ec\Helper\Constants::EVENT_ADD_TO_WISHLIST
 							)
 						)
 					)
@@ -1353,7 +1353,7 @@ class Api
 							(
 								'type' 	=> 'template',
 								'key' 	=> 'arg1',
-								'value' => 'addToCompare'
+							    'value' => \Anowave\Ec\Helper\Constants::EVENT_ADD_TO_COMPARE
 							)
 						)
 					)
@@ -1380,7 +1380,7 @@ class Api
 							(
 								'type' 	=> 'template',
 								'key' 	=> 'arg1',
-								'value' => 'cookieConsentGranted'
+							    'value' => \Anowave\Ec\Helper\Constants::COOKIE_CONSENT_GRANTED_EVENT
 							)
 						)
 					)
@@ -1407,7 +1407,7 @@ class Api
 							(
 								'type' 	=> 'template',
 								'key' 	=> 'arg1',
-								'value' => 'performance'
+							    'value' => \Anowave\Ec\Helper\Constants::EVENT_PERFORMANCE
 							)
 						)
 					)
@@ -2466,7 +2466,7 @@ class Api
 	    {
 	        $set[$tag->name] = true;
 	    }
-
+	    
 	    foreach ($schema as $tag => $parameters)
 	    {
 	        try
@@ -2615,7 +2615,7 @@ class Api
 		{
 			$value = trim
 			(
-				$this->scope->getConfig('ec/api/override_client_id')
+			    (string) $this->scope->getConfig('ec/api/override_client_id')
 			);
 			
 			if ($value)
@@ -2638,7 +2638,7 @@ class Api
 		{
 			$value = trim
 			(
-				$this->scope->getConfig('ec/api/override_client_secret')
+			    (string) $this->scope->getConfig('ec/api/override_client_secret')
 			);
 			
 			if ($value)

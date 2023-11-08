@@ -1,6 +1,6 @@
 <script data-ommit="true">
 
-    if (AEC.GA4)
+    if ('undefined' !== typeof AEC && AEC.GA4)
     {
     	AEC.GA4.enabled = <?php echo json_encode($block->isGA4Enabled())?>;
 
@@ -19,6 +19,14 @@
     	?>
     	
     	AEC.GA4.currency = <?php echo json_encode($block->getHelper()->getBaseHelper()->getCurrency())?>;
+
+    	<?php
+    	/**
+    	 * Get quote details
+    	 */
+    	?>
+    	
+    	AEC.GA4.quote = <?php echo json_encode($block->getQuoteDetails()) ?>;
     }
     
 </script>

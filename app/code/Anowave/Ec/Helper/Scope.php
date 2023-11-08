@@ -15,7 +15,7 @@
  *
  * @category 	Anowave
  * @package 	Anowave_Ec
- * @copyright 	Copyright (c) 2022 Anowave (https://www.anowave.com/)
+ * @copyright 	Copyright (c) 2023 Anowave (https://www.anowave.com/)
  * @license  	https://www.anowave.com/license-agreement/
  */
 
@@ -79,7 +79,7 @@ class Scope extends \Anowave\Package\Helper\Package
 	 */
 	public function getConfig($config)
 	{
-	    return $this->scopeConfig->getValue($config, $this->getCurrentScope(), $this->getCurrentScopeCode());
+	    return $this->_context->getScopeConfig()->getValue($config, $this->getCurrentScope(), $this->getCurrentScopeCode());
 	}
 	
 	/**

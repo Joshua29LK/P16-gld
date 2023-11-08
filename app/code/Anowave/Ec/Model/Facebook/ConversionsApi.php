@@ -15,7 +15,7 @@
  *
  * @category 	Anowave
  * @package 	Anowave_Ec
- * @copyright 	Copyright (c) 2022 Anowave (https://www.anowave.com/)
+ * @copyright 	Copyright (c) 2023 Anowave (https://www.anowave.com/)
  * @license  	https://www.anowave.com/license-agreement/
  */
 
@@ -32,6 +32,13 @@ use Anowave\Ec\Model\Facebook\Conversions\Endpoint;
 
 class ConversionsApi extends Endpoint
 {
+    /**
+     * Default action source
+     * 
+     * @var string
+     */
+    const ACTION_SOURCE = 'website';
+    
     /**
      * @var \Anowave\Ec\vendor\FacebookAds\Api
      */
@@ -85,13 +92,18 @@ class ConversionsApi extends Endpoint
     private $cookie_directive_constent_granted = false;
     
     /**
+     * @var \Anowave\Ec\Model\Logger
+     */
+    private $logger;
+    
+    /**
      * Constructor 
      * 
      * @param unknown $pixel_id
      * @param unknown $access_token
      * @param \Anowave\Ec\Model\Cookie\Facebook $cookie
      */
-    public function __construct($pixel_id, $access_token, $test_event_code, \Anowave\Ec\Model\Cookie\Facebook $cookie, array $user_data = [], $cookie_directive = false, $cookie_directive_constent_granted = false)
+    public function __construct($pixel_id, $access_token, $test_event_code, \Anowave\Ec\Model\Cookie\Facebook $cookie, array $user_data = [], $cookie_directive = false, $cookie_directive_constent_granted = false, \Anowave\Ec\Model\Logger $logger = null)
     {
         /**
          * Set pixel id 
@@ -162,6 +174,13 @@ class ConversionsApi extends Endpoint
          * @var \Anowave\Ec\Model\Facebook\ConversionsApi $cookie_directive_constent_granted
          */
         $this->cookie_directive_constent_granted = $cookie_directive_constent_granted;
+        
+        /**
+         * Set logger
+         * 
+         * @var \Anowave\Ec\Model\Facebook\ConversionsApi $logger
+         */
+        $this->logger = $logger;
     }
     
     /**
@@ -216,6 +235,8 @@ class ConversionsApi extends Endpoint
      */
     public function trackPurchase(\Magento\Sales\Model\Order $order, array $content_ids = [], $currency = 'EUR', float $value = 0)
     {
+        $this->user_data = [];
+        
         /**
          * Handle non-logged purchase
          */
@@ -260,6 +281,16 @@ class ConversionsApi extends Endpoint
                     if ($address->getCountryId())
                     {
                         $this->user_data['country_code'] = strtolower($address->getCountryId());
+                    }
+                    
+                    if ($address->getRegionCode())
+                    {
+                        $region = preg_replace('/[^a-z]/i','', $address->getRegionCode());
+                        
+                        if ($region)
+                        {
+                            $this->user_data['state'] = $region;
+                        }
                     }
         
                     $this->user_data = array_map(function($data)
@@ -348,11 +379,19 @@ class ConversionsApi extends Endpoint
                             ->setUserData($user_data)
                             ->setActionSource(ActionSource::WEBSITE);
             
+            if(php_sapi_name() !== "cli")
+            {
+                if (isset($_SERVER['HTTP_REFERER']))
+                {
+                    $event->setEventSourceUrl($_SERVER['HTTP_REFERER']);
+                }
+            }
+            
             if ($custom_data)
             {
                  $event->setCustomData($custom_data);
             }
-            
+
             if (!isset($_COOKIE['facebook_latest_uuid']) || $force)
             {
                 $uuid = (object)
@@ -419,7 +458,7 @@ class ConversionsApi extends Endpoint
         }
         catch (\Exception $e)
         {
-            
+            $this->logger->log("CAPI ERROR: {$e->getMessage()}");
         }
         
         return true;

@@ -2,7 +2,55 @@
 
 All notable changes to this project will be documented in this file.
 
-## [2.0.3.8084] - 10/06/2022
+## [3.0.1.8084] - 05/10/2023
+
+### Added
+
+- Added better license popup helper
+
+## [3.0.0] - 21/07/2023
+
+### Fixed
+
+- Fixed some domain exceptions
+
+## [2.0.9] - 20/07/2023
+
+### Fixed
+
+- Extended support for wildcard license keys
+
+## [2.0.8] - 14/07/2023
+
+### Fixed
+
+- Fixed wrong typehint in \app\code\Anowave\Package\Model\Plugin\Builder.php
+
+## [2.0.7] - 29/06/2023
+
+### Added
+
+- Added PHP 8.2 support in composer.json
+
+## [2.0.6] - 11/05/2023
+
+### Added
+
+- Added .staging wildcard
+
+## [2.0.5] - 29/03/2023
+
+### Added
+
+- Added license guide dialog to ease license generation
+
+## [2.0.4] - 04/07/2022
+
+### Fixed
+
+- Added fixed domains for broader testing purposes
+
+## [2.0.3] - 10/06/2022
 
 ### Fixed
 

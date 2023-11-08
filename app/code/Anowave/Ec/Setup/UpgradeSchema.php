@@ -15,7 +15,7 @@
  *
  * @category 	Anowave
  * @package 	Anowave_Ec
- * @copyright 	Copyright (c) 2022 Anowave (https://www.anowave.com/)
+ * @copyright 	Copyright (c) 2023 Anowave (https://www.anowave.com/)
  * @license  	https://www.anowave.com/license-agreement/
  */
 
@@ -155,6 +155,22 @@ class UpgradeSchema implements UpgradeSchemaInterface
             $sql[] = "SET foreign_key_checks = 0";
             
             $sql[] = "CREATE TABLE IF NOT EXISTS {$setup->getTable('ae_ec_gdpr')} (consent_id bigint(21) NOT NULL AUTO_INCREMENT,consent_uuid varchar(255) DEFAULT NULL,consent_ip bigint(8) DEFAULT NULL,consent text,consent_type tinyint(1) NOT NULL DEFAULT '0',consent_timestamp timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,PRIMARY KEY (consent_id)) ENGINE=InnoDB DEFAULT CHARSET=utf8";
+            
+            $sql[] = "SET foreign_key_checks = 1";
+            
+            foreach ($sql as $query)
+            {
+                $setup->run($query);
+            }
+        }
+        
+        if (version_compare($context->getVersion(), '103.0.2') < 0)
+        {
+            $sql = [];
+            
+            $sql[] = "SET foreign_key_checks = 0";
+            
+            $sql[] = "CREATE TABLE IF NOT EXISTS {$setup->getTable('ae_ec_log')} (log_id bigint(21) NOT NULL AUTO_INCREMENT,log longtext,log_timestamp timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,PRIMARY KEY (log_id)) ENGINE=InnoDB DEFAULT CHARSET=utf8";
             
             $sql[] = "SET foreign_key_checks = 1";
             

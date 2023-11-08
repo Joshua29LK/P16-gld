@@ -14,7 +14,7 @@
  *
  * @category 	Anowave
  * @package 	Anowave_Ec
- * @copyright 	Copyright (c) 2022 Anowave (https://www.anowave.com/)
+ * @copyright 	Copyright (c) 2023 Anowave (https://www.anowave.com/)
  * @license  	https://www.anowave.com/license-agreement/
  */
 
@@ -50,7 +50,8 @@ define(function ()
                 
                 steps()[activeIndex + 1].isVisible(true);
                 
-                window.location 		= window.checkoutConfig.checkoutUrl + "#" + code;
+                target.setHash(code);
+
                 document.body.scrollTop = document.documentElement.scrollTop = 0;
             }
         }

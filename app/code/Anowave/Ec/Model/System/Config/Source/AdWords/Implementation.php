@@ -15,7 +15,7 @@
  *
  * @category 	Anowave
  * @package 	Anowave_Ec
- * @copyright 	Copyright (c) 2022 Anowave (https://www.anowave.com/)
+ * @copyright 	Copyright (c) 2023 Anowave (https://www.anowave.com/)
  * @license  	https://www.anowave.com/license-agreement/
  */
 
@@ -65,17 +65,12 @@ class Implementation implements \Magento\Framework\Option\ArrayInterface
 			[
 				'value' => self::I_STANDARD,
 				'label' => __('Standard')
-			]
+			],
+		    [
+		        'value' => self::I_GTAG,
+		        'label' => __('Using gtag.js - BETA')
+		    ]
 		];
-		
-		if ($this->helper->isBetaMode())
-		{
-			$options[] = 
-			[
-				'value' => self::I_GTAG,
-				'label' => __('Using gtag.js - BETA')
-			];
-		}
 		
 		return $options;
 	}

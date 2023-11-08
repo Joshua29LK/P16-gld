@@ -4,8 +4,6 @@
 <?php endif ?>
 <script data-ommit="true">
 
-	var EC = [];
-
 	/* Dynamic remarketing */
 	window.google_tag_params = window.google_tag_params || {};
 
@@ -47,10 +45,7 @@
 	dataLayer.push({ pageType: <?php echo $block->getHelper()->getPageType() ?>});
 	
 </script>
-<?php echo $block->getChildHtml('ec_impressions') ?>
-<?php echo $block->getChildHtml('ec_search') ?>
 <?php echo $block->getChildHtml('ec_detail') ?>
-<?php echo $block->getChildHtml('ec_cart') ?>
 <?php echo $block->getChildHtml('ec_widgets') ?>
 
 <?php 
@@ -79,8 +74,12 @@
         		 */
         		?>
 
-        		AEC.Cookie.purchase(data).push(dataLayer, false);
-        
+        		AEC.CookieConsent.queue(() => 
+    			{
+    				AEC.Cookie.purchase(data).push(dataLayer);
+        			
+    			}).process();
+    			
         		<?php 
         		/**
         		 * Push data to custom transport layer
@@ -91,11 +90,11 @@
         
         		<?php if ($block->getHelper()->facebook()): ?>
         
-            		var content_ids = [], content_length = data.ecommerce.purchase.products.length;
+            		var content_ids = [], content_length = data.ecommerce.purchase.items.length;
             		
-            		for (i = 0, l = data.ecommerce.purchase.products.length; i < l; i++)
+            		for (i = 0, l = data.ecommerce.purchase.items.length; i < l; i++)
             		{
-            			content_ids.push(data.ecommerce.purchase.products[i].id);
+            			content_ids.push(data.ecommerce.purchase.items[i].item_id);
             		}
             
             		window.content_ids = content_ids;
@@ -242,11 +241,6 @@
 <?php if ($block->getHelper()->isAdwordsConversionTrackingActive(true)):?>
 
 	<?php if (!$block->getHelper()->useAdwordsConversionTrackingGtag()): ?>
-		<?php
-		/**
-		 * Standard AdWords Conversion Tracking Implementation
-		 */
-		?>
 		<?php if ($block->getOrders() && $block->getAdwords()->getGoogleConversionId()) : ?>
 			<script data-ommit="true" src="//www.googleadservices.com/pagead/conversion.js"></script>
 		    <?php foreach ($block->getOrders() as $order): ?>

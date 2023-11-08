@@ -15,7 +15,7 @@
  *
  * @category 	Anowave
  * @package 	Anowave_Ec
- * @copyright 	Copyright (c) 2022 Anowave (https://www.anowave.com/)
+ * @copyright 	Copyright (c) 2023 Anowave (https://www.anowave.com/)
  * @license  	https://www.anowave.com/license-agreement/
  */
 
@@ -53,6 +53,23 @@ class Track extends Template
 	protected $currencyFactory;
 	
 	/**
+	 * @var \Magento\Framework\Filesystem\Driver\File
+	 */
+	protected $driverFile;
+
+	/**
+	 * @var \Psr\Log\LoggerInterface
+	 */
+	protected $logger;
+	
+	/**
+	 * Load inline
+	 * 
+	 * @var string
+	 */
+	private $inline = false;
+	
+	/**
 	 * Constructor 
 	 * 
 	 * @param \Magento\Framework\View\Element\Template\Context $context
@@ -69,6 +86,8 @@ class Track extends Template
 		\Anowave\Ec\Helper\Datalayer $dataLayer,
 		\Anowave\Ec\Model\Api\Measurement\Protocol $protocol,
 	    \Magento\Directory\Model\CurrencyFactory $currencyFactory,
+	    \Magento\Framework\Filesystem\Driver\File $driverFile,
+	    \Psr\Log\LoggerInterface $logger,
 		array $data = []
 	) 
 	{
@@ -101,6 +120,20 @@ class Track extends Template
 		 */
 		$this->currencyFactory = $currencyFactory;
 		
+		/**
+		 * Set logger 
+		 * 
+		 * @var \Anowave\Ec\Block\Track $logger
+		 */
+		$this->logger = $logger;
+		
+		/**
+		 * Set driver file 
+		 * 
+		 * @var \Magento\Framework\Filesystem\Driver\File $driverFile
+		 */
+		$this->driverFile = $driverFile;
+
 		/**
 		 * Parent constructor
 		 */
@@ -208,16 +241,6 @@ class Track extends Template
 	public function getDetailPushForward()
 	{
 		return $this->_helper->getDetailPushForward($this);
-	}
-
-	/**
-	 * Get impressions push
-	 *
-	 * @return JSON|false
-	 */
-	public function getImpressionPushForward()
-	{
-		return $this->_helper->getImpressionPushForward($this);
 	}
 
 	/**
@@ -362,6 +385,36 @@ class Track extends Template
 	public function getDatalayer()
 	{
 		return $this->dataLayer;
+	}
+	
+	/**
+	 * Load inline script 
+	 * 
+	 * @return string
+	 */
+	public function getScript() : string
+	{
+	    $content = [];
+	    
+	    if ($this->inline)
+	    {
+    	    foreach(['Anowave_Ec' => 'Anowave/Ec/view/frontend/web/js/ec.js'] as $module => $script)
+    	    {
+    	        try
+    	        {
+    	            $path = dirname(dirname(dirname(__DIR__))) . DIRECTORY_SEPARATOR . $script;
+    	            
+    	            $content[] = $this->driverFile->fileGetContents($path);
+    	            
+    	        }
+    	        catch (\Exception $e)
+    	        {
+    	            $this->logger->debug($e->getMessage());
+    	        }
+    	    }
+	    }
+
+	    return join(PHP_EOL, $content);
 	}
 	
 	/**

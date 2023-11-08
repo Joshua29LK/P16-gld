@@ -15,7 +15,7 @@
  *
  * @category 	Anowave
  * @package 	Anowave_Ec
- * @copyright 	Copyright (c) 2022 Anowave (https://www.anowave.com/)
+ * @copyright 	Copyright (c) 2023 Anowave (https://www.anowave.com/)
  * @license  	https://www.anowave.com/license-agreement/
  */
 
@@ -56,19 +56,13 @@ class Override implements \Magento\Framework\Option\ArrayInterface
 			[
 				'value' => 1,
 				'label' => __('Yes')
-			]
+			],
+		    [
+		        'value' => 0,
+		        'label' => __('No')
+		    ]
 		];
 		
-		
-		if (1 === (int) $this->scope->getConfig('ec/beta/mode'))
-		{
-			$options[] = 
-			[
-				'value' => 0,
-				'label' => __('No')
-			];
-		}
-
 		return $options;
 	}
 }

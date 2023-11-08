@@ -15,7 +15,7 @@
  *
  * @category 	Anowave
  * @package 	Anowave_Ec
- * @copyright 	Copyright (c) 2022 Anowave (https://www.anowave.com/)
+ * @copyright 	Copyright (c) 2023 Anowave (https://www.anowave.com/)
  * @license  	https://www.anowave.com/license-agreement/
  */
  
@@ -43,6 +43,9 @@ class Cart extends \Magento\Framework\App\Action\Action
 	 */
 	protected $helper;
 	
+	/**
+	 * @var \Magento\Framework\App\RequestInterface
+	 */
 	private $request;
 	
 	/**
@@ -126,18 +129,23 @@ class Cart extends \Magento\Framework\App\Action\Action
 		{
 		    $items = [];
 		    
-			foreach ($this->proxy->getQuote()->getItems() as $item)
-			{
-			    $items[] = 
-			    [
-			        'id'         => $this->helper->getIdentifier($item->getProduct()),
-			        'price'      => $this->helper->getPrice($item->getProduct()),
-			        'name'       => $item->getProduct()->getName(),
-			        'quantity'   => $item->getQty()
-			    ];
-			}
-			
-			$response['items'] = $items;
+		    $current = $this->proxy->getQuote()->getItems();
+		    
+		    if ($current)
+		    {
+    			foreach ($current as $item)
+    			{
+    			    $items[] = 
+    			    [
+    			        'id'         => $this->helper->getIdentifier($item->getProduct()),
+    			        'price'      => $this->helper->getPrice($item->getProduct()),
+    			        'name'       => $item->getProduct()->getName(),
+    			        'quantity'   => $item->getQty()
+    			    ];
+    			}
+    			
+    			$response['items'] = $items;
+		    }
 		}
 		else 
 		{

@@ -14,7 +14,7 @@
  *
  * @category 	Anowave
  * @package 	Anowave_Ec
- * @copyright 	Copyright (c) 2022 Anowave (https://www.anowave.com/)
+ * @copyright 	Copyright (c) 2023 Anowave (https://www.anowave.com/)
  * @license  	https://www.anowave.com/license-agreement/
  */
 
@@ -80,7 +80,7 @@ define(['jquery'], function ($)
 	    						/**
         						 * Update data-simple attribute
         						 */
-	    						$('[data-event="addToCart"]').data('simple-id', simple.id).attr('data-simple-id', simple.id);
+	    						$('[data-event="add_to_cart"]').data('simple-id', simple.id).attr('data-simple-id', simple.id);
 	    						
 	    						/**
         						 * Facebook Pixel tracking

@@ -15,7 +15,7 @@
  *
  * @category 	Anowave
  * @package 	Anowave_Ec
- * @copyright 	Copyright (c) 2022 Anowave (https://www.anowave.com/)
+ * @copyright 	Copyright (c) 2023 Anowave (https://www.anowave.com/)
  * @license  	https://www.anowave.com/license-agreement/
  */
 
@@ -23,8 +23,6 @@ namespace Anowave\Ec\Model\Api\Measurement;
 
 class Protocol
 {
-    const DEFAULT_USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:93.0) Gecko/20100101 Firefox/93.0';
-    
 	/**
 	 * Client ID
 	 *
@@ -90,7 +88,17 @@ class Protocol
 	protected $transactionFactory;
 	
 	/**
-	 * Constructor 
+	 * @var \Anowave\Ec\Model\Random
+	 */
+	protected $random;
+	
+	/**
+	 * @var \Anowave\Ec\Model\Cookie\Analytics
+	 */
+	protected $cookie;
+	
+	/**
+	 * Constructor
 	 * 
 	 * @param \Anowave\Ec\Helper\Data $helper
 	 * @param \Magento\Store\Model\StoreManagerInterface $storeManager
@@ -102,6 +110,8 @@ class Protocol
 	 * @param \Magento\Catalog\Model\ResourceModel\Eav\AttributeFactory $attribute
 	 * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
 	 * @param \Anowave\Ec\Model\ResourceModel\Transaction\CollectionFactory $transactionFactory
+	 * @param \Anowave\Ec\Model\Random $random
+	 * @param \Anowave\Ec\Model\Cookie\Analytics $cookie
 	 */
 	public function __construct
 	(
@@ -114,7 +124,9 @@ class Protocol
 		\Magento\Config\Model\ResourceModel\Config $resourceConfig,
 		\Magento\Catalog\Model\ResourceModel\Eav\AttributeFactory $attribute,
 		\Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-	    \Anowave\Ec\Model\ResourceModel\Transaction\CollectionFactory $transactionFactory
+	    \Anowave\Ec\Model\ResourceModel\Transaction\CollectionFactory $transactionFactory,
+	    \Anowave\Ec\Model\Random $random,
+	    \Anowave\Ec\Model\Cookie\Analytics $cookie
 	)
 	{
 		/**
@@ -186,41 +198,20 @@ class Protocol
 		 * @var \Anowave\Ec\Model\ResourceModel\Transaction\CollectionFactory $transactionFactory
 		 */
 		$this->transactionFactory = $transactionFactory;
-	}
-	
-	/**
-	 * Log message 
-	 * 
-	 * @param string $message
-	 */
-	public function log($message)
-	{
-		$log = $this->helper->getConfig('ec/logs/log');
-
-		if ($log)
-		{
-			$log = (array) @unserialize($log);
-			
-			array_unshift($log, $message);
-		}
-		else 
-		{
-			$log = [$message];
-		}
 		
 		/**
-		 * Limit log to latest 10 events
+		 * Set random model
 		 * 
-		 * @var []
+		 * @var \Anowave\Ec\Model\Api\Measurement\Protocol $random
 		 */
-		$log = array_filter(array_slice($log,0,10));
+		$this->random = $random;
 		
 		/**
-		 * Save log
+		 * Set cookie model 
+		 * 
+		 * @var \Anowave\Ec\Model\Cookie\Analytics $cookie
 		 */
-		$this->resourceConfig->saveConfig('ec/logs/log', serialize($log), \Magento\Framework\App\Config::SCOPE_TYPE_DEFAULT, 0);
-		
-		return $this;
+		$this->cookie = $cookie;
 	}
 	
 	/**
@@ -250,134 +241,6 @@ class Protocol
 	 */
 	public function purchase(\Magento\Sales\Model\Order $order, $reverse = false)
 	{
-		/**
-		 * Get default parameters
-		 *
-		 * @var []
-		 */
-		$default = $this->getDefaultParameters($order);
-		
-		/**
-		 * Purchase payload
-		 *
-		 * @var []
-		*/
-		$default['pa']	= 'purchase';
-		$default['ni']  = 1;
-		$default['ti']	= $order->getIncrementId();
-		$default['tr']	= (float) $this->helper->getRevenue($order);
-		$default['ts']	= (float) $order->getShippingInclTax();
-		$default['tt']	= (float) $order->getTaxAmount();
-		$default['ta']	= $this->helper->escape
-		(
-			$this->helper->getStoreName()
-		);
-		
-		$default['cu'] = $order->getOrderCurrencyCode();
-		
-		/**
-		 * Check if this is transaction reversal
-		 */
-		if ($reverse)
-		{
-			$default['tr'] *= -1;
-			$default['ts'] *= -1;
-			$default['tt'] *= -1;
-		}
-		
-		/**
-		 * Default start position
-		 *
-		 * @var int
-		*/
-		$index = 1;
-
-		/**
-		 * Loop products
-		 */
-		foreach ($this->getProducts($order) as $product)
-		{
-			$default["pr{$index}id"] = 			@$product['id'];
-			$default["pr{$index}nm"] = 			@$product['name'];
-			$default["pr{$index}ca"] = 			@$product['category'];
-			$default["pr{$index}pr"] = 	(float) @$product['price'];
-			$default["pr{$index}qt"] = 	(int)   @$product['quantity'];
-			$default["pr{$index}br"] = (string) @$product['brand'];
-			
-			/**
-			 * Check if reverse and reverse quantity
-			 */
-			if ($reverse)
-			{
-				$default["pr{$index}qt"] *= -1;
-				$default["pr{$index}pr"] *= -1;
-			}
-		
-			$index++;
-		}
-
-		/**
-		 * Init CURL
-		 *
-		 * @var Resource
-		 */
-		$analytics = curl_init('https://ssl.google-analytics.com/collect');
-			
-		curl_setopt($analytics, CURLOPT_HEADER, 		0);
-		curl_setopt($analytics, CURLOPT_RETURNTRANSFER, 1);
-		curl_setopt($analytics, CURLOPT_POST, 			1);
-		curl_setopt($analytics, CURLOPT_SSL_VERIFYHOST, 0);
-		curl_setopt($analytics, CURLOPT_SSL_VERIFYPEER, 0);
-		curl_setopt($analytics, CURLOPT_USERAGENT,		'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.13) Gecko/20080311 Firefox/2.0.0.13');
-			
-		/**
-		 * Get Universal Analytics ID
-		 *
-		 * @var string
-		*/
-		$ua = $this->getUA($order);
-		
-		if ($ua)
-		{
-			$data = $default;
-
-			curl_setopt($analytics, CURLOPT_POSTFIELDS, utf8_encode
-			(
-				http_build_query($data)
-			));
-		}
-		else 
-		{
-		    $this->errors[] = __('Please specify Universal Analytics Tracking ID in General options');
-		    
-		    return false;
-		}
-		
-		
-		
-		try
-		{
-			$response = curl_exec($analytics);
-
-			if (!curl_error($analytics) && $response)
-			{
-				return $this;
-			}
-			else 
-			{
-				throw new \Exception(curl_error($analytics));
-			}
-		}
-		catch (Exception $e)
-		{
-			$this->errors[] = $e->getMessage();
-		}
-		
-		if ($this->errors)
-		{
-		    return false;
-		}
-
 		return $this;
 	}
 	
@@ -439,98 +302,56 @@ class Protocol
 	 */
 	public function getUA(\Magento\Sales\Model\Order $order = null)
 	{
-		if ($order && $order->getId())
-		{
-			return trim
-			(
-				(string) $this->scopeConfig->getValue('ec/general/account', \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $order->getStore())
-			);
-		}
-
-		return trim
-		(
-			(string) $this->helper->getConfig('ec/general/account')
-		);
-	}
-
-	/**
-	 * Get default parameters 
-	 * 
-	 * @param \Magento\Sales\Model\Order $order
-	 * 
-	 * @return array
-	 */
-	protected function getDefaultParameters(\Magento\Sales\Model\Order $order = null)
-	{
-		return array
-		(
-			'v' 	=> 1,
-			'tid' 	=> $this->getUA($order),
-			'cid' 	=> $this->getCID(),
-			't'		=> 'pageview',
-			'dp'	=> "/{$this->getDp()}",
-			'dh'	=> PHP_SAPI == 'cli' ? $this->getBaseHost()      : $_SERVER['HTTP_HOST'],
-			'ua'	=> PHP_SAPI == 'cli' ? $this->getBaseUserAgent() : $_SERVER['HTTP_USER_AGENT']
-		);
+		return null;
 	}
 	
-	/**
-	 * Get base URL host
-	 * 
-	 * @return string
-	 */
-	protected function getBaseHost() : string
-	{
-	    return parse_url($this->helper->getStoreManager()->getStore()->getBaseUrl(), PHP_URL_HOST);
-	}
-	
-	/**
-	 * Get default user agent
-	 * 
-	 * @return string
-	 */
-	protected function getBaseUserAgent() : string
-	{
-	    return static::DEFAULT_USER_AGENT;
-	}
-
 	/**
 	 * Get Client ID
 	 *
 	 * @var UUID
 	 */
-	protected function getCID()
+	public function getCID()
 	{
 		if (!$this->cid)
 		{
-			/**
-			 * Load CID from session
-			 *
-			 * @var UUID
-			 */
-			$this->cid = $this->session->getCID();
-				
-			if (!$this->cid)
-			{
-				$this->cid = sprintf('%04x%04x-%04x-%04x-%04x-%04x%04x%04x',mt_rand(0, 0xffff), mt_rand(0, 0xffff),mt_rand(0, 0xffff),mt_rand(0, 0x0fff) | 0x4000,mt_rand(0, 0x3fff) | 0x8000,mt_rand(0, 0xffff), mt_rand(0, 0xffff), mt_rand(0, 0xffff));
-
-				$this->session->setCID($this->cid);
-			}
+		    if (null !== $cid = $this->cookie->get())
+		    {
+		        $this->cid = $cid;
+		    }
+		    else 
+		    {
+		        if (null !== $cid = $this->session->getCID())
+		        {
+		            $this->cid = $cid;
+		        }
+		        else 
+		        {
+		            $this->cid = $this->random->getCID();
+		            
+		            $this->session->setCID($this->cid);
+		        }
+		    }
 		}
 
 		return $this->cid;
 	}
-
+	
 	/**
-	 * Get document path
-	 *
-	 * @return string
+	 * Set client id 
+	 * 
+	 * @param string $cid
+	 * @return \Anowave\Ec\Model\Api\Measurement\Protocol
 	 */
-	protected function getDp()
+	public function setCID($cid = null)
 	{
-		return ltrim(str_replace(array('http://', 'https://', @$_SERVER['HTTP_HOST']), '', @$_SERVER['HTTP_REFERER']),'/');
+	    if ($cid)
+	    {
+	       $this->cid = $cid;
+	    }
+	    
+	    return $this;
 	}
-
+	
 	/**
 	 * Get order products array
 	 *
@@ -645,140 +466,12 @@ class Protocol
 		return $products;
 	}
 	
-	public function fallback($params = [])
+	
+	public function fallback(array $params = [])
 	{
-		/**
-		 * Get default parameters 
-		 * 
-		 * @var array $default
-		 */
-		$default = $this->getDefaultParameters();
-		
-		$payload = function() use ($default)
-		{
-			return $default;
-		};
-		
-		if (isset($params['data']) && is_array($params['data']) && count($params['data']) > 0)
-		{
-			$ecommerce = reset($params['data'])['ecommerce'];
-			
-			if (isset($ecommerce['detail']))
-			{
-				$payload = function() use ($default, $ecommerce)
-				{
-					$default['t'] 	= 'event';
-					$default['ec'] 	= 'Ecommerce';
-					$default['ea'] 	= 'Detail';
-					$default['pa']	= 'detail';
-					$default['ni']  = 1;
-					
-					$index = 1;
-					
-					foreach ($ecommerce['detail']['products'] as $product)
-					{
-						$default["pr{$index}id"] = $product['id'];
-						$default["pr{$index}nm"] = $product['name'];
-						$default["pr{$index}ca"] = $product['category'];
-						$default["pr{$index}pr"] = $product['price'];
-						$default["pr{$index}br"] = $product['brand'];
-						
-						$index++;
-					}
-					
-					return $default;
-				};
-			}
-			elseif (isset($ecommerce['impressions']))
-			{
-				$payload = function() use ($default, $ecommerce)
-				{
-					$index = 1;
-					
-					foreach ($ecommerce['impressions'] as $product)
-					{
-						$default["il1nm"] 				= $product['list'];
-						$default["il1pi{$index}nm"] 	= $product['name'];
-						$default["il1pi{$index}id"] 	= $product['id'];
-						$default["il1pi{$index}ca"] 	= $product['category'];
-						$default["il1pi{$index}pr"] 	= $product['price'];
-						$default["il1pi{$index}br"] 	= $product['brand'];
-						
-						$index++;
-					}
-					
-					return $default;
-				};
-			}
-			elseif (isset($ecommerce['purchase']))
-			{
-				$payload = function() use ($default, $ecommerce)
-				{
-					$default['pa']	= 'purchase';
-					$default['ni']  = 1;
-					$default['ti']	= $ecommerce['purchase']['actionField']['id'];
-					$default['tr']	= $ecommerce['purchase']['actionField']['revenue'];
-					$default['ts']	= $ecommerce['purchase']['actionField']['shipping'];
-					$default['tt']	= $ecommerce['purchase']['actionField']['tax'];
-					$default['ta']	= $ecommerce['purchase']['actionField']['affiliation'];
-					
-					$index = 1;
-					
-					foreach ($ecommerce['purchase']['products'] as $product)
-					{
-						$default["pr{$index}id"] = $product['id'];
-						$default["pr{$index}nm"] = $product['name'];
-						$default["pr{$index}ca"] = $product['category'];
-						$default["pr{$index}pr"] = $product['price'];
-						$default["pr{$index}br"] = $product['brand'];
-						
-						$index++;
-					}
-					
-					return $default;
-				};
-			}
-		}
-		
-		$analytics = curl_init('https://ssl.google-analytics.com/collect');
-		
-		curl_setopt($analytics, CURLOPT_HEADER, 		0);
-		curl_setopt($analytics, CURLOPT_RETURNTRANSFER, 1);
-		curl_setopt($analytics, CURLOPT_POST, 			1);
-		curl_setopt($analytics, CURLOPT_SSL_VERIFYHOST, 0);
-		curl_setopt($analytics, CURLOPT_SSL_VERIFYPEER, 0);
-		curl_setopt($analytics, CURLOPT_USERAGENT,		'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.13) Gecko/20080311 Firefox/2.0.0.13');
-		
-		/**
-		 * Get Universal Analytics ID
-		 *
-		 * @var string
-		 */
-		$ua = $this->getUA();
-		
-		if ($ua)
-		{
-			$data = $payload();
-			
-			curl_setopt($analytics, CURLOPT_POSTFIELDS, utf8_encode
-			(
-				http_build_query($data)
-			));
-		}
-		
-		try
-		{
-			$response = curl_exec($analytics);
-			
-			if (!curl_error($analytics) && $response)
-			{
-				return true;
-			}
-		}
-		catch (Exception $e){}
-		
-		return false;
+	    return false;
 	}
+	
 	
 	/**
 	 * Get root category id

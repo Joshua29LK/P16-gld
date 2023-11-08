@@ -18,4 +18,46 @@
             </argument>
         </arguments>
     </type>
+    <virtualType name="LogFilterPool" type="Magento\Framework\View\Element\UiComponent\DataProvider\FilterPool">
+        <arguments>
+            <argument name="appliers" xsi:type="array">
+                <item name="regular" xsi:type="object">Magento\Framework\View\Element\UiComponent\DataProvider\RegularFilter</item>
+                <item name="fulltext" xsi:type="object">Magento\Framework\View\Element\UiComponent\DataProvider\FulltextFilter</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="LogFilterPool" type="Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider">
+        <arguments>
+            <argument name="collection" xsi:type="object" shared="false">Anowave\Ec\Model\ResourceModel\Log\Collection</argument>
+            <argument name="filterPool" xsi:type="object" shared="false">LogFilterPool</argument>
+        </arguments>
+    </virtualType>
+	<type name="Anowave\Ec\Model\ResourceModel\Log\Grid\Collection">
+	    <arguments>
+	        <argument name="mainTable" xsi:type="string">ae_ec_log</argument>
+	        <argument name="eventPrefix" xsi:type="string">track_log_grid_collection</argument>
+	        <argument name="eventObject" xsi:type="string">log_grid_collection</argument>
+	        <argument name="resourceModel" xsi:type="string">Anowave\Ec\Model\ResourceModel\Log</argument>
+	    </arguments>
+	</type>
+	<type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
+	    <arguments>
+	        <argument name="collections" xsi:type="array">
+	            <item name="track_log_listing_data_source" xsi:type="string">Anowave\Ec\Model\ResourceModel\Log\Grid\Collection</item>
+	        </argument>
+	    </arguments>
+	</type>
+	<type name="Anowave\Ec\Logger\Handler">
+        <arguments>
+            <argument name="filesystem" xsi:type="object">Magento\Framework\Filesystem\Driver\File</argument>
+        </arguments>
+    </type>
+    <type name="Anowave\Ec\Logger\Logger">
+        <arguments>
+            <argument name="name" xsi:type="string">ec</argument>
+            <argument name="handlers"  xsi:type="array">
+                <item name="system" xsi:type="object">Anowave\Ec\Logger\Handler</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

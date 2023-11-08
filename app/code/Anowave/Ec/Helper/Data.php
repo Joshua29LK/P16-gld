@@ -15,10 +15,9 @@
  *
  * @category 	Anowave
  * @package 	Anowave_Ec
- * @copyright 	Copyright (c) 2022 Anowave (https://www.anowave.com/)
+ * @copyright 	Copyright (c) 2023 Anowave (https://www.anowave.com/)
  * @license  	https://www.anowave.com/license-agreement/
  */
-
 namespace Anowave\Ec\Helper;
 
 use Magento\Store\Model\Store;
@@ -40,13 +39,6 @@ class Data extends \Anowave\Package\Helper\Package
 	 * @var string
 	 */
 	const VARIANT_DELIMITER_ATT = ':';
-	
-	/**
-	 * Asunc events
-	 * 
-	 * @var boolean
-	 */
-	const USE_ASYNC_EVENTS = false;
 	
 	/**
 	 * Package name
@@ -73,6 +65,13 @@ class Data extends \Anowave\Package\Helper\Package
 	 * @var array
 	 */
 	private $_brandMap = [];
+	
+	/**
+	 * Category map 
+	 * 
+	 * @var array
+	 */
+	private $_categories = [];
 	
 	/**
 	 * @var \Magento\Catalog\Api\ProductRepositoryInterface
@@ -208,9 +207,9 @@ class Data extends \Anowave\Package\Helper\Package
 	protected $privateData;
 	
 	/**
-	 * @var \Magento\Catalog\Helper\Category
+	 * @var \Magento\Catalog\Model\ResourceModel\Category\CollectionFactory
 	 */
-	protected $categoryHelper;
+	protected $categoryCollectionFactory;
 	
 	/**
 	 * @var \Anowave\Ec\Model\Cookie\Directive;
@@ -262,6 +261,21 @@ class Data extends \Anowave\Package\Helper\Package
 	 */
 	protected $facebookConversionsApiFactory;
 	
+	/**
+	 * @var \Anowave\Ec\Model\Logger
+	 */
+	protected $logger;
+	
+	/**
+	 * @var \Magento\Framework\Data\Form\FormKey;
+	 */
+	protected $formKey;
+	
+	/**
+	 * @var \Magento\Framework\Module\Manager
+	 */
+	protected $moduleManager;
+	
 	
 	/**
 	 * Check if returning customer
@@ -298,6 +312,7 @@ class Data extends \Anowave\Package\Helper\Package
 	 * @param \Magento\Framework\Registry $registry
 	 * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
 	 * @param \Magento\Catalog\Model\CategoryRepository $categoryRepository
+	 * @param \Magento\Catalog\Model\ResourceModel\Category\CollectionFactory $categoryCollectionFactory
 	 * @param \Magento\Customer\Model\SessionFactory $sessionFactory
 	 * @param \Magento\Customer\Model\GroupRegistry $groupRegistry
 	 * @param \Magento\Sales\Model\ResourceModel\Order\CollectionFactory $orderCollectionFactory
@@ -317,7 +332,6 @@ class Data extends \Anowave\Package\Helper\Package
 	 * @param \Anowave\Ec\Helper\Bridge $bridge
 	 * @param \Magento\Framework\App\Response\RedirectInterface $redirect
 	 * @param \Anowave\Ec\Model\Cookie\PrivateData $privateData
-	 * @param \Magento\Catalog\Helper\Category $categoryHelper
 	 * @param \Anowave\Ec\Model\Cookie\Directive $directive
 	 * @param \Anowave\Ec\Helper\Json $jsonHelper
 	 * @param \Magento\Sales\Model\ResourceModel\Order\CollectionFactory $salesOrderCollection
@@ -328,6 +342,9 @@ class Data extends \Anowave\Package\Helper\Package
 	 * @param \Magento\Catalog\Model\Layer\Resolver $layerResolver
 	 * @param \Anowave\Ec\Model\Facebook\ConversionsApiFactory $facebookConversionsApiFactory
 	 * @param \Magento\Framework\App\ScopeResolverInterface $scopeResolver
+	 * @param \Anowave\Ec\Model\Logger $logger
+	 * @param \Magento\Framework\Data\Form\FormKey $formKey
+	 * @param \Magento\Framework\Module\Manager $moduleManager
 	 * @param array $data
 	 */
 	public function __construct
@@ -336,6 +353,7 @@ class Data extends \Anowave\Package\Helper\Package
 		\Magento\Framework\Registry $registry,
 		\Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
 		\Magento\Catalog\Model\CategoryRepository $categoryRepository,
+	    \Magento\Catalog\Model\ResourceModel\Category\CollectionFactory $categoryCollectionFactory,
 		\Magento\Customer\Model\SessionFactory $sessionFactory,
 		\Magento\Customer\Model\GroupRegistry $groupRegistry,
 		\Magento\Sales\Model\ResourceModel\Order\CollectionFactory $orderCollectionFactory,
@@ -355,7 +373,6 @@ class Data extends \Anowave\Package\Helper\Package
 		\Anowave\Ec\Helper\Bridge $bridge,
 		\Magento\Framework\App\Response\RedirectInterface $redirect,
 		\Anowave\Ec\Model\Cookie\PrivateData $privateData,
-		\Magento\Catalog\Helper\Category $categoryHelper,
 		\Anowave\Ec\Model\Cookie\Directive $directive,
 		\Anowave\Ec\Helper\Json $jsonHelper,
 		\Magento\Sales\Model\ResourceModel\Order\CollectionFactory $salesOrderCollection,
@@ -366,6 +383,9 @@ class Data extends \Anowave\Package\Helper\Package
 	    \Magento\Catalog\Model\Layer\Resolver $layerResolver,
 	    \Anowave\Ec\Model\Facebook\ConversionsApiFactory $facebookConversionsApiFactory,
 	    \Magento\Framework\App\ScopeResolverInterface $scopeResolver,
+	    \Anowave\Ec\Model\Logger $logger,
+	    \Magento\Framework\Data\Form\FormKey $formKey,
+	    \Magento\Framework\Module\Manager $moduleManager,
 		array $data = []
 	)
 	{
@@ -398,6 +418,13 @@ class Data extends \Anowave\Package\Helper\Package
 		 * @var \Magento\Catalog\Model\CategoryRepository $categoryRepository
 		 */
 		$this->categoryRepository = $categoryRepository;
+		
+		/**
+		 * Set category collection factory 
+		 * 
+		 * @var \Magento\Catalog\Model\ResourceModel\Category\CollectionFactory $categoryCollectionFactory
+		 */
+		$this->categoryCollectionFactory = $categoryCollectionFactory;
 		
 		/**
 		 * Set Group Registry 
@@ -552,13 +579,6 @@ class Data extends \Anowave\Package\Helper\Package
 		$this->privateData = $privateData;
 		
 		/**
-		 * Set category helper 
-		 * 
-		 * @var \Anowave\Ec\Helper\Data $categoryHelper
-		 */
-		$this->categoryHelper = $categoryHelper;
-		
-		/**
 		 * Set cookie directive 
 		 * 
 		 * @var \Anowave\Ec\Helper\Data $directive
@@ -626,6 +646,44 @@ class Data extends \Anowave\Package\Helper\Package
 		 */
 		
 		$this->facebookConversionsApiFactory = $facebookConversionsApiFactory;
+		
+		/**
+		 * Set logger 
+		 * 
+		 * @var \Anowave\Ec\Helper\Data $logger
+		 */
+		$this->logger = $logger;
+		
+		/**
+		 * Sey form key
+		 * 
+		 * @var \Magento\Framework\Data\Form\FormKey $formKey
+		 */
+		$this->formKey = $formKey;
+		
+		/**
+		 * Set module manager 
+		 * 
+		 * @var \Anowave\Ec\Helper\Data $moduleManager
+		 */
+		$this->moduleManager = $moduleManager;
+		
+		if ($this->moduleManager->isEnabled('Anowave_Ec4'))
+		{
+		    /**
+		     * Update package
+		     * 
+		     * @var \Anowave\Ec\Helper\Data $package
+		     */
+		    $this->package = 'MAGE2-GTMGA4';
+		    
+		    /**
+		     * Update license path
+		     * 
+		     * @var \Anowave\Ec\Helper\Data $config
+		     */
+		    $this->config = 'ec/ec4/license';
+		}
 	}
 	
 	/**
@@ -638,8 +696,10 @@ class Data extends \Anowave\Package\Helper\Package
 	{
 		switch ((int) $this->getConfig('ec/tax/revenue'))
 		{
-			case \Anowave\Ec\Model\System\Config\Source\Tax::INCL_TAX: return $order->getGrandTotal();
-			case \Anowave\Ec\Model\System\Config\Source\Tax::EXCL_TAX: return $order->getSubtotal();
+			case \Anowave\Ec\Model\System\Config\Source\Tax::INCL_TAX:                   return ($order->getGrandTotal());
+			case \Anowave\Ec\Model\System\Config\Source\Tax::EXCL_TAX:                   return ($order->getSubtotal());
+			case \Anowave\Ec\Model\System\Config\Source\Tax::INCL_TAX_EXCL_SHIPPING:     return ($order->getGrandTotal() - $order->getShippingAmount());
+			case \Anowave\Ec\Model\System\Config\Source\Tax::EXCL_TAX_INCL_SHIPPING:     return ($order->getGrandTotal() - $order->getTaxAmount());
 		}
 		
 		/**
@@ -675,8 +735,10 @@ class Data extends \Anowave\Package\Helper\Package
 	{
 		switch ((int) $this->getConfig('ec/tax/ecomm_totalvalue'))
 		{
-			case \Anowave\Ec\Model\System\Config\Source\Tax::INCL_TAX: return $order->getGrandTotal();
-			case \Anowave\Ec\Model\System\Config\Source\Tax::EXCL_TAX: return $order->getSubtotal();
+			case \Anowave\Ec\Model\System\Config\Source\Tax::INCL_TAX:                   return ($order->getGrandTotal());
+			case \Anowave\Ec\Model\System\Config\Source\Tax::EXCL_TAX:                   return ($order->getSubtotal());
+			case \Anowave\Ec\Model\System\Config\Source\Tax::INCL_TAX_EXCL_SHIPPING:     return ($order->getGrandTotal() - $order->getShippingAmount());
+			case \Anowave\Ec\Model\System\Config\Source\Tax::EXCL_TAX_INCL_SHIPPING:     return ($order->getGrandTotal() - $order->getTaxAmount());
 		}
 		
 		/**
@@ -705,26 +767,25 @@ class Data extends \Anowave\Package\Helper\Package
 		 */
 		$data->google_tag_params->ecomm_totalvalue = (float) $this->cart->getQuote()->getGrandTotal();
 		
+		/**
+		 * Build checkout payload 
+		 * 
+		 * @var array $checkout
+		 */
 		$checkout = 
 		[
-		    'push' =>
+		    'payload' =>
 		    [
-		        'event' => 'checkout',
+		        'event' => 'begin_checkout',
+		        'currency' => $this->getStore()->getCurrentCurrencyCode(),
 		        'ecommerce' =>
 		        [
-		            'currencyCode' 	=> $this->getStore()->getCurrentCurrencyCode(),
-		            'checkout' =>
-		            [
-		                'actionField' =>
-		                [
-		                    'step' => \Anowave\Ec\Helper\Constants::CHECKOUT_STEP_SHIPPING
-		                ],
-		                'products' => $data->products
-		            ]
-		        ]
+		            'items' => $data->products
+		        ],
+		        'value' => (float) $this->cart->getQuote()->getGrandTotal()
 		    ],
 		    'google_tag_params' => $data->google_tag_params,
-		    'total'	=> (float) $this->cart->getQuote()->getGrandTotal()
+		    'total'	            => (float) $this->cart->getQuote()->getGrandTotal()
 		];
 		
 		/**
@@ -806,22 +867,16 @@ class Data extends \Anowave\Package\Helper\Package
 	    return $this->getJsonHelper()->encode
 	    (
 	        [
-	            'push' =>
+	            'payload' =>
 	            [
-	                'event' => 'checkout',
+	                'event' => 'begin_checkout',
+	                'currency' => $this->getStore()->getCurrentCurrencyCode(),
 	                'ecommerce' =>
 	                [
-	                    'currencyCode' 	=> $this->getStore()->getCurrentCurrencyCode(),
-	                    'checkout' =>
-	                    [
-	                        'actionField' =>
-	                        [
-	                            'type' => 'multicheckout',
-	                            'step' => $current
-	                        ],
-	                        'products' => $data->products
-	                    ]
-	                ]
+	                    'items' => $data->products
+	                ],
+	                'type' => 'multicheckout',
+	                'step' => $current
 	            ],
 	            'google_tag_params' => $data->google_tag_params,
 	            'total'	=> (float) $this->cart->getQuote()->getGrandTotal()
@@ -892,6 +947,7 @@ class Data extends \Anowave\Package\Helper\Package
 			 */
 			$categories = $this->getCurrentStoreProductCategories($item->getProduct());
 			
+
 			if (!$categories)
 			{
 				/**
@@ -906,11 +962,6 @@ class Data extends \Anowave\Package\Helper\Package
 				);
 			}
 			
-			if (!$categories && $item->getProduct()->getCategoryIds())
-			{
-			    $categories = $item->getProduct()->getCategoryIds();
-			}
-			
 			/**
 			 * Cases when product does not exist in any category
 			 */
@@ -919,13 +970,24 @@ class Data extends \Anowave\Package\Helper\Package
 				$categories[] = $this->getStoreRootDefaultCategoryId();
 			}
 			
-			/**
-			 * Load last category 
-			 */
-			$category = $this->categoryRepository->get
-			(
-				end($categories)
-			);
+			try 
+			{
+    			/**
+    			 * Load last category 
+    			 */
+    			$category = $this->categoryRepository->get
+    			(
+    				end($categories)
+    			);
+			
+			}
+			catch (\Exception $e)
+			{
+			    $category = $this->categoryRepository->get
+			    (
+			        $this->getStoreRootDefaultCategoryId()
+		        );
+			}
 			
 			/**
 			 * Variant
@@ -936,15 +998,18 @@ class Data extends \Anowave\Package\Helper\Package
 			
 			$data = new \Magento\Framework\DataObject(array
 			(
-				'id' 		=> 		 	$this->getIdentifierItem($item),
-				'name' 		=> 		 	$item->getName(),
-				'price' 	=> (float)  $item->getPriceInclTax(),
-				'quantity' 	=> (int) 	$item->getQty(),
-				'category'	=> 		 	$this->getCategory($category),
-				'brand'		=> 		 	$this->getBrand
+				'item_id' 		    => 		 	$this->getIdentifierItem($item),
+				'item_name' 		=> 		 	$item->getName(),
+			    'price' 	        => (float)  $this->getPrice($item->getProduct()),
+				'quantity' 	        => (int) 	$item->getQty(),
+				'category'	        => 		 	$this->getCategory($category),
+			    'item_list_name'    =>          $this->getCategoryList($category),
+			    'item_list_id'      =>          $this->getCategoryList($category),
+				'item_brand'		=> 		 	$this->getBrand
 				(
 					$item->getProduct()
-				)
+				),
+			    $this->getStockDimensionIndex(true) => $this->getStock($item->getProduct())
 			));
 
 			/**
@@ -1138,17 +1203,17 @@ class Data extends \Anowave\Package\Helper\Package
 					}
 				}
 				
-				$data->setBrand
+				$data->setItemBrand
 				(
 					$this->getBrand($configurable)
 				);
-					
+				
 				/**
 				 * Push variant to data
 				 *
 				 * @var array
 				 */
-				$data->setVariant(join(self::VARIANT_DELIMITER, $variant));
+				$data->setItemVariant(join(self::VARIANT_DELIMITER, $variant));
 				
 				/**
 				 * Push variant id into dataLayer[] object
@@ -1172,6 +1237,13 @@ class Data extends \Anowave\Package\Helper\Package
 			 */
 			try
 			{
+			    $variant = [];
+			    
+			    if ($data->getItemVariant())
+			    {
+			        $variant[] = $data->getItemVariant();
+			    }
+			    
 				/**
 				 * Get order options
 				 * 
@@ -1190,11 +1262,17 @@ class Data extends \Anowave\Package\Helper\Package
 					
 					if ($selection)
 					{
-						$variant = (string) $data->getVariant();
+					    $variant[] = (string) $data->getVariant() . join(self::VARIANT_DELIMITER_ATT, $selection);
 						
-						$variant .= join(self::VARIANT_DELIMITER, $selection);
+					    /**
+					     * Update variant
+					     */
+						$data->setItemVariant(join(static::VARIANT_DELIMITER, $variant));
 						
-						$data->setVariant($variant);
+						/**
+						 * Add custom option explicitly
+						 */
+						$data->setItemCustomOption($selection);
 					}
 				}
 				
@@ -1202,7 +1280,7 @@ class Data extends \Anowave\Package\Helper\Package
 				 * Get additional options
 				 */
 				$options = $item->getProduct()->getCustomOptions();
-				
+
 				if ($options && isset($options['additional_options']))
 				{
 					if ($options['additional_options']->getValue())
@@ -1213,21 +1291,28 @@ class Data extends \Anowave\Package\Helper\Package
 						
 						foreach ($additional_options as $option)
 						{
-							$selection[] = join(self::VARIANT_DELIMITER_ATT, [$option->label, $option->value]);
+						    $selection[] = join(self::VARIANT_DELIMITER_ATT, [$option->label, join(chr(32), array_filter((array) $option->value))]);
 						}
 						
 						if ($selection)
 						{
-							$variant = (string) $data->getVariant();
-							
-							$variant .= join(self::VARIANT_DELIMITER, $selection);
-							
-							$data->setVariant($variant);
+						    $variant[] = (string) $data->getVariant() . join(self::VARIANT_DELIMITER_ATT, $selection);
+
+						    /**
+						     * Update variant
+						     */
+						    $data->setItemVariant(join(static::VARIANT_DELIMITER, $variant));
+						    
+						    /**
+						     * Add custom option explicitly
+						     */
+						    $data->setItemCustomOption($selection);
 						}
 					}
 				}
 			}
 			catch (\Exception $e){}
+			
 
 			/**
 			 * Add product
@@ -1298,231 +1383,6 @@ class Data extends \Anowave\Package\Helper\Package
 		];
 	}
 	
-	/**
-	 * Impressions push 
-	 * 
-	 * @param \Magento\Framework\View\Element\Template $block
-	 */
-	public function getImpressionPushForward($block)
-	{
-		if (!$this->registry->registry('current_category') || 'category' !== $this->request->getControllerName())
-		{
-			return false;	
-		}
-		
-		if ($this->usePostRenderImpressionPayloadModel())
-		{
-		    return false;
-		}
-		
-		try 
-		{
-			$list = $block->getLayout()->getBlock('category.products.list');
-			
-			if ($list)
-			{
-				$category = $this->registry->registry('current_category');
-				
-				$response = 
-				[
-					'ecommerce' => 
-					[
-						'currencyCode' => $this->getStore()->getCurrentCurrencyCode(),
-						'actionField' => 
-						[
-							'list' => $this->getCategoryList($category)
-						],
-						'impressions' => []
-					]
-				];
-				
-				/**
-				 * Get loaded collection 
-				 * 
-				 * @var \Magento\Eav\Model\Entity\Collection\AbstractCollection $collection
-				 */
-				$collection = $this->getLoadedCollection($list);
-
-				/**
-				 * Set default position
-				 * 
-				 * @var integer $position
-				 */
-				$position = 1;
-				
-				/**
-				 * Consider pagination
-				 * 
-				 * @var int $p
-				 */
-				$p = (int) $collection->getCurPage();
-				
-				if ($p > 1)
-				{
-					$position += (($p-1) * (int) $collection->getPageSize());
-				}
-				
-				/**
-				 * Push data 
-				 * 
-				 * @var []
-				 */
-				$data = [];
-				
-				$taxonomy = (object) 
-				[
-					'list' => $this->getCategoryList($category),
-					'name' => $this->getCategory($category)
-				];
-				
-				/**
-				 * Get grid mode e.g. list or grid. Magento 2.2 or lower does not support getMode() method.
-				 */
-				if (method_exists($list, 'getMode'))
-				{
-				    $mode = $list->getMode();
-				}
-				else 
-				{
-				    $mode = null;
-				}
-				
-				/**
-				 * Get current sorting parameter 
-				 * 
-				 * @var string $sort
-				 */
-				$sort = $list->getData('sort_by');
-				
-				foreach ($collection as $product)
-				{
-					$entity = 
-					[
-						'list' 								=> $taxonomy->list,
-						'category'							=> $taxonomy->name,
-						'id'								=> $this->getIdentifier($product),
-						'name'								=> $product->getName(),
-						'brand'								=> $this->getBrand
-						(
-							$product
-						),
-						'price'								=> $this->getPrice($product),
-						$this->getStockDimensionIndex(true) => $this->getStock($product),
-						'position'							=> $position++
-					];
-					
-					/**
-					 * Create transport object
-					 *
-					 * @var \Magento\Framework\DataObject $transport
-					 */
-					$transport = new \Magento\Framework\DataObject
-					(
-						[
-							'attributes' => $this->attributes->getAttributes(), 
-							'entity'	 => $entity,
-						    'product'    => $product
-						]
-					);
-					
-					/**
-					 * Notify others
-					 */
-					$this->eventManager->dispatch('ec_get_impression_item_attributes', ['transport' => $transport]);
-					
-					/**
-					 * Get response
-					 */
-					$attributes = $transport->getAttributes();
-					
-					/**
-					 * Add entity to impression array
-					 */
-					$response['ecommerce']['impressions'][] = array_merge($entity, $attributes);	
-				}
-				
-				$response['currentStore'] = $this->getStoreName();
-				
-				/**
-				 * Current category state 
-				 * 
-				 * @var array $categoryState
-				 */
-				$categoryState = [];
-				
-				if ($sort)
-				{
-					$categoryState['sort'] = $sort;
-				}
-				
-				if ($mode)
-				{
-					$categoryState['mode'] = $mode;
-				}
-
-				if ($categoryState)
-				{
-					$response['currentCategory'] = $categoryState;
-				}
-			}
-
-			/**
-			 * Create transport object
-			 *
-			 * @var \Magento\Framework\DataObject $transport
-			 */
-			$transport = new \Magento\Framework\DataObject
-			(
-				[
-					'response' => $response
-				]
-			);
-			
-			/**
-			 * Notify others
-			 */
-			$this->eventManager->dispatch('ec_get_impression_data_after', ['transport' => $transport]);
-			
-			/**
-			 * Get response
-			 */
-			$response = $transport->getResponse();
-			
-			/**
-			 * Facebook data
-			 *
-			 * @var []
-			 */
-			
-			$content_name =  $taxonomy->name;
-			
-			$fbq = 
-			[
-				'content_name'		=> $content_name,
-				'content_category' 	=> $content_name,
-				'content_type' 		=> 'product',
-				'content_ids' 		=> array_map
-				(
-					function($entity) {return $entity['id']; }, $response['ecommerce']['impressions']
-				)
- 			];
-
-			return (object) 
-			[
-				'push' 				=> $this->getJsonHelper()->encode($response),
-				'google_tag_params' => array
-				(
-					'ecomm_pagetype' => 'category',
-					'ecomm_category' => $this->escape($taxonomy->name)
-				),
-				'fbq' => $this->getJsonHelper()->encode($fbq)
-			];
-		}
-		catch (\Exception $e){}
-		
-		return false;
-	}
-
 	/**
 	 * Get loaded product collection from product list block 
 	 *  
@@ -1641,13 +1501,30 @@ class Data extends \Anowave\Package\Helper\Package
 					$categories[] = $this->getStoreRootDefaultCategoryId();
 				}
 				
-				/**
-				 * Load last category
-				*/
-				$category = $this->categoryRepository->get
-				(
-					end($categories)
-				);
+				try 
+				{
+    				/**
+    				 * Load last category
+    				*/
+    				$category = $this->categoryRepository->get
+    				(
+    					end($categories)
+    				);
+				}
+				catch (\Exception $e) 
+				{
+				    $categories = $info->getProduct()->getCategoryIds();
+				    
+				    if (!$categories)
+				    {
+				        $categories = [$this->getStoreRootDefaultCategoryId()];
+				    }
+				    
+				    $category = $this->categoryRepository->get
+				    (
+				        end($categories)
+			        );
+				}
 			}
 			
 			/**
@@ -1673,34 +1550,58 @@ class Data extends \Anowave\Package\Helper\Package
 			 */
 			$attributes = $transport->getAttributes();
 			
+			/**
+			 * Value parameter 
+			 * 
+			 * @var integer $value
+			 */
+			$value = 0;
+			
+			/**
+			 * Items array 
+			 * 
+			 * @var array $items
+			 */
+			$items = [];
+			
+			/**
+			 * Build item 
+			 * 
+			 * @var array $item
+			 */
+			$item = array_merge
+			(
+			    [
+			        'item_id' 							=> $this->getIdentifier($info->getProduct()),
+			        'item_name' 						=> $info->getProduct()->getName(),
+			        'price' 							=> $this->getPrice($info->getProduct()),
+			        'item_brand'						=> $this->getBrand
+			        (
+			            $info->getProduct()
+		            ),
+			        $this->getStockDimensionIndex(true)	=> $this->getStock($info->getProduct()),
+			        'quantity' 							=> 1,
+			        'index'                             => 0
+			    ],
+			    $attributes
+		    );
+			
+			$items[] = $this->assignCategory($category, $item);
+    			
+			foreach ($items as $item)
+			{
+			    $value += (float) $item['price'];
+			}
+			
 			$data = 
 			[
 				'ecommerce' => 
 				[
-					'currencyCode' => $this->getStore()->getCurrentCurrencyCode(),
-					'detail' => 
-					[
-						'products' => 
-						[
-							array_merge
-							(
-								[
-									'id' 								=> $this->getIdentifier($info->getProduct()),
-									'name' 								=> $info->getProduct()->getName(),
-									'price' 							=> $this->getPrice($info->getProduct()),
-									'brand'								=> $this->getBrand
-									(
-										$info->getProduct()
-									),
-									'category'							=> $this->getCategory($category),
-									$this->getStockDimensionIndex(true)	=> $this->getStock($info->getProduct()),
-									'quantity' 							=> 1
-								], 
-								$attributes
-							)
-						]
-					]
-				]
+					'currency'  => $this->getStore()->getCurrentCurrencyCode(),
+				    'value'     => $value,
+				    'items'     => $items,
+				],
+			    'event' => 'view_item'
 			];
 			
 			/**
@@ -1713,7 +1614,8 @@ class Data extends \Anowave\Package\Helper\Package
 			 */
 			if (1 === (int) $this->getConfig('ec/options/use_detail_list'))
 			{
-				$data['ecommerce']['detail']['actionField']['list'] = $this->getCategoryList($category);
+			    $data['ecommerce']['item_list_id'] = $this->getCategoryList($category);
+				$data['ecommerce']['item_list_name'] = $this->getCategoryList($category);
 			}
 			
 			
@@ -1936,7 +1838,7 @@ class Data extends \Anowave\Package\Helper\Package
 			 */
 			return (object) 
 			[
-				'push' 				=> $this->getJsonHelper()->encode($data),
+				'payload' 			=> $this->getJsonHelper()->encode($data),
 			    'fbq'				=> $this->getJsonHelper()->encode($this->getFacebookViewContentTrack($product, $category)),
 				'google_tag_params' => $google_tag_params,
 				'group'             => $this->getDetailGroup($info, $category)
@@ -2016,22 +1918,19 @@ class Data extends \Anowave\Package\Helper\Package
 		
 		$response =
 		[
+		    'currency' => $this->getStore()->getCurrentCurrencyCode(),
 		    'ecommerce' =>
 		    [
-		        'currencyCode' => $this->getStore()->getCurrentCurrencyCode(),
 		        'purchase' 	   =>
 		        [
-		            'actionField' =>
-		            [
-		                'id' 			      => $order->getIncrementId(),
-		                'revenue' 		      => (float) $this->getRevenue($order),
-		                'tax'			      =>            (float) $order->getTaxAmount(),
-		                'shipping' 		      =>            (float) $order->getShippingAmount(),
-		                'coupon'		      => strtoupper((string) $order->getCouponCode()),
-		                'affiliation' 	      =>            (string) $this->getStore()->getName(),
-		                'shipping_country'    => $address->getCountryId()
-		            ],
-		            'products' => []
+		            'transaction_id'  => $order->getIncrementId(),
+		            'affiliation'     => (string) $this->getStore()->getName(),
+		            'value'           => (float) $this->getRevenue($order),
+		            'tax'             => (float) $order->getTaxAmount(),
+		            'shipping'        => (float) $order->getShippingAmount(),
+		            'currency'        => $this->getStore()->getCurrentCurrencyCode(),
+		            'coupon'          => strtoupper((string) $order->getCouponCode()),
+		            'items'           => []
 		        ]
 		    ],
 		    'facebook' =>
@@ -2047,8 +1946,13 @@ class Data extends \Anowave\Package\Helper\Package
 		    [
 		        'method' => $order->getShippingDescription()
 		    ],
-		    'event' => 'purchase'
+		    'event' => \Anowave\Ec\Helper\Constants::EVENT_PURCHASE
 		];
+		
+		if ($order->getCouponCode())
+		{
+		    $response['ecommerce']['purchase']['discount'] = abs($order->getDiscountAmount());
+		}
 		
 		foreach ($order->getAllVisibleItems() as $item)
 		{
@@ -2071,24 +1975,38 @@ class Data extends \Anowave\Package\Helper\Package
 		            $categories[] = $this->getStoreRootDefaultCategoryId();
 		        }
 		        
-		        /**
-		         * Load last category
-		         */
-		        $category = $this->categoryRepository->get
-		        (
-		            end($categories)
-	            );
+		        
+		        try
+		        {
+		            /**
+		             * Load last category
+		             */
+		            $category = $this->categoryRepository->get
+		            (
+		                end($categories)
+	                );
+		            
+		        }
+		        catch (\Exception $e)
+		        {
+		            $category = $this->categoryRepository->get
+		            (
+		                $this->getStoreRootDefaultCategoryId()
+	                );
+		        }
 		    }
 		    
 		    $data = new \Magento\Framework\DataObject
 		    (
 		        [
-		            'id' 		=> 		 	$this->getIdentifier($item->getProduct()),
-		            'name' 		=> 		 	$item->getName(),
-		            'price' 	=> (float) 	$this->getRevenueProduct($item),
-		            'quantity' 	=> (int) 	$item->getQtyOrdered(),
-		            'category'	=> 		 	$this->getCategory($category),
-		            'brand'		=> 		 	$this->getBrand
+		            'item_id' 		    => 		 	$this->getIdentifier($item->getProduct()),
+		            'item_name' 		=> 		 	$item->getName(),
+		            'price' 	        => (float) 	$this->getRevenueProduct($item),
+		            'quantity' 	        => (int) 	$item->getQtyOrdered(),
+		            'category'	        => 		 	$this->getCategory($category),
+		            'item_list_id'      =>          $this->getCategoryList($category),
+		            'item_list_name'    =>          $this->getCategoryList($category),
+		            'item_brand'		=> 		 	$this->getBrand
 		            (
 		                $item->getProduct()
 	                ),
@@ -2270,9 +2188,52 @@ class Data extends \Anowave\Package\Helper\Package
 		         *
 		         * @var array
 		         */
-		        $data->setVariant(join(self::VARIANT_DELIMITER, $variant));
+		        $data->setItemVariant(join(self::VARIANT_DELIMITER, $variant));
 		    }
+		    
+		    if (\Magento\Bundle\Model\Product\Type::TYPE_CODE == $item->getProduct()->getTypeId())
+		    {
+		        $bundles = [];
+		        
+		        /**
+		         * Get bundle 
+		         * 
+		         * @var \Magento\Catalog\Model\Product $bundle
+		         */
+		        $bundle = $item->getProduct();
+		        
+		        
+		        /**
+		         * Get buy request 
+		         * 
+		         * @var array
+		         */
+		        $buyRequest = $item->getProductOptionByCode('info_buyRequest');
+		          
+		        if ($buyRequest && isset($buyRequest['bundle_option']))
+		        {
+		            $options = [];
+		            
+		            foreach ($buyRequest['bundle_option'] as $option => $selections)
+		            {
+		                $collection = $bundle->getTypeInstance(true)->getSelectionsCollection($option,$bundle);
+		                
+		                foreach ($collection as $id => $entity)
+		                {
+		                    if (in_array($id, (array) $selections))
+		                    {
+		                        $bundles[] = $entity->getName();
+		                    }
+		                }
+		            }  
+		        }
 
+		        if ($bundles)
+		        {
+		            $response['ecommerce']['purchase']['bundles'] = $bundles;
+		        }
+		    }
+		    
 		    /**
 		     * Track custom options
 		     */
@@ -2303,7 +2264,7 @@ class Data extends \Anowave\Package\Helper\Package
 		                    
 		                    $variant .= join(self::VARIANT_DELIMITER, $selection);
 		                    
-		                    $data->setVariant($variant);
+		                    $data->setItemVariant($variant);
 		                }
 		            }
 		        }
@@ -2328,7 +2289,7 @@ class Data extends \Anowave\Package\Helper\Package
 		                
 		                $variant .= join(self::VARIANT_DELIMITER, $selection);
 		                
-		                $data->setVariant($variant);
+		                $data->setItemVariant($variant);
 		            }
 		        }
 		    }
@@ -2414,7 +2375,7 @@ class Data extends \Anowave\Package\Helper\Package
 		/**
 		 * Set products
 		 */
-		$response['ecommerce']['purchase']['products'] = $products;
+		$response['ecommerce']['purchase']['items'] = $products;
 		
 		/**
 		 * Create transport object
@@ -2439,7 +2400,7 @@ class Data extends \Anowave\Package\Helper\Package
 		 */
 		$attributes = $transport->getAttributes();
 		
-		foreach ($response['ecommerce']['purchase']['products'] as &$product)
+		foreach ($response['ecommerce']['purchase']['items'] as &$product)
 		{
 		    foreach ($attributes as $key => $value)
 		    {
@@ -2659,147 +2620,6 @@ class Data extends \Anowave\Package\Helper\Package
 		
 		return $this->_orders;
 	}
-	
-	/**
-	 * Get Search push 
-	 * 
-	 * @param \Magento\Framework\View\Element\Template $block
-	 * @return StdClass|boolean
-	 */
-	public function getSearchPush($block)
-	{
-	    if ($this->usePostRenderImpressionPayloadModel())
-	    {
-	        return false;
-	    }
-	    
-		try 
-		{
-			if ('catalogsearch' === $this->request->getModuleName())
-			{
-				$list = $block->getLayout()->getBlock('search_result_list');
-				
-				if ($list)
-				{
-					$response = array
-					(
-						'ecommerce' 	=> array
-						(
-							'currencyCode' 	=> $this->getStore()->getCurrentCurrencyCode(),
-							'actionField' => 
-							[
-								'list' => __('Search Results')
-							],
-							'impressions' => []
-						)
-					);
-					
-					$data = [];
-
-					$collection = $this->getLoadedCollection($list);
-					
-					$position = 1;
-					
-					/**
-					 * Adjust position depending on pagination.
-					 */
-					try
-					{
-					    $position = (int) $list->getToolbarBlock()->getLimit() * (int) $collection->getCurPage();
-					}
-					catch (\Exception $e)
-					{
-					    $position = 1;
-					}
-					
-					foreach ($collection  as $product)
-					{
-						/**
-						 * Get all product categories
-						 */
-						$categories = $this->getCurrentStoreProductCategories($product);
-						
-						/**
-						 * Cases when product does not exist in any category
-						 */
-						if (!$categories)
-						{
-							$categories[] = $this->getStoreRootDefaultCategoryId();
-						}
-						
-						/**
-						 * Load last category
-						 */
-						$category = $this->categoryRepository->get
-						(
-							end($categories)
-						);
-						
-						$response['ecommerce']['impressions'][] = array
-						(
-							'list' 			=> __('Search Results')->__toString(),
-							'category'		=> $this->getCategory($category),
-							'id'			=> $this->getIdentifier($product),
-							'name'			=> $product->getName(),
-							'brand'			=> $this->getBrand
-							(
-								$product
-							),
-							'price'			=> $this->getPrice($product),
-							'position'		=> $position++
-						);
-					}
-					
-					$response['currentStore'] = $this->getStoreName();
-				}
-	
-				/**
-				 * Create transport object
-				 *
-				 * @var \Magento\Framework\DataObject $transport
-				 */
-				$transport = new \Magento\Framework\DataObject
-				(
-					[
-						'attributes' => $this->attributes->getAttributes()
-					]
-				);
-				
-				/**
-				 * Notify others
-				 */
-				$this->eventManager->dispatch('ec_get_search_attributes', ['transport' => $transport]);
-				
-				/**
-				 * Get response
-				 */
-				$attributes = $transport->getAttributes();
-				
-				foreach ($response['ecommerce']['impressions'] as &$product)
-				{
-					foreach ($attributes as $key => $value)
-					{
-						$product[$key] = $value;
-					}
-				}
-				
-				unset($product);
-	
-				return (object) 
-				[
-					'push' 				=> $this->getJsonHelper()->encode($response),
-					'google_tag_params' => array
-					(
-						'ecomm_pagetype' 	=> 'category',
-						'ecomm_category'	=> __('Search Results')
-					)
-				];
-			}
-		}
-		catch (\Exception $e){}
-		
-		return false;
-	}
 
 	/**
 	 * Get visitor push
@@ -2809,9 +2629,8 @@ class Data extends \Anowave\Package\Helper\Package
 	public function getVisitorPush($block = null)
 	{
 		/**
-		 * Get customer group
+		 * Get customer group ($this->orderConfig->getVisibleOnFrontStatuses())
 		 */
-		
 		$data = array
 		(
 			'visitorLoginState' 		=> $this->isLogged() ? __('Logged in') : __('Logged out'),
@@ -2824,11 +2643,24 @@ class Data extends \Anowave\Package\Helper\Package
 			$data['visitorId'] = (int) $this->getCustomer()->getId();
 			
 			/**
+			 * Get statuses 
+			 * 
+			 * @var array $statuses
+			 */
+			$statuses = 
+			[
+			    \Magento\Sales\Model\Order::STATE_COMPLETE,
+			    \Magento\Sales\Model\Order::STATE_CLOSED,
+			    \Magento\Sales\Model\Order::STATE_PROCESSING
+			];
+			
+			
+			/**
 			 * Get customer order(s)
 			 * 
 			 * @var array
 			 */
-			$orders = $this->orderCollectionFactory->create()->addFieldToSelect('*')->addFieldToFilter('customer_id', $this->getCustomer()->getId())->addFieldToFilter('status',['in' => $this->orderConfig->getVisibleOnFrontStatuses()])->setOrder('created_at','desc');
+			$orders = $this->orderCollectionFactory->create()->addFieldToSelect('*')->addFieldToFilter('customer_id', $this->getCustomer()->getId())->addFieldToFilter('status',['in' => $statuses])->setOrder('created_at','desc');
 			
 			$total = 0;
 			
@@ -2893,7 +2725,7 @@ class Data extends \Anowave\Package\Helper\Package
 		$this->getEventManager()->dispatch('ec_get_visitor_data', ['transport' => $transport]);
 		
 		$data = $transport->getVisitor();
-
+		
 		return $this->getJsonHelper()->encode($data);
 	}
 
@@ -2947,8 +2779,6 @@ class Data extends \Anowave\Package\Helper\Package
 	 */
 	public function getFacebookPixelCode() : string
 	{
-		$this->getFacebookAdvancedMatchingParameters();
-		
 		if ($this->facebook())
 		{
 			return (string) $this->getConfig('ec/facebook/facebook_pixel_code');
@@ -2983,19 +2813,36 @@ class Data extends \Anowave\Package\Helper\Package
 	 */
 	public function getFacebookPixelCodePlain() : string
 	{
-	    $dom = new \DOMDocument('1.0','utf-8');
+	    /**
+	     * Plain snippet code
+	     *
+	     * @var string $plain
+	     */
+	    $plain = '';
+	    
+	    /**
+	     * Create DOMDocument instance
+	     * 
+	     * @var \DOMDocument $dom
+	     */
+	    $dom = new \Anowave\Ec\Model\Dom('1.0','utf-8');
+	    
+	    /**
+	     * Get Facebook Pixel code 
+	     * 
+	     * @var string $pixel
+	     */
+	    $pixel = $this->getFacebookPixelCode();
+	    
+	    if (!$pixel)
+	    {
+	        return $plain;
+	    }
 	    
 	    /**
 	     * Load Facebook Pixel code
 	     */
-	    @$dom->loadHTML($this->getFacebookPixelCode());
-	    
-	    /**
-	     * Plain snippet code 
-	     * 
-	     * @var string $plain
-	     */
-	    $plain = '';
+	    @$dom->loadHTML($pixel);
 	   
 	    foreach($dom->getElementsByTagName('script') as $script)
 	    {
@@ -3147,6 +2994,9 @@ class Data extends \Anowave\Package\Helper\Package
 			
 			if (\Magento\ConfigurableProduct\Model\Product\Type\Configurable::TYPE_CODE == $product->getTypeId())
 			{
+			    
+			    $attributes = $product->getTypeInstance()->getConfigurableAttributes($product);
+			    
 				foreach ($product->getTypeInstance()->getUsedProducts($product) as $simple)
 				{
 					$simples[$simple->getId()] = 
@@ -3155,6 +3005,19 @@ class Data extends \Anowave\Package\Helper\Package
 						'name' 		=> $simple->getName(),
 						'price'		=> $simple->getPrice()
 					];
+					
+					$configurations = [];
+					
+					foreach ($attributes as $attribute)
+					{
+					    $configurations[] = 
+					    [
+					        'value' => $attribute->getAttributeId(),
+					        'label' => $simple->getData($attribute->getProductAttribute()->getAttributeCode())
+					    ];
+					}
+					
+					$simples[$simple->getId()]['configurations'] = $configurations;
 				}
 			}
 		}
@@ -3209,7 +3072,7 @@ class Data extends \Anowave\Package\Helper\Package
 	 * 
 	 * @param \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attribute
 	 */
-	protected function getAttributeLabel(\Magento\Catalog\Model\ResourceModel\Eav\Attribute $attribute)
+	public function getAttributeLabel(\Magento\Catalog\Model\ResourceModel\Eav\Attribute $attribute)
 	{
 		return ($this->useDefaultValues() ? $attribute->getFrontendLabel() : $attribute->getStoreLabel());
 	}
@@ -3235,7 +3098,7 @@ class Data extends \Anowave\Package\Helper\Package
 				foreach ($options as &$option)
 				{
 					$this->optionCollection->clear();
-					$this->optionCollection->getSelect()->reset(\Zend_Db_Select::WHERE);
+					$this->optionCollection->getSelect()->reset('where');
 					$this->optionCollection->getSelect()->where('main_table.option_id IN (?)',[$option['value_index']]);
 					$this->optionCollection->getSelect()->group('main_table.option_id');
 					
@@ -3265,6 +3128,13 @@ class Data extends \Anowave\Package\Helper\Package
 	 */
 	public function getPrice(\Magento\Catalog\Model\Product $product)
 	{
+	    /**
+	     * Get tax display type configuration
+	     * 
+	     * @var int $display
+	     */
+	    $tax = $this->getPriceRenderTaxType();
+	    
 		/**
 		 * Get final price
 		 *
@@ -3279,17 +3149,16 @@ class Data extends \Anowave\Package\Helper\Package
 			    
 			    if ($products)
 			    {
-			        $minimal = (float) $products[0]->getPriceInfo()->getPrice('final_price')->getAmount()->getValue();
-			        
+			        $minimal = $this->renderPrice($products[0], $tax);
+			        			        
 			        foreach ($products as $entity)
 			        {
-			            $price = (float) $entity->getPriceInfo()->getPrice('final_price')->getAmount()->getValue();
-			            
+			            $price = $this->renderPrice($entity, $tax);
+
 			            if ($price < $minimal)
 			            {
 			                $minimal = $price;
 			            }
-			            
 			        }
 			        
 			        $price = round($minimal,2, PHP_ROUND_HALF_UP);
@@ -3303,14 +3172,18 @@ class Data extends \Anowave\Package\Helper\Package
 				
 			case \Magento\Bundle\Model\Product\Type::TYPE_CODE:
 				
-				$price = (float) $product->getPriceInfo()->getPrice('final_price')->getMinimalPrice()->getValue();
+			    switch ($tax)
+			    {
+			        case \Anowave\Ec\Model\System\Config\Source\TaxItem::INCL_TAX: $price = (float) $product->getPriceInfo()->getPrice(\Magento\Catalog\Pricing\Price\FinalPrice::PRICE_CODE)->getMinimalPrice()->getValue(); break;
+			        case \Anowave\Ec\Model\System\Config\Source\TaxItem::EXCL_TAX: $price = (float) $product->getPriceInfo()->getPrice(\Magento\Catalog\Pricing\Price\FinalPrice::PRICE_CODE)->getMinimalPrice()->getBaseAmount(); break;
+			    }
 
 				break;
 				
 			default: 
-				
-				$price = $product->getPriceInfo()->getPrice('final_price')->getAmount()->getValue();
-				
+			    
+			    $price = $this->renderPrice($product, $tax);
+
 				break;
 				
 		}
@@ -3321,6 +3194,24 @@ class Data extends \Anowave\Package\Helper\Package
 		$this->eventManager->dispatch('catalog_product_get_final_price', ['product' => $product, 'qty' => 1]);
 		
 		return $price;
+	}
+	
+	/**
+	 * Render price 
+	 * 
+	 * @param \Magento\Catalog\Model\AbstractModel $entity
+	 * @param int $tax
+	 * @return float
+	 */
+	private function renderPrice(\Magento\Catalog\Model\AbstractModel $entity, int $tax = 0) : float
+	{
+	    switch ($tax)
+	    {
+	        case \Anowave\Ec\Model\System\Config\Source\TaxItem::INCL_TAX: return $entity->getPriceInfo()->getPrice(\Magento\Catalog\Pricing\Price\FinalPrice::PRICE_CODE)->getAmount()->getValue();
+	        case \Anowave\Ec\Model\System\Config\Source\TaxItem::EXCL_TAX: return $entity->getPriceInfo()->getPrice(\Magento\Catalog\Pricing\Price\FinalPrice::PRICE_CODE)->getAmount()->getBaseAmount();
+	    }
+	    
+	    return $entity->getPriceInfo()->getPrice(\Magento\Catalog\Pricing\Price\FinalPrice::PRICE_CODE)->getAmount()->getValue();
 	}
 	
 	/**
@@ -3340,6 +3231,43 @@ class Data extends \Anowave\Package\Helper\Package
 	    }
 	    
 		return $stock;
+	}
+	
+	/**
+	 * Assign category 
+	 * 
+	 * @param \Magento\Catalog\Model\Category $category
+	 * @param array $item
+	 * @return array
+	 */
+	public function assignCategory(\Magento\Catalog\Model\Category $category, array $item = []) : array
+	{
+	    if ($category)
+	    {
+	        $indexes = explode(chr(47), $this->getCategory($category));
+	        
+	        if ($indexes)
+	        {
+	            $item['item_category'] = array_shift($indexes);
+	        }
+	        
+	        $index = 2;
+	        
+	        while($indexes)
+	        {
+	            /**
+	             * Add category index
+	             */
+	            $item["item_category{$index}"] = array_shift($indexes);
+	            
+	            /**
+	             * Increment index
+	             */
+	            $index++;
+	        }
+	    }
+	    
+	    return $item;
 	}
 	
 	/**
@@ -3435,7 +3363,16 @@ class Data extends \Anowave\Package\Helper\Package
 					
 					if ($attribute->getId() && $attribute->usesSource())
 					{
-						$brand = (string) $product->getAttributeText($code);
+						$brand = $product->getAttributeText($code);
+						
+						if (is_array($brand))
+						{
+						    $brand = join($this->getBrandDelimueter(), $brand);
+						}
+						else
+						{
+						    $brand = (string) $brand;
+						}
 
 						if (!$brand)
 						{
@@ -3557,11 +3494,6 @@ class Data extends \Anowave\Package\Helper\Package
 	 */
 	public function getGoogleOptimizeIsStandalone()
 	{
-		if (!$this->isBetaMode())
-		{
-			return false;
-		}
-		
 		/**
 		 * Check Optimize Container Id
 		 */
@@ -3677,6 +3609,20 @@ class Data extends \Anowave\Package\Helper\Package
 	    return false;
 	}
 	
+	public function getCustomerLoginEvent()
+	{
+	    $event = $this->session->getCustomerLoginEvent();
+	    
+	    if ($event)
+	    {
+	        $this->session->unsetData('customer_login_event');
+	        
+	        return $event;
+	    }
+	    
+	    return false;
+	}
+
 	/**
 	 * Get Facebook Events 
 	 * 
@@ -4018,16 +3964,6 @@ class Data extends \Anowave\Package\Helper\Package
 	}
 	
 	/**
-	 * Check if module is in beta mode 
-	 * 
-	 * @return boolean
-	 */
-	public function isBetaMode()
-	{
-		return 1 === (int) $this->getConfig('ec/beta/mode');
-	}
-	
-	/**
 	 * Check if using GTAG implementation 
 	 * 
 	 * @return boolean
@@ -4063,6 +3999,45 @@ class Data extends \Anowave\Package\Helper\Package
 	}
 	
 	/**
+	 * Use measurement protocol to track admin/offline orders
+	 * @return bool
+	 */
+	public function useMeasurementProtocol() : bool
+	{
+	    return 1 === (int) $this->helper->getConfig('ec/gmp/use_measurement_protocol');
+	}
+	
+	/**
+	 * Use only measurement protocol for tracking transactions
+	 * 
+	 * @return bool
+	 */
+	public function useMeasurementProtocolOnly() : bool
+	{
+	    return 1 === (int) $this->getConfig('ec/gmp/use_measurement_protocol_only');
+	}
+	
+	/**
+	 * Use only measurement protocol for tracking cancelled orders
+	 *
+	 * @return bool
+	 */
+	public function useMeasurementProtocolCancel() : bool
+	{
+	    return 1 === (int) $this->getConfig('ec/gmp/use_measurement_protocol_cancel');
+	}
+	
+	/**
+	 * Use only measurement protocol for tracking refunds
+	 *
+	 * @return bool
+	 */
+	public function useMeasurementProtocolRefund() : bool
+	{
+	    return 1 === (int) $this->getConfig('ec/gmp/use_measurement_protocol_refund');
+	}
+	
+	/**
 	 * Local storage 
 	 * 
 	 * @return boolean
@@ -4080,6 +4055,23 @@ class Data extends \Anowave\Package\Helper\Package
 	public function getUseRemoveConfirm()
 	{
 		return 1 === (int) $this->getConfig('ec/options/use_remove_confirm');
+	}
+	
+	/**
+	 * Get brand delimiter 
+	 * 
+	 * @return string
+	 */
+	public function getBrandDelimueter() : string
+	{
+	    $delimiter = $this->getConfig('ec/options/use_brand_attribute_delimiter');
+	    
+	    if (is_null($delimiter))
+	    {
+	        $delimiter = chr(44);
+	    }
+	    
+	    return $delimiter;
 	}
 	
 	/**
@@ -4145,7 +4137,7 @@ class Data extends \Anowave\Package\Helper\Package
     	            $variable['last_name']     = $shippingAddress->getLastname();
     	            $variable['street']        = is_array($shippingAddress->getStreet()) ? $shippingAddress->getStreet()[0] : $shippingAddress->getStreet();
     	            $variable['city']          = $shippingAddress->getCity();
-    	            $variable['region']        = $shippingAddress->getRegionId();
+    	            $variable['region']        = $shippingAddress->getRegionCode();
     	            $variable['country']       = $shippingAddress->getCountryId();
     	            $variable['postal_code']   = $shippingAddress->getPostcode();
     	        }
@@ -4345,6 +4337,22 @@ class Data extends \Anowave\Package\Helper\Package
 	}
 	
 	/**
+	 * Get built-in Google Consent
+	 * 
+	 * @return string
+	 */
+	public function getGoogleBuiltinConsent() : string
+	{
+	    return json_encode(
+	    [
+	        'ad_storage'               => 'denied',
+	        'analytics_storage'        => 'denied',
+	        'functionality_storage'    => 'denied',
+	        'personalization_storage'  => 'denied',
+	        'security_storage'         => 'denied'
+	    ]);
+	}
+	/**
 	 * Check if cookie consent is accepted 
 	 * 
 	 * @return boolean
@@ -4453,6 +4461,17 @@ class Data extends \Anowave\Package\Helper\Package
 	}
 	
 	/**
+	 * Get border radius 
+	 * 
+	 * @return string
+	 */
+	public function getCookieDirectiveRadius() : string
+	{
+	    return sprintf('%dpx', (int) $this->getConfig('ec/cookie/content_border_radius'));
+	}
+	
+	
+	/**
 	 * Get filter-out payment methods
 	 * 
 	 * @return []
@@ -4502,6 +4521,16 @@ class Data extends \Anowave\Package\Helper\Package
 	public function getImpressionPayloadModel()
 	{
 	    return (int) $this->getConfig('ec/options/impression_payload_model');
+	}
+	
+	/**
+	 * Get price render tax type
+	 * 
+	 * @return int
+	 */
+	public function getPriceRenderTaxType() : int
+	{
+	    return (int) $this->getConfig('ec/tax/payload_product');
 	}
 	
 	/**
@@ -4600,22 +4629,55 @@ class Data extends \Anowave\Package\Helper\Package
 	 */
 	public function getCurrentStoreProductCategories(\Magento\Catalog\Model\Product $product)
 	{
-		return array_intersect((array) $product->getCategoryIds(), $this->getCurrentStoreCategories());
+	    return $this->getCurrentStoreCategories((array) $product->getCategoryIds());
 	}
 	
 	/**
-	 * Get current store categories 
+	 * Get current store categories for product 
 	 * 
-	 * @return NULL[]
+	 * @param array $intersect
+	 * @return array
 	 */
-	public function getCurrentStoreCategories()
+	public function getCurrentStoreCategories(array $intersect = [])
 	{
-		if (!$this->currentCategories)
-		{
-			$this->currentCategories = $this->categoryHelper->getStoreCategories(false, true)->getAllIds();
-		}
+	    if (!$this->currentCategories)
+	    {
+	        $collection = $this->categoryCollectionFactory->create()->addAttributeToSelect('entity_id')->setStore($this->getStoreManager()->getStore());
+	        
+	        $this->currentCategories = [];
+  
+	        foreach ($collection as $entity)
+	        {
+	            $this->currentCategories[] = (int) $entity->getEntityId();
+	        }
+	    }
+	    
+	    if ($this->currentCategories)
+	    {
+	        $intersect = array_filter($intersect, function($category)
+	        {
+	            try 
+	            {
+	                if (!in_array($category, $this->_categories))
+	                {
+	                    $this->_categories[] = (int) $this->categoryRepository->get($category)->getId();
+	                }
+	                
+	                return true;
+	            }
+	            catch (\Exception $e)
+	            {
+	                return false;
+	            }
+	        });
 
-		return $this->currentCategories;
+	        return array_filter($this->currentCategories, function($category) use ($intersect)
+	        {
+	            return in_array($category, $intersect);
+	        });
+	    }
+
+	    return $this->currentCategories;
 	}
 	
 	/**
@@ -4785,7 +4847,7 @@ class Data extends \Anowave\Package\Helper\Package
     	     */
     	    usort($children, function($a, $b)
     	    {
-    	        return $a->getFinalPrice() > $b->getFinalPrice();
+    	        return $a->getFinalPrice() <=> $b->getFinalPrice();
     	    });
     	    
     	    if ($children)
@@ -4843,10 +4905,26 @@ class Data extends \Anowave\Package\Helper\Package
 	 */
 	public function getIdentifierItem(\Magento\Framework\Api\ExtensibleDataInterface $item)
 	{
-	    return $this->getIdentifier
-	    (
-	        $item->getProduct()
-	    );
+	    $product = $item->getProduct();
+	    
+	    if (!$product)
+	    {
+	        if ($item->getProductId())
+	        {
+	            try
+	            {
+	                $product = $this->productRepository->getById($item->getProductId());
+	            }
+	            catch (\Exception $e)
+	            {
+	                return $item->getSku();
+	            }
+	        }
+	    }
+	    
+	    
+	    return $this->getIdentifier($product);
+	    
 	}
 	
 	/**
@@ -4979,7 +5057,7 @@ class Data extends \Anowave\Package\Helper\Package
 	}
 	
 	/**
-	 * Category items click selector
+	 * Category items add to wishlist selector
 	 *
 	 * @return XPath (string)
 	 */
@@ -4992,6 +5070,22 @@ class Data extends \Anowave\Package\Helper\Package
 	    }
 	    
 	    return \Anowave\Ec\Helper\Constants::XPATH_LIST_WISHLIST_SELECTOR;
+	}
+	
+	/**
+	 * Category items add to compare selector
+	 *
+	 * @return XPath (string)
+	 */
+	public function getListCompareSelector()
+	{
+	    if ('' !== $selector = (string) $this->getConfig('ec/selectors/list_compare'))
+	    {
+	        return $selector;
+	        
+	    }
+	    
+	    return \Anowave\Ec\Helper\Constants::XPATH_LIST_COMPARE_SELECTOR;
 	}
 	
 	/**
@@ -5165,16 +5259,6 @@ class Data extends \Anowave\Package\Helper\Package
 	}
 	
 	/**
-	 * Check whether event callback should be used
-	 *
-	 * @return number
-	 */
-	public function getEventCallback()
-	{
-		return $this->getJsonHelper()->encode(false);
-	}
-	
-	/**
 	 * Get search attributes 
 	 * 
 	 * @return string
@@ -5191,6 +5275,16 @@ class Data extends \Anowave\Package\Helper\Package
 	public function getEventManager()
 	{
 		return $this->eventManager;
+	}
+	
+	/**
+	 * Get module manager 
+	 * 
+	 * @return \Magento\Framework\Module\Manager
+	 */
+	public function getModuleManager()
+	{
+	    return $this->moduleManager;
 	}
 	
 	/**
@@ -5263,6 +5357,21 @@ class Data extends \Anowave\Package\Helper\Package
 	    return $this->request;
 	}
 	
+	public function getProductRepository()
+	{
+	    return $this->productRepository;
+	}
+	
+	/**
+	 * Get form key 
+	 * 
+	 * @return string
+	 */
+	public function getFormKey() : string
+	{
+	    return $this->formKey->getFormKey();
+	}
+	
 	/**
 	 * Get Facebook Conversions API endpoint 
 	 * 
@@ -5326,6 +5435,27 @@ class Data extends \Anowave\Package\Helper\Package
 	                    {
 	                        $user_data['country_code'] = strtolower($address->getCountryId());
 	                    }
+	                    
+	                    if ($address->getRegion())
+	                    {
+	                        if (is_string($address->getRegion()))
+	                        {
+	                            $region = preg_replace('/[^a-z]/i','', $address->getRegionCode() ?? '');
+	                        }
+	                        elseif (is_object($address->getRegion()))
+	                        {
+	                            $region = preg_replace('/[^a-z]/i','', $address->getRegion()->getRegionCode() ?? '');
+	                        }
+	                        else 
+	                        {
+	                            $region = null;
+	                        }
+
+	                        if ($region)
+	                        {
+	                            $user_data['state'] = $region;
+	                        }
+	                    }
 	                }
 	                
 	                $user_data = array_map(function($data)
@@ -5343,7 +5473,8 @@ class Data extends \Anowave\Package\Helper\Package
                 'test_event_code'                   => $this->getFacebookConversionsApiTestEventCode(),
                 'user_data'                         => $user_data,
                 'cookie_directive'                  => $this->supportCookieDirective(),
-                'cookie_directive_constent_granted' => $this->isCookieConsentAccepted()
+                'cookie_directive_constent_granted' => $this->isCookieConsentAccepted(), 
+                'logger'                            => $this->logger
             ]); 
 	        
 	        /**
@@ -5376,7 +5507,7 @@ class Data extends \Anowave\Package\Helper\Package
 	 */
 	public function escape($data)
 	{
-		return addcslashes($data, '\'');
+		return addcslashes((string) $data, '\'');
 	}
 	
 	/**
@@ -5388,5 +5519,21 @@ class Data extends \Anowave\Package\Helper\Package
 	public function escapeDataArgument($data)
 	{
 		return str_replace(array('"','\''), array('&quot;','&apos;'), $data);
+	}
+	
+	/**
+	 * Encode string
+	 *
+	 * @param string $string
+	 * @return string
+	 */
+	public function utf($source) : string
+	{
+	    if (version_compare(phpversion(), '8.2.0', '<'))
+	    {
+	        return mb_convert_encoding($source, 'HTML-ENTITIES', 'utf-8');
+	    }
+	    
+	    return htmlspecialchars_decode(mb_encode_numericentity( htmlentities( $source, ENT_COMPAT, 'UTF-8' ), [0x80, 0x10FFFF, 0, ~0], 'UTF-8' ));
 	}
 }

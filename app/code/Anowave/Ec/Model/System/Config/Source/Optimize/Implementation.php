@@ -15,7 +15,7 @@
  *
  * @category 	Anowave
  * @package 	Anowave_Ec
- * @copyright 	Copyright (c) 2022 Anowave (https://www.anowave.com/)
+ * @copyright 	Copyright (c) 2023 Anowave (https://www.anowave.com/)
  * @license  	https://www.anowave.com/license-agreement/
  */
 
@@ -65,17 +65,12 @@ class Implementation implements \Magento\Framework\Option\ArrayInterface
 			[
 				'value' => self::I_ASSISTED,
 				'label' => __('Assisted (depends on Optimize implemented via tag in GTM)')
-			]
+			],
+		    [
+		        'value' => self::I_STANDALONE,
+		        'label' => __('Standalone (installs/configures Optimize without GTM)')
+		    ]
 		];
-		
-		if ($this->helper->isBetaMode())
-		{
-			$options[] = 
-			[
-				'value' => self::I_STANDALONE,
-				'label' => __('Standalone (installs/configures Optimize without GTM)')
-			];
-		}
 		
 		return $options;
 	}

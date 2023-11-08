@@ -15,7 +15,7 @@
  *
  * @category 	Anowave
  * @package 	Anowave_Ec
- * @copyright 	Copyright (c) 2022 Anowave (https://www.anowave.com/)
+ * @copyright 	Copyright (c) 2023 Anowave (https://www.anowave.com/)
  * @license  	https://www.anowave.com/license-agreement/
  */
 
@@ -35,7 +35,7 @@ class Result
 	/**
 	 * @var \Anowave\Ec\Helper\Dom
 	 */
-	protected $_helperDom = null;
+	protected $dom = null;
 	
 	/**
 	 * @var \Anowave\Ec\Helper\Attributes
@@ -59,14 +59,14 @@ class Result
 	 * 
 	 * @param \Magento\Framework\Registry $registry
 	 * @param \Anowave\Ec\Helper\Data $helper
-	 * @param \Anowave\Ec\Helper\Dom $helperDom
+	 * @param \Anowave\Ec\Helper\Dom $dom
 	 * @param \Magento\Catalog\Model\CategoryRepository $categoryRepository
 	 */
 	public function __construct
 	(
 		\Magento\Framework\Registry $registry,
 		\Anowave\Ec\Helper\Data $helper,
-		\Anowave\Ec\Helper\Dom $helperDom,
+		\Anowave\Ec\Helper\Dom $dom,
 		\Magento\Catalog\Model\CategoryRepository $categoryRepository
 	)
 	{
@@ -80,9 +80,9 @@ class Result
 		/**
 		 * Set DOM helper 
 		 * 
-		 * @var \Anowave\Ec\Helper\Dom $_helperDom
+		 * @var \Anowave\Ec\Helper\Dom $dom
 		 */
-		$this->_helperDom = $helperDom;
+		$this->dom = $dom;
 		
 		/**
 		 * Set core registry 
@@ -126,7 +126,7 @@ class Result
 		$doc = new \Anowave\Ec\Model\Dom('1.0','utf-8');
 		$dom = new \Anowave\Ec\Model\Dom('1.0','utf-8');
 		
-		@$dom->loadHTML(mb_convert_encoding($content, 'HTML-ENTITIES', 'UTF-8'));
+		@$dom->loadHTML($content);
 
 		$query = new \DOMXPath($dom);
 		
@@ -142,7 +142,16 @@ class Result
 		 */
 		try 
 		{
-		    $current = (int) $block->getListBlock()->getToolbarBlock()->getCollection()->getCurPage();
+		    $collection = $block->getListBlock()->getToolbarBlock()->getCollection();
+		    
+		    if ($collection)
+		    {
+		        $current = (int) $block->getListBlock()->getToolbarBlock()->getCollection()->getCurPage();
+		    }
+		    else
+		    {
+		        $current = 1;
+		    }
 		    
 		    if (1 === $current)
 		    {
@@ -179,10 +188,20 @@ class Result
 					$categories[] = $root_category_id;
 				}
 				
-				/**
-				 * Load last category
-				 */
-				$category = $this->getCategory(end($categories));
+				try 
+				{
+    				/**
+    				 * Load last category
+    				 */
+    				$category = $this->getCategory
+    				(
+    				    end($categories)
+    			    );
+				}
+				catch (\Exception $e)
+				{
+				    $category = $this->getCategory($root_category_id);
+				}
 				
 				/**
 				 * Add data-* attributes used for tracking dynamic values
@@ -200,7 +219,7 @@ class Result
 					$a->setAttribute('data-quantity', 	1);
 					$a->setAttribute('data-click',		$click);
 					$a->setAttribute('data-store',		$this->_helper->getStoreName());
-					$a->setAttribute('data-event',		'productClick');
+					$a->setAttribute('data-event',		\Anowave\Ec\Helper\Constants::EVENT_PRODUCT_CLICK);
 					$a->setAttribute('data-position',   ++$position);
 					
 					$a->setAttribute("data-{$this->_helper->getStockDimensionIndex(true)}", $this->_helper->getStock($products[$key]));
@@ -248,14 +267,14 @@ class Result
 						$a->setAttribute('data-quantity', 	1);
 						$a->setAttribute('data-click',		$click);
 						$a->setAttribute('data-store',		$this->_helper->getStoreName());
-						$a->setAttribute('data-event',		'addToCart');
+						$a->setAttribute('data-event',		\Anowave\Ec\Helper\Constants::EVENT_ADD_TO_CART);
 						$a->setAttribute('data-position',   $position);
 					}
 				}
 			}
 		}
 		
-		return $this->_helperDom->getDOMContent($dom, $doc);
+		return $this->dom->getDOMContent($dom, $doc);
 	}
 	
 	/**

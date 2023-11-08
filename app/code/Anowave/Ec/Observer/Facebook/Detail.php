@@ -15,7 +15,7 @@
  *
  * @category 	Anowave
  * @package 	Anowave_Ec
- * @copyright 	Copyright (c) 2022 Anowave (https://www.anowave.com/)
+ * @copyright 	Copyright (c) 2023 Anowave (https://www.anowave.com/)
  * @license  	https://www.anowave.com/license-agreement/
  */
 
@@ -28,32 +28,6 @@ class Detail extends Facebook
 {
     public function execute(EventObserver $observer)
     {
-        /**
-         * @var \Magento\Catalog\Model\Product $product
-         */
-        $product = $observer->getTransport()->getProduct();
-        
-        /**
-         * Get payload response 
-         * 
-         * @var array $response
-         */
-        $response = $observer->getTransport()->getResponse();
-        
-        $content_ids = [];
-        
-        $category = null;
-        
-        foreach ($response['ecommerce']['detail']['products'] as $entity)
-        {
-            $content_ids = $entity['id'];
-            
-            /**
-             * Set category
-             */
-            $category = $entity['category'];
-        }
-
-        $this->helper->getFacebookConversionsApi()->trackViewContent($content_ids, $response['ecommerce']['currencyCode'], $this->helper->getPrice($product), $category, $product->getName());
+        return true;
     }
 }
