@@ -270,8 +270,10 @@
   margin-bottom: 2px !important;
 }
 .bss-onestepcheckout .checkout-payment-method .payment-method-title .payment-icon {
-    display: none;
+    max-height: 28px;
+    max-width: 36px;
 }
+.bss-onestepcheckout .payment-method._active .actions-toolbar {display:none;}
 /*            Static Footer                */
 .bss-onestepcheckout .footer-block-static {
     text-align: center;
