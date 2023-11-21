@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "4641f690ad06e5bdc22f23917697bbbb",
+    "content-hash": "be38e12eeae920516fe5c21f9e43864a",
     "packages": [
         {
             "name": "2tvenom/cborencode",
@@ -18018,6 +18018,315 @@
             "time": "2021-06-14T00:11:39+00:00"
         },
         {
+            "name": "multisafepay/magento2",
+            "version": "3.2.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/MultiSafepay/magento2.git",
+                "reference": "35050f52f51040f2b0d7cb1c37bb53bca6e57ccb"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/MultiSafepay/magento2/zipball/35050f52f51040f2b0d7cb1c37bb53bca6e57ccb",
+                "reference": "35050f52f51040f2b0d7cb1c37bb53bca6e57ccb",
+                "shasum": ""
+            },
+            "require": {
+                "multisafepay/magento2-adminhtml": "1.24.0",
+                "multisafepay/magento2-catalog-inventory": "1.0.3",
+                "multisafepay/magento2-core": "3.2.1",
+                "multisafepay/magento2-frontend": "2.2.0",
+                "multisafepay/magento2-msi": "1.0.2"
+            },
+            "type": "metapackage",
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "OSL-3.0"
+            ],
+            "description": "MultiSafepay module suite for Magento 2",
+            "support": {
+                "issues": "https://github.com/MultiSafepay/magento2/issues",
+                "source": "https://github.com/MultiSafepay/magento2/tree/3.2.1"
+            },
+            "time": "2023-10-16T13:42:52+00:00"
+        },
+        {
+            "name": "multisafepay/magento2-adminhtml",
+            "version": "1.24.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/MultiSafepay/magento2-adminhtml.git",
+                "reference": "573040c32a4f156c8c8c3ad9153b53e603b97261"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/MultiSafepay/magento2-adminhtml/zipball/573040c32a4f156c8c8c3ad9153b53e603b97261",
+                "reference": "573040c32a4f156c8c8c3ad9153b53e603b97261",
+                "shasum": ""
+            },
+            "require": {
+                "ext-zip": "*",
+                "magento/framework": "^102.0|^103.0",
+                "magento/module-backend": "^101.0|^102.0",
+                "magento/module-config": "^101.0",
+                "magento/module-customer": "^102.0|^103.0",
+                "multisafepay/magento2-core": "^3.2"
+            },
+            "type": "magento2-module",
+            "autoload": {
+                "files": [
+                    "registration.php"
+                ],
+                "psr-4": {
+                    "MultiSafepay\\ConnectAdminhtml\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "OSL-3.0"
+            ],
+            "description": "MultiSafepay backend module for Magento 2",
+            "support": {
+                "issues": "https://github.com/MultiSafepay/magento2-adminhtml/issues",
+                "source": "https://github.com/MultiSafepay/magento2-adminhtml/tree/1.24.0"
+            },
+            "time": "2023-10-11T14:46:47+00:00"
+        },
+        {
+            "name": "multisafepay/magento2-catalog-inventory",
+            "version": "1.0.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/MultiSafepay/magento2-catalog-inventory.git",
+                "reference": "bf271539c8bdd587dbbf698c75baef763a464ce8"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/MultiSafepay/magento2-catalog-inventory/zipball/bf271539c8bdd587dbbf698c75baef763a464ce8",
+                "reference": "bf271539c8bdd587dbbf698c75baef763a464ce8",
+                "shasum": ""
+            },
+            "require": {
+                "magento/framework": "^102.0|^103.0",
+                "magento/module-catalog-inventory": "^100.0",
+                "magento/module-sales": "^102.0|^103.0",
+                "multisafepay/magento2-core": "^1.0|^2.0|^3.0"
+            },
+            "type": "magento2-module",
+            "autoload": {
+                "files": [
+                    "registration.php"
+                ],
+                "psr-4": {
+                    "MultiSafepay\\ConnectCatalogInventory\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "OSL-3.0"
+            ],
+            "description": "MultiSafepay module for Magento 2 (only for deprecated Catalog Inventory)",
+            "support": {
+                "issues": "https://github.com/MultiSafepay/magento2-catalog-inventory/issues",
+                "source": "https://github.com/MultiSafepay/magento2-catalog-inventory/tree/1.0.3"
+            },
+            "time": "2023-04-03T13:24:14+00:00"
+        },
+        {
+            "name": "multisafepay/magento2-core",
+            "version": "3.2.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/MultiSafepay/magento2-core.git",
+                "reference": "d42c9205a34769f459e2bcb0031fbbee6f66efd8"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/MultiSafepay/magento2-core/zipball/d42c9205a34769f459e2bcb0031fbbee6f66efd8",
+                "reference": "d42c9205a34769f459e2bcb0031fbbee6f66efd8",
+                "shasum": ""
+            },
+            "require": {
+                "ext-curl": "*",
+                "ext-json": "*",
+                "ext-pcre": "*",
+                "magento/framework": "^102.0|^103.0",
+                "magento/module-checkout": "^100.0",
+                "magento/module-payment": "^100.0",
+                "magento/module-quote": "^101.0",
+                "magento/module-sales": "^102.0|^103.0",
+                "magento/module-store": "^101.0",
+                "magento/module-vault": "^101.0",
+                "multisafepay/php-sdk": "^5.11",
+                "nyholm/psr7": "^1.4",
+                "php": ">=7.2",
+                "psr/http-client": "^1.0"
+            },
+            "provide": {
+                "psr/http-client-implementation": "1.0"
+            },
+            "require-dev": {
+                "object-calisthenics/phpcs-calisthenics-rules": "^3.5 || ^2.0",
+                "php-http/mock-client": "^1.3"
+            },
+            "type": "magento2-module",
+            "autoload": {
+                "files": [
+                    "registration.php"
+                ],
+                "psr-4": {
+                    "MultiSafepay\\ConnectCore\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "OSL-3.0"
+            ],
+            "description": "MultiSafepay core module for Magento 2",
+            "support": {
+                "issues": "https://github.com/MultiSafepay/magento2-core/issues",
+                "source": "https://github.com/MultiSafepay/magento2-core/tree/3.2.1"
+            },
+            "time": "2023-10-16T13:42:47+00:00"
+        },
+        {
+            "name": "multisafepay/magento2-frontend",
+            "version": "2.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/MultiSafepay/magento2-frontend.git",
+                "reference": "7d6fbb4e2dbd97f8147f18c984f8774af0b710f8"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/MultiSafepay/magento2-frontend/zipball/7d6fbb4e2dbd97f8147f18c984f8774af0b710f8",
+                "reference": "7d6fbb4e2dbd97f8147f18c984f8774af0b710f8",
+                "shasum": ""
+            },
+            "require": {
+                "magento/framework": "^102.0|^103.0",
+                "magento/module-checkout": "^100.0",
+                "magento/module-quote": "^101.0",
+                "magento/module-sales": "^102.0|^103.0",
+                "magento/module-store": "^101.0",
+                "multisafepay/magento2-adminhtml": "^1.24",
+                "multisafepay/magento2-core": "^3.2"
+            },
+            "type": "magento2-module",
+            "autoload": {
+                "files": [
+                    "registration.php"
+                ],
+                "psr-4": {
+                    "MultiSafepay\\ConnectFrontend\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "OSL-3.0"
+            ],
+            "description": "MultiSafepay frontend module for Magento 2",
+            "support": {
+                "issues": "https://github.com/MultiSafepay/magento2-frontend/issues",
+                "source": "https://github.com/MultiSafepay/magento2-frontend/tree/2.2.0"
+            },
+            "time": "2023-10-11T14:46:50+00:00"
+        },
+        {
+            "name": "multisafepay/magento2-msi",
+            "version": "1.0.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/MultiSafepay/magento2-msi.git",
+                "reference": "9feeeef00d629eac5d0889c43fd5696c93ddf3c4"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/MultiSafepay/magento2-msi/zipball/9feeeef00d629eac5d0889c43fd5696c93ddf3c4",
+                "reference": "9feeeef00d629eac5d0889c43fd5696c93ddf3c4",
+                "shasum": ""
+            },
+            "require": {
+                "magento/framework": "^102.0|^103.0",
+                "magento/module-catalog": "^101.0|^102.0|^103.0|^104.0",
+                "magento/module-inventory-sales-api": "^1.0",
+                "magento/module-store": "^100.0|^101.0",
+                "multisafepay/magento2-core": "^1.0|^2.0|^3.0"
+            },
+            "type": "magento2-module",
+            "autoload": {
+                "files": [
+                    "registration.php"
+                ],
+                "psr-4": {
+                    "MultiSafepay\\ConnectMSI\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "OSL-3.0"
+            ],
+            "description": "MultiSafepay module for Magento 2 (msi-only)",
+            "support": {
+                "issues": "https://github.com/MultiSafepay/magento2-msi/issues",
+                "source": "https://github.com/MultiSafepay/magento2-msi/tree/1.0.2"
+            },
+            "time": "2023-04-03T13:18:03+00:00"
+        },
+        {
+            "name": "multisafepay/php-sdk",
+            "version": "5.11.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/MultiSafepay/php-sdk.git",
+                "reference": "16a7cead65c0d34c7b8e8be4fd002bae5fa3a60f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/MultiSafepay/php-sdk/zipball/16a7cead65c0d34c7b8e8be4fd002bae5fa3a60f",
+                "reference": "16a7cead65c0d34c7b8e8be4fd002bae5fa3a60f",
+                "shasum": ""
+            },
+            "require": {
+                "ext-json": "*",
+                "php": "^7.2|^8.0",
+                "php-http/discovery": "^1.0",
+                "psr/http-client-implementation": "^1.0",
+                "psr/http-factory-implementation": "^1.0",
+                "psr/http-message-implementation": "^1.0"
+            },
+            "require-dev": {
+                "fakerphp/faker": "^1.13",
+                "guzzlehttp/guzzle": "^7.0",
+                "http-interop/http-factory-guzzle": "^1.0",
+                "multisafepay/coding-standards": "dev-master",
+                "php-http/message": "^1.14",
+                "php-http/message-factory": "^1.1",
+                "php-http/mock-client": "^1.3",
+                "phpstan/phpstan": "^0.12.23",
+                "phpunit/phpunit": "^9.0 || ^7.5"
+            },
+            "suggest": {
+                "jschaedl/iban-validation": "Adds additional IBAN validation for \\MultiSafepay\\ValueObject\\IbanNumber"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "MultiSafepay\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "MultiSafepay PHP SDK",
+            "support": {
+                "issues": "https://github.com/MultiSafepay/php-sdk/issues",
+                "source": "https://github.com/MultiSafepay/php-sdk/tree/5.11.2"
+            },
+            "time": "2023-10-13T14:29:27+00:00"
+        },
+        {
             "name": "nikic/php-parser",
             "version": "v4.15.5",
             "source": {
@@ -18072,6 +18381,84 @@
                 "source": "https://github.com/nikic/PHP-Parser/tree/v4.15.5"
             },
             "time": "2023-05-19T20:20:00+00:00"
+        },
+        {
+            "name": "nyholm/psr7",
+            "version": "1.8.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Nyholm/psr7.git",
+                "reference": "aa5fc277a4f5508013d571341ade0c3886d4d00e"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Nyholm/psr7/zipball/aa5fc277a4f5508013d571341ade0c3886d4d00e",
+                "reference": "aa5fc277a4f5508013d571341ade0c3886d4d00e",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.2",
+                "psr/http-factory": "^1.0",
+                "psr/http-message": "^1.1 || ^2.0"
+            },
+            "provide": {
+                "php-http/message-factory-implementation": "1.0",
+                "psr/http-factory-implementation": "1.0",
+                "psr/http-message-implementation": "1.0"
+            },
+            "require-dev": {
+                "http-interop/http-factory-tests": "^0.9",
+                "php-http/message-factory": "^1.0",
+                "php-http/psr7-integration-tests": "^1.0",
+                "phpunit/phpunit": "^7.5 || ^8.5 || ^9.4",
+                "symfony/error-handler": "^4.4"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.8-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Nyholm\\Psr7\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Tobias Nyholm",
+                    "email": "tobias.nyholm@gmail.com"
+                },
+                {
+                    "name": "Martijn van der Ven",
+                    "email": "martijn@vanderven.se"
+                }
+            ],
+            "description": "A fast PHP7 implementation of PSR-7",
+            "homepage": "https://tnyholm.se",
+            "keywords": [
+                "psr-17",
+                "psr-7"
+            ],
+            "support": {
+                "issues": "https://github.com/Nyholm/psr7/issues",
+                "source": "https://github.com/Nyholm/psr7/tree/1.8.1"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/Zegnat",
+                    "type": "github"
+                },
+                {
+                    "url": "https://github.com/nyholm",
+                    "type": "github"
+                }
+            ],
+            "time": "2023-11-13T09:31:12+00:00"
         },
         {
             "name": "paragonie/constant_time_encoding",
@@ -18523,6 +18910,84 @@
             },
             "abandoned": true,
             "time": "2020-10-14T08:39:05+00:00"
+        },
+        {
+            "name": "php-http/discovery",
+            "version": "1.19.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/php-http/discovery.git",
+                "reference": "57f3de01d32085fea20865f9b16fb0e69347c39e"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/php-http/discovery/zipball/57f3de01d32085fea20865f9b16fb0e69347c39e",
+                "reference": "57f3de01d32085fea20865f9b16fb0e69347c39e",
+                "shasum": ""
+            },
+            "require": {
+                "composer-plugin-api": "^1.0|^2.0",
+                "php": "^7.1 || ^8.0"
+            },
+            "conflict": {
+                "nyholm/psr7": "<1.0",
+                "zendframework/zend-diactoros": "*"
+            },
+            "provide": {
+                "php-http/async-client-implementation": "*",
+                "php-http/client-implementation": "*",
+                "psr/http-client-implementation": "*",
+                "psr/http-factory-implementation": "*",
+                "psr/http-message-implementation": "*"
+            },
+            "require-dev": {
+                "composer/composer": "^1.0.2|^2.0",
+                "graham-campbell/phpspec-skip-example-extension": "^5.0",
+                "php-http/httplug": "^1.0 || ^2.0",
+                "php-http/message-factory": "^1.0",
+                "phpspec/phpspec": "^5.1 || ^6.1 || ^7.3",
+                "symfony/phpunit-bridge": "^6.2"
+            },
+            "type": "composer-plugin",
+            "extra": {
+                "class": "Http\\Discovery\\Composer\\Plugin",
+                "plugin-optional": true
+            },
+            "autoload": {
+                "psr-4": {
+                    "Http\\Discovery\\": "src/"
+                },
+                "exclude-from-classmap": [
+                    "src/Composer/Plugin.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Márk Sági-Kazár",
+                    "email": "mark.sagikazar@gmail.com"
+                }
+            ],
+            "description": "Finds and installs PSR-7, PSR-17, PSR-18 and HTTPlug implementations",
+            "homepage": "http://php-http.org",
+            "keywords": [
+                "adapter",
+                "client",
+                "discovery",
+                "factory",
+                "http",
+                "message",
+                "psr17",
+                "psr7"
+            ],
+            "support": {
+                "issues": "https://github.com/php-http/discovery/issues",
+                "source": "https://github.com/php-http/discovery/tree/1.19.1"
+            },
+            "time": "2023-07-11T07:02:26+00:00"
         },
         {
             "name": "phpgt/cssxpath",
@@ -27279,5 +27744,5 @@
     "prefer-lowest": false,
     "platform": [],
     "platform-dev": [],
-    "plugin-api-version": "2.3.0"
+    "plugin-api-version": "2.6.0"
 }

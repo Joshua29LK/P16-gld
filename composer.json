@@ -25,7 +25,8 @@
         "swissup/module-marketplace": "^1.10",
         "swissup/easytabs": "v1.11.4",
         "rosell-dk/webp-convert": "^2.9",
-        "dotsquares/module-advance-discount": "^1.0"
+        "dotsquares/module-advance-discount": "^1.0",
+        "multisafepay/magento2": "^3.2"
     },
     "require-dev": {
         "phpunit/phpunit": "^9",
@@ -102,7 +103,8 @@
             "magento/composer-dependency-version-audit-plugin": true,
             "magento/magento-composer-installer": true,
             "magento/inventory-composer-installer": true,
-            "laminas/laminas-dependency-plugin": true
+            "laminas/laminas-dependency-plugin": true,
+            "php-http/discovery": true
         }
     }
 }
