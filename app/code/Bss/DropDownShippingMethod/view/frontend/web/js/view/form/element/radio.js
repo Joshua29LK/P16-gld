@@ -36,6 +36,10 @@ define([
             if (value === 'company') {
                 $('#co-shipping-form [name="shippingAddress.vat_id"]').show();
                 $('#co-shipping-form [name="shippingAddress.company"]').show();
+                var inputVat = $('#co-shipping-form [name="shippingAddress.vat_id"] :input');
+                inputVat.attr('aria-required', 'true');
+                inputVat.attr('aria-invalid', 'true');
+                inputVat.attr('data-validate', '{required:true}');
             } else if (value === 'consumer') {
                 $('#co-shipping-form [name="shippingAddress.vat_id"]').find(':input').val('').change();
                 var address = quote.shippingAddress();

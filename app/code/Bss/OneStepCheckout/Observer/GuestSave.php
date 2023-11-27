@@ -173,6 +173,7 @@ class GuestSave implements ObserverInterface
             $this->subscriber($order, $additionalData, $customer->getId());
             return $this;
         }
+        $data = $this->checkoutSession->getNewAccountInformaton();
         $pass = $this->isCreateNewAccount($emailGuest);
         if (!$pass) {
             if ($order->getCustomerIsGuest() == 0) {
@@ -193,7 +194,8 @@ class GuestSave implements ObserverInterface
                     $websiteId,
                     $storeId,
                     $defaultCustomerGroupId,
-                    $pass
+                    $pass,
+                    $data
                 );
                 if (!$customer) {
                     $this->subscriber($order, $additionalData, 0);
@@ -291,9 +293,10 @@ class GuestSave implements ObserverInterface
      * @param int $storeId
      * @param int $defaultCustomerGroupId
      * @param string $pass
+     * @param array $dataCustomer
      * @return bool|\Magento\Customer\Model\Customer
      */
-    protected function createNewAccount($billingAddress, $websiteId, $storeId, $defaultCustomerGroupId, $pass)
+    protected function createNewAccount($billingAddress, $websiteId, $storeId, $defaultCustomerGroupId, $pass, $dataCustomer)
     {
         $customer = $this->customerFactory->create();
         $customer->setWebsiteId($websiteId);
@@ -321,7 +324,7 @@ class GuestSave implements ObserverInterface
             $customer->updateData($customerData);
         }
 
-        $this->processOtherRequiredFields($customer);
+        $this->processOtherRequiredFields($customer, $dataCustomer);
         try {
             $customer->save();
         } catch (\Exception $e) {
@@ -340,8 +343,9 @@ class GuestSave implements ObserverInterface
 
     /**
      * @param \Magento\Customer\Model\Customer $customer
+     * @param array $dataCustomer
      */
-    protected function processOtherRequiredFields(&$customer)
+    protected function processOtherRequiredFields(&$customer, $dataCustomer)
     {
         if ($this->helper->isCustomerDobFieldRequired()) {
             $customer->setDob('1/1/1970');
@@ -349,8 +353,8 @@ class GuestSave implements ObserverInterface
         if ($this->helper->isCustomerGenderFieldRequired()) {
             $customer->setGender('3'); // Gender as 'Not Specified'
         }
-        if ($this->helper->isCustomerTaxVatFieldRequired()) {
-            $customer->setTaxvat('000000');
+        if (isset($dataCustomer['taxvat'])) {
+            $customer->setTaxvat($dataCustomer['taxvat']);
         }
     }
 

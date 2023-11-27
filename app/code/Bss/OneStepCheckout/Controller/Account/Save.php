@@ -59,9 +59,11 @@ class Save extends \Magento\Framework\App\Action\Action
                 && isset($params['confirmpass'])
                 && $params['pass'] == $params['confirmpass']
             ) {
-                $this->checkoutSession->setNewAccountInformaton(
-                    ['email' => $params['email'], 'pass' => $params['pass']]
-                );
+                $data = ['email' => $params['email'], 'pass' => $params['pass']];
+                if (isset($params['taxvat'])) {
+                    $data['taxvat'] = $params['taxvat'];
+                }
+                $this->checkoutSession->setNewAccountInformaton($data);
             } else {
                 $this->checkoutSession->unsNewAccountInformaton();
             }

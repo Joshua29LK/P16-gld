@@ -368,11 +368,27 @@ class Config extends AbstractHelper
      */
     public function isCustomerDobFieldRequired($storeId = null)
     {
-        return $this->scopeConfig->isSetFlag(
+        $value = $this->scopeConfig->getValue(
             'customer/address/dob_show',
             ScopeInterface::SCOPE_STORE,
             $storeId
         );
+        return $this->isRequireCustomerInformation($value);
+    }
+
+    /**
+     * Check field customer address information is required?
+     *
+     * @param int|string|null $value
+     * @return bool
+     */
+    public function isRequireCustomerInformation($value = null)
+    {
+        if ($value && $value == "req") {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     /**
@@ -382,11 +398,12 @@ class Config extends AbstractHelper
      */
     public function isCustomerTaxVatFieldRequired($storeId = null)
     {
-        return $this->scopeConfig->isSetFlag(
+        $value = $this->scopeConfig->getValue(
             'customer/address/taxvat_show',
             ScopeInterface::SCOPE_STORE,
             $storeId
         );
+        return $this->isRequireCustomerInformation($value);
     }
 
     /**
@@ -396,11 +413,12 @@ class Config extends AbstractHelper
      */
     public function isCustomerGenderFieldRequired($storeId = null)
     {
-        return $this->scopeConfig->isSetFlag(
+        $value =  $this->scopeConfig->getValue(
             'customer/address/gender_show',
             ScopeInterface::SCOPE_STORE,
             $storeId
         );
+        return $this->isRequireCustomerInformation($value);
     }
 
     /**

@@ -180,8 +180,14 @@ class CompositeConfigProvider implements ConfigProviderInterface
             }
             if ($version >= "2.2.6") {
                 $output['rewrite_email_element'] = true;
+                $output['dob_show'] = $this->configHelper->isCustomerDobFieldRequired();
+                $output['gender_show'] = $this->configHelper->isCustomerDobFieldRequired();
+                $output['taxvat_show'] = $this->configHelper->isCustomerTaxVatFieldRequired();
             } else {
                 $output['rewrite_email_element'] = false;
+                $output['dob_show'] = false;
+                $output['gender_show'] = false;
+                $output['taxvat_show'] = false;
             }
             $output['oscWidget'] = $this->getOscWidget();
         }

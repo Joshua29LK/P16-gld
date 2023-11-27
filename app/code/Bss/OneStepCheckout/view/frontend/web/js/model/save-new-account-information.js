@@ -37,6 +37,9 @@ define([
                 data['email'] = $(loginFormSelector + ' input[name=username]').val();
                 data['pass'] = $(loginFormSelector + ' input[name=newcustomerpassword]').val();
                 data['confirmpass'] = $(loginFormSelector + ' input[name=newcustomerpassword_confirmation]').val();
+                if (window.checkoutConfig.taxvat_show) {
+                    data['taxvat'] = $(loginFormSelector + ' input[name=newcustomertaxvat_confirmation]').val();
+                }
                 var saveUrl = 'onestepcheckout/account/save';
 
                 // If condition prevent dispatch more than one time while ajax doing, this make improve performance
