@@ -99,6 +99,24 @@
                     <span data-bind="i18n: 'Create New Account'"></span>
                 </label>
             </div>
+            <!-- ko if: window.checkoutConfig.taxvat_show -->
+            <div class="field _required taxvat" data-bind="fadeVisible: createNewAccount()">
+                <label class="label" for="new-customer-tax-vat">
+                    <span data-bind="i18n: 'Tax/VAT Number'"></span>
+                </label>
+                <div class="control">
+                    <input class="input-text"
+                           data-bind="
+                                attr: {
+                                    placeholder: $t('Tax/VAT Number'),
+                                }"
+                           type="text"
+                           name="newcustomertaxvat_confirmation"
+                           id="new-customer-tax-vat-confirmation"
+                           data-validate="{required: true'}" autocomplete="off"/>
+                </div>
+            </div>
+            <!-- /ko -->
             <div class="field _required pass" data-bind="fadeVisible: createNewAccount()">
                 <label class="label" for="new-customer-password">
                     <span data-bind="i18n: 'Password'"></span>
