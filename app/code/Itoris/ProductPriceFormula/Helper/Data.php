@@ -46,7 +46,13 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     }
     
     public function getDate($dateOrigValue) {
-        return date('Y-m-d', strtotime($dateOrigValue));
+        // Check if $dateOrigValue is not null before using strtotime
+        if ($dateOrigValue !== null) {
+            return date('Y-m-d', strtotime($dateOrigValue));
+        } else {
+            // Handle the case where $dateOrigValue is null (e.g., return a default value)
+            return 'default_date';
+        }
     }
     
     public function correctDate($startDate, $endDate) {
@@ -104,7 +110,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
                 }
             }
         } else {
-            $allowedGroups = explode(',', $selectedGroupId);
+            $allowedGroups = $selectedGroupId !== null ? explode(',', $selectedGroupId) : [];
         }
         $allowedGroups = array_map('intval', $allowedGroups);
         if (is_null($selectedGroupId)) {

@@ -32,16 +32,24 @@ class Item
         \Magento\Quote\Model\Quote\Item $subject,
         \Closure $proceed
     ) {
-        $finalPrice = round($subject->getFormulaPrice(), 2);
-        $finalPrice = ($finalPrice == 0) ? null : $finalPrice;
+        $finalPrice = $subject->getFormulaPrice();
+
         if (!is_null($finalPrice)) {
-            if ($subject->isCatalogPriceInclTax() && $subject->getTaxPercent()) {
-                $finalPrice = 100 * $finalPrice / (100 + $subject->getTaxPercent());
+            $finalPrice = round($finalPrice, 2);
+
+            if ($finalPrice == 0) {
+                $finalPrice = null;
             }
 
-            $rowTotal = $finalPrice * $subject->getQty();
-            $rowTotal = $this->priceCurrency->convert($rowTotal);
-            return $this->priceCurrency->convert($rowTotal);
+            if (!is_null($finalPrice)) {
+                if ($subject->isCatalogPriceInclTax() && $subject->getTaxPercent()) {
+                    $finalPrice = 100 * $finalPrice / (100 + $subject->getTaxPercent());
+                }
+
+                $rowTotal = $finalPrice * $subject->getQty();
+                $rowTotal = $this->priceCurrency->convert($rowTotal);
+                return $this->priceCurrency->convert($rowTotal);
+            }
         }
 
         return $proceed();

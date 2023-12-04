@@ -9,7 +9,8 @@
  */
 
 // We should use strlen function because coupon code could be "0", converted to bool will lead to false
-$hasCouponCode = (bool) strlen($block->getCouponCode());
+$couponCode = $block->getCouponCode();
+$hasCouponCode = $couponCode !== null ? (bool) strlen($couponCode) : false;
 ?>
 <div class="discount"
      id="block-discount"
