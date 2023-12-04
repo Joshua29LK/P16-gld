@@ -277,9 +277,13 @@ class Topmenu extends MagentoTopmenu
      */
     public function menuStyleHtml()
     {
-        if (!empty(trim($this->primaryMenu->getMenuStyle()))) {
-            return '<style>' . $this->primaryMenu->getMenuStyle() . '</style>';
+        $menuStyle = $this->primaryMenu->getMenuStyle();
+    
+        // Check if $menuStyle is not null and is a string
+        if (!empty($menuStyle) && is_string($menuStyle)) {
+            return '<style>' . trim($menuStyle) . '</style>';
         }
+    
         return '';
     }
 
