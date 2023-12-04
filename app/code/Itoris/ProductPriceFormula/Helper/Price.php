@@ -110,21 +110,52 @@ class Price extends Data
             $disallowCriteria[(int) $value['formula_id']] = (array) json_decode($value['disallow_criteria']);
             $qtyInResult = strrpos($value['price'], '{qty}') !== false ? (int) $dataBySku['{qty}'] : 1;
             foreach ($dataBySku as $sku => $valueOption) {
-                if ($valueOption != '' && !is_array($valueOption)) {
-                    if (!is_numeric($valueOption)) $valueOption = '"'.addslashes($valueOption).'"';
-                    $variableString = str_ireplace($sku, $valueOption, $variableString);
-                    $conditionString = str_ireplace($sku, $valueOption, $conditionString);
-                    $priceString = str_ireplace($sku, $valueOption, $priceString);
-                    if ($overrideWeight) $weightString = str_ireplace($sku, $valueOption, $weightString);
-                    foreach($disallowCriteria[(int) $value['formula_id']] as $key => $criteria) {
-                        $disallowCriteria[(int) $value['formula_id']][$key]->formula = str_ireplace($sku, $valueOption, $criteria->formula);
+                if ($valueOption !== null && $valueOption !== '' && !is_array($valueOption)) {
+                    if (!is_numeric($valueOption)) $valueOption = '"' . addslashes($valueOption) . '"';
+            
+                    // Check if $variableString is not null before calling str_ireplace
+                    if ($variableString !== null) {
+                        $variableString = str_ireplace($sku, $valueOption, $variableString);
+                    }
+            
+                    // Check if $conditionString is not null before calling str_ireplace
+                    if ($conditionString !== null) {
+                        $conditionString = str_ireplace($sku, $valueOption, $conditionString);
+                    }
+            
+                    // Check if $priceString is not null before calling str_ireplace
+                    if ($priceString !== null) {
+                        $priceString = str_ireplace($sku, $valueOption, $priceString);
+                    }
+            
+                    if ($overrideWeight && $weightString !== null) {
+                        $weightString = str_ireplace($sku, $valueOption, $weightString);
+                    }
+            
+                    foreach ($disallowCriteria[(int) $value['formula_id']] as $key => $criteria) {
+                        // Check if $criteria->formula is not null before calling str_ireplace
+                        if ($criteria->formula !== null) {
+                            $disallowCriteria[(int) $value['formula_id']][$key]->formula = str_ireplace($sku, $valueOption, $criteria->formula);
+                        }
                     }
                 }
             }
             //$variableString = str_ireplace('{price}', '@price', $variableString);
-            $conditionString = str_ireplace('{price}', '@price', $conditionString);
-            $priceString = str_ireplace('{price}', '@price', $priceString);
-            $weightString = str_ireplace('{price}', '@price', $weightString);
+
+            // Check if $conditionString is not null before calling str_ireplace
+            if ($conditionString !== null) {
+                $conditionString = str_ireplace('{price}', '@price', $conditionString);
+            }
+
+            // Check if $priceString is not null before calling str_ireplace
+            if ($priceString !== null) {
+                $priceString = str_ireplace('{price}', '@price', $priceString);
+            }
+
+            // Check if $weightString is not null before calling str_ireplace
+            if ($weightString !== null) {
+                $weightString = str_ireplace('{price}', '@price', $weightString);
+            }
             
             //JS -> PHP math constants conversion
             $map = ["E" => "M_E","LN2" => "M_LN2","LN10" => "M_LN10","LOG2E" => "M_LOG2E","LOG10E" => "M_LOG10E","PI" => "M_PI","SQRT1_2" => "M_SQRT1_2","SQRT2" => "M_SQRT2"];
@@ -162,24 +193,44 @@ class Price extends Data
                 $variables[$varName] = $varResult;
             }
             
-            foreach($variables as $key => $var) {
-                $conditionString = str_ireplace('{'.$key.'}', '@$_dpoVars["'.$key.'"]', $conditionString);
-                $priceString = str_ireplace('{'.$key.'}', '@$_dpoVars["'.$key.'"]', $priceString);
-                $weightString = str_ireplace('{'.$key.'}', '@$_dpoVars["'.$key.'"]', $weightString);
-                foreach($disallowCriteria[(int) $value['formula_id']] as $key2 => $criteria) {
-                    $disallowCriteria[(int) $value['formula_id']][$key2]->formula = str_ireplace('{'.$key.'}', '@$_dpoVars["'.$key.'"]', $criteria->formula);
-                    $disallowCriteria[(int) $value['formula_id']][$key2]->message = str_ireplace('{'.$key.'}', '@$_dpoVars["'.$key.'"]', $criteria->message);
+            foreach ($variables as $key => $var) {
+                // Check if $conditionString is not null before calling str_ireplace
+                if ($conditionString !== null) {
+                    $conditionString = str_ireplace('{'.$key.'}', '@$_dpoVars["'.$key.'"]', $conditionString);
+                }
+            
+                // Check if $priceString is not null before calling str_ireplace
+                if ($priceString !== null) {
+                    $priceString = str_ireplace('{'.$key.'}', '@$_dpoVars["'.$key.'"]', $priceString);
+                }
+            
+                // Check if $weightString is not null before calling str_ireplace
+                if ($weightString !== null) {
+                    $weightString = str_ireplace('{'.$key.'}', '@$_dpoVars["'.$key.'"]', $weightString);
+                }
+            
+                foreach ($disallowCriteria[(int) $value['formula_id']] as $key2 => $criteria) {
+                    // Check if $criteria->formula is not null before calling str_ireplace
+                    if ($criteria->formula !== null) {
+                        $disallowCriteria[(int) $value['formula_id']][$key2]->formula = str_ireplace('{'.$key.'}', '@$_dpoVars["'.$key.'"]', $criteria->formula);
+                    }
+            
+                    // Check if $criteria->message is not null before calling str_ireplace
+                    if ($criteria->message !== null) {
+                        $disallowCriteria[(int) $value['formula_id']][$key2]->message = str_ireplace('{'.$key.'}', '@$_dpoVars["'.$key.'"]', $criteria->message);
+                    }
                 }
             }
             
-            $variableString = preg_replace('/\{(.*)}/U', 'false', $variableString);
-            $conditionString = preg_replace('/\{(.*)}/U', 'false', $conditionString);
-            $priceString = preg_replace('/\{(.*)}/U', '0', $priceString);
-            $weightString = preg_replace('/\{(.*)}/U', '0', $weightString);
-            foreach($disallowCriteria[(int) $value['formula_id']] as $key => $criteria) {
-                $disallowCriteria[(int) $value['formula_id']][$key]->formula = str_ireplace('{price}', '@price', $criteria->formula);
-                $disallowCriteria[(int) $value['formula_id']][$key]->formula = preg_replace('/\{(.*)}/U', '0', $criteria->formula);
-            }                    
+            $variableString = $variableString !== null ? preg_replace('/\{(.*)}/U', 'false', $variableString) : null;
+            $conditionString = $conditionString !== null ? preg_replace('/\{(.*)}/U', 'false', $conditionString) : null;
+            $priceString = $priceString !== null ? preg_replace('/\{(.*)}/U', '0', $priceString) : null;
+            $weightString = $weightString !== null ? preg_replace('/\{(.*)}/U', '0', $weightString) : null;
+            
+            foreach ($disallowCriteria[(int) $value['formula_id']] as $key => $criteria) {
+                // Check if $criteria->formula is not null before calling preg_replace
+                $criteria->formula = $criteria->formula !== null ? preg_replace('/\{(.*)}/U', '0', $criteria->formula) : null;
+            }                     
             
             $variableString = $this->str_replace_outside_quotes(array_keys($map), array_values($map), $variableString);
             $conditionString = $this->str_replace_outside_quotes(array_keys($map), array_values($map), $conditionString);
@@ -189,7 +240,8 @@ class Price extends Data
                 $disallowCriteria[(int) $value['formula_id']][$key]->formula = $this->str_replace_outside_quotes(array_keys($map), array_values($map), $criteria->formula);
             }
 
-            preg_match_all('/\{.*}/U', $conditionString, $resultCond);
+            preg_match_all('/\{.*}/U', $conditionString ?? '', $resultCond);
+
             if (!array_key_exists($value['formula_id'], $conditionPrice)) {
                 $conditionPrice[$value['formula_id']] = [];
             }
@@ -200,29 +252,40 @@ class Price extends Data
         $priceForCompare = 0; $apply_to_total = false; $weight = $item->getWeight();
         foreach ($conditionPrice as $formulaId => $values) {
             $isRightCondition = false;
+        
             foreach ($values as $value) {
                 if (!$isRightCondition) {
-                    $condition = str_ireplace('@price', $productCurrentPrice, $value['condition']);
-                    $priceCond = str_ireplace('@price', $productCurrentPrice, $value['price']);
-
+                    $condition = $value['condition'] ?? '';
+                    $priceCond = $value['price'] ?? '';
+        
                     $qtyInResult = $value['qty_in_result'];
                     $apply_to_total = (int)$value['apply_to_total'];
+        
                     if ($condition !== false && $condition == '') {
                         $condition = true;
                     }
+        
                     if ($condition != '' && $priceCond) {
-                        //$formulaFunc = @create_function('&$isRightCondition, &$priceForCompare, $_dpoVars', 'if (' . $condition . ') {$isRightCondition=true; $priceForCompare = (' . $priceCond . ');}');
-                        //$formulaFunc($isRightCondition, $priceForCompare, $variables);
-                        $_dpoVars = $variables;
-                        @eval('if (' . $condition . ') {$isRightCondition=true; $priceForCompare = (' . $priceCond . ');}');
-                        
-                        if ($priceForCompare > 0) $productCurrentPrice = $priceForCompare;
-                        if ($isRightCondition && $value['override_weight']) {
-                            $weightCond = str_ireplace('@price', $productCurrentPrice, $value['weight']);
-                            //$weightValue = @create_function('&$weight, $_dpoVars', '$weight = '.$weightCond.';');
-                            //$weightValue($weight, $variables);
+                        $condition = str_ireplace('@price', $productCurrentPrice, $condition);
+                        $priceCond = str_ireplace('@price', $productCurrentPrice, $priceCond);
+        
+                        if ($condition !== null && $priceCond !== null) {
                             $_dpoVars = $variables;
-                            @eval('$weight = '.$weightCond.';');
+                            @eval('if (' . $condition . ') {$isRightCondition=true; $priceForCompare = (' . $priceCond . ');}');
+        
+                            if ($priceForCompare > 0) {
+                                $productCurrentPrice = $priceForCompare;
+                            }
+        
+                            if ($isRightCondition && $value['override_weight']) {
+                                $weightCond = $value['weight'] ?? '';
+                                $weightCond = str_ireplace('@price', $productCurrentPrice, $weightCond);
+        
+                                if ($weightCond !== null) {
+                                    $_dpoVars = $variables;
+                                    @eval('$weight = ' . $weightCond . ';');
+                                }
+                            }
                         }
                     }
                 } else {
@@ -337,10 +400,14 @@ class Price extends Data
     }
     
     public function str_replace_outside_quotes($replace, $with, $string){
-        $result = "";
-        $outside = preg_split('/("[^"]*"|\'[^\']*\')/',$string,-1,PREG_SPLIT_DELIM_CAPTURE);
-        while ($outside) $result .= str_replace($replace,$with,array_shift($outside)).array_shift($outside);
-        return $result;
+        if ($string !== null) {
+            $result = "";
+            $outside = preg_split('/("[^"]*"|\'[^\']*\')/', $string, -1, PREG_SPLIT_DELIM_CAPTURE);
+            while ($outside) $result .= str_replace($replace, $with, array_shift($outside)).array_shift($outside);
+            return $result;
+        } else {
+            return null; // or handle null string case accordingly
+        }
     }
     
     public function getDataHelper() {
