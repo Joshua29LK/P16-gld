@@ -23,11 +23,17 @@
  * @license    http://www.itoris.com/magento-extensions-license.html  Commercial License
  */
 
-namespace Itoris\ProductPriceFormula\Plugin;
+ namespace Itoris\ProductPriceFormula\Plugin;
 
-class PriceCurrency {
-    
-    public function aroundRound($subject, $proceed, $price) {
-        return round($price, 2); //improving accuracy
-    }
-}
+ class PriceCurrency {
+     
+     public function aroundRound($subject, $proceed, $price) {
+         // Check if $price is not null before rounding
+         if ($price !== null) {
+             return round($price, 2); //improving accuracy
+         } else {
+             // Handle the case when $price is null
+             return 0; // or some default value
+         }
+     }
+ }
