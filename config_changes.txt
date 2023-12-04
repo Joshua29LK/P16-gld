@@ -1,0 +1,3 @@
+config changes bij livegang:
+
+- Stores > Config > Easytabs > Layout: Magento tabs (bottom option)
