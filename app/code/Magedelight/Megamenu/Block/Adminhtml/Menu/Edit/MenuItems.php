@@ -557,7 +557,7 @@ class MenuItems extends \Magento\Backend\Block\Template
      * @return string
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function yesNoDropdown($selected = '', $name, $randLabel, $position)
+    public function yesNoDropdown($name, $randLabel, $position, $selected = '')
     {
         $selectedHtml = $this->getLayout()->createBlock('Magento\Framework\View\Element\Template');
         $selectedHtml->setSelectedOptions($selected);
@@ -568,6 +568,7 @@ class MenuItems extends \Magento\Backend\Block\Template
         $contents = $selectedHtml->toHtml();
         return trim(preg_replace('/\s\s+/', ' ', $contents));
     }
+   
 
     public function getMenuLabels()
     {
