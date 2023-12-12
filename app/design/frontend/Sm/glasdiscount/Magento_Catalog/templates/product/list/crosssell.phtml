@@ -98,21 +98,6 @@ switch ($type = $block->getType()) {
 									}
 									?>
 
-									<?php
-									$now      = date("Y-m-d");
-									$newsFrom = substr($_item->getNewsFromDate(), 0, 10);
-									$newsTo   = substr($_item->getNewsToDate(), 0, 10);
-
-
-									if (($newsTo != '' || $newsFrom != '') && $_config->getAdvanced('show_newlabel')) {
-										if (($newsTo != '' && $newsFrom != '' && $now >= $newsFrom && $now <= $newsTo) || ($newsTo == '' && $now >= $newsFrom) || ($newsFrom == '' && $now <= $newsTo)) { ?>
-                                            <div class="label-product label-new">
-													<span class="new-product-icon"><?php echo __('New'); ?></span>
-												</div>
-										<?php }
-									} ?>
-                                    <!--END LABEL PRODUCT-->
-
 									<?php if ($homeStyle == 'home-16' || $homeStyle == 'home-17' || $homeStyle == 'home-18' || $homeStyle == 'home-19' || $homeStyle == 'home-20') { ?>
                                         <div class="button-action">
 											<?php if ($_config->getAdvanced('show_wishlist_button')) { ?>

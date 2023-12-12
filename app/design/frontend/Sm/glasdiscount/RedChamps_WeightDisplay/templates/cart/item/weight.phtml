@@ -5,13 +5,15 @@ $_item = $block->getItem();
 $product = $_item->getProduct();
 
 $weight = $block->getWeight();
-$weightUnit = explode(" ", $weight);
 
-if ($weight && $weightUnit[0] > 1):?>
-    <dl class="item-options item-weight">
-        <dt><?= __("Weight")?></dt>
-        <dd><?= round($weight, 2)?></dd>
-    </dl>
-<?php endif;?>
+if ($weight !== null) {
+    $weightUnit = explode(" ", $weight);
 
-
+    if (count($weightUnit) > 0 && floatval($weightUnit[0]) > 1):?>
+        <dl class="item-options item-weight">
+            <dt><?= __("Weight")?></dt>
+            <dd><?= round(floatval($weightUnit[0]), 2)?></dd>
+        </dl>
+    <?php endif;
+}
+?>

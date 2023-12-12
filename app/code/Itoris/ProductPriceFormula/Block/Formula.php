@@ -108,24 +108,37 @@ class Formula extends \Magento\Backend\Block\Widget\Container
     public function getDataBySku($product) {
         $dataBySku = [];
         $allConditionPriceArray = [];
-        $replaceVars = ['.qty}','.price}','.length}'];
+        $replaceVars = ['.qty}', '.price}', '.length}'];
+        
         foreach ($this->getConditions($product->getId()) as $conditionData) {
             foreach ($conditionData['conditions'] as $value) {
-                preg_match_all('/\{.*}/U', str_replace($replaceVars, '}', $value['condition']), $conditionMatch);
+                $conditionString = $value['condition'] ?? '';
+                $priceString = $value['price'] ?? '';
+                $weightString = $value['weight'] ?? '';
+        
+                preg_match_all('/\{.*}/U', str_replace($replaceVars, '}', $conditionString), $conditionMatch);
                 $allConditionPriceArray[] = $conditionMatch[0];
-                preg_match_all('/\{.*}/U', str_replace($replaceVars, '}', $value['price']), $priceMatch);
+        
+                preg_match_all('/\{.*}/U', str_replace($replaceVars, '}', $priceString), $priceMatch);
                 $allConditionPriceArray[] = $priceMatch[0];
-                preg_match_all('/\{.*}/U', str_replace($replaceVars, '}', $value['weight']), $weightMatch);
+        
+                preg_match_all('/\{.*}/U', str_replace($replaceVars, '}', $weightString), $weightMatch);
                 $allConditionPriceArray[] = $weightMatch[0];
             }
+        
             foreach ($conditionData['disallow_criteria'] as $value) {
                 $value = (array) $value;
-                preg_match_all('/\{.*}/U', str_replace($replaceVars, '}', $value['formula']), $conditionMatch);
+                $formulaString = $value['formula'] ?? '';
+        
+                preg_match_all('/\{.*}/U', str_replace($replaceVars, '}', $formulaString), $conditionMatch);
                 $allConditionPriceArray[] = $conditionMatch[0];
             }
-            preg_match_all('/\{.*}/U', str_replace($replaceVars, '}', $conditionData['variables']), $conditionMatch);
+        
+            $variablesString = $conditionData['variables'] ?? '';
+            preg_match_all('/\{.*}/U', str_replace($replaceVars, '}', $variablesString), $conditionMatch);
             $allConditionPriceArray[] = $conditionMatch[0];
         }
+        
         $dataBySku = $this->prepareDataBySku($allConditionPriceArray, $product);
         return $dataBySku;
     }

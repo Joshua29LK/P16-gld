@@ -87,33 +87,43 @@ echo $viewMode; ?>">
 							$today = time();
 
 							if ($specialprice && $_config->getAdvanced('show_salelabel')) {
-								if ($today >= strtotime($specialPriceFromDate) && $today <= strtotime($specialPriceToDate) || $today >= strtotime($specialPriceFromDate) && is_null($specialPriceToDate)) { ?>
-									<?php if ($specialprice < $orgprice) {
-										$save_percent = 100 - round(($specialprice / $orgprice) * 100);
-										?>
-                                        <div class="label-product label-sale">
-										<span class="sale-product-icon">
-											<?php echo '-' . $save_percent . '%'; ?>
-										</span>
-									</div>
-									<?php } ?>
-								<?php }
+								if ($specialPriceFromDate !== null && $today >= strtotime($specialPriceFromDate)) {
+									if ($specialPriceToDate === null || $today <= strtotime($specialPriceToDate)) {
+										if ($specialprice < $orgprice) {
+											$save_percent = 100 - round(($specialprice / $orgprice) * 100);
+											?>
+											<div class="label-product label-sale">
+												<span class="sale-product-icon">
+													<?php echo '-' . $save_percent . '%'; ?>
+												</span>
+											</div>
+											<?php
+										}
+									}
+								}
 							}
 							?>
 
 							<?php
 							$now      = date("Y-m-d");
-							$newsFrom = substr($_product->getNewsFromDate(), 0, 10);
-							$newsTo   = substr($_product->getNewsToDate(), 0, 10);
+							$newsFrom = $_product->getNewsFromDate();
+							$newsTo   = $_product->getNewsToDate();
 
+							if (($newsTo !== null || $newsFrom !== null) && $_config->getAdvanced('show_newlabel')) {
+								$newsFromSubstring = $newsFrom !== null ? substr($newsFrom, 0, 10) : null;
+								$newsToSubstring   = $newsTo !== null ? substr($newsTo, 0, 10) : null;
 
-							if (($newsTo != '' || $newsFrom != '') && $_config->getAdvanced('show_newlabel')) {
-								if (($newsTo != '' && $newsFrom != '' && $now >= $newsFrom && $now <= $newsTo) || ($newsTo == '' && $now >= $newsFrom) || ($newsFrom == '' && $now <= $newsTo)) { ?>
-                                    <div class="label-product label-new">
-											<span class="new-product-icon"><?php echo __('New'); ?></span>
-										</div>
+								if (
+									($newsToSubstring !== '' && $newsFromSubstring !== '' && $now >= $newsFromSubstring && $now <= $newsToSubstring) ||
+									($newsToSubstring === '' && $now >= $newsFromSubstring) ||
+									($newsFromSubstring === '' && $now <= $newsToSubstring)
+								) { ?>
+									<div class="label-product label-new">
+										<span class="new-product-icon"><?php echo __('New'); ?></span>
+									</div>
 								<?php }
-							} ?>
+							}
+							?>
                             <!--END LABEL PRODUCT-->
 
 							<?php if ($homeStyle == 'home-16' || $homeStyle == 'home-17' || $homeStyle == 'home-18' || $homeStyle == 'home-19' || $homeStyle == 'home-20') { ?>
