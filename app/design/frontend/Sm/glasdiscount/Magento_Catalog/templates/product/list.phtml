@@ -65,32 +65,32 @@ $_priceHelper       = $this->helper('Magento\Framework\Pricing\Helper\Data');
                 <!--LABEL PRODUCT-->
 
                 <?php
-                $orgprice             = $_product->getPrice();
-                $specialprice         = $_product->getSpecialPrice();
-                $specialPriceFromDate = $_product->getSpecialFromDate();
-                $specialPriceToDate   = $_product->getSpecialToDate();
+                  $orgprice             = $_product->getPrice();
+                  $specialprice         = $_product->getSpecialPrice();
+                  $specialPriceFromDate = $_product->getSpecialFromDate();
+                  $specialPriceToDate   = $_product->getSpecialToDate();
 
-                $today = time();
+                  $today = time();
 
-                if ($specialprice && $_config->getAdvanced('show_salelabel')) {
-                  if ($today >= strtotime($specialPriceFromDate) && $today <= strtotime($specialPriceToDate) || $today >= strtotime($specialPriceFromDate) && is_null($specialPriceToDate)) { ?>
-                    <?php if ($specialprice < $orgprice) {
-                      $save_percent = 100 - round(($specialprice / $orgprice) * 100);
-                      ?>
-                      <div class="product-card_badges label-product">
-                        <!-- <span class="sale-product-icon">
-                          <?php 
-                          /* echo '-' . $save_percent . '%'; */
-                          ?>
-                        </span> -->
-                        <span class="text">
-                          <div class="sale-product-icon"></div>
-                        </span>
-                      </div>
-                    <?php } ?>
-                  <?php }
-                }
-                ?>
+                  if (
+                      $specialprice &&
+                      $_config->getAdvanced('show_salelabel') &&
+                      ($specialPriceFromDate !== null) &&
+                      ($specialPriceToDate !== null)  // Add null check for $specialPriceToDate
+                  ) {
+                      if ($today >= strtotime($specialPriceFromDate) && ($today <= strtotime($specialPriceToDate) || is_null($specialPriceToDate))) {
+                          if ($specialprice < $orgprice) {
+                              $save_percent = 100 - round(($specialprice / $orgprice) * 100);
+                              ?>
+                              <div class="product-card_badges label-product">
+                                  <span class="text">
+                                      <div class="sale-product-icon"></div>
+                                  </span>
+                              </div>
+                          <?php }
+                      }
+                  }
+                  ?>
 
                 <!--END LABEL PRODUCT-->
                 <a href="<?php /* @escapeNotVerified */
