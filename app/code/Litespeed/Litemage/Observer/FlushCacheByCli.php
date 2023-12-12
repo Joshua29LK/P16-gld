@@ -23,9 +23,10 @@ class FlushCacheByCli implements \Magento\Framework\Event\ObserverInterface
     protected $helper;
 
     /**
-     * @var \Magento\Framework\Url 
+     * @var \Magento\Framework\Url
      */
     protected $url;
+
     private $_reason;
 
     /**
@@ -35,9 +36,12 @@ class FlushCacheByCli implements \Magento\Framework\Event\ObserverInterface
      */
     protected $coreRegistry;
 
+	private $enabled;
+
     /**
      * @param \Litespeed\Litemage\Model\Config $config,
      * @param \Magento\Framework\Registry $coreRegistry,
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager,
      * @param \Magento\Framework\Url $url,
      * @param \Litespeed\Litemage\Helper\Data $helper
      * @throws \Magento\Framework\Exception\IntegrationException
@@ -54,6 +58,7 @@ class FlushCacheByCli implements \Magento\Framework\Event\ObserverInterface
         $this->coreRegistry = $coreRegistry;
         $this->url = $url;
         $this->helper = $helper;
+		$this->enabled = $this->config->moduleEnabled();
     }
 
     /**
@@ -64,8 +69,9 @@ class FlushCacheByCli implements \Magento\Framework\Event\ObserverInterface
      */
     public function execute(\Magento\Framework\Event\Observer $observer)
     {
-        if (!$this->config->moduleEnabled())
+        if (!$this->enabled) {
             return;
+        }
 
         $event = $observer->getEvent();
         $tags = $event->getTags();
@@ -86,20 +92,19 @@ class FlushCacheByCli implements \Magento\Framework\Event\ObserverInterface
                 }
             }
             if (!empty($used)) {
-                $this->_shellPurge(['tags' => implode(',', $used)]);
+                $list = array_chunk($used, 50); // split to avoid url too long
+                foreach ($list as $l) {
+                    $this->_shellPurge(['tags' => implode(',', $l)]);
+                }
             }
         }
     }
 
     private function _shellPurge($params)
     {
-        $msg = sprintf("FlushCacheByCli %s tags=%s", $this->_reason,
-                       print_r($params, 1));
-
-        $server_ip = false; //in future, allow this configurable.
-        $uparams = ['_type' => \Magento\Framework\UrlInterface::URL_TYPE_LINK,
-            '_secure' => true];
-        $base = $this->url->getBaseUrl($uparams);
+        $server_ip = $this->config->getServerIp();
+        $storeId = $this->config->getFrontStoreId();
+        $base = $this->url->getUrl('litemage/shell/purge', ['_scope' => $storeId, '_nosid' => true]);
         $headers = [];
         if ($server_ip) {
             $pattern = "/:\/\/([^\/^:]+)(\/|:)?/";
@@ -113,8 +118,11 @@ class FlushCacheByCli implements \Magento\Framework\Event\ObserverInterface
         }
         $stat = stat(__FILE__);
         $stat[] = date('l jS F Y h');
-        $params['secret'] = md5(print_r($stat, 1));
-        $uri = $base . 'litemage/shell/purge?' . http_build_query($params);
+        $params['secret'] = md5(print_r($stat, true));
+        //$uri = $base . 'litemage/shell/purge?' . http_build_query($params);
+        $uri = $base . '?' . http_build_query($params);
+        $msg = sprintf('FlushCacheByCli %s url=%s ', $this->_reason, $uri);
+
         $result = true;
 
         try {
@@ -150,7 +158,7 @@ class FlushCacheByCli implements \Magento\Framework\Event\ObserverInterface
         }
 
         $this->helper->debugLog($msg);
-
+        $this->helper->debugTrace('shellpurge');
         return $result;
     }
 

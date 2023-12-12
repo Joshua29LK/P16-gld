@@ -17,7 +17,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
 
     protected $_debug = false;
     protected $_debugTrace = false;
-    protected $_isCacheable = -1; // sync with CacheControl var
+    protected $_isCacheable = -1; // sync with CacheControl var. -1: not set, 0: No, 1: public, 2: private
     protected $config;
     
     /**
@@ -37,6 +37,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
             $this->_debug = $this->config->debugEnabled();
             $this->_debugTrace = $this->config->debugTraceEnabled();
         }
+        // $this->debugLog($config->getModuleStatus(), true);
     }
 
     public function getUrl($route, array $params = [])
@@ -56,16 +57,19 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         $this->_logger->notice($message); // allow to show in production mode
     }
 
-    public function debugLog($message)
+    public function debugLog($message, $forced=false)
     {
-        if ($this->_debug) {
+        if ($this->_debug || $forced) {
+            if ($forced) {
+                $message .= ' ' . $this->config->getModuleStatus();
+            }
             $this->log($message);
         }
     }
 
-    public function debugTrace($message)
+    public function debugTrace($message, $forced=false)
     {
-        if ($this->_debug && $this->_debugTrace) {
+        if (($this->_debug && $this->_debugTrace) || $forced) {
             ob_start();
             debug_print_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 200);
             $trace = ob_get_contents();
@@ -88,14 +92,14 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         return $this->config->moduleEnabled();
     }
 
-    public function isCacheable()
+    public function getCacheable()
     {
-        return ($this->_isCacheable === 1);
+        return $this->_isCacheable;
     }
 
     public function needCustVaryAjax()
     {
-        return (($this->_isCacheable === 1) && ($this->config->getCustomVaryMode() == 1));
+        return (($this->_isCacheable > 0) && ($this->config->getCustomVaryMode() == 1));
     }
 
     /**
@@ -108,7 +112,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         $this->_isCacheable = $flag;
         if ($this->_debug) {
             $msg = sprintf('setCacheableFlag=%d %s', $flag, $reason);
-            if ($trace) {
+            if ($trace && $this->_debugTrace) {
                 $this->debugTrace($msg);
             } else {
                 $this->debugLog($msg);
@@ -127,8 +131,8 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         $lstags = [];
         if (!empty($tags)) {
             // sequence matters, need to be in front of shorter ones
-            $search = ['block', 'left-menu', 'cms_b', 'cat_p_', 'cat_p', 'cat_c_p', 'cat_c'];
-            $replace = ['B', 'l', 'MB', 'P', 'P', 'C', 'C'];
+            $search = ['block', 'left-menu', 'cms_b', 'cms_p', 'cat_p_', 'cat_p', 'cat_c_p', 'cat_c'];
+            $replace = ['B', 'l', 'MB', 'MG', 'P', 'P', 'C', 'C'];
 
             $footer = false;
             foreach ($tags as $tag) {
