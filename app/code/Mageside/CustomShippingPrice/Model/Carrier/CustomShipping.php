@@ -100,7 +100,7 @@ class CustomShipping extends AbstractCarrier implements CarrierInterface
 
             $method->setMethod('custom_shipping');
             $method->setMethodTitle(
-                (strlen($description) > 0) ?
+                (strlen($description ?? '') > 0) ?
                     $description :
                     $this->getConfigData('name')
             );
