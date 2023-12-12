@@ -12,7 +12,7 @@ RewriteRule .* - [E=noabort:1]
 RewriteCond %{REQUEST_URI} ^/(index.php/)?beheer789(.*) [NC]
 ## Kantoor loenen
 RewriteCond %{REMOTE_ADDR} !^94\.168\.56\.242
-RewriteCond %{REMOTE_ADDR} !^141\.224\.203\.64
+RewriteCond %{REMOTE_ADDR} !^141\.224\.207\.209
 ## ICT
 RewriteCond %{REMOTE_ADDR} !^92\.111\.104\.99
 RewriteCond %{REMOTE_ADDR} !^84\.86\.147\.48
