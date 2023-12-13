@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "1f76ec420bed09ec1295a637616ee8f3",
+    "content-hash": "fa95cf3bb9c9e079a6bd457759774aa9",
     "packages": [
         {
             "name": "2tvenom/cborencode",
@@ -17240,6 +17240,33 @@
             "time": "2022-06-21T01:22:39+00:00"
         },
         {
+            "name": "magmodules/magento2-channable",
+            "version": "1.16.0",
+            "dist": {
+                "type": "zip",
+                "url": "https://repo.magento.com/archives/magmodules/magento2-channable/magmodules-magento2-channable-1.16.0.0.zip",
+                "shasum": "ac87ffa795f92198b3a5c0fe0a7611aec5253a1d"
+            },
+            "require": {
+                "ext-json": "*",
+                "magento/framework": ">=102.0.3"
+            },
+            "type": "magento2-module",
+            "autoload": {
+                "files": [
+                    "registration.php"
+                ],
+                "psr-4": {
+                    "Magmodules\\Channable\\": ""
+                }
+            },
+            "license": [
+                "BSD-2-Clause"
+            ],
+            "description": "Channable integration for Magento 2",
+            "homepage": "https://github.com/magmodules/magento2-channable"
+        },
+        {
             "name": "mirasvit/module-cache-warmer",
             "version": "1.9.0",
             "dist": {
@@ -27709,5 +27736,5 @@
     "prefer-lowest": false,
     "platform": [],
     "platform-dev": [],
-    "plugin-api-version": "2.3.0"
+    "plugin-api-version": "2.6.0"
 }
