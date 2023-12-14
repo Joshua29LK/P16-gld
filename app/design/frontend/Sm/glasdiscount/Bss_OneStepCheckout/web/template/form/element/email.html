@@ -19,15 +19,18 @@
       method="post">
     <fieldset id="customer-email-fieldset" class="fieldset" data-bind="blockLoader: isLoading">
         <div class="field required">
-            <label class="label" for="customer-email">
+            <!-- <label class="label" for="customer-email">
                 <span data-bind="i18n: 'Email Address'"></span>
-            </label>
+            </label> -->
             <div class="control _with-tooltip">
                 <!-- ko if: window.checkoutConfig.rewrite_email_element -->
                 <input class="input-text"
                        type="email"
                        data-bind="
                             textInput: email,
+                            attr: {
+                                placeholder: $t('email'),
+                            },
                             hasFocus: emailFocused,
                             mageInit: {'mage/trim-input':{}}"
                        name="username"
@@ -39,6 +42,9 @@
                        type="email"
                        data-bind="
                             textInput: email,
+                            attr: {
+                                placeholder: $t('email'),
+                            },
                             hasFocus: emailFocused"
                        name="username"
                        data-validate="{required:true, 'validate-email':true}"
@@ -106,21 +112,21 @@
                 </label>
                 <div class="control">
                     <input class="input-text"
-                           data-bind="
+                            data-bind="
                                 attr: {
                                     placeholder: $t('Tax/VAT Number'),
                                 }"
-                           type="text"
-                           name="newcustomertaxvat_confirmation"
-                           id="new-customer-tax-vat-confirmation"
-                           data-validate="{required: true'}" autocomplete="off"/>
+                            type="text"
+                            name="newcustomertaxvat_confirmation"
+                            id="new-customer-tax-vat-confirmation"
+                            data-validate="{required: true'}" autocomplete="off"/>
                 </div>
             </div>
             <!-- /ko -->
             <div class="field _required pass" data-bind="fadeVisible: createNewAccount()">
-                <label class="label" for="new-customer-password">
+                <!-- <label class="label" for="new-customer-password">
                     <span data-bind="i18n: 'Password'"></span>
-                </label>
+                </label> -->
                 <div class="control">
                     <input class="input-text"
                            data-bind="
@@ -136,9 +142,9 @@
                 </div>
             </div>
             <div class="field _required confirm-pass" data-bind="fadeVisible: createNewAccount()">
-                <label class="label" for="new-customer-password-confirmation">
+                <!-- <label class="label" for="new-customer-password-confirmation">
                     <span data-bind="i18n: 'Confirm Password'"></span>
-                </label>
+                </label> -->
                 <div class="control">
                     <input class="input-text"
                            data-bind="
