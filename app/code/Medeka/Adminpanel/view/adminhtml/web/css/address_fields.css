@@ -1,0 +1,20 @@
+.order-address div.admin__field.field.field-street label {display:none!important;}
+div.admin__field.field.field-street > div > div {position:relative}
+div.admin__field.field.field-street > div > div::before {
+    font-size: 1.4rem;
+    font-weight: 600;
+    margin-bottom: 0.86rem;
+    display: block; }
+div.admin__field.field.field-street > div > div::after {
+        content: "*";
+        color: red;
+        position: absolute;
+        top: 3px;
+    }
+div.admin__field.field.field-street > div > div:nth-child(1)::after {left:89px;}
+div.admin__field.field.field-street > div > div:nth-child(2)::after {left:97px;}
+div.admin__field.field.field-street > div > div:nth-child(3)::after {display:none;}
+div.admin__field.field.field-street > div > div:nth-child(1)::before {content: "Straatnaam";margin-top: -0.14rem;}
+div.admin__field.field.field-street > div > div:nth-child(2)::before, .entry-edit.form-inline div[data-index="street_1"]::before {content: "Huisnummer";}
+div.admin__field.field.field-street > div > div:nth-child(3)::before, .entry-edit.form-inline div[data-index="street_2"]::before {content: "Huisnummer toevoeging";}
+
