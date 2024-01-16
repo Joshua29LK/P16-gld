@@ -33,7 +33,7 @@
             <?php if ($block->showOrderIncrementId()): ?>
                 <?php echo __('Order #') . ': ' . $order->getIncrementId() ?><br/>
             <?php endif; ?>
-            <?php echo __('Order Date') ?>: <?php echo $block->getFormattedDate($order->getCreatedAt()) ?>
+            <?php echo __('Order Date') ?>: <?php echo $block->getFormattedDate($order->getCreatedAt()) ?><br/><br/>
 			<?= /* @noEscape */ $block->getCommentsBlock() ?> 
         </td>
          <td valign="top">
