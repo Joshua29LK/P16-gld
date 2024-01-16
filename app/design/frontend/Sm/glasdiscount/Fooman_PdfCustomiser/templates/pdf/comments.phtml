@@ -4,19 +4,12 @@
  */
 ?>
 <?php if ($block->getCustomComments()): ?>
-    <br/>
-    <br/>
 	
-    <table class="amasty-attributes" border="0" cellpadding="2" cellspacing="0">
+    <table class="amasty-attributes" border="0" cellspacing="0">
         <?php foreach ($block->getCustomComments() as $comment): ?>
             <?php if ($comment['label']): ?>
                 <tr>
-                    <td width="25%"><?= /* @noEscape */ $block->escapeComment($comment['label']) ?>: </td>
-                    <td><?= /* @noEscape */ $block->escapeComment($comment['value']) ?></td>
-                </tr>
-            <?php else: ?>
-                <tr>
-                    <td colspan="2"><?= /* @noEscape */ $block->escapeComment($comment['value']) ?></td>
+                    <td><?= /* @noEscape */ $block->escapeComment($comment['label']) ?>: <?= /* @noEscape */ $block->escapeComment($comment['value']) ?></td>
                 </tr>
             <?php endif; ?>
         <?php endforeach; ?>
@@ -30,10 +23,7 @@
     <table border="0" cellpadding="2" cellspacing="0">
         <?php foreach ($block->getComments() as $comment): ?>
             <tr>
-                <td><?= /* @noEscape */ $comment['date'] ?><?php if ($comment['label']):
-                    ?> | <?= /* @noEscape */ $block->escapeComment($comment['label']) ?><?php
-                    endif; ?></td>
-                <td><strong><?= /* @noEscape */ $block->escapeComment($comment['comment']) ?></strong></td>
+                <td><?= /* @noEscape */ $block->escapeComment($comment['comment']) ?></td>
             </tr>
         <?php endforeach; ?>
     </table>
