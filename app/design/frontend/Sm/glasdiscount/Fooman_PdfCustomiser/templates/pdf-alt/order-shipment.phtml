@@ -60,7 +60,7 @@ tel; 055-843 42 02<br/>
 <strong>Rek nr:</strong> NL20 RABO 0306 0701 97 t.n.v. <br/>
 Geerdink Bouwmaterialen B.V.<br/>
 <strong>KvK nummer:</strong> 66359953<br/>
-<?php echo $block->getOwnerAddress() ?><?php if ($order->getShipping_arrival_date()) : ?><?php echo date('d M Y', strtotime($order->getShipping_arrival_date())); ?><?php endif; ?></td>
+<?php echo $block->getOwnerAddress() ?><?php if ($order->getShipping_arrival_date()) : ?><?php echo date('d M Y', strtotime($order->getShipping_arrival_date())); ?><br/><?php endif; ?></td>
     </tr>
     <tr>
         <?php if ($block->shouldDisplayBothAddresses()): ?>
