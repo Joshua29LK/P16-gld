@@ -21,7 +21,7 @@
         "dhlparcel/magento2-plugin": "1.0.40",
         "laminas/laminas-dependency-plugin": "^2.2",
         "swissup/module-marketplace": "^1.10",
-        "swissup/easytabs": "v1.11.4",
+        "swissup/easytabs": "1.12.7",
         "rosell-dk/webp-convert": "^2.9",
         "dotsquares/module-advance-discount": "^1.0",
         "multisafepay/magento2": "^3.2",
@@ -76,6 +76,10 @@
     },
     "minimum-stability": "stable",
     "repositories": {
+        "swissuplabs": {
+            "type": "composer",
+            "url": "https://ci.swissuplabs.com/api/packages.json"
+        },
         "0": {
             "type": "composer",
             "url": "https://repo.magento.com/"
