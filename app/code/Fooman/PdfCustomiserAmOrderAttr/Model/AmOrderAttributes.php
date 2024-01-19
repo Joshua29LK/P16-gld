@@ -39,7 +39,7 @@ class AmOrderAttributes
     public function getOrderAttributesData($order)
 {
     $orderAttributesData = [];
-    $filterAttributeCodes = ['klant_referentie', 'bestelopmerking']; // Define the attribute codes here
+    $filterAttributeCodes = ['klant_referentie', 'bestelopmerking', 'afhalenbezorgen', 'leverancier_admin', 'leverancier_date_admin']; // Define the attribute codes here
 
     $entity = $this->entityResolver->getEntityByOrder($order);
     if ($entity->isObjectNew()) {
