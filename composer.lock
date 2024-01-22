@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ff2372e45bbc1058ff889b17b9f671cd",
+    "content-hash": "483a5ab7150325a5b812e7e4aa923122",
     "packages": [
         {
             "name": "2tvenom/cborencode",
@@ -2194,6 +2194,48 @@
                 }
             ],
             "time": "2023-10-06T03:09:31+00:00"
+        },
+        {
+            "name": "geissweb/module-euvat",
+            "version": "1.20.10.1",
+            "dist": {
+                "type": "zip",
+                "url": "https://packages.geissweb.de/composer/download/file/m/geissweb_module-euvat/h/b761b5b66f930bf8981de3247b0080e0886cd9bb/v/1.20.10.1",
+                "reference": "b761b5b66f930bf8981de3247b0080e0886cd9bb"
+            },
+            "require": {
+                "ext-curl": "*",
+                "ext-json": "*",
+                "ext-pcre": "*",
+                "ext-soap": "*",
+                "magento/framework": ">=102.0.7",
+                "php": ">=7.4"
+            },
+            "type": "magento2-module",
+            "extra": {
+                "_gw_magento_module_name": "Geissweb_Euvat",
+                "_gw_magento_codepool": "app/code"
+            },
+            "autoload": {
+                "files": [
+                    "registration.php"
+                ],
+                "psr-4": {
+                    "Geissweb\\Euvat\\": ""
+                }
+            },
+            "notification-url": "https://packages.geissweb.de/composer/download/notify/",
+            "license": [
+                "proprietary"
+            ],
+            "authors": [
+                {
+                    "name": "Sven Geiß",
+                    "email": "info@geissweb.de"
+                }
+            ],
+            "description": "Improved VAT handling for merchants dealing with or in the EU.",
+            "time": "2023-12-19T07:43:17+00:00"
         },
         {
             "name": "gmostafa/php-graphql-client",
@@ -27926,5 +27968,5 @@
     "prefer-lowest": false,
     "platform": [],
     "platform-dev": [],
-    "plugin-api-version": "2.2.0"
+    "plugin-api-version": "2.3.0"
 }
