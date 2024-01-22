@@ -21,6 +21,7 @@ Hourly,Hourly
 Daily,Daily
 Weekly,Weekly
 Monthly,Monthly
+Never,Never
 "Are you sure you want to remove from archive this order?","Are you sure you want to remove from archive this order?"
 "Remove From Archive","Remove From Archive"
 "Are you sure you want to archive this order?","Are you sure you want to archive this order?"

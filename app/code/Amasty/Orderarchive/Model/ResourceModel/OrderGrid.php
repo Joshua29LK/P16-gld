@@ -1,9 +1,9 @@
 <?php
 /**
-* @author Amasty Team
-* @copyright Copyright (c) 2022 Amasty (https://www.amasty.com)
-* @package Order Archive for Magento 2
-*/
+ * @author Amasty Team
+ * @copyright Copyright (c) Amasty (https://www.amasty.com)
+ * @package Order Archive for Magento 2
+ */
 
 namespace Amasty\Orderarchive\Model\ResourceModel;
 
@@ -14,6 +14,11 @@ use Magento\Framework\DB\Select;
 
 class OrderGrid extends ArchiveAbstract
 {
+    /**
+     * @var bool
+     */
+    protected $isOrderArchive = true;
+
     protected function _construct()
     {
         $this->_init(
@@ -22,18 +27,9 @@ class OrderGrid extends ArchiveAbstract
         );
     }
 
-    /**
-     * @param string $tableName
-     * @param array $params
-     * @return Select
-     */
-    protected function getSelect($tableName, array $params)
+    protected function getSelect(string $tableName, array $params): Select
     {
-        $select = $this->connection->select()->from($this->getTable($tableName));
-
-        if (array_key_exists(self::ARCHIVE_ENTITY_ID, $params) && !empty($params[self::ARCHIVE_ENTITY_ID])) {
-            $select->where($this->connection->quoteIdentifier(key($params)). " IN (?)", current($params));
-        }
+        $select = parent::getSelect($tableName, $params);
 
         if (($tableName == $this->baseTable)) {
 

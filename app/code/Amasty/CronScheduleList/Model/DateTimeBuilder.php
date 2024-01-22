@@ -1,9 +1,9 @@
 <?php
 /**
-* @author Amasty Team
-* @copyright Copyright (c) 2022 Amasty (https://www.amasty.com)
-* @package Cron Schedule List for Magento 2 (System) 
-*/
+ * @author Amasty Team
+ * @copyright Copyright (c) Amasty (https://www.amasty.com)
+ * @package Cron Schedule List for Magento 2 (System) 
+ */
 
 namespace Amasty\CronScheduleList\Model;
 
@@ -36,14 +36,7 @@ class DateTimeBuilder
         $ago = new \DateTime($datetime);
         $diff = $now->diff($ago);
 
-        $diff->w = floor($diff->d / 7);
-        $diff->d -= $diff->w * 7;
-
         $string = [
-            'y' => 'year',
-            'm' => 'month',
-            'w' => 'week',
-            'd' => 'day',
             'h' => 'hour',
             'i' => 'minute',
             's' => 'second',
