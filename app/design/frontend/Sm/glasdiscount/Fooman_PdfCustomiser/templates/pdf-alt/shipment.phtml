@@ -90,7 +90,7 @@ Geerdink Bouwmaterialen B.V.<br/>
     <tr>
         <td valign="top"
             style="<?= /* @noEscape */ $block->getDesign()->getCellStyle(true, true, true, false)?>"
-        ><?= /* @noEscape */ $block->getBillingAddress() ?></td>
+        ><?= /* @noEscape */ $block->getBillingAddress() ?><?php echo $order->getCustomerEmail(); ?></td>
         <td valign="top"
             style="<?= /* @noEscape */ $block->getDesign()->getCellStyle(true, true, false, true)?>"
         ><?php if (!$order->getIsVirtual()):
