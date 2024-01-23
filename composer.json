@@ -27,7 +27,8 @@
         "multisafepay/magento2": "^3.2",
         "magmodules/magento2-channable": "^1.16",
         "magefan/module-blog": "2.11.0.1",
-        "geissweb/module-euvat": "1.20.10.1"
+        "geissweb/module-euvat": "1.20.10.1",
+        "magevision/module-update-order-email-address": "2.4.2"
     },
     "require-dev": {
 		"allure-framework/allure-phpunit": "~1.5.0",

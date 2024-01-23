@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "483a5ab7150325a5b812e7e4aa923122",
+    "content-hash": "612b41bf0da73a3515a1f450e5948115",
     "packages": [
         {
             "name": "2tvenom/cborencode",
@@ -17452,6 +17452,47 @@
                 "source": "https://github.com/magento/zf1/tree/1.15.1"
             },
             "time": "2022-06-21T01:22:39+00:00"
+        },
+        {
+            "name": "magevision/module-update-order-email-address",
+            "version": "2.4.2",
+            "dist": {
+                "type": "zip",
+                "url": "https://repo.magento.com/archives/magevision/module-update-order-email-address/magevision-module-update-order-email-address-2.4.2.0.zip",
+                "shasum": "f884da3d705f20686ee490e92a843206a2a0a24f"
+            },
+            "require": {
+                "magento/framework": "103.0.*",
+                "magento/module-backend": "102.0.*",
+                "magento/module-sales": "103.0.*",
+                "php": "~7.3.0||~7.4.0||~8.1.0||~8.2.0"
+            },
+            "type": "magento2-module",
+            "autoload": {
+                "files": [
+                    "registration.php"
+                ],
+                "psr-4": {
+                    "MageVision\\UpdateOrderEmailAddress\\": ""
+                }
+            },
+            "license": [
+                "LICENSE_MV"
+            ],
+            "authors": [
+                {
+                    "name": "MageVision Team",
+                    "email": "info@magevision.com",
+                    "homepage": "https://www.magevision.com/"
+                }
+            ],
+            "description": "Update Order Email Address Extension for Magento 2",
+            "keywords": [
+                "Admin Order",
+                "Order Email",
+                "Update Email Address",
+                "magento 2"
+            ]
         },
         {
             "name": "magmodules/magento2-channable",
