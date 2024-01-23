@@ -25,7 +25,7 @@ class Email extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * @param array $data
      * @throws \Magento\Framework\Exception\FileSystemException
-     * @throws \Zend_Mail_Exception
+     * @throws \Laminas\Mail\Exception
      */
     public function sendEmail($data = [])
     {
@@ -51,14 +51,14 @@ class Email extends \Magento\Framework\App\Helper\AbstractHelper
      * @param array $filenames
      * @param $path
      * @param null $type
-     * @return \Zend_Mail
+     * @return \Laminas\Mail\Message
      * @throws \Magento\Framework\Exception\FileSystemException
-     * @throws \Zend_Mail_Exception
+     * @throws \Laminas\Mail\Message
      */
     public function mailWithAttachment($mailFrom, $mailto, $subject, $message, $filenames = [], $path = null, $type = null)
     {
-        $mail = new \Zend_Mail();
-        $mail->setType(\Zend_Mime::MULTIPART_MIXED);
+/*        $mail = new \Laminas\Mail\Message();
+        $mail->setType(\Laminas\Mime\Mime::MULTIPART_MIXED);
         $mail->setFrom($mailFrom, $mailFrom);
         $mail->setBodyHtml($message);
         $mail->addTo($mailto, $mailto);
@@ -67,8 +67,75 @@ class Email extends \Magento\Framework\App\Helper\AbstractHelper
             $filenames = [$filenames];
         }
         foreach ($filenames as $filename) {
-            $mail->createAttachment($this->directoryRead->readFile($path . $filename), $type == null ? \Zend_Mime::TYPE_OCTETSTREAM : "text/" . $type, \Zend_Mime::DISPOSITION_INLINE, \Zend_Mime::ENCODING_BASE64, basename($filename));
+            $mail->createAttachment($this->directoryRead->readFile($path . $filename), $type == null ? \Laminas\Mime\Mime::TYPE_OCTETSTREAM : "text/" . $type, \Laminas\Mime\Mime::DISPOSITION_INLINE, \Laminas\Mime\Mime::ENCODING_BASE64, basename($filename));
         }
-        return $mail->send();
+        return $mail->send();*/
+
+
+        $parts = [];
+
+        $html = new \Laminas\Mime\Part($message);
+        $html->type = \Laminas\Mime\Mime::TYPE_HTML;
+        $html->charset = 'utf-8';
+        $html->encoding = \Laminas\Mime\Mime::ENCODING_QUOTEDPRINTABLE;
+
+        $parts[] = $html;
+
+        if (!is_array($filenames)) {
+            $filenames = [$filenames];
+        }
+
+        foreach ($filenames as $filename) {
+            $file = new \Laminas\Mime\Part($this->directoryRead->readFile($path . $filename));
+            $file->type = 'application/octet-stream';
+            $file->filename = $filename;
+            $file->disposition = \Laminas\Mime\Mime::DISPOSITION_ATTACHMENT;
+            $file->encoding = \Laminas\Mime\Mime::ENCODING_BASE64;
+            $parts[] = $file;
+        }
+
+        $body = new \Laminas\Mime\Message();
+        $body->setParts($parts);
+
+        $message = new \Laminas\Mail\Message();
+        $message->setBody($body);
+        $message->addFrom($mailFrom);
+        $message->addTo($mailto);
+        $message->addReplyTo($mailFrom);
+        $message->setSubject($subject);
+        $message->setEncoding('UTF-8');
+
+        $contentTypeHeader = $message->getHeaders()->get('Content-Type');
+        $contentTypeHeader->setType('multipart/related');
+
+
+//        $transport = new \Laminas\Mail\Transport\Smtp();
+        /*
+        $options   = new \Laminas\Mail\Transport\SmtpOptions([
+            'name' => 'localhost',
+            'host' => '127.0.0.1',
+            'port' => 25,
+        ]);
+        */
+/*
+        $options   = new \Laminas\Mail\Transport\SmtpOptions([
+            'name'              => 'mail.sigmalatex.nl',
+            'host'              => 'mail.sigmalatex.nl',
+            'port'              => '587',
+            'connection_class'  => 'login',
+            'connection_config' => [
+                'username' => 'test@sigmalatex.nl',
+                'password' => 'LeKVMTz2NmAFMrkQW7H9',
+            ],
+        ]);
+*/
+//        $transport->setOptions($options);
+
+        $transport = new \Laminas\Mail\Transport\Sendmail();
+
+        return  $transport->send($message);
+
+
+
     }
 }

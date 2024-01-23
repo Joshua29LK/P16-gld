@@ -1205,7 +1205,9 @@ class Profiles extends \Magento\Framework\Model\AbstractModel
                             foreach ($mails as $mail) {
                                 $mail = trim((string) $mail);
                                 if ($mail != "") {
-                                    if ($this->emailHelper->mailWithAttachment($this->_params['mail_sender'], $mail, $this->_params['mail_subject'], $this->_params['mail_message'], $file, $this->_params['path'], $this->storageHelper->getFileType($this->_params['type']))) {
+                                    $sendResult = $this->emailHelper->mailWithAttachment($this->_params['mail_sender'], $mail, $this->_params['mail_subject'], $this->_params['mail_message'], $file, $this->_params['path'], $this->storageHelper->getFileType($this->_params['type']));
+
+                                    if ($sendResult) {
                                         $this->addSuccess(sprintf(__("File " . $file . " successfully sent to %s."), $mail));
                                     }
                                 }
