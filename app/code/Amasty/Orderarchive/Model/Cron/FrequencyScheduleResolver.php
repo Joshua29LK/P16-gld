@@ -1,10 +1,12 @@
 <?php
-/**
-* @author Amasty Team
-* @copyright Copyright (c) 2022 Amasty (https://www.amasty.com)
-* @package Order Archive for Magento 2
-*/
+
 declare(strict_types=1);
+
+/**
+ * @author Amasty Team
+ * @copyright Copyright (c) Amasty (https://www.amasty.com)
+ * @package Order Archive for Magento 2
+ */
 
 namespace Amasty\Orderarchive\Model\Cron;
 
@@ -12,12 +14,7 @@ use Amasty\Orderarchive\Model\Source\Frequency;
 
 class FrequencyScheduleResolver
 {
-    /**
-     * get shedule
-     * @param string $frequency
-     * @return string
-     */
-    public function getSchedule(string $frequency): string
+    public function getSchedule(string $frequency): ?string
     {
         switch ($frequency) {
             case Frequency::CRON_HOURLY:
@@ -37,6 +34,9 @@ class FrequencyScheduleResolver
                 break;
             case Frequency::CRON_CUSTOM:
                 $cronExpString = "0 0 1 * *";
+                break;
+            case Frequency::CRON_NEVER:
+                $cronExpString = null;
                 break;
             default:
                 $cronExpString = '*/10 * * * * *';

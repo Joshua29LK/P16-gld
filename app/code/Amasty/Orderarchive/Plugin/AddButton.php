@@ -1,56 +1,51 @@
 <?php
+
+declare(strict_types=1);
+
 /**
-* @author Amasty Team
-* @copyright Copyright (c) 2022 Amasty (https://www.amasty.com)
-* @package Order Archive for Magento 2
-*/
+ * @author Amasty Team
+ * @copyright Copyright (c) Amasty (https://www.amasty.com)
+ * @package Order Archive for Magento 2
+ */
 
 namespace Amasty\Orderarchive\Plugin;
 
+use Amasty\Orderarchive\Controller\Adminhtml\Customer\Archive;
 use Amasty\Orderarchive\Helper\Data;
+use Amasty\Orderarchive\Model\ResourceModel\OrderGrid;
+use Magento\Framework\AuthorizationInterface;
+use Magento\Sales\Block\Adminhtml\Order\View;
 
 class AddButton
 {
-    public const ADD_TO_ARCHIVE_COMPONENT_NAMESPACE = 'add_to_archive';
-
     /**
      * @var Data
      */
-    protected $helper;
+    private $helper;
 
     /**
-     * @var \Magento\Framework\UrlInterface
+     * @var OrderGrid
      */
-    protected $urlBuilder;
+    private $orderGrid;
 
     /**
-     * @var \Amasty\Orderarchive\Model\ResourceModel\OrderGrid
+     * @var AuthorizationInterface
      */
-    protected $orderGrid;
+    private $authorization;
 
-    /**
-     * AddButton constructor.
-     * @param Data $helper
-     * @param \Magento\Framework\UrlInterface $urlBuilder
-     * @param \Amasty\Orderarchive\Model\ResourceModel\OrderGrid $orderGrid
-     */
     public function __construct(
         Data $helper,
-        \Magento\Framework\UrlInterface $urlBuilder,
-        \Amasty\Orderarchive\Model\ResourceModel\OrderGrid $orderGrid
+        OrderGrid $orderGrid,
+        AuthorizationInterface $authorization
     ) {
         $this->helper = $helper;
-        $this->urlBuilder = $urlBuilder;
         $this->orderGrid = $orderGrid;
+        $this->authorization = $authorization;
     }
 
-    /**
-     * @param \Magento\Sales\Block\Adminhtml\Order\View $subject
-     * @return null
-     */
-    public function beforeSetLayout(\Magento\Sales\Block\Adminhtml\Order\View $subject)
+    public function beforeSetLayout(View $subject): void
     {
-        if ($this->helper->isModuleOn()) {
+        if ($this->helper->isModuleOn() && $this->authorization->isAllowed(Archive::ADMIN_RESOURCE)) {
             $buttonParams = $this->getButtonData($subject);
 
             $subject->addButton(
@@ -60,29 +55,35 @@ class AddButton
                     'onclick'   => "confirmSetLocation('{$buttonParams['message']}', '{$buttonParams['buttonUrl']}')",
                 ]
             );
+
+            if ($this->orderGrid->isArchived($subject->getOrderId())) {
+                $subject->updateButton(
+                    'back',
+                    'onclick',
+                    'setLocation(\'' . $subject->getUrl('amastyorderarchive/order/index') . '\')'
+                );
+            }
         }
     }
 
-    /**
-     * @param \Magento\Sales\Block\Adminhtml\Order\View $block
-     * @return array
-     */
-    protected function getButtonData($block)
+    private function getButtonData(View $block): array
     {
         if ($this->orderGrid->isArchived($block->getOrderId())) {
-            return [
+            $buttonData = [
                 'message'    => __('Are you sure you want to remove from archive this order?'),
                 'buttonId'   => 'remove_from_archive_order',
                 'buttonUrl'  => $block->getUrl('amastyorderarchive/archive/OrderFromArchive'),
                 'buttonName' => __('Remove From Archive'),
             ];
+        } else {
+            $buttonData = [
+                'message'    => __('Are you sure you want to archive this order?'),
+                'buttonId'   => 'archive_order',
+                'buttonUrl'  => $block->getUrl('amastyorderarchive/archive/OrderToArchive'),
+                'buttonName' => __('Archiving'),
+            ];
         }
 
-        return [
-            'message'    => __('Are you sure you want to archive this order?'),
-            'buttonId'   => 'archive_order',
-            'buttonUrl'  => $block->getUrl('amastyorderarchive/archive/OrderToArchive'),
-            'buttonName' => __('Archiving'),
-        ];
+        return $buttonData;
     }
 }

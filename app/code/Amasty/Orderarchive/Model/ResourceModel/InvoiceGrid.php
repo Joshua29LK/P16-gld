@@ -1,11 +1,13 @@
 <?php
 /**
-* @author Amasty Team
-* @copyright Copyright (c) 2022 Amasty (https://www.amasty.com)
-* @package Order Archive for Magento 2
-*/
+ * @author Amasty Team
+ * @copyright Copyright (c) Amasty (https://www.amasty.com)
+ * @package Order Archive for Magento 2
+ */
 
 namespace Amasty\Orderarchive\Model\ResourceModel;
+
+use Amasty\Orderarchive\Model\ArchiveFactory;
 
 class InvoiceGrid extends \Amasty\Orderarchive\Model\ArchiveAbstract
 {
@@ -15,5 +17,15 @@ class InvoiceGrid extends \Amasty\Orderarchive\Model\ArchiveAbstract
             \Amasty\Orderarchive\Model\ArchiveFactory::INVOICE_ARCHIVE_NAMESPACE,
             \Amasty\Orderarchive\Model\ArchiveAbstract::ARCHIVE_ENTITY_ID
         );
+    }
+
+    public function removePermanently(array $selectedIds): array
+    {
+        $this->removeFromGrid(
+            ArchiveFactory::INVOICE_ARCHIVE_NAMESPACE,
+            $this->prepareParams($selectedIds)
+        );
+
+        return [];
     }
 }

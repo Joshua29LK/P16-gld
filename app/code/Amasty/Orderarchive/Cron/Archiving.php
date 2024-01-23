@@ -1,11 +1,18 @@
 <?php
+
+declare(strict_types=1);
+
 /**
-* @author Amasty Team
-* @copyright Copyright (c) 2022 Amasty (https://www.amasty.com)
-* @package Order Archive for Magento 2
-*/
+ * @author Amasty Team
+ * @copyright Copyright (c) Amasty (https://www.amasty.com)
+ * @package Order Archive for Magento 2
+ */
 
 namespace Amasty\Orderarchive\Cron;
+
+use Amasty\Orderarchive\Api\ArchiveProcessorInterface;
+use Amasty\Orderarchive\Helper;
+use Amasty\Orderarchive\Model\Source\Frequency;
 
 /**
  * custom cron actions
@@ -13,40 +20,31 @@ namespace Amasty\Orderarchive\Cron;
 class Archiving
 {
     /**
-     * @var \Amasty\Orderarchive\Helper\Data
+     * @var Helper\Data
      */
     protected $helper;
 
     /**
-     * @var \Amasty\Orderarchive\Helper\Email\Data
+     * @var Helper\Email\Data
      */
     private $emailHelper;
 
     /**
-     * @var \Amasty\Orderarchive\Api\ArchiveProcessorInterface
+     * @var ArchiveProcessorInterface
      */
     private $orderProcessor;
 
-    /**
-     * Archiving constructor.
-     * @param \Amasty\Orderarchive\Helper\Data $helper
-     * @param \Amasty\Orderarchive\Helper\Email\Data $emailHelper
-     * @param \Amasty\Orderarchive\Api\ArchiveProcessorInterface $orderProcessor
-     */
     public function __construct(
-        \Amasty\Orderarchive\Helper\Data $helper,
-        \Amasty\Orderarchive\Helper\Email\Data $emailHelper,
-        \Amasty\Orderarchive\Api\ArchiveProcessorInterface $orderProcessor
+        Helper\Data $helper,
+        Helper\Email\Data $emailHelper,
+        ArchiveProcessorInterface $orderProcessor
     ) {
         $this->helper = $helper;
         $this->emailHelper = $emailHelper;
         $this->orderProcessor = $orderProcessor;
     }
 
-    /**
-     * @return void
-     */
-    public function execute()
+    public function execute(): void
     {
         if ($this->helper->isModuleOn()) {
             $result = $this->orderProcessor->moveAllToArchive();

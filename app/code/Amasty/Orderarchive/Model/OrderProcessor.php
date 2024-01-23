@@ -1,9 +1,9 @@
 <?php
 /**
-* @author Amasty Team
-* @copyright Copyright (c) 2022 Amasty (https://www.amasty.com)
-* @package Order Archive for Magento 2
-*/
+ * @author Amasty Team
+ * @copyright Copyright (c) Amasty (https://www.amasty.com)
+ * @package Order Archive for Magento 2
+ */
 
 namespace Amasty\Orderarchive\Model;
 
@@ -114,8 +114,10 @@ class OrderProcessor implements \Amasty\Orderarchive\Api\ArchiveProcessorInterfa
                     break;
                 case self::REMOVE_PERMANENTLY_METHOD_CODE:
                     if ('order' == $type) {
-                        $orderInfo = $archiveModel->getProcessor()->removePermanently($selectedOrders);
-                        $result->setData($orderInfo);
+                        $result[$type] = $archiveModel->getProcessor()->removePermanently($selectedOrders);
+                        $result->setData($result[$type]);
+                    } else {
+                        $archiveModel->getProcessor()->removePermanently($selectedOrders);
                     }
                     break;
             }

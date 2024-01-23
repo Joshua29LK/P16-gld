@@ -1,9 +1,9 @@
 <?php
 /**
-* @author Amasty Team
-* @copyright Copyright (c) 2022 Amasty (https://www.amasty.com)
-* @package Order Archive for Magento 2
-*/
+ * @author Amasty Team
+ * @copyright Copyright (c) Amasty (https://www.amasty.com)
+ * @package Order Archive for Magento 2
+ */
 
 namespace Amasty\Orderarchive\Model;
 
@@ -15,7 +15,13 @@ use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 abstract class ArchiveAbstract extends AbstractDb
 {
     public const ARCHIVE_ENTITY_ID = 'entity_id';
+    public const ORDER_INCREMENT_ID = 'order_increment_id';
     public const BATCH_SIZE = 100;
+
+    /**
+     * @var bool
+     */
+    protected $isOrderArchive = false;
 
     /**
      * @var string
@@ -256,32 +262,27 @@ abstract class ArchiveAbstract extends AbstractDb
         return [];
     }
 
-    /**
-     * @param $tableName
-     * @param array $params
-     * @return Select
-     */
-    protected function getSelect($tableName, array $params)
+    protected function getSelect(string $tableName, array $params): Select
     {
-        $select = $this->connection->select()->from($tableName);
+        $select = $this->connection->select()->from($this->getTable($tableName));
 
         if (isset($params[self::ARCHIVE_ENTITY_ID])) {
-            $select->where($this->getOrderIdCondition($params));
+            $idField = $this->isOrderArchive ? self::ARCHIVE_ENTITY_ID : self::ORDER_INCREMENT_ID;
+            $select->where($this->getOrderIdCondition($idField, $params));
         }
 
         return $select;
     }
 
-    protected function getOrderIdCondition(array $params): string
+    private function getOrderIdCondition(string $idField, array $params): string
     {
-        return $this->connection->quoteInto(' `order_increment_id` IN (?)', $params[self::ARCHIVE_ENTITY_ID]);
+        return $this->connection->quoteInto(
+            sprintf('`%s` IN (?)', $idField),
+            $params[self::ARCHIVE_ENTITY_ID]
+        );
     }
 
-    /**
-     * @param $selectedIds
-     * @return array|mixed
-     */
-    public function removePermanently($selectedIds)
+    public function removePermanently(array $selectedIds): array
     {
         $res = [];
         $params = $this->prepareParams($selectedIds);
@@ -296,14 +297,12 @@ abstract class ArchiveAbstract extends AbstractDb
                     if ($quote->getId()) {
                         $this->quoteRepository->delete($quote);
                     }
-                } catch (NoSuchEntityException $e) {
-                    //skip if quote wil be deleted (for some Modules, which deleted expired quote by cron)
-                    null;
+                } catch (NoSuchEntityException $e) { // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock.DetectedCatch
+                    //skip if quote will be deleted (for some modules, which deleted expired quote by cron)
                 }
 
-                $res['order'][] = $item->getId();
-                $this->deleteAllForOrder($item, $res);
-                $item->delete();
+                $res['order'][] = $item->getIncrementId();
+                $this->orderRepository->delete($item);
             }
 
             $this->removeFromGrid(ArchiveFactory::ORDER_ARCHIVE_NAMESPACE, $params);
@@ -312,30 +311,6 @@ abstract class ArchiveAbstract extends AbstractDb
         }
 
         return [];
-    }
-
-    /**
-     * @param $order
-     * @param $result
-     * @return mixed
-     */
-    protected function deleteAllForOrder($order, &$result)
-    {
-        if ($order->getId()) {
-            foreach ($this->availableRemoveCollections as $type) {
-                $collectionName = 'get' . ucfirst($type) . 'Collection';
-                $collection = $order->$collectionName();
-
-                if ($collection->getSize()) {
-                    foreach ($collection as $item) {
-                        $result[$type][] = $item->getId();
-                        $item->delete();
-                    }
-                }
-            }
-        }
-
-        return $result;
     }
 
     /**

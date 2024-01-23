@@ -1,19 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 /**
-* @author Amasty Team
-* @copyright Copyright (c) 2022 Amasty (https://www.amasty.com)
-* @package Order Archive for Magento 2
-*/-->
+ * @author Amasty Team
+ * @copyright Copyright (c) Amasty (https://www.amasty.com)
+ * @package Order Archive for Magento 2
+ */-->
 <listing xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
     <listingToolbar name="listing_top">
-        <massaction name="listing_massaction">
+        <massaction name="listing_massaction" class="Amasty\Orderarchive\Ui\Component\Sales\Order\MassAction">
             <action name="add_to_archive">
                 <argument name="data" xsi:type="array">
                     <item name="config" xsi:type="array">
                         <item name="type" xsi:type="string">add_to_archive</item>
                         <item name="label" xsi:type="string" translate="true">Add To Archive</item>
                         <item name="url" xsi:type="url" path="amastyorderarchive/archive/massAddToArchive"/>
+                    </item>
+                </argument>
+            </action>
+            <action name="delete_permanently">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="type" xsi:type="string">delete_permanently</item>
+                        <item name="label" xsi:type="string" translate="true">Delete Permanently</item>
+                        <item name="url" xsi:type="url" path="amastyorderarchive/archive/massRemovePermanently"/>
+                        <item name="confirm" xsi:type="array">
+                            <item name="title" xsi:type="string" translate="true">Delete items</item>
+                            <item name="message" xsi:type="string" translate="true">Are you sure you want to delete permanently this orders? The action is irreversible.</item>
+                        </item>
                     </item>
                 </argument>
             </action>

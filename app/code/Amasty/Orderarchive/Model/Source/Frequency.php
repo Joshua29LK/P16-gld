@@ -1,9 +1,13 @@
 <?php
+
+declare(strict_types=1);
+
 /**
-* @author Amasty Team
-* @copyright Copyright (c) 2022 Amasty (https://www.amasty.com)
-* @package Order Archive for Magento 2
-*/
+ * @author Amasty Team
+ * @copyright Copyright (c) Amasty (https://www.amasty.com)
+ * @package Order Archive for Magento 2
+ */
+
 namespace Amasty\Orderarchive\Model\Source;
 
 class Frequency implements \Magento\Framework\Option\ArrayInterface
@@ -13,12 +17,13 @@ class Frequency implements \Magento\Framework\Option\ArrayInterface
      */
     protected static $_options;
 
-    public const CRON_HOURLY          = 'H';
+    public const CRON_HOURLY = 'H';
     public const CRON_TO_TIME_PER_DAY = '2TD';
-    public const CRON_DAILY           = 'D';
-    public const CRON_WEEKLY          = 'W';
-    public const CRON_MONTHLY         = 'M';
-    public const CRON_CUSTOM          = 'CUS';
+    public const CRON_DAILY = 'D';
+    public const CRON_WEEKLY = 'W';
+    public const CRON_MONTHLY = 'M';
+    public const CRON_CUSTOM = 'CUS';
+    public const CRON_NEVER = 'NEVER';
 
     /**
      * @var \Amasty\Orderarchive\Helper\Data
@@ -62,6 +67,10 @@ class Frequency implements \Magento\Framework\Option\ArrayInterface
                     'label' => __('Monthly'),
                     'value' => self::CRON_MONTHLY,
                 ],
+                [
+                    'label' => __('Never'),
+                    'value' => self::CRON_NEVER,
+                ]
             ];
         }
 
