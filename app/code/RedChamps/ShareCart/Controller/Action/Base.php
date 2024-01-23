@@ -93,7 +93,13 @@ abstract class Base extends Action
 
     protected function stripTags($input, $allowedTags = null)
     {
-        return strip_tags($input, $allowedTags);
+        if ($input !== null) {
+            return strip_tags($input, $allowedTags);
+        } else {
+            // Handle the case where $input is null, depending on your requirements.
+            // For example, you might want to return an empty string or throw an exception.
+            return '';
+        }
     }
 
     protected function prepareSenderData($request)
