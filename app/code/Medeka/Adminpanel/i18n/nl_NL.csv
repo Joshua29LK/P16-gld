@@ -1,2 +1,5 @@
 Print Orders,Print inkooporders
 Print Packingslip,Print pakbon
+Change Status And Notify,Status wijzigen
+Change status to:,Aanpassen naar:
+Change status for selected orders and notify customers?,De orderstatus van de geselecteerde orders wordt aangepast
