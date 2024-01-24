@@ -1,11 +1,12 @@
 <?php
-/**
-* @author Amasty Team
-* @copyright Copyright (c) 2022 Amasty (https://www.amasty.com)
-* @package Custom Order Number for Magento 2
-*/
 
 declare(strict_types=1);
+
+/**
+ * @author Amasty Team
+ * @copyright Copyright (c) Amasty (https://www.amasty.com)
+ * @package Custom Order Number for Magento 2
+ */
 
 namespace Amasty\Number\Model\Number\Format;
 
@@ -68,10 +69,10 @@ class DateFormatter extends AbstractFormatter
     }
 
     /**
-     * @param string $format
+     * @param mixed $format
      * @return string
      */
-    public function formatDate(string $format): string
+    public function formatDate($format): string
     {
         if (!$this->timestamp) {
             $timestampMixin = $this->configProvider->getTimezoneOffset() * self::SECONDS_IN_HOUR;
@@ -86,7 +87,7 @@ class DateFormatter extends AbstractFormatter
      * @param null $input
      * @return string
      */
-    public function date($format = null, $input = null)
+    public function date($format = null, $input = null): string
     {
         return $this->dateTime->date($format, $input);
     }

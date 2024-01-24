@@ -1,11 +1,12 @@
 <?php
-/**
-* @author Amasty Team
-* @copyright Copyright (c) 2022 Amasty (https://www.amasty.com)
-* @package Custom Order Number for Magento 2
-*/
 
 declare(strict_types=1);
+
+/**
+ * @author Amasty Team
+ * @copyright Copyright (c) Amasty (https://www.amasty.com)
+ * @package Custom Order Number for Magento 2
+ */
 
 namespace Amasty\Number\Model;
 
@@ -186,11 +187,11 @@ class ConfigProvider extends ConfigProviderAbstract
 
     /**
      * @param string $type
-     * @return string
+     * @return mixed
      */
-    public function getCounterResetOnDateChange($type): string
+    public function getCounterResetOnDateChange(string $type)
     {
-        return (string)$this->getScopedValue($type . self::PART_COUNTER_RESET_DATE);
+        return $this->getScopedValue($type . self::PART_COUNTER_RESET_DATE);
     }
 
     /**

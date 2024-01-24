@@ -1,11 +1,12 @@
 <?php
-/**
-* @author Amasty Team
-* @copyright Copyright (c) 2022 Amasty (https://www.amasty.com)
-* @package Custom Order Number for Magento 2
-*/
 
 declare(strict_types=1);
+
+/**
+ * @author Amasty Team
+ * @copyright Copyright (c) Amasty (https://www.amasty.com)
+ * @package Custom Order Number for Magento 2
+ */
 
 namespace Amasty\Number\Model\Number\Format;
 
@@ -128,7 +129,9 @@ class CounterFormatter extends AbstractFormatter
             list($counterResetDateFormat, $counterResetDate) = $this->counterResetDateProvider
                 ->getCounterResetDateInfo($counter);
 
-            if ($counterResetDate !== $this->dateFormatter->date($counterResetDateFormat, $counter->getUpdatedAt())) {
+            if ($counterResetDateFormat &&
+                $counterResetDate !== $this->dateFormatter->date($counterResetDateFormat, $counter->getUpdatedAt())
+            ) {
                 $this->isCounterAlreadyReset = true;
 
                 return true;
@@ -136,6 +139,11 @@ class CounterFormatter extends AbstractFormatter
         }
 
         return false;
+    }
+
+    public function getIsCounterAlreadyReset(): bool
+    {
+        return (bool)$this->isCounterAlreadyReset;
     }
 
     /**

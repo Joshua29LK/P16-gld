@@ -9,6 +9,7 @@
 <ul
     class="action-submenu"
     data-bind="foreach: {data: action.actions, as: 'action'},
+    style: { top: action.top },
     css: { _active: action.visible }">
     <li data-bind="css: { '_visible': $data.visible}">
         <div class="amasty-oaction-form">
@@ -35,7 +36,7 @@
                             <label if="$data.subLabel" data-bind="text: $data.subLabel"></label>
                             <input class="admin__control-text"
                                    data-amoaction-js="action"
-                                   data-bind="value: $parent.comment_text"/>
+                                   data-bind="value: $parent.comment_text">
                             <button class="amoaction-button"
                                     data-bind="
                                         i18n: 'Apply',

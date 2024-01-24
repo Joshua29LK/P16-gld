@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 /**
  * @author Amasty Team
- * @copyright Copyright (c) 2022 Amasty (https://www.amasty.com)
+ * @copyright Copyright (c) Amasty (https://www.amasty.com)
  * @package Mass Order Actions for Magento 2
  */
 
@@ -97,7 +97,7 @@ class Invoice extends Command
     {
         $numAffectedOrders = 0;
         $comment = __('Invoice created');
-        $capture = (int) $this->oActionHelper->getModuleConfig('invoice/capture');
+        $capture = (string)$this->oActionHelper->getModuleConfig('invoice/capture');
         $orderStatus = $this->oActionHelper->getModuleConfig('invoice/status');
         $print = $this->oActionHelper->getModuleConfig('invoice/print');
 
@@ -174,7 +174,7 @@ class Invoice extends Command
         }
     }
 
-    private function createInvoice(Order $order, int $capture, int $notifyCustomer, Phrase $comment): OrderInvoice
+    private function createInvoice(Order $order, string $capture, int $notifyCustomer, Phrase $comment): OrderInvoice
     {
         $invoice = $this->invoiceService->prepareInvoice($order);
 
