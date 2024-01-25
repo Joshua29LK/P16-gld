@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "1ffbbaa2a61476c3b6f8ed073b0b3341",
+    "content-hash": "a585a7e99f161e6ebf4199fa21fa95de",
     "packages": [
         {
             "name": "2tvenom/cborencode",
@@ -23526,6 +23526,72 @@
                 }
             ],
             "time": "2023-07-05T14:23:37+00:00"
+        },
+        {
+            "name": "weltpixel/m2-weltpixel-backend",
+            "version": "1.11.19",
+            "dist": {
+                "type": "zip",
+                "url": "https://repo.magento.com/archives/weltpixel/m2-weltpixel-backend/weltpixel-m2-weltpixel-backend-1.11.19.0.zip",
+                "shasum": "40e831ec1f5709b86ceab5768019e3855dbf25b7"
+            },
+            "type": "magento2-module",
+            "autoload": {
+                "files": [
+                    "registration.php"
+                ],
+                "psr-4": {
+                    "WeltPixel\\Backend\\": ""
+                }
+            },
+            "license": [
+                "OSL-3.0",
+                "AFL-3.0"
+            ],
+            "description": "WeltPixel Backend Module"
+        },
+        {
+            "name": "weltpixel/m2-weltpixel-google-cards",
+            "version": "1.11.19",
+            "dist": {
+                "type": "zip",
+                "url": "https://repo.magento.com/archives/weltpixel/m2-weltpixel-google-cards/weltpixel-m2-weltpixel-google-cards-1.11.19.0.zip",
+                "shasum": "32cc9b51b8964179bd77b656160d43633272ae91"
+            },
+            "require": {
+                "magento/framework": "103.0.*",
+                "weltpixel/m2-weltpixel-backend": "1.11.19",
+                "weltpixel/m2-weltpixel-google-cards-free": "1.11.19"
+            },
+            "type": "metapackage",
+            "license": [
+                "OSL-3.0",
+                "AFL-3.0"
+            ],
+            "description": "WeltPixel Rich Snippets schema.org Module"
+        },
+        {
+            "name": "weltpixel/m2-weltpixel-google-cards-free",
+            "version": "1.11.19",
+            "dist": {
+                "type": "zip",
+                "url": "https://repo.magento.com/archives/weltpixel/m2-weltpixel-google-cards-free/weltpixel-m2-weltpixel-google-cards-free-1.11.19.0.zip",
+                "shasum": "279b4e8c87a4cd72b0ad741afdd5744a5b10362e"
+            },
+            "type": "magento2-module",
+            "autoload": {
+                "files": [
+                    "registration.php"
+                ],
+                "psr-4": {
+                    "WeltPixel\\GoogleCards\\": ""
+                }
+            },
+            "license": [
+                "OSL-3.0",
+                "AFL-3.0"
+            ],
+            "description": "WeltPixel GoogleCards Module"
         },
         {
             "name": "wikimedia/less.php",
