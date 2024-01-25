@@ -80,7 +80,7 @@ class ShippingRestrictionRuleTest extends \PHPUnit\Framework\TestCase
         $salesRuleValidator->expects($this->any())->method('validate')->willReturn(true);
         $rule1->expects($this->any())->method('validate')->willReturn(true);
         $rule2->expects($this->any())->method('validate')->willReturn(false);
-        $messageBuilder->expects($this->exactly(2))->method('parseMessage');
+        $messageBuilder->expects($this->atLeastOnce())->method('parseMessage');
 
         $this->setProperty($this->model, 'allRules', [$rule1, $rule2], ShippingRestrictionRule::class);
         $this->setProperty($this->model, 'productRegistry', $productRegistry, ShippingRestrictionRule::class);

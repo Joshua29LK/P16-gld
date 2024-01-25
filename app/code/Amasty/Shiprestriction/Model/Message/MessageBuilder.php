@@ -7,23 +7,47 @@
 
 namespace Amasty\Shiprestriction\Model\Message;
 
-/**
- * Class MessageBuilder
- */
+use Amasty\Shiprestriction\Model\Message\MessageBuilderProcessors\MessageBuilderProcessorInterface;
+
 class MessageBuilder
 {
     /**
-     * @param string $message
-     * @param array $products
-     * @return string
+     * @var MessageBuilderProcessorInterface[]
      */
-    public function parseMessage($message, $products)
-    {
-        $allProducts = implode(', ', $products);
-        $lastProduct = end($products);
-        $newMessage = str_replace('{all-products}', $allProducts, $message);
-        $newMessage = str_replace('{last-product}', $lastProduct, $newMessage);
+    private $messageBuilderProcessors;
 
-        return $newMessage;
+    public function __construct(
+        $messageBuilderProcessors = []
+    ) {
+        $this->initializeProcessors($messageBuilderProcessors);
+    }
+
+    /**
+     * @param string $message
+     * @param string[] $products @deprecated use \Amasty\Shiprestriction\Model\ProductRegistry::getProducts() instead
+     * @return string
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public function parseMessage(string $message, array $products = []): string
+    {
+        foreach ($this->messageBuilderProcessors as $processor) {
+            $message = $processor->process($message);
+        }
+
+        return $message;
+    }
+
+    private function initializeProcessors(array $processors): void
+    {
+        foreach ($processors as $processor) {
+            if (!$processor instanceof MessageBuilderProcessorInterface) {
+                throw new \InvalidArgumentException(
+                    'Type "' . get_class($processor) . '" is not instance of '
+                    . MessageBuilderProcessorInterface::class
+                );
+            }
+        }
+
+        $this->messageBuilderProcessors = $processors;
     }
 }

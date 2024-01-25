@@ -130,14 +130,13 @@ class ShippingRestrictionRule
         /** @var \Amasty\Shiprestriction\Model\Rule $rule */
         foreach ($this->allRules as $rule) {
             $this->productRegistry->clearProducts();
+            $this->productRegistry->clearProductValidationData();
 
             if ($rule->validate($address, $allItems)
                 && $this->salesRuleValidator->validate($rule, $allItems)
             ) {
                 foreach ($allItems as $item) {
-                    if ($item->getProductType() === 'simple' && $rule->validate($address, [$item])) {
-                        $this->productRegistry->addProduct($item->getName());
-                    }
+                    $this->productRegistry->addProduct($item->getName());
                 }
                 // remember used products
                 $newMessage = $this->messageBuilder->parseMessage(

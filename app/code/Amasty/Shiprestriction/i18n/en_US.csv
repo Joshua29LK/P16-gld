@@ -30,7 +30,6 @@ Inactive,Inactive
 "Show Restriction Message","Show Restriction Message"
 "Enable this setting to specify a restriction message that will be displayed instead of a blocked shipping method.","Enable this setting to specify a restriction message that will be displayed instead of a blocked shipping method."
 "Custom Restriction Message","Custom Restriction Message"
-"Specify the restriction message. Limited to 500 symbols. You can add the {delivery_name} and {delivery_method} variables to the restriction messages, so then on the frontend they will be displayed to customers with the corresponding Carrier names or Delivery methods.","Specify the restriction message. Limited to 500 symbols. You can add the {delivery_name} and {delivery_method} variables to the restriction messages, so then on the frontend they will be displayed to customers with the corresponding Carrier names or Delivery methods."
 "Show Restriction Message Once","Show Restriction Message Once"
 "Select ‘Yes’ if you’d like to restrict the whole carrier and show one restriction message for it.","Select ‘Yes’ if you’d like to restrict the whole carrier and show one restriction message for it."
 "Select Sources","Select Sources"
