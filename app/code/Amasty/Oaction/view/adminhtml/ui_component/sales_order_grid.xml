@@ -2,7 +2,7 @@
 <!--
 /**
  * @author Amasty Team
- * @copyright Copyright (c) 2022 Amasty (https://www.amasty.com)
+ * @copyright Copyright (c) Amasty (https://www.amasty.com)
  * @package Mass Order Actions for Magento 2
  */-->
 <listing xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
@@ -137,7 +137,7 @@
                     <item name="config" xsi:type="array">
                         <item name="type" xsi:type="string">amasty_oaction_statusnotify</item>
                         <item name="amasty_actions" xsi:type="string">1</item>
-                        <item name="label" xsi:type="string" translate="true">Status wijzigen</item>
+                        <item name="label" xsi:type="string" translate="true">Change Status And Notify</item>
                     </item>
                 </argument>
                 <argument name="actions" xsi:type="array">
@@ -146,15 +146,15 @@
                         <item name="actionName" xsi:type="string">status_comment</item>
                         <item name="skipOnChange" xsi:type="boolean">true</item>
                         <item name="subLabel" xsi:type="string" translate="true">Comment</item>
-                        <item name="fieldLabel" xsi:type="string" translate="true">Aanpassen naar:</item>
+                        <item name="fieldLabel" xsi:type="string" translate="true">Change status to:</item>
                         <item name="label" xsi:type="string" translate="true">Change status</item>
                         <item name="type" xsi:type="string">amasty_oaction_statusnotify</item>
                         <item name="url" xsi:type="url" path="amasty_oaction/massaction/index/type/status">
                             <param name="notify">1</param>
                         </item>
                         <item name="confirm" xsi:type="array">
-                            <item name="title" xsi:type="string" translate="true">Status wijzigen</item>
-                            <item name="message" xsi:type="string" translate="true">De orderstatus van de geselecteerde orders wordt aangepast</item>
+                            <item name="title" xsi:type="string" translate="true">Change Status and Notify</item>
+                            <item name="message" xsi:type="string" translate="true">Change status for selected orders and notify customers?</item>
                         </item>
                     </item>
                 </argument>

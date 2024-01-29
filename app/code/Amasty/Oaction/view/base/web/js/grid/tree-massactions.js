@@ -8,7 +8,7 @@ define([
     return Massactions.extend({
         defaults: {
             template: 'Amasty_Oaction/grid/tree-massactions',
-            submenuTemplate: 'ui/grid/submenu',
+            submenuTemplate: 'Amasty_Oaction/grid/native-submenu',
             amastysubmenuTemplate: 'Amasty_Oaction/grid/submenu',
             selectProvider: '',
             modules: {
@@ -16,6 +16,9 @@ define([
             },
             listens: {
                 opened: 'hideSubmenus'
+            },
+            selectors: {
+                menuClass: 'action-menu'
             }
         },
 
@@ -41,6 +44,7 @@ define([
             _.each(actions, function (action) {
                 if (action.actions) {
                     action.visible = ko.observable(false);
+                    action.top = ko.observable(0);
                     action.parent = actions;
                     this.recursiveObserveActions(action.actions);
                 }
@@ -53,16 +57,24 @@ define([
          * Applies specified action.
          *
          * @param {String} actionIndex - Actions' identifier.
+         * @param {Object} action
+         * @param {Event} event
          * @returns {Massactions} Chainable.
          */
-        applyAction: function (actionIndex) {
-            var action = this.getAction(actionIndex),
-                visibility;
+        applyAction: function (actionIndex, action, event) {
+            var visibility,
+                submenuTop;
+
+            if (!action) {
+                action = this.getAction(actionIndex);
+            }
 
             if (action.visible) {
                 visibility = action.visible();
-
                 this.hideSubmenus(action.parent);
+
+                submenuTop = this.calculateSubmenuTop(event.currentTarget.parentElement);
+                action.top(submenuTop);
                 action.visible(!visibility);
 
                 return this;
@@ -123,6 +135,20 @@ define([
 
         applyMassaction: function (action) {
             return this._super(this, action);
+        },
+
+        /**
+         * @param {Element} activeMenuItem
+         * @returns {number}
+         */
+        calculateSubmenuTop: function (activeMenuItem) {
+            var top = 0,
+                menuElement = activeMenuItem.parentElement;
+            if (menuElement.classList.contains(this.selectors.menuClass)) {
+                top = activeMenuItem.offsetTop - menuElement.scrollTop;
+            }
+
+            return top;
         }
     });
 });

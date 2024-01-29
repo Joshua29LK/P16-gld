@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 /**
  * @author Amasty Team
- * @copyright Copyright (c) 2023 Amasty (https://www.amasty.com)
+ * @copyright Copyright (c) Amasty (https://www.amasty.com)
  * @package Order Status for Magento 2
  */
 
@@ -31,7 +31,7 @@ class SetIsCustomerNotified
         History $subject,
         History $result
     ): History {
-        $amastyStatus = $this->amOrderStatusRegistry->get((string)$subject->getStatus());
+        $amastyStatus = $this->amOrderStatusRegistry->get($subject->getStatus());
 
         if ($amastyStatus && (int)$amastyStatus->getNotifyByEmail() !== Email::NOTIFY_OPTIONAL) {
             $result->setData('is_customer_notified', (bool)$amastyStatus->getNotifyByEmail());

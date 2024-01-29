@@ -16,6 +16,17 @@
         </arguments>
     </type>
 
+    <type name="Amasty\Shiprestriction\Model\Message\MessageBuilder">
+        <arguments>
+            <argument name="messageBuilderProcessors" xsi:type="array">
+                <item name="all_products"
+                      xsi:type="object">Amasty\Shiprestriction\Model\Message\MessageBuilderProcessors\AllProductsProcessor</item>
+                <item name="last_product"
+                      xsi:type="object">Amasty\Shiprestriction\Model\Message\MessageBuilderProcessors\LastProductProcessor</item>
+            </argument>
+        </arguments>
+    </type>
+
     <type name="Magento\Shipping\Model\Shipping">
         <plugin name="Amasty_Shiprestriction::RestrictRates" type="Amasty\Shiprestriction\Plugin\Model\ShippingPlugin"/>
     </type>
@@ -37,5 +48,9 @@
                 </item>
             </argument>
         </arguments>
+    </type>
+    <type name="Magento\SalesRule\Model\Rule\Condition\Product">
+        <plugin name="Amasty_Shiprestriction::SaveValidationData"
+                type="Amasty\Shiprestriction\Plugin\SalesRule\Model\Rule\Condition\Product\SaveValidationData"/>
     </type>
 </config>

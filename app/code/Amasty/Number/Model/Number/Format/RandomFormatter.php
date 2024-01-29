@@ -1,11 +1,12 @@
 <?php
-/**
-* @author Amasty Team
-* @copyright Copyright (c) 2022 Amasty (https://www.amasty.com)
-* @package Custom Order Number for Magento 2
-*/
 
 declare(strict_types=1);
+
+/**
+ * @author Amasty Team
+ * @copyright Copyright (c) Amasty (https://www.amasty.com)
+ * @package Custom Order Number for Magento 2
+ */
 
 namespace Amasty\Number\Model\Number\Format;
 
@@ -27,7 +28,7 @@ class RandomFormatter extends AbstractFormatter
         return $this->replacePlaceholder(
             $template,
             self::PLACEHOLDER,
-            (string)Random::getRandomNumber(0, 9999)
+            sprintf('%04d', Random::getRandomNumber(0, 9999))
         );
     }
 }

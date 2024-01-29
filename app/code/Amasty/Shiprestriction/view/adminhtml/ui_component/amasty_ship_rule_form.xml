@@ -213,13 +213,17 @@
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="default" xsi:type="string">Sorry, we do not ship to this country.</item>
+                    <item name="additionalInfo" xsi:type="string"><![CDATA[<span class="admin__field-note">
+                    Specify the restriction message. Limited to 500 symbols.
+                    You can also add variables to the message, please read more about them
+                    <a href="https://amasty.com/docs/doku.php?id=magento_2:shipping-restrictions#shipping_methods">
+                    here</a>.</span>]]></item>
                 </item>
             </argument>
 
             <settings>
                 <label translate="true">Custom Restriction Message</label>
                 <dataScope>custom_restriction_message</dataScope>
-                <notice translate="true">Specify the restriction message. Limited to 500 symbols. You can add the {delivery_name} and {delivery_method} variables to the restriction messages, so then on the frontend they will be displayed to customers with the corresponding Carrier names or Delivery methods.</notice>
                 <required>true</required>
                 <validation>
                     <rule xsi:type="boolean" name="required-entry">true</rule>

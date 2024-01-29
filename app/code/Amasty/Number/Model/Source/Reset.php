@@ -1,9 +1,9 @@
 <?php
 /**
-* @author Amasty Team
-* @copyright Copyright (c) 2022 Amasty (https://www.amasty.com)
-* @package Custom Order Number for Magento 2
-*/
+ * @author Amasty Team
+ * @copyright Copyright (c) Amasty (https://www.amasty.com)
+ * @package Custom Order Number for Magento 2
+ */
 
 namespace Amasty\Number\Model\Source;
 
@@ -51,7 +51,7 @@ class Reset implements OptionSourceInterface
 
         ];
         $options[] = [
-            'value' => 'Y',
+            'value' => 'Y-01-01',
             'label' => __('Each Year'),
 
         ];

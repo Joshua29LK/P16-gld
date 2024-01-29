@@ -11,7 +11,9 @@ use Amasty\ShippingArea\Api\AreaRepositoryInterface;
 use Amasty\ShippingArea\Api\Data\AreaInterface;
 use Amasty\ShippingArea\Api\Data\AreaInterfaceFactory;
 use Amasty\ShippingArea\Controller\Adminhtml\Areas;
+use Amasty\ShippingArea\Model\Area\PostcodeDataProcessor;
 use Magento\Backend\App\Action;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\Request\DataPersistorInterface;
 use Magento\Framework\Exception\LocalizedException;
 
@@ -32,17 +34,25 @@ class Save extends Areas
      */
     private $areaFactory;
 
+    /**
+     * @var PostcodeDataProcessor
+     */
+    private $dataProcessor;
+
     public function __construct(
         Action\Context $context,
         DataPersistorInterface $dataPersistor,
         AreaRepositoryInterface $areaRepository,
-        AreaInterfaceFactory $areaFactory
+        AreaInterfaceFactory $areaFactory,
+        PostcodeDataProcessor $dataProcessor = null
     ) {
         parent::__construct($context);
 
         $this->dataPersistor = $dataPersistor;
         $this->areaRepository = $areaRepository;
         $this->areaFactory = $areaFactory;
+        // OM for backward compatibility
+        $this->dataProcessor = $dataProcessor ?? ObjectManager::getInstance()->get(PostcodeDataProcessor::class);
     }
 
     public function execute()
@@ -53,11 +63,7 @@ class Save extends Areas
 
         try {
             if (!empty($data[AreaInterface::POSTCODE_SET]) && is_array($data[AreaInterface::POSTCODE_SET])) {
-                foreach ($data[AreaInterface::POSTCODE_SET] as $key => $zipRow) {
-                    if (isset($zipRow['delete']) && $zipRow['delete']) {
-                        unset($data[AreaInterface::POSTCODE_SET][$key]);
-                    }
-                }
+                $data[AreaInterface::POSTCODE_SET] = $this->dataProcessor->process($data[AreaInterface::POSTCODE_SET]);
             }
             $areaModel->setData($data);
             $this->areaRepository->save($areaModel);

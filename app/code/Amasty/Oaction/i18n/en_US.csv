@@ -35,7 +35,9 @@ Installed,Installed
 "We can't save the shipment right now.","We can't save the shipment right now."
 "Can not ship order #%1: %2","Can not ship order #%1: %2"
 "Total of %1 order(s) have been successfully shipped.","Total of %1 order(s) have been successfully shipped."
+"Please specify the status.","Please specify the status."
 "Selected status does not correspond to the state of order.","Selected status does not correspond to the state of order."
+"A shipment can't be created when order items have different sources.","A shipment can't be created when order items have different sources."
 Products,Products
 Qty,Qty
 SKU,SKU

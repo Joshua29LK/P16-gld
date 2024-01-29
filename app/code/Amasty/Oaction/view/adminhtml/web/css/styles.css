@@ -40,7 +40,6 @@ div.aoaction-cell  > .admin__field-label span::after {
 }
 
 .sales-order-index .action-menu-items > .action-menu .amoaction-menu-item .action-submenu {
-    top: 100%;
     left: 100%;
     right: auto;
 }

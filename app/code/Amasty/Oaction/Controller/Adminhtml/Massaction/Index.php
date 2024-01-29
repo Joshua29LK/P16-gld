@@ -1,7 +1,7 @@
 <?php
 /**
  * @author Amasty Team
- * @copyright Copyright (c) 2022 Amasty (https://www.amasty.com)
+ * @copyright Copyright (c) Amasty (https://www.amasty.com)
  * @package Mass Order Actions for Magento 2
  */
 
@@ -36,10 +36,15 @@ class Index extends \Amasty\Oaction\Controller\Adminhtml\Massaction
 
         if ($oaction == null) {
             $oaction = [];
+        } elseif (is_array($oaction)) {
+            $collection->addFieldToFilter(
+                $collection->getIdFieldName(),
+                ['in' => array_keys($oaction)]
+            );
         }
 
         try {
-            $className = 'Amasty\Oaction\Model\Command\\'  . ucfirst($action);
+            $className = 'Amasty\Oaction\Model\Command\\' . ucfirst($action);
             $command = $this->_objectManager->create($className);
             $success = $command->execute($collection, $param, $oaction);
 
@@ -52,7 +57,7 @@ class Index extends \Amasty\Oaction\Controller\Adminhtml\Massaction
                 }
             }
 
-            // show non critical erroes to the user
+            // show non-critical errors to the user
             foreach ($command->getErrors() as $errorMessage) {
                 $this->messageManager->addErrorMessage($errorMessage);
             }

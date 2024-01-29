@@ -1,17 +1,18 @@
 <?php
 /**
  * @author Amasty Team
- * @copyright Copyright (c) 2022 Amasty (https://www.amasty.com)
+ * @copyright Copyright (c) Amasty (https://www.amasty.com)
  * @package Mass Order Actions for Magento 2
  */
 
 namespace Amasty\Oaction\Model\Command;
 
+use Amasty\Oaction\Model\Inventory\GetSourceSelectionResultFromOrder;
+use Magento\Framework\DB\TransactionFactory;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
 use Magento\Framework\Registry;
 use Magento\Sales\Model\Order\Email\Sender\ShipmentSender;
-use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\DB\TransactionFactory;
 
 class Ship extends \Amasty\Oaction\Model\Command
 {
@@ -50,6 +51,16 @@ class Ship extends \Amasty\Oaction\Model\Command
      */
     private $carrier;
 
+    /**
+     * @var GetSourceSelectionResultFromOrder
+     */
+    private $getSourceSelectionResultFromOrder;
+
+    /**
+     * @var \Magento\Sales\Api\OrderManagementInterface
+     */
+    private $orderApi;
+
     public function __construct(
         \Amasty\Oaction\Helper\Data $helper,
         TransactionFactory $transactionFactory,
@@ -57,7 +68,8 @@ class Ship extends \Amasty\Oaction\Model\Command
         \Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader $shipmentLoader,
         \Amasty\Oaction\Model\Source\Carriers $carrier,
         ShipmentSender $shipmentSender,
-        Registry $registry
+        Registry $registry,
+        GetSourceSelectionResultFromOrder $getSourceSelectionResultFromOrder
     ) {
         parent::__construct();
         $this->helper = $helper;
@@ -67,6 +79,7 @@ class Ship extends \Amasty\Oaction\Model\Command
         $this->shipmentSender = $shipmentSender;
         $this->transactionFactory = $transactionFactory;
         $this->carrier = $carrier;
+        $this->getSourceSelectionResultFromOrder = $getSourceSelectionResultFromOrder;
     }
 
     /**
@@ -99,12 +112,17 @@ class Ship extends \Amasty\Oaction\Model\Command
                     throw new LocalizedException(__('We can\'t save the shipment right now.'));
                 }
 
+                $sourceCode = $this->getSourceSelectionResultFromOrder->execute($order);
+                if ($sourceCode) {
+                    $shipment->getExtensionAttributes()->setSourceCode($sourceCode);
+                }
+
                 $shipment->addComment(
                     $comment,
                     $notifyCustomer
                 );
 
-                $shipment->setCustomerNote($comment);
+                $shipment->setCustomerNote($comment->getText());
                 $shipment->setCustomerNoteNotify($notifyCustomer);
 
                 $shipment->register();
