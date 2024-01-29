@@ -18,9 +18,19 @@
     $_postCollection = $block->getPostCollection();
 ?>
 <?php if ($_postCollection->count()) { ?>
+<style>
+    .post-content .post-description .post-ftimg-hld {margin: 0 15px 0 0px;width: 45%;}
+    @media (min-width: 768px) {
+        .blog-widget-recent .post-list {display:flex}
+        .blog-widget-recent .post-holder {width:33%}
+    }
+    @media (max-width: 767px) {
+        .blog-widget-recent .post-holder {width:100%}
+    }
+</style>
 <div class="post-list-wrapper blog-widget-recent">
     <h3 class="title"><?= $block->escapeHtml($block->getTitle()) ?></h3>
-    <ul class="post-list clearfix">
+    <ul class="post-list clearfix" style="flex;padding:0;margin:0;">
         <?php foreach ($_postCollection as $_post) { ?>
             <?php
                 $_postUrl = $block->escapeUrl($_post->getPostUrl());
