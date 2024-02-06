@@ -36,10 +36,14 @@ class AmOrderAttributes
     }
 
 
-    public function getOrderAttributesData($order)
+    public function getOrderAttributesData($order, $salesObject = null)
 {
     $orderAttributesData = [];
-    $filterAttributeCodes = ['klant_referentie', 'bestelopmerking', 'afhalenbezorgen', 'leverancier_admin', 'leverancier_date_admin']; // Define the attribute codes here
+    if ($salesObject->getEventPrefix() == 'sales_order_invoice') {
+        $filterAttributeCodes = ['klant_referentie', 'bestelopmerking'];// Define the attribute codes for invoice here
+    } else {
+        $filterAttributeCodes = ['klant_referentie', 'bestelopmerking', 'afhalenbezorgen', 'leverancier_admin', 'leverancier_date_admin']; // Define the attribute codes here
+    }
 
     $entity = $this->entityResolver->getEntityByOrder($order);
     if ($entity->isObjectNew()) {
