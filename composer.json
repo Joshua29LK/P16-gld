@@ -29,7 +29,8 @@
         "geissweb/module-euvat": "1.20.10.1",
         "magevision/module-update-order-email-address": "2.4.2",
         "multisafepay/magento2": "3.3.1",
-        "weltpixel/m2-weltpixel-google-cards": "1.11.19"
+        "weltpixel/m2-weltpixel-google-cards": "1.11.19",
+        "snmportal/module-syntaxhighlighter": "2.4.6"
     },
     "require-dev": {
 		"allure-framework/allure-phpunit": "~1.5.0",
@@ -79,6 +80,10 @@
     },
     "minimum-stability": "stable",
     "repositories": {
+        "snmportal": {
+            "type": "composer",
+            "url": "https://snm-portal.com/repro"
+        },
         "geissweb": {
             "type": "composer",
             "url": "https://packages.geissweb.de"

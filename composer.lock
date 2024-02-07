@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "1f19f7b8381ad523a59fd0648726feac",
+    "content-hash": "f8df5efd1bf1dbf8b74b1386e9405a49",
     "packages": [
         {
             "name": "2tvenom/cborencode",
@@ -20534,6 +20534,28 @@
             },
             "abandoned": true,
             "time": "2020-02-19T12:21:53+00:00"
+        },
+        {
+            "name": "snmportal/module-syntaxhighlighter",
+            "version": "2.4.6",
+            "dist": {
+                "type": "zip",
+                "url": "https://snm-portal.com/repro/packages/snmportal_module-syntaxhighlighter-2.4.6.zip"
+            },
+            "type": "magento2-module",
+            "autoload": {
+                "files": [
+                    "registration.php"
+                ],
+                "psr-4": {
+                    "Snmportal\\SyntaxHighlighter\\": ""
+                }
+            },
+            "license": [
+                "OSL-3.0",
+                "AFL-3.0"
+            ],
+            "description": "Cms syntaxhighlighter"
         },
         {
             "name": "spomky-labs/aes-key-wrap",
