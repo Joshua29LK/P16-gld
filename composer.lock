@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "af368723a32f4f9739b2947898297e19",
+    "content-hash": "1f19f7b8381ad523a59fd0648726feac",
     "packages": [
         {
             "name": "2tvenom/cborencode",
@@ -17585,11 +17585,11 @@
         },
         {
             "name": "mirasvit/module-feed",
-            "version": "1.3.14",
+            "version": "1.3.19",
             "dist": {
                 "type": "tar",
-                "url": "https://packages.mirasvit.com/57890:G402HBKJFL/downloads/mirasvit-module-feed-1.3.14-223bbe.tar",
-                "reference": "261660aea5828bd749c14eddb343941b89b65390"
+                "url": "https://packages.mirasvit.com/57890:G402HBKJFL/downloads/mirasvit-module-feed-1.3.19-140b3b.tar",
+                "reference": "853e0848ddfa8454d6d1d1ccf8b3d1edc4c34275"
             },
             "require": {
                 "magento/framework": "102.0.*|103.0.*",
@@ -17610,7 +17610,7 @@
                 "proprietary"
             ],
             "description": "Advanced Product Feeds",
-            "time": "2023-11-24T16:11:11+00:00"
+            "time": "2024-01-26T13:58:08+00:00"
         },
         {
             "name": "mirasvit/module-report",
