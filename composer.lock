@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f67393b6f76f7fff14aab254546f836f",
+    "content-hash": "a42ed8e082c5e1dc1cba43fd73b036d9",
     "packages": [
         {
             "name": "2tvenom/cborencode",
@@ -17578,11 +17578,11 @@
         },
         {
             "name": "mirasvit/module-cache-warmer",
-            "version": "1.9.0",
+            "version": "1.9.1",
             "dist": {
                 "type": "tar",
-                "url": "https://packages.mirasvit.com/43177:WBJ0IVK65P/downloads/mirasvit-module-cache-warmer-1.9.0-98fa08.tar",
-                "reference": "0e07dc444831827823b4ae9ed616f23da282b185"
+                "url": "https://packages.mirasvit.com/43177:WBJ0IVK65P/downloads/mirasvit-module-cache-warmer-1.9.1-44a8b8.tar",
+                "reference": "f28b0a6ec9f9a0fa623a6e032999ce4936d27d2b"
             },
             "require": {
                 "magento/framework": "102.0.*|103.0.*",
@@ -17605,7 +17605,7 @@
                 "proprietary"
             ],
             "description": "Cache Warmer",
-            "time": "2023-08-31T07:36:50+00:00"
+            "time": "2024-02-05T08:51:05+00:00"
         },
         {
             "name": "mirasvit/module-core",
