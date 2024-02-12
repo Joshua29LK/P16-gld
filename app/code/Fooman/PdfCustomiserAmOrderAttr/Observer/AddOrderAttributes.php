@@ -23,7 +23,7 @@ class AddOrderAttributes implements ObserverInterface
     {
         $order = $observer->getEvent()->getOrder();
 
-        $comments = $this->amOrderAttributes->getOrderAttributesData($order);
+        $comments = $this->amOrderAttributes->getOrderAttributesData($order, $observer->getEvent()->getSalesObject());
         if (empty($comments)) {
             return;
         }
