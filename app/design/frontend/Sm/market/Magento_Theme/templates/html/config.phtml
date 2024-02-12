@@ -8,6 +8,7 @@ $store_id          = $_config->getStoreId();
 $store_code        = $_config->getStoreCode();
 $locale            = $_config->getLocale();
 $config_href       = $url_static . 'frontend/Sm/market/' . $locale . '/css/config_' . $store_code . '.css';
+$google_fonts      = $url_static . 'frontend/Sm/market/' . $locale . '/css/google-fonts.css';
 
 if ($compile_less) {
 	echo $this->getLayout()->createBlock("Magento\Theme\Block\Html\Header")->setTemplate("Magento_Theme::html/compile_less.phtml")->toHtml();
@@ -22,7 +23,7 @@ $element_google_font_name = $_config->getGeneral('element_google_font');
 ?>
 
 <?php if ($main_font == 'google_font') { ?>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=<?php echo $main_google_font; ?>"/>
+    <link rel="stylesheet" href="<?php echo $google_fonts; ?>"/>
 <?php } ?>
 <?php if ($google_font_element != '') { ?>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=<?php echo $element_google_font_name; ?>"/>

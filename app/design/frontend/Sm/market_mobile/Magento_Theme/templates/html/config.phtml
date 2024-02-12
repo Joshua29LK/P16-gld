@@ -6,6 +6,7 @@ $url_static        = $_config->getUrlStatic();
 $store_id          = $_config->getStoreId();
 $locale            = $_config->getLocale();
 $config_href       = $url_static . 'frontend/Sm/market_mobile/' . $locale . '/css/config_' . $store_id . '.css';
+$google_fonts      = $url_static . 'frontend/Sm/market/' . $locale . '/css/google-fonts.css';
 ?>
 
 <?php
@@ -18,7 +19,7 @@ $headerStyle              = $_config->getThemeLayout('header_style');
 ?>
 <link rel="stylesheet" type="text/css" media="all" href="<?php echo $config_href; ?>"/>
 <?php if ($main_font == 'google_font') { ?>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=<?php echo $main_google_font ?>"/>
+    <link rel="stylesheet" href="<?php echo $google_fonts; ?>"/>
 <?php } ?>
 <?php if ($google_font_element != '') { ?>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=<?php echo $element_google_font_name ?>"/>
