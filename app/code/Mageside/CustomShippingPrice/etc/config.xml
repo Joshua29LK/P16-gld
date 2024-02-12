@@ -11,6 +11,11 @@
             <general>
                 <module_name>Custom Shipping Price</module_name>
                 <module_page_link>https://mageside.com/custom-shipping-price-2.html</module_page_link>
+                <extensions_link>https://mageside.com</extensions_link>
+                <marketplace_link>https://marketplace.magento.com/mageside-module-custom-shipping-price.html</marketplace_link>
+                <marketplace_extensions_link>https://marketplace.magento.com/partner/Mageside</marketplace_extensions_link>
+                <!--Please, change it to 1 for the marketplace version-->
+                <is_marketplace>0</is_marketplace>
             </general>
         </mageside_customshippingprice>
         <carriers>
