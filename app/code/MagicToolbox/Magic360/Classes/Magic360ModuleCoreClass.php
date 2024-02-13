@@ -64,7 +64,7 @@ class Magic360ModuleCoreClass
         }
         $headers = [];
         // add module version
-        $headers[] = '<!-- Magic 360 Magento 2 module version v1.7.4 [v1.6.92:v4.6.12] -->';
+        $headers[] = '<!-- Magic 360 Magento 2 module version v1.7.6 [v1.6.96:v4.6.13] -->';
         $headers[] = '<script type="text/javascript">window["mgctlbx$Pltm"] = "Magento 2";</script>';
         // add tool style link
         $headers[] = '<link type="text/css" href="' . $cssPath . '/magic360.css" rel="stylesheet" media="screen" />';
@@ -138,6 +138,7 @@ class Magic360ModuleCoreClass
         $id = '';
         $width = '';
         $height = '';
+        $alt = '';
 
         $html = [];
 
@@ -153,6 +154,12 @@ class Magic360ModuleCoreClass
             $height = '';
         } else {
             $height = " height=\"{$height}\"";
+        }
+
+        if (empty($alt)) {
+            $alt = '';
+        } else {
+            $alt = htmlspecialchars(htmlspecialchars_decode($alt, ENT_QUOTES));
         }
 
         // check ID
@@ -187,7 +194,7 @@ class Magic360ModuleCoreClass
         $rel = ' data-magic360-options="' . $rel . '"';
 
         $html[] = '<a' . $id . ' class="Magic360" href="#"' . $rel . '>';
-        $html[] = '<img class="no-sirv-lazy-load" itemprop="image"' . $src . $width . $height . ' />';
+        $html[] = '<img alt="'.$alt.'" class="no-sirv-lazy-load" itemprop="image"' . $src . $width . $height . ' />';
         $html[] = '</a>';
 
         // check message

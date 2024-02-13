@@ -188,6 +188,8 @@ class Gallery extends \Magento\Catalog\Block\Product\View\Gallery
                         $this->magic360ImageHelper->keepFrame(true);
                     }
                     $image['medium_image_url'] = $this->magic360ImageHelper->getUrl();
+                    $image['medium_image_width'] = $w;
+                    $image['medium_image_height'] = $h;
 
                     $images[$id]->addItem(new \Magento\Framework\DataObject($image));
                 }

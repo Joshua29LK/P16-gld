@@ -58,6 +58,27 @@ class Image implements \Magento\Framework\View\Asset\LocalInterface
     protected $encryptor;
 
     /**
+     * Determine if the data has been initialized or not
+     *
+     * @var bool
+     */
+    protected static $isInitialized = false;
+
+    /**
+     * Store manager
+     *
+     * @var \Magento\Store\Model\StoreManagerInterface
+     */
+    protected static $storeManager = null;
+
+    /**
+     * Media URL format
+     *
+     * @var string
+     */
+    protected static $mediaUrlFormat = 'hash';
+
+    /**
      * Constructor
      *
      * @param \Magento\Catalog\Model\Product\Media\ConfigInterface $mediaConfig
@@ -85,6 +106,27 @@ class Image implements \Magento\Framework\View\Asset\LocalInterface
         $this->filePath = $filePath;
         $this->miscParams = $miscParams;
         $this->encryptor = $encryptor;
+
+        if (static::$isInitialized === false) {
+            $this->initializeData();
+        }
+    }
+
+    /**
+     * Initialize the data
+     *
+     * @return void
+     */
+    protected function initializeData()
+    {
+        static::$isInitialized = true;
+        //NOTE: this class exists since version 2.4.2
+        if (class_exists('\Magento\Catalog\Model\Config\CatalogMediaConfig')) {
+            $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+            static::$storeManager = $objectManager->get(\Magento\Store\Model\StoreManagerInterface::class);
+            $catalogMediaConfig =  $objectManager->get(\Magento\Catalog\Model\Config\CatalogMediaConfig::class);
+            static::$mediaUrlFormat = $catalogMediaConfig->getMediaUrlFormat();
+        }
     }
 
     /**
@@ -94,7 +136,28 @@ class Image implements \Magento\Framework\View\Asset\LocalInterface
      */
     public function getUrl()
     {
-        return $this->context->getBaseUrl() . DIRECTORY_SEPARATOR . $this->getRelativePath();
+        if (static::$mediaUrlFormat == 'hash') {
+            return $this->context->getBaseUrl() . DIRECTORY_SEPARATOR . $this->getRelativePath();
+        } else {
+            return $this->context->getBaseUrl() . DIRECTORY_SEPARATOR .
+                ltrim($this->getFilePath(), DIRECTORY_SEPARATOR) .
+                '?' . http_build_query($this->getImageTransformationParameters());
+        }
+    }
+
+    /**
+     * Get list of transformations parameters
+     *
+     * @return string[]
+     */
+    public function getImageTransformationParameters()
+    {
+        return [
+            'width' => $this->miscParams['image_width'],
+            'height' => $this->miscParams['image_height'],
+            'store' => static::$storeManager->getStore()->getCode(),
+            'image-type' => $this->sourceContentType
+        ];
     }
 
     /**

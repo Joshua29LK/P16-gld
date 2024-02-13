@@ -24,7 +24,7 @@ define([
 
         initialize: function (config, element) {
             this._super(config, element);
-            this.magic360ShowendHandler({'type': 'magictoolbox:showend', 'element' : element}, this.settings.api.fotorama, {});
+            this.magic360ShowendHandler({'type': 'magictoolbox:showend'}, this.settings.api.fotorama, {});
             $('body').on('fotorama:showend', '.fotorama-item', this.magic360ShowendHandler);
 
             //NOTE: to fix an issue with fotorama fullscreen mode
@@ -34,7 +34,6 @@ define([
         },
 
         openFullScreen: function () {
-            console.warn('..........2')
             var fotorama = this.settings.fotoramaApi;
             if (fotorama.activeFrame.magic360) {
                 return;
@@ -63,8 +62,6 @@ define([
 
             //NOTE: for case when gallery is updated with the same spin
             var started = fotorama.activeFrame.$stageFrame.hasClass('magic360-stage-frame');
-
-            $(e.element).find('.loading-mask').remove();
 
             if (fotorama.activeFrame.magic360 && (fotorama.activeFrame.magic360 != fotorama.magic360.id || !started)) {
                 Magic360.start(fotorama.activeFrame.magic360);

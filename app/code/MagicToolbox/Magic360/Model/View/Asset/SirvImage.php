@@ -182,6 +182,12 @@ class SirvImage extends \MagicToolbox\Magic360\Model\View\Asset\Image
         $productMetadata = $objectManager->get(\Magento\Framework\App\ProductMetadataInterface::class);
         $version = $productMetadata->getVersion();
         static::$outdatedMagentoVersion = version_compare($version, '2.3.4', '<') && version_compare($version, '2.3.0', '>=');
+
+        //NOTE: this class exists since version 2.4.2
+        if (class_exists('\Magento\Catalog\Model\Config\CatalogMediaConfig')) {
+            $catalogMediaConfig =  $objectManager->get(\Magento\Catalog\Model\Config\CatalogMediaConfig::class);
+            static::$mediaUrlFormat = $catalogMediaConfig->getMediaUrlFormat();
+        }
     }
 
     /**
@@ -192,7 +198,7 @@ class SirvImage extends \MagicToolbox\Magic360\Model\View\Asset\Image
     public function getUrl()
     {
         if (!static::$isSirvEnabled) {
-            return $this->context->getBaseUrl() . DIRECTORY_SEPARATOR . $this->getRelativePath();
+            return parent::getUrl();
         }
 
         //NOTE: path relative to the media folder
@@ -239,11 +245,11 @@ class SirvImage extends \MagicToolbox\Magic360\Model\View\Asset\Image
         }
 
         if (!$isFileSynced) {
-            return $this->context->getBaseUrl() . DIRECTORY_SEPARATOR . $this->getRelativePath();
+            return parent::getUrl();
         }
 
         if (!is_file($absPath)) {
-            return $this->context->getBaseUrl() . DIRECTORY_SEPARATOR . $this->getRelativePath();
+            return parent::getUrl();
         }
 
         $url = static::$syncHelper->getUrl($relPath);
