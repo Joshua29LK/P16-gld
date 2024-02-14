@@ -2,10 +2,15 @@ Magento 2 CustomShippingPrice by Mageside
 =========================================
 
 ####Magento Support
-    v1.0.7 - Magento 2.0.* - 2.3.*
+    v1.0.12 - Magento 2.3.* - 2.4.*
 
 ####Change list
-    v1.0.7 - Magento 2.7 compatibility checking (updated composer.json)
+    v1.0.12 - Magento 2.4.6 compatibility checking. Added compatibility PHP 8.2
+    v1.0.11 - Added compatibility PHP 8.0 - 8.1 compatibility
+    v1.0.10 - Magento 2.4.3 compatibility checking (updated composer.json)
+    v1.0.9 - Magento 2.4 compatibility checking (updated composer.json)
+    v1.0.8 - Updated composer.json (php checking section)
+    v1.0.7 - Magento 2.3 compatibility checking (updated composer.json)
     v1.0.6 - Fixed functionality if payment method is credit card
     v1.0.4 - Magento 2.2 compatibility checking (updated composer.json)
     v1.0.3 - Updated composer.json

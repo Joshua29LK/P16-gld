@@ -64,11 +64,18 @@ class Hint extends Template implements RendererInterface
         return $this->toHtml();
     }
 
+    /**
+     * @return mixed|string
+     */
     public function getModuleName()
     {
         return $this->_helper->getConfigModule('module_name');
     }
-    
+
+    /**
+     * @return string
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
     public function getVersion()
     {
         $modules = $this->_loader->load();
@@ -80,8 +87,25 @@ class Hint extends Template implements RendererInterface
         return $v;
     }
 
+    /**
+     * @return mixed
+     */
     public function getModulePage()
     {
+        if ($this->_helper->getConfigModule('is_marketplace')) {
+            return $this->_helper->getConfigModule('marketplace_link');
+        }
         return $this->_helper->getConfigModule('module_page_link');
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getExtensionsPage()
+    {
+        if ($this->_helper->getConfigModule('is_marketplace')) {
+            return $this->_helper->getConfigModule('marketplace_extensions_link');
+        }
+        return $this->_helper->getConfigModule('extensions_link');
     }
 }

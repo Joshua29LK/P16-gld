@@ -511,7 +511,11 @@ class MagicToolboxParamsClass
         if (!is_array($value)) {
             $value = [$value];
         }
-        return in_array(strtolower($this->getValue($id, $profile, $strict)), array_map('strtolower', $value));
+        $val = $this->getValue($id, $profile, $strict);
+        if (empty($val)) {
+            $val = '';
+        }
+        return in_array(strtolower($val), array_map('strtolower', $value));
     }
 
     /**

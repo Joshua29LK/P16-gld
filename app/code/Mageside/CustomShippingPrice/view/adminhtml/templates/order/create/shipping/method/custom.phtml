@@ -7,45 +7,45 @@
 <?php /** @var $block \Magento\Sales\Block\Adminhtml\Order\Create\Shipping\Method\Form */ ?>
 <?php
     $_shippingRateGroups = $block->getShippingRates();
-    $config = $this->helper('Mageside\CustomShippingPrice\Helper\Config')
+    $config = $this->helper(\Mageside\CustomShippingPrice\Helper\Config::class)
 ?>
-<?php if ($_shippingRateGroups && $config->getConfig('active')) : ?>
+<?php if ($_shippingRateGroups && $config->getConfig('active')): ?>
     <?php
         $style = $block->getActiveMethodRate() ? 'style="display:none;"' : '';
         $customTitle = $_shippingRateGroups['custom_shipping'][0]->getMethodTitle();
         $customPrice = $_shippingRateGroups['custom_shipping'][0]->getPrice();
-        ?>
-    <div id="order-shipping-method-custom" <?php echo $style; ?>>
+    ?>
+    <div id="order-shipping-method-custom" <?= $style; ?>>
         <dl class="admin__order-shipment-methods">
             <dd class="admin__order-shipment-method-custom custom-shipping-form"  id="custom-method-form" style="display:none">
                 <div class="admin__field field field-custom-title">
                     <label class="label admin__field-label">
-                        <span><?php /* @escapeNotVerified */ echo __('Name') ?></span>
+                        <span><?= /* @escapeNotVerified */ __('Name') ?></span>
                     </label>
                     <div class="admin__field-control control">
                         <input id="custom-shipping-title"
                                name="custom-shipping-title"
-                               value="<?php /* @escapeNotVerified */ echo $customTitle; ?>"
+                               value="<?= /* @escapeNotVerified */ $customTitle; ?>"
                                class=" input-text admin__control-text"
                                type="text">
                     </div>
                 </div>
                 <div class="admin__field field-custom-rate">
                     <label class="label admin__field-label">
-                        <span><?php /* @escapeNotVerified */ echo __('Rate') ?></span>
+                        <span><?= /* @escapeNotVerified */ __('Rate') ?></span>
                     </label>
                     <div class="admin__field-control">
                         <input id="custom-shipping-rate"
                                name="custom-shipping-rate"
-                               value="<?php /* @escapeNotVerified */ echo $customPrice; ?>"
+                               value="<?= /* @escapeNotVerified */ $customPrice; ?>"
                                class=" input-text admin__control-text"
                                type="text">
                         <div class="actions">
                             <button id="custom-shipping-button-update"
-                                    title="<?php /* @escapeNotVerified */ echo __('Update') ?>"
+                                    title="<?= /* @escapeNotVerified */ __('Update') ?>"
                                     type="button"
                                     class="action-default scalable">
-                                <span><?php /* @escapeNotVerified */ echo __('Update') ?></span>
+                                <span><?= /* @escapeNotVerified */ __('Update') ?></span>
                             </button>
                         </div>
                     </div>
@@ -56,10 +56,10 @@
                     <div class="admin__field-control">
                         <div class="actions">
                             <button id="custom-shipping-button-change"
-                                    title="<?php /* @escapeNotVerified */ echo __('Change Custom Shipping') ?>"
+                                    title="<?= /* @escapeNotVerified */ __('Change Custom Shipping') ?>"
                                     type="button"
                                     class="action-default scalable">
-                                <span><?php /* @escapeNotVerified */ echo __('Change Custom Shipping') ?></span>
+                                <span><?= /* @escapeNotVerified */ __('Change Custom Shipping') ?></span>
                             </button>
                         </div>
                     </div>

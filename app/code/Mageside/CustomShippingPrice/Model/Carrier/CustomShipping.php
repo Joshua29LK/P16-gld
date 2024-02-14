@@ -77,7 +77,7 @@ class CustomShipping extends AbstractCarrier implements CarrierInterface
         if (!$this->_session->isLoggedIn()) {
             return false;   // Only allow this to be used from the admin system
         }
-        
+
         if (!$this->getConfigFlag('active')) {
             return false;
         }
@@ -100,9 +100,7 @@ class CustomShipping extends AbstractCarrier implements CarrierInterface
 
             $method->setMethod('custom_shipping');
             $method->setMethodTitle(
-                (strlen($description ?? '') > 0) ?
-                    $description :
-                    $this->getConfigData('name')
+                $description ?? $this->getConfigData('name')
             );
 
             $method->setPrice($shippingPrice);

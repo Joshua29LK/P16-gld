@@ -16,7 +16,8 @@ class PlaceOrderAfterObserver implements ObserverInterface
      */
     protected $_session;
 
-    public function __construct(Session $authSession) {
+    public function __construct(Session $authSession)
+    {
         $this->_session = $authSession;
     }
 

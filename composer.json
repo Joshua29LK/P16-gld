@@ -13,7 +13,7 @@
         "composer/composer": "@alpha",
         "magento/data-migration-tool": "2.4.5",
         "mirasvit/module-feed": "1.3.19",
-        "mirasvit/module-cache-warmer": "*",
+        "mirasvit/module-cache-warmer": "1.9.1",
         "mirasvit/module-search-ultimate": "2.1.10",
         "fooman/pdfcustomiser-m2": "8.9.1",
         "gmostafa/php-graphql-client": "^1.13",
@@ -30,7 +30,8 @@
         "magevision/module-update-order-email-address": "2.4.2",
         "multisafepay/magento2": "3.3.1",
         "weltpixel/m2-weltpixel-google-cards": "1.11.19",
-        "snmportal/module-syntaxhighlighter": "2.4.6"
+        "snmportal/module-syntaxhighlighter": "2.4.6",
+        "magenizr/magento2-resetuibookmarks": "1.3.1"
     },
     "require-dev": {
 		"allure-framework/allure-phpunit": "~1.5.0",
