@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "19ac6c8c9467e8cfd0def1366702d67c",
+    "content-hash": "39e3ac28598737f953efe0506b5064d9",
     "packages": [
         {
             "name": "2tvenom/cborencode",
@@ -19795,6 +19795,67 @@
                 }
             ],
             "time": "2023-11-16T16:16:50+00:00"
+        },
+        {
+            "name": "redchamps/module-core",
+            "version": "1.1.8",
+            "source": {
+                "type": "git",
+                "url": "git@bitbucket.org:redchampsTeam/core.git",
+                "reference": "2420841a207889e22348cbdc2997f4cbc577766c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://repo.redchamps.com//dist/redchamps/module-core/redchamps-module-core-1.1.8-1976d8.zip",
+                "reference": "2420841a207889e22348cbdc2997f4cbc577766c",
+                "shasum": "6ba01fa31f8accbf7018ea258c3a0e06198c5981"
+            },
+            "type": "magento2-module",
+            "autoload": {
+                "files": [
+                    "registration.php"
+                ],
+                "psr-4": {
+                    "RedChamps\\Core\\": ""
+                }
+            },
+            "license": [
+                "RedChamps-Eula"
+            ],
+            "description": "RedChamps Core Module",
+            "time": "2021-07-22T12:43:12+00:00"
+        },
+        {
+            "name": "redchamps/module-sitemap-url-exclude",
+            "version": "1.0.4",
+            "source": {
+                "type": "git",
+                "url": "git@bitbucket.org:redchampsTeam/sitemap-url-exclude.git",
+                "reference": "f0b3162bb846c565d9529aa7642a68a820fff564"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://repo.redchamps.com//dist/redchamps/module-sitemap-url-exclude/redchamps-module-sitemap-url-exclude-1.0.4-7782a1.zip",
+                "reference": "f0b3162bb846c565d9529aa7642a68a820fff564",
+                "shasum": "7443aaef3f5fd12c05d0f5f050c77c497a443b6d"
+            },
+            "require": {
+                "redchamps/module-core": "*"
+            },
+            "type": "magento2-module",
+            "autoload": {
+                "psr-4": {
+                    "RedChamps\\SitemapUrlExclude\\": ""
+                },
+                "files": [
+                    "registration.php"
+                ]
+            },
+            "license": [
+                "RedChamps EULA"
+            ],
+            "description": "This extension allows you to exclude any URL from XML sitemap.",
+            "time": "2022-03-17T12:28:29+00:00"
         },
         {
             "name": "rosell-dk/exec-with-fallback",

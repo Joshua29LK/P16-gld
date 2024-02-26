@@ -32,7 +32,8 @@
         "weltpixel/m2-weltpixel-google-cards": "1.11.19",
         "snmportal/module-syntaxhighlighter": "2.4.6",
         "magenizr/magento2-resetuibookmarks": "1.3.1",
-        "woom/module-cmstree": "1.0.20"
+        "woom/module-cmstree": "1.0.20",
+        "redchamps/module-sitemap-url-exclude": "1.0.4"
     },
     "require-dev": {
 		"allure-framework/allure-phpunit": "~1.5.0",
@@ -117,6 +118,10 @@
         "fooman": {
             "type": "composer",
             "url": "https://customer-repos.fooman.co.nz/glasdiscount.nl-946dcd10154054a475815dc5862bee90abe3eea1"
+        },
+        "redchamps": {
+            "type": "composer",
+            "url": "https://RkIXo16HMUDYAKLXxu4WASILzmPS:OMRKsT5QD9uNJ1Y2T5nHqPtzmeu@repo.redchamps.com/repositories/info@medeka.nl-chckh3yEvmUcgk1nSOOUwz6VMAor4gb9"
         }
     },
     "extra": {
