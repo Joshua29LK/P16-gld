@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "dd9abfcee50e56dabbbcc3322dafab5a",
+    "content-hash": "19ac6c8c9467e8cfd0def1366702d67c",
     "packages": [
         {
             "name": "2tvenom/cborencode",
@@ -23744,6 +23744,42 @@
                 "source": "https://github.com/wikimedia/less.php/tree/v3.2.1"
             },
             "time": "2023-02-03T06:43:41+00:00"
+        },
+        {
+            "name": "woom/module-cmstree",
+            "version": "1.0.20",
+            "dist": {
+                "type": "zip",
+                "url": "https://repo.magento.com/archives/woom/module-cmstree/woom-module-cmstree-1.0.20.0.zip",
+                "shasum": "008f3893db5730745a19ac040bc81aff4b638c1c"
+            },
+            "require": {
+                "magento/framework": "103.0.*",
+                "magento/module-cms": "104.0.*",
+                "magento/module-sitemap": "100.4.*",
+                "magento/module-url-rewrite": "102.0.*",
+                "php": "~7.4.0||~8.1.0||~8.2.0"
+            },
+            "type": "magento2-module",
+            "autoload": {
+                "files": [
+                    "registration.php"
+                ],
+                "psr-4": {
+                    "Woom\\CmsTree\\": ""
+                }
+            },
+            "license": [
+                "proprietary"
+            ],
+            "authors": [
+                {
+                    "name": "WOOM",
+                    "email": "info@woom.digital",
+                    "homepage": "https://woom.digital/"
+                }
+            ],
+            "description": "Magento2 CMS tree extension"
         },
         {
             "name": "zf1/zend-exception",
