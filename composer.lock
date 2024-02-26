@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "598286b6ebeb0a8c6039f29ebf7d06d3",
+    "content-hash": "c52aefc7037944b16507f50805d57c7a",
     "packages": [
         {
             "name": "2tvenom/cborencode",
@@ -4908,6 +4908,47 @@
                 }
             ],
             "time": "2023-10-17T14:13:20+00:00"
+        },
+        {
+            "name": "litespeed/module-litemage",
+            "version": "2.2.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/litespeedtech/magento2-LiteSpeed_LiteMage.git",
+                "reference": "3043f93b7d203089b463b46c145901271f5540d2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/litespeedtech/magento2-LiteSpeed_LiteMage/zipball/3043f93b7d203089b463b46c145901271f5540d2",
+                "reference": "3043f93b7d203089b463b46c145901271f5540d2",
+                "shasum": ""
+            },
+            "require": {
+                "ext-curl": "*",
+                "magento/framework": "*",
+                "magento/module-page-cache": "*",
+                "php": ">=7.3.0"
+            },
+            "type": "magento2-module",
+            "autoload": {
+                "files": [
+                    "registration.php"
+                ],
+                "psr-4": {
+                    "Litespeed\\Litemage\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "OSL-3.0",
+                "AFL-3.0"
+            ],
+            "description": "LiteMage Full Page Cache for LiteSpeed Web Server",
+            "support": {
+                "issues": "https://github.com/litespeedtech/magento2-LiteSpeed_LiteMage/issues",
+                "source": "https://github.com/litespeedtech/magento2-LiteSpeed_LiteMage/tree/v2.2.3"
+            },
+            "time": "2024-02-13T22:13:55+00:00"
         },
         {
             "name": "magefan/module-admin-user-guide",
