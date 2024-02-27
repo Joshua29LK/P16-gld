@@ -1,7 +1,0 @@
-<?xml version="1.0"?>
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
-    <menu>
-        <remove id="Magento_Cms::cms_page" />
-        <add id="Woom_CmsTree::page" title="Pages Tree" translate="title" module="Woom_CmsTree" sortOrder="0" parent="Magento_Backend::content_elements" action="cmstree/page" resource="Magento_Cms::page"/>
-    </menu>
-</config>
