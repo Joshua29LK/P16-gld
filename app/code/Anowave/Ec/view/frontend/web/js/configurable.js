@@ -32,6 +32,11 @@ define(['jquery'], function ($)
     			
     			this._super();
     			
+    			if ('undefined' === typeof AEC)
+    			{
+    				return this;
+    			}
+    			
     			if ('undefined' === typeof AEC.Const)
     			{
     				return this;
@@ -63,7 +68,7 @@ define(['jquery'], function ($)
 	            					{
 	            						return function()
 	            						{
-	            							console.log('Skipping virtualVariantView event.');
+	            							console.log('Skipping view_item event.');
 	            						};
 	            					}
 	            					
@@ -74,27 +79,40 @@ define(['jquery'], function ($)
 	            					
 	            					return function()
 	            					{
+	            						let list = 'Configurable variants', item = 
+	            						{
+	            							item_id: 			simple.id,
+	            							item_name:  		simple.name,
+	            							item_list_name: 	list,
+	            							item_list_id: 		list,
+	            							price: 				simple.price,
+	            							quantity:			1
+	            						};
+	            						
+	            						if (simple.hasOwnProperty('configurations'))
+	            						{
+	            							item['configurations'] = simple.configurations;
+	            						}
+	            						
+	            					
 	            						dataLayer.push(
 	            						{
-	            							'event':'virtualVariantView',
-	            							'ecommerce':
+	            							event:'view_item',
+	            							ecommerce:
 	            							{
-	            								'currencyCode': AEC.currencyCode,
-	            								'detail':
-	            								{
-	            									'actionField':
-													{
-														'list':'Configurable variants'
-													},
-													'products':[simple]
-	            								}
+	            								currency: AEC.currencyCode,
+	            								value: item.price,
+            									items:
+        										[
+        											item
+    											]
 	            							}
 	            						});
 	            						
 	            						/**
 	            						 * Update data-simple attribute
 	            						 */
-	            						$('[data-event="addToCart"]').data('simple-id', simple.id).attr('data-simple-id', simple.id);
+	            						$('[data-event="add_to_cart"]').data('simple-id', simple.id).attr('data-simple-id', simple.id);
 	            						
 	            						/**
 	            						 * Facebook Pixel tracking

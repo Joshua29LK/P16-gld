@@ -3,7 +3,7 @@ var AEC = (function()
 	return {
 		add: function(context, dataLayer)
 		{
-			let element = context, qty = 1, variant = [], variant_attribute_option = [], items = [];
+			let element = context, qty = 1, variants = [], variant = [], variant_attribute_option = [], items = [];
 
 			document.querySelectorAll('input[name=qty]:checked, [name=qty]').forEach(element => 
 			{
@@ -44,8 +44,6 @@ var AEC = (function()
 			
 			if(element.dataset.configurable)
 			{
-				var variants = [];
-
 				document.querySelectorAll('[name^="super_attribute"]').forEach(attribute => 
 				{
 					if (attribute.matches('select'))
@@ -76,7 +74,8 @@ var AEC = (function()
 							{
 								if (-1 != attribute.name.indexOf("super_attribute[" + super_attribute.id + "]"))
 								{
-									let variant = {
+									let variant = 
+									{
 										id: 	super_attribute.id,
 										text:	super_attribute.label,
 										option: attribute.value
@@ -174,11 +173,41 @@ var AEC = (function()
 							}
 							
 							variant.push([AEC.SUPER[a].label,text].join(AEC.Const.VARIANT_DELIMITER_ATT));
+							
+							let tier_price = Number.parseFloat(element.dataset.price).toFixed(2);
+							
+							Object.entries(AEC.CONFIGURABLE_SIMPLES).forEach(([key, simple]) => 
+							{
+							    if (simple.hasOwnProperty('configurations'))
+							    {
+							    	Object.entries(simple.configurations).forEach(([key, configuration]) => 
+									{
+										if (configuration.label === variants[i].option)
+										{
+											let prices = [];
+											
+											Object.entries(simple.price_tier).forEach(([key, tier]) => 
+											{
+												if (parseInt(qty) >= parseInt(tier.price_qty))
+												{
+													prices.push(Number.parseFloat(tier.price));
+												}
+											});
 
+											if (prices.length)
+											{
+												tier_price = prices.sort(function(a,b) { return a < b; }).pop();
+											}
+										}
+									});
+							    }
+							});
+							
 							variant_attribute_option.push(
 							{
 								attribute: 	variants[i].id,
-								option: 	variants[i].option
+								option: 	variants[i].option,
+								price:		tier_price
 							})
 						}
 					}
@@ -229,13 +258,48 @@ var AEC = (function()
 			}
 			else
 			{
+				let price = Number.parseFloat(element.dataset.price);
+				
+				if (element.dataset.hasOwnProperty('selection'))
+				{
+					let selection = parseInt(element.dataset.selection);
+					
+					Object.entries(AEC.CONFIGURABLE_SIMPLES).forEach(([key, simple]) => 
+					{
+						if (key == selection)
+						{
+							if (simple.hasOwnProperty('price_tier'))
+							{
+								Object.entries(simple.configurations).forEach(([key, configuration]) => 
+								{
+									let prices = [];
+									
+									Object.entries(simple.price_tier).forEach(([key, tier]) => 
+									{
+										if (parseInt(qty) >= parseInt(tier.price_qty))
+										{
+											prices.push(Number.parseFloat(tier.price));
+										}
+									});
+
+									if (prices.length)
+									{
+										price = prices.sort(function(a,b) { return a < b; }).pop();
+									}
+								});
+							}
+						}
+					});
+				}
+				
 				let item = 
 				{
 					'item_name': 		element.dataset.name,
 					'item_id': 		    1 === parseInt(element.dataset.useSimple) ? element.dataset.simpleId : element.dataset.id,
-					'price': 			element.dataset.price,
+					'price': 			price,
 					'item_brand':		element.dataset.brand,
 					'item_variant':		variant.join(AEC.Const.VARIANT_DELIMITER),
+					'variants':			variants,
 					'category':			element.dataset.category,
 					'quantity': 		qty,
 					'currency':			AEC.currencyCode,
@@ -1357,6 +1421,13 @@ var AEC = (function()
 		{
 			return {
 				chain: {},
+				endpoints:{}, 
+				widget: 
+				{
+					display: 	false,
+					color: 		'rgba(0,0,0,1)',
+					colorEnd: 	'rgba(0,0,0,1)'
+				},
 				queue: function(callback, event)
 				{	
 					event = typeof event !== 'undefined' ? event : AEC.Const.COOKIE_DIRECTIVE_CONSENT_GRANTED_EVENT;
@@ -1421,18 +1492,24 @@ var AEC = (function()
 							security_storage:			-1 !== segments.indexOf('cookieConsentGranted')				? 'granted' : 'denied',
 							functionality_storage:		-1 !== segments.indexOf('cookieConsentGranted')			   	? 'granted' : 'denied',
 							personalization_storage:	-1 !== segments.indexOf('cookieConsentPreferencesGranted') 	? 'granted' : 'denied',
-							analytics_storage:			-1 !== segments.indexOf('cookieConsentAnalyticsGranted')	? 'granted' : 'denied'
+							analytics_storage:			-1 !== segments.indexOf('cookieConsentAnalyticsGranted')	? 'granted' : 'denied',
+							ad_user_data:			    -1 !== segments.indexOf('cookieConsentUserdata')			? 'granted' : 'denied',
+							ad_personalization:		    -1 !== segments.indexOf('cookieConsentPersonalization')		? 'granted' : 'denied'
 						} : 
 						{
 							ad_storage: 				'granted',
 							security_storage:			'granted',
 							functionality_storage:		'granted',
 							personalization_storage:	'granted',
-							analytics_storage:			'granted'
+							analytics_storage:			'granted',
+							ad_user_data:				'granted',
+							ad_personalization:			'granted'
 						}
 						
-						
-						gtag('consent','updated',consentMode);
+						/**
+						 * Update consent
+						 */
+						gtag('consent','update',consentMode);
 						
 				        localStorage.setItem('consentMode', JSON.stringify(consentMode));
 					}
@@ -1457,9 +1534,14 @@ var AEC = (function()
 							security_storage:			'denied',
 							functionality_storage:		'denied',
 							personalization_storage:	'denied',
-							analytics_storage:			'denied'
+							analytics_storage:			'denied',
+							ad_user_data:				'denied',
+							ad_personalization:			'denied'
 						};
 						
+						/**
+						 * Update consent
+						 */
 						gtag('consent','updated',consentMode);
 						
 				        localStorage.setItem('consentMode', JSON.stringify(consentMode));
@@ -1467,106 +1549,26 @@ var AEC = (function()
 					
 					return this;
 				},
-				getConsentDialog: function(dataLayer, endpoints)
+				setEndpoints: function(endpoints)
 				{
+					this.endpoints = endpoints;
+					
+					return this;
+				},
+				getConsentDialog: function(dataLayer)
+				{
+					var endpoints = this.endpoints;
+					
 					if (1 == AEC.Cookie.get(AEC.Const.COOKIE_DIRECTIVE_CONSENT_DECLINE_EVENT))
 					{
+						this.getWidget();
+						
 						return true;
 					}
 					
 					if (1 != AEC.Cookie.get(AEC.Const.COOKIE_DIRECTIVE_CONSENT_GRANTED_EVENT))
 					{
-						AEC.Request.get(endpoints.cookieContent, {}, (response) => 
-						{
-							var directive = (body => 
-							{
-								body.insertAdjacentHTML('beforeend', response.cookieContent);
-								
-								return body.lastElementChild;
-								
-							})(document.body);
-							
-							directive.querySelectorAll('a.ec-gtm-cookie-directive-note-toggle').forEach(element => 
-							{
-								element.addEventListener('click', event => 
-								{
-									event.target.nextElementSibling.style.display = 'block' === event.target.nextElementSibling.style.display ? 'none' : 'block';
-								});
-							});
-							
-							directive.querySelectorAll('a.accept').forEach(element => 
-							{
-								element.addEventListener('click', event => 
-								{
-									event.target.text = event.target.dataset.confirm;
-	
-									var grant = [...directive.querySelectorAll('[name="cookie[]"]:checked')].map(element => { return element.value });
-
-									grant.unshift('cookieConsentGranted');
-									
-									AEC.CookieConsent.acceptGoogleConsent(grant);
-
-									AEC.Request.post(endpoints.cookie, { cookie: grant }, response => 
-									{
-										Object.keys(response).forEach(event => 
-										{
-											AEC.CookieConsent.acceptConsent(event);
-										});
-
-										directive.remove();
-									});
-								});
-							});
-							
-							directive.querySelectorAll('a.accept-all').forEach(element => 
-							{
-								element.addEventListener('click', event => 
-								{
-									event.target.text = event.target.dataset.confirm;
-	
-									[...directive.querySelectorAll('[name="cookie[]"]')].forEach(element => 
-									{
-										element.checked = true;
-									});
-									
-									element.parentNode.removeChild(element.previousElementSibling);
-
-									var grant = [...directive.querySelectorAll('[name="cookie[]"]:checked')].map(element => { return element.value });
-									
-									grant.unshift('cookieConsentGranted');
-
-									AEC.CookieConsent.acceptGoogleConsent(grant);
-									
-									AEC.Request.post(endpoints.cookie, { cookie: grant }, response => 
-									{
-										Object.keys(response).forEach(event => 
-										{
-											AEC.CookieConsent.acceptConsent(event);
-										});
-
-										directive.remove();
-									});
-								});
-							});
-							
-							directive.querySelectorAll('a.decline').forEach(element => 
-							{
-								element.addEventListener('click', event => 
-								{
-									AEC.CookieConsent.declineGoogleConsent();
-									
-									AEC.Request.post(endpoints.cookie, { decline: true }, response => 
-									{
-										Object.keys(response).forEach(event => 
-										{
-											AEC.CookieConsent.declineConsent(event);
-										});
-
-										directive.remove();
-									});
-								});
-							});
-						});
+						this.renderConsentDialog(dataLayer);
 					}
 					else 
 					{
@@ -1585,7 +1587,7 @@ var AEC = (function()
 										grant.push(segments[i]);
 									}
 								}
-								
+	
 								AEC.CookieConsent.acceptGoogleConsent(grant);
 								
 							})(AEC.Const.COOKIE_DIRECTIVE_SEGMENT_MODE_EVENTS);
@@ -1594,8 +1596,322 @@ var AEC = (function()
 						{
 							AEC.CookieConsent.acceptConsent(AEC.Const.COOKIE_DIRECTIVE_CONSENT_GRANTED_EVENT);
 						}
+						
+						this.getWidget();
 					}
-				}
+				},
+				closeConsentDialog: function(directive)
+				{
+					directive.remove();
+					
+					this.getWidget();
+				},
+				renderConsentDialog: function(dataLayer)
+				{
+					(endpoints => 
+					{
+						AEC.Request.get(endpoints.cookieContent, {}, (response) => 
+						{
+							
+							
+							AEC.CookieConsent.loader.hide();
+							
+							var directive = (body => 
+							{
+								body.insertAdjacentHTML('beforeend', response.cookieContent);
+								
+								return body.lastElementChild;
+								
+							})(document.body);
+							
+							(directive => 
+							{
+								let listener = event => 
+								{
+									if (event.key === 'Escape') 
+							        {
+							        	AEC.CookieConsent.closeConsentDialog(directive);
+							        }
+								};
+								document.addEventListener('keydown', event => 
+								{
+									listener(event);
+									
+									document.removeEventListener('keydown', listener);
+								});
+								
+							})(directive);
+							
+							directive.querySelectorAll('a.ec-gtm-cookie-directive-note-toggle').forEach(element => 
+							{
+								element.addEventListener('click', event => 
+								{
+									if ('block' === event.target.nextElementSibling.style.display)
+									{
+										event.target.nextElementSibling.style.display = 'none';
+									}
+									else 
+									{
+										directive.querySelectorAll('.ec-gtm-cookie-directive-note').forEach(note => 
+										{
+											note.previousElementSibling.innerHTML = note.previousElementSibling.dataset.show;
+											
+											note.style.display = 'none';
+										});
+										
+										event.target.nextElementSibling.style.display = 'block';
+									}	
+									
+									event.target.innerHTML = 'block' === event.target.nextElementSibling.style.display ? event.target.dataset.hide : event.target.dataset.show;
+									
+								});
+							});
+							
+							directive.querySelectorAll('a.accept').forEach(element => 
+							{
+								element.addEventListener('click', event => 
+								{
+									event.target.text = event.target.dataset.confirm;
+
+									var grant = [...directive.querySelectorAll('[name="cookie[]"]:checked')].map(element => { return element.value });
+
+									grant.unshift('cookieConsentGranted');
+									
+									AEC.CookieConsent.acceptGoogleConsent(grant);
+
+									AEC.Request.post(endpoints.cookie, { cookie: grant }, response => 
+									{
+										Object.keys(response).forEach(event => 
+										{
+											AEC.CookieConsent.acceptConsent(event);
+										});
+
+										AEC.CookieConsent.closeConsentDialog(directive);
+									});
+								});
+							});
+							
+							directive.querySelectorAll('a.accept-all').forEach(element => 
+							{
+								element.addEventListener('click', event => 
+								{
+									event.target.text = event.target.dataset.confirm;
+
+									[...directive.querySelectorAll('[name="cookie[]"]')].forEach(element => 
+									{
+										element.checked = true;
+									});
+									
+									var grant = [...directive.querySelectorAll('[name="cookie[]"]:checked')].map(element => { return element.value });
+									
+									grant.unshift('cookieConsentGranted');
+
+									AEC.CookieConsent.acceptGoogleConsent(grant);
+									
+									AEC.Request.post(endpoints.cookie, { cookie: grant }, response => 
+									{
+										Object.keys(response).forEach(event => 
+										{
+											AEC.CookieConsent.acceptConsent(event);
+										});
+
+										AEC.CookieConsent.closeConsentDialog(directive);
+									});
+								});
+							});
+							
+							directive.querySelectorAll('a.decline').forEach(element => 
+							{
+								element.addEventListener('click', event => 
+								{
+									AEC.CookieConsent.declineGoogleConsent();
+									
+									AEC.Request.post(endpoints.cookie, { decline: true }, response => 
+									{
+										Object.keys(response).forEach(event => 
+										{
+											AEC.CookieConsent.declineConsent(event);
+										});
+
+										AEC.CookieConsent.closeConsentDialog(directive);
+									});
+								});
+							});
+							
+							directive.querySelectorAll('a.close').forEach(element => 
+							{
+								element.addEventListener('click', event => 
+								{
+									AEC.CookieConsent.closeConsentDialog(directive);
+								});
+							});
+						});
+						
+					})(this.endpoints);
+					
+					return this;
+				},
+				setWidget(options)
+				{
+					this.widget = {...this.widget, ...options };
+					
+					return this;
+				},
+				getWidget: function()
+				{
+					if (this.widget.display)
+					{
+						let svg = (node => 
+						{
+							return (text => 
+							{
+								let styles = 
+								{
+									position: 	'fixed', 
+									bottom: 	'10px', 
+									left: 		'10px',
+									'z-index': 	'9999', 
+									cursor: 	'pointer' 
+								};
+								
+								let style = Object.entries(styles).map(([key, value]) => 
+								{
+									return [key,value].join(':');
+								});
+								
+								let svg = node('svg', { id: 'consentWidget', width:50, height: 50, style: style.join(';') });
+
+								let gradient = node('linearGradient', { id: 'gradient', gradientTransform: 'rotate(90)'});
+								
+								let filter = node('filter', { id: 'shadow' });
+								
+								[
+									node('feDropShadow', { dx: '0',   dy: '0',  stdDeviation: '0.7','flood-opacity': 0.5 }),
+									
+								].forEach(element => 
+								{
+									filter.appendChild(element);
+								});	      
+							      
+								let count = parseInt(text);
+
+								[
+									node('stop', { offset: '0%',   'stop-color': this.widget.color }),
+									node('stop', { offset: '100%', 'stop-color': this.widget.colorEnd })
+									
+								].forEach(element => 
+								{
+									gradient.appendChild(element);
+								});
+								
+								
+								if (0)
+								{
+									svg.appendChild(filter);
+								}
+								
+								svg.appendChild(gradient);
+								
+								let transform = 'scale(1.5 1.5) translate(1 10)';
+
+								[
+									node('path', { id: 'a', d: 'M22.6004 0H7.40039C3.50039 0 0.400391 3.1 0.400391 7C0.400391 10.9 3.50039 14 7.40039 14H22.6004C26.5004 14 29.6004 10.9 29.6004 7C29.6004 3.1 26.4004 0 22.6004 0ZM1.60039 7C1.60039 3.8 4.20039 1.2 7.40039 1.2H17.3004L14.2004 12.8H7.40039C4.20039 12.8 1.60039 10.2 1.60039 7Z', filter: 'url(#shadow)', fill: 'url(#gradient)', transform: transform }),
+									node('path', { id: 'b', d: 'M24.6012 4.0001C24.8012 4.2001 24.8012 4.6001 24.6012 4.8001L22.5012 7.0001L24.7012 9.2001C24.9012 9.4001 24.9012 9.8001 24.7012 10.0001C24.5012 10.2001 24.1012 10.2001 23.9012 10.0001L21.7012 7.8001L19.5012 10.0001C19.3012 10.2001 18.9012 10.2001 18.7012 10.0001C18.5012 9.8001 18.5012 9.4001 18.7012 9.2001L20.8012 7.0001L18.6012 4.8001C18.4012 4.6001 18.4012 4.2001 18.6012 4.0001C18.8012 3.8001 19.2012 3.8001 19.4012 4.0001L21.6012 6.2001L23.8012 4.0001C24.0012 3.8001 24.4012 3.8001 24.6012 4.0001Z',  fill: 'rgba(255,255,255,1)', transform: transform }),
+									node('path', { id: 'c', d: 'M12.7 4.1002C12.9 4.3002 13 4.7002 12.8 4.9002L8.6 9.8002C8.5 9.9002 8.4 10.0002 8.3 10.0002C8.1 10.1002 7.8 10.1002 7.6 9.9002L5.4 7.7002C5.2 7.5002 5.2 7.1002 5.4 6.9002C5.6 6.7002 6 6.7002 6.2 6.9002L8 8.6002L11.8 4.1002C12 3.9002 12.4 3.9002 12.7 4.1002Z', fill: 'url(#gradient)', transform: transform, filter: 'url(#shadow)' })
+									
+								].forEach(element => 
+								{
+									svg.appendChild(element);
+								});
+								
+								let loader = node('circle', { id: 'd', cx: 13, cy:25.5, r: 6, fill:'transparent', stroke:'url(#gradient)', 'stroke-width':2, 'stroke-dasharray':'60 40', 'stroke-dashoffset': 40, filter: 'url(#shadow)', style: 'display:none'  });
+
+								[
+									node('animateTransform', 
+									{ 
+										attributeName: 	"transform",
+								        attributeType:	"XML",
+								        type:			"rotate",
+								        dur:			"1s",
+								        from:			"0 13 25.5",
+								        to:				"360 13 25.5",
+								        repeatCount:	"indefinite" 
+									})
+									
+								].forEach(element => 
+								{
+									loader.appendChild(element);
+								});
+								
+								svg.appendChild(loader);
+								
+								return svg;
+							});
+						
+						})((n, v) => 
+						{
+							  n = document.createElementNS("http://www.w3.org/2000/svg", n);
+							  
+							  for (var p in v) 
+							  {
+								  n.setAttributeNS(null, p, v[p]);
+							  }
+							  
+							  return n;
+						});
+						
+						let widget = svg();
+						
+						/**
+						 * Remove widget
+						 */
+						this.deleteWidget();
+						
+						/**
+						 * Add widget
+						 */
+						document.body.appendChild(widget);
+						
+						/**
+						 * Render widget
+						 */
+						document.body.querySelectorAll('[id=consentWidget]').forEach(element => 
+						{
+							element.addEventListener('click', event => 
+							{
+								AEC.CookieConsent.renderConsentDialog(dataLayer).loader.show();
+							});
+						});
+						
+						return widget;
+					}
+					
+					return null;
+				},
+				deleteWidget: function()
+				{
+					document.body.querySelectorAll('[id=consentWidget]').forEach(element => 
+					{
+						element.parentNode.removeChild(element);
+					});
+					
+					return this;
+				},
+				loader: (function()
+				{
+					return {
+						show: function()
+						{
+							document.querySelectorAll('[id=c]').forEach(e => { e.style.display = 'none' });
+							document.querySelectorAll('[id=d]').forEach(e => { e.style.display = 'block' });
+						},
+						hide: function()
+						{
+							document.querySelectorAll('[id=c]').forEach(e => { e.style.display = 'block' });
+							document.querySelectorAll('[id=d]').forEach(e => { e.style.display = 'none' });
+						}
+					}
+				})()
 			}
 		})(),
 		Storage: (function(api)

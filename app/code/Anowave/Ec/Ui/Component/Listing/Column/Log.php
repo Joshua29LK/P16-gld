@@ -45,7 +45,10 @@ class Log extends Column
         {
             foreach ($dataSource['data']['items'] as & $item)
             {
-                $item['log'] = '<pre>' . print_r($item['log'], true) . '</pre>';
+                if (null !== $object = json_decode($item['log'], true))
+                {
+                    $item['log'] = '<textarea style="width:700px;height:200px">' . print_r(json_encode($object, JSON_PRETTY_PRINT), true) . '</textarea>';  
+                }
             }
         }
 

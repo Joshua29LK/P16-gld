@@ -2,7 +2,7 @@
 	<div>
 		<div>
 			<div>
-				<p><strong><?php echo __('COOKIES') ?></strong></p>
+				<p><strong><?php echo __('Cookie Settings') ?></strong></p>
 				<p><?php echo sprintf($block->getHelper()->getCookieDirectiveContent(),$block->getHelper()->getStore()->getName()) ?></p>
 			</div>
 			<?php if ($block->getHelper()->getCookieDirectiveIsSegmentMode()):?>
@@ -10,7 +10,7 @@
 				<div>
 					<input type="checkbox" checked="checked" disabled />
 					<label><?php echo __('Allow essential cookies') ?></label>
-					<a class="ec-gtm-cookie-directive-note-toggle"><?php echo __('Learn more')?></a>
+					<a class="ec-gtm-cookie-directive-note-toggle" data-show="<?php echo __('Learn more')?>" data-hide="<?php echo __('Hide')?>"><?php echo __('Learn more')?></a>
 					<div class="ec-gtm-cookie-directive-note">
 						<small><?php echo __('These cookies are essential so that you can move around the website and use its features. Without these cookies services you have asked for cannot be provided.') ?></small>
 					</div>
@@ -19,19 +19,38 @@
 					<div>
 						<input type="checkbox" name="cookie[]" value="<?php echo $key ?>" id="consent_<?php echo $key ?>" <?php if ($segment['check']):?>checked="checked"<?php endif ?> />
 						<label for="consent_<?php echo $key ?>"><?php echo $segment['label'] ?></label>
-						<a class="ec-gtm-cookie-directive-note-toggle"><?php echo __('Learn more')?></a>
+						<a class="ec-gtm-cookie-directive-note-toggle" data-show="<?php echo __('Learn more')?>" data-hide="<?php echo __('Hide')?>"><?php echo __('Learn more')?></a>
 						<div class="ec-gtm-cookie-directive-note">
 							<small><?php echo $segment['value'] ?></small>
 						</div>
 					</div>
 				<?php endforeach ?>
+				<div>
+    				<?php if (null !== $uuid = $block->getUuid()) : ?>
+    					<a class="ec-gtm-cookie-directive-note-toggle" data-show="<?php echo __('Show consent details')?>" data-hide="<?php echo __('Close consent details')?>"><?php echo __('Show consent details')?></a>
+    					<div class="ec-gtm-cookie-directive-note ec-gtm-cookie-directive-note-consent">
+    						<small>
+        						<div>Your consent ID:</div>
+        						<div><?php echo $uuid ?></div>
+    						</small>
+    					</div>
+    				<?php endif ?>
+    			</div>
 			</div>
 			<?php endif ?>
+			
 			<div>
-				<a class="action accept" data-confirm="<?php echo $block->getHelper()->getConfig('ec/cookie/content_text_confirm') ?>"><?php echo $block->getHelper()->getConfig('ec/cookie/content_text_accept') ?></a>
+				<?php if ($block->getSegmentMode()): ?>
+					<a class="action accept" data-confirm="<?php echo $block->getHelper()->getConfig('ec/cookie/content_text_confirm') ?>"><?php echo $block->getHelper()->getConfig('ec/cookie/content_text_accept') ?></a>
+				<?php endif ?>
 				<a class="action accept-all" data-confirm="<?php echo $block->getHelper()->getConfig('ec/cookie/content_text_confirm') ?>"><?php echo $block->getHelper()->getConfig('ec/cookie/content_text_accept_all') ?></a>
 				<a class="action decline"><?php echo $block->getHelper()->getConfig('ec/cookie/content_text_decline') ?></a>
 				<a class="action refuse" href="<?php echo $block->getHelper()->getConfig('ec/cookie/content_link_learn') ?>" target="_blank"><?php echo $block->getHelper()->getConfig('ec/cookie/content_text_learn') ?></a>
+				<a class="action close">
+					<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120">
+						<path transform="scale(0.7 0.7) translate(4 4)" fill="<?php echo $block->getHelper()->getCookieDirectiveCloseIconBackgroundColor() ?>" d="M6,6H6a20.53,20.53,0,0,1,29,0l26.5,26.49L87.93,6a20.54,20.54,0,0,1,29,0h0a20.53,20.53,0,0,1,0,29L90.41,61.44,116.9,87.93a20.54,20.54,0,0,1,0,29h0a20.54,20.54,0,0,1-29,0L61.44,90.41,35,116.9a20.54,20.54,0,0,1-29,0H6a20.54,20.54,0,0,1,0-29L32.47,61.44,6,34.94A20.53,20.53,0,0,1,6,6Z"/>
+					</svg>
+				</a>
 			</div>
 		</div>
 	</div>

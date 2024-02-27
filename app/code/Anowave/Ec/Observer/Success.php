@@ -207,20 +207,51 @@ class Success implements ObserverInterface
 		         * Track serve-side
 		         */
 		        $this->trackServerSide($order_ids);
+		        
+		        if ($this->helper->useMeasurementProtocolOnlyKeepEvent())
+		        {
+		            $this->assignOrders($block, $order_ids);
+		            
+		            /**
+		             * Push logging information into dataLayer[]
+		             */
+		            $block->setServerSide(
+		            [
+		                'use_measurement_protocol' => true
+		            ]);
+		        }
+		    }
+		    else if ($this->helper->useMeasurementProtocolOnlyPlaced()) 
+		    {
+		        if ($this->helper->useMeasurementProtocolOnlyKeepEvent())
+		        {
+		            $this->assignOrders($block, $order_ids);
+		            
+		            /**
+		             * Push logging information into dataLayer[]
+		             */
+		            $block->setServerSide(
+	                [
+	                    'use_measurement_protocol_placed' => true
+	                ]);
+		        }
+		        
+		        if ($this->helper->useMeasurementProtocolOnlyKeepEnhancedConversionData())
+		        {
+		            $this->assignEnhancedConversionData($block, $order_ids);
+		        }
 		    }
 		    else 
 		    {
 		        /**
-		         * Get orders collection
-		         *
-		         * @var array $orders
+		         * Assign order ids
 		         */
-		        $orders = $this->helper->getOrdersCollection($order_ids);
+		        $this->assignOrders($block, $order_ids);
 		        
-		        if ($orders)
-		        {
-		            $block->setOrderIds($order_ids);
-		        }
+		        /**
+		         * Assign enhanced conversion data
+		         */
+		        $this->assignEnhancedConversionData($block, $order_ids);
 		    }
 		}
 	}
@@ -261,6 +292,61 @@ class Success implements ObserverInterface
 	    }
 	    
 	    return true;
+	}
+	
+	/**
+	 * Assign enhanced conversion data
+	 * 
+	 * @param array $order_ids
+	 * @return string
+	 */
+	private function assignEnhancedConversionData(\Magento\Framework\View\Element\Template $block, array $order_ids = [])
+	{
+	    if ($this->helper->supportEnhancedConversions())
+	    {
+    	    /**
+    	     * Get orders collection
+    	     *
+    	     * @var array $orders
+    	     */
+    	    $orders = $this->helper->getOrdersCollection($order_ids);
+    	    
+    	    if ($orders)
+    	    {
+    	        $data = [];
+    	        
+    	        if ($this->helper->supportEnhancedConversions())
+    	        {
+    	            foreach ($orders as $order)
+    	            {
+    	                $data[] = $this->helper->getEnhancedConversionVariable($order);
+    	            }
+    	        }
+    	        
+    	        $block->setEnhancedConversionData($data);
+    	    }
+	    }
+	}
+	
+	/**
+	 * Assign order ids
+	 * 
+	 * @param \Magento\Framework\View\Element\Template $block
+	 * @param array $orders_ids
+	 */
+	private function assignOrders(\Magento\Framework\View\Element\Template $block, array $order_ids = [])
+	{
+	    /**
+	     * Get orders collection
+	     *
+	     * @var array $orders
+	     */
+	    $orders = $this->helper->getOrdersCollection($order_ids);
+	    
+	    if ($orders)
+	    {
+	        $block->setOrderIds($order_ids);
+	    }
 	}
 	
 	/**

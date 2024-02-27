@@ -263,41 +263,20 @@ class Config implements ObserverInterface
 		{
 			$this->_messageManager->addErrorMessage('It seems you are using older version of GTM snippet. Please update using the splitted version provided by Google Tag Manager otherwise tracking may not work.');
 		}
-		
-		if (1 === (int) $this->scope->getConfig('ec/gmp/use_measurement_protocol_only'))
-		{
-		    $this->_messageManager->addWarningMessage('You have opted to track transactions via server-side implementation ONLY. purchase event will not be pushed into dataLayer[] object on success page.');
-		}
-		
-		$addons = 
-		[
-			'Amasty_Checkout' => 
-			[
-				'Anowave_Ecoam' => __('It seems you are using checkout solution from Amasty')
-			],
-			'Mageplaza_Osc' =>
-			[
-				'Anowave_Ecopz' => __('It seems you are using checkout solution from Mageplaza')
-			],
-			'IWD_Opc' =>
-			[
-				'Anowave_Ecosc' => __('It seems you are using checkout solution from IWD')
-			],
-		];
 
-		foreach ($addons as $module => $dependency)
-		{
-			list($addon, $message) = array_merge(array_keys($dependency), array_values($dependency));
-			
-			if ($this->moduleManager->isEnabled($module) && !$this->moduleManager->isEnabled($addon))
-			{
-				$this->_messageManager->addWarningMessage("$message. Checkout tracking may not work correctly. Please contact our Help Desk for further support.");
-			}
-		}
-		
 		if (version_compare($this->getVersion(), '2.4','>=') && $this->_helper->usePreRenderImpressionPayloadModel())
 		{
 		    $this->_messageManager->addWarningMessage("Current payload model may not work correctly in Magento 2.4. Change impression payload model to After Pageview in Enhanced Ecommerce Tracking preferences section below.");
+		}
+		
+		if ($this->_helper->useMeasurementProtocolOnly() && $this->_helper->useMeasurementProtocolOnlyKeepEvent())
+		{
+		    $this->_messageManager->addWarningMessage("You have enabled server-side tracking on SUCCESS PAGE and kept PURCHASE event. Make sure to disable " . \Anowave\Ec4\Model\Api::TAG_GA4_PURCHASE . " tag from firing to avoid data duplication.");
+		}
+		
+		if ($this->_helper->useMeasurementProtocolOnlyPlaced() && $this->_helper->useMeasurementProtocolOnlyKeepEvent())
+		{
+		    $this->_messageManager->addWarningMessage("You have enabled server-side tracking on PLACED ORDER and kept PURCHASE event. Make sure to disable " . \Anowave\Ec4\Model\Api::TAG_GA4_PURCHASE . " tag from firing to avoid data duplication");
 		}
 		
 		/**

@@ -210,39 +210,39 @@
                 </field>
 			</group>
 			<group id="facebook" translate="label" type="text" sortOrder="4" showInDefault="1" showInWebsite="1" showInStore="1">
-				<label>Facebook Pixel Tracking</label>
+				<label>Meta Pixel Tracking</label>
 				<attribute type="expanded">0</attribute>
 				<field id="active" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Enable</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
 				<field id="facebook_pixel_code" translate="label" type="textarea" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Facebook pixel code</label>
+                    <label>Meta Pixel code</label>
                   	<comment>Obtain from AdManager -> Actions > View Pixel Code in Pixels page</comment>
                   	<depends>
                         <field id="ec/facebook/active">1</field>
                     </depends>
                 </field>
                 <field id="facebook_value" translate="label" type="select" sortOrder="3" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Facebook value</label>
+                    <label>Meta value</label>
                   	<source_model>Anowave\Ec\Model\System\Config\Source\Value</source_model>
                   	<depends>
 	                    <field id="ec/facebook/active">1</field>
 	                </depends>
                 </field>
                 <field id="facebook_conversions_api" translate="label" type="select" sortOrder="4" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Enable Facebook Conversions API (server-side)</label>
+                    <label>Enable Meta Conversions API (server-side)</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
                 <field id="facebook_conversions_api_pixel_id" translate="label" type="text" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Conversions API Pixel Id</label>
+                    <label>Meta Conversions API Pixel Id</label>
                     <depends>
 	                    <field id="ec/facebook/active">1</field>
 	                    <field id="ec/facebook/facebook_conversions_api">1</field>
 	                </depends>
                 </field>
                 <field id="facebook_conversions_api_access_token" translate="label" type="text" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Conversions API Access token</label>
+                    <label>Meta Conversions API Access token</label>
                     <depends>
 	                    <field id="ec/facebook/active">1</field>
 	                    <field id="ec/facebook/facebook_conversions_api">1</field>
@@ -267,7 +267,7 @@
 	                <comment>Pick an event that will fire Facebook pixel</comment>
                 </field>
                 <field id="facebook_content_id" translate="label" type="select" sortOrder="8" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Facebook content_ids[] attribute</label>
+                    <label>Meta content_ids[] attribute</label>
                     <source_model>Anowave\Ec\Model\System\Config\Source\Id</source_model>
                     <comment>Allows for content_ids[] to be either ID or SKU. Default: SKU</comment>
                 </field>
@@ -332,7 +332,12 @@
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                     <comment>Strip and restore inline HTML prior to pre-processing data-* selectors</comment>
                 </field>
-                <field id="debug" translate="label" type="select" sortOrder="15" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="optimize" translate="label" type="select" sortOrder="15" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Optimize scripts</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>If enabled, the module will optimize scripts and render them directly in HTML source code instead of adding them in head.</comment>
+                </field>
+                <field id="debug" translate="label" type="select" sortOrder="16" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Debug mode</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                     <comment>In Debug mode, the module will display payload information about backend orders, refunds, reverse transactions etc.</comment>
@@ -410,12 +415,27 @@
                 </field>
 			</group>
 			<group id="gmp" translate="label" type="text" sortOrder="7" showInDefault="1" showInWebsite="1" showInStore="1">
-				<label><![CDATA[Google Analytics Measurement Protocol]]></label>
+				<label><![CDATA[Measurement Protocol Google Anlaytics 4]]></label>
 				<attribute type="expanded">0</attribute>
 				<field id="use_measurement_protocol_only" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Track server-side ONLY</label>
-                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <source_model>Anowave\Ec\Model\System\Config\Source\Server</source_model>
                     <comment>If enabled, the extension will track frontend orders via measurement protocol ONLY. All other events will still be tracked using client-side implementation. ATTENTION: If enabled, 'purchase' event will not be pushed into dataLayer[] object on success page.</comment>
+                </field>
+                <field id="use_measurement_protocol_only_keep_event" translate="label" type="select" sortOrder="1.1" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Keep 'purchase' event</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>ATTENTION! If you enable this option, transactions may get duplicated. Make sure to remove EE4 Purchase tag to prevent this from happening.</comment>
+                    <depends>
+                    	<field id="ec/gmp/use_measurement_protocol_only" separator="|">1|2</field>
+                    </depends>
+                </field>
+                 <field id="use_measurement_protocol_only_keep_enhanced_conversion_data" translate="label" type="select" sortOrder="1.2" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Keep 'enhanced_conversion_data' event</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <depends>
+                    	<field id="ec/gmp/use_measurement_protocol_only">2</field>
+                    </depends>
                 </field>
 				<field id="use_measurement_protocol" translate="label" type="select" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Track offline orders</label>
@@ -505,7 +525,7 @@
                     <comment>If enabled, the site will display a confirmation popup to customers upon removing product(s) from shopping cart.</comment>
                 </field>
                 <field id="use_local_storage" translate="label" type="select" sortOrder="8" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label><![CDATA[Use localStorage confirmation>]]></label>
+                    <label><![CDATA[Use localStorage]]></label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                     <comment>If enabled, the extension will use a localStorage feature to better correlate categories with add/remove/checkout events. Provides more accurate reports for products in multiple categories. Note that this feature will work only on modern browsers that support localStorage.</comment>
                 </field>
@@ -565,7 +585,7 @@
                     <comment>Modifies 'price' parameter e.g. product price in items array [] for all types of events</comment>
                 </field>
                 <field id="ecomm_totalvalue" translate="label" type="select" sortOrder="3" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>AdWords total value</label>
+                    <label>Google Ads total value</label>
                     <source_model>Anowave\Ec\Model\System\Config\Source\Tax</source_model>
                     <comment>Modifies 'ecomm_totalvalue' parameter e.g. google_tag_params.ecomm_totalvalue (on success page)</comment>
                 </field>
@@ -630,6 +650,32 @@
                     </depends>
                     <comment>Select consent mode</comment>
                 </field>
+                <field id="widget" translate="label" type="select" sortOrder="0.5" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Consent Widget</label>
+                    <source_model>Anowave\Ec\Model\System\Config\Source\Consent\Widget</source_model>
+                    <depends>
+                    	<field id="ec/cookie/enable">1</field>
+                    </depends>
+                    <comment>Set desired display behaviour</comment>
+                </field>
+                <field id="widget_color" translate="label" type="textarea" sortOrder="0.6" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Widget color</label>
+                    <frontend_model>Anowave\Ec\Block\Field\Color</frontend_model>
+                    <depends>
+                    	<field id="ec/cookie/enable">1</field>
+                    	<field id="ec/cookie/widget" separator="|">1|2|3</field>
+                    </depends>
+                    <comment>Choose background color. Default: rgb(255,255,255) e.g. White</comment>
+                </field>
+                <field id="widget_color_end" translate="label" type="textarea" sortOrder="0.7" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Widget color gradient end</label>
+                    <frontend_model>Anowave\Ec\Block\Field\Color</frontend_model>
+                    <depends>
+                    	<field id="ec/cookie/enable">1</field>
+                    	<field id="ec/cookie/widget" separator="|">1|2|3</field>
+                    </depends>
+                    <comment>Choose background color. Default: rgb(255,255,255) e.g. White</comment>
+                </field>
                 <field id="mode_segment_checkall" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Check all by default</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
@@ -662,6 +708,14 @@
                 </field>
                 <field id="content_background_color" translate="label" type="textarea" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Background color</label>
+                    <frontend_model>Anowave\Ec\Block\Field\Color</frontend_model>
+                    <depends>
+                    	<field id="ec/cookie/enable">1</field>
+                    </depends>
+                    <comment>Choose background color. Default: rgb(255,255,255) e.g. White</comment>
+                </field>
+                <field id="content_close_icon_background_color" translate="label" type="textarea" sortOrder="5.1" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Close icon color</label>
                     <frontend_model>Anowave\Ec\Block\Field\Color</frontend_model>
                     <depends>
                     	<field id="ec/cookie/enable">1</field>

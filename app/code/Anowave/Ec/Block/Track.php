@@ -388,35 +388,49 @@ class Track extends Template
 	}
 	
 	/**
-	 * Load inline script 
-	 * 
-	 * @return string
-	 */
-	public function getScript() : string
-	{
-	    $content = [];
-	    
-	    if ($this->inline)
-	    {
-    	    foreach(['Anowave_Ec' => 'Anowave/Ec/view/frontend/web/js/ec.js'] as $module => $script)
-    	    {
-    	        try
-    	        {
-    	            $path = dirname(dirname(dirname(__DIR__))) . DIRECTORY_SEPARATOR . $script;
-    	            
-    	            $content[] = $this->driverFile->fileGetContents($path);
-    	            
-    	        }
-    	        catch (\Exception $e)
-    	        {
-    	            $this->logger->debug($e->getMessage());
-    	        }
-    	    }
-	    }
+     * Translate script to inline script
+     * 
+     * @return string
+     */
+    public function getScript() : string
+    {
+        $content = [];
+        
+        if ($this->_helper->isActive())
+        {
+            if ($this->_helper->useOptimize())
+            {
+                foreach(['Anowave_Ec' => 'Anowave/Ec/view/frontend/web/js/ec.js', 'Anowave_Ec4' => 'Anowave/Ec4/view/frontend/web/js/ec4.js'] as $module => $script)
+                {
+                    try
+                    {
+                        $path = dirname(dirname(dirname(__DIR__))) . DIRECTORY_SEPARATOR . $script;
+                        
+                        /**
+                         * Artefact installation fallback
+                         */
+                        if (!\file_exists($path))
+                        {
+                            $path = strtolower($path);
+                        }
+                        
+                        if (\file_exists($path))
+                        {
+                            $content[] = $this->driverFile->fileGetContents($path);
+                        }
+                        
+                    }
+                    catch (\Exception $e)
+                    {
+                        $this->logger->debug($e->getMessage());
+                    }
+                }
+            }
+        }
 
-	    return join(PHP_EOL, $content);
-	}
-	
+        return join(PHP_EOL, $content);
+    }
+
 	/**
 	 * Escape strig 
 	 * 

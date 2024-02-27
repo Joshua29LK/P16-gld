@@ -861,6 +861,13 @@ class Plugin
 		{
 			if (isset($products[$key]))
 			{
+			    /**
+			     * Custom attributes 
+			     * 
+			     * @var array $custom_attributes
+			     */
+			    $custom_attributes = $this->helper->getDataLayerAttributesArray($products[$key]->getSku());
+			    
 				/**
 				 * Get current category
 				 *  
@@ -910,7 +917,7 @@ class Plugin
 					$transport = new \Magento\Framework\DataObject
 					(
 						[
-							'attributes' => $this->attributes->getAttributes()
+						    'attributes' => $this->attributes->getAttributes() + $custom_attributes
 						]
 					);
 					
@@ -975,13 +982,13 @@ class Plugin
 				foreach ($query->query($this->helper->getListCompareSelector(), $element) as $a)
 				{
 				    $this->setAttributes($a, $products[$key],
-				        [
-				            'data-event'             => \Anowave\Ec\Helper\Constants::EVENT_ADD_TO_COMPARE,
-				            'data-event-attributes'  => $this->helper->getJsonHelper()->encode($transport->getAttributes(), JSON_UNESCAPED_UNICODE | JSON_HEX_APOS),
-				            'data-category'          => $this->helper->getCategory($category),
-				            'data-list'              => $this->helper->getCategoryList($category),
-				            'data-position'          => $position
-				        ]);
+			        [
+			            'data-event'             => \Anowave\Ec\Helper\Constants::EVENT_ADD_TO_COMPARE,
+			            'data-event-attributes'  => $this->helper->getJsonHelper()->encode($transport->getAttributes(), JSON_UNESCAPED_UNICODE | JSON_HEX_APOS),
+			            'data-category'          => $this->helper->getCategory($category),
+			            'data-list'              => $this->helper->getCategoryList($category),
+			            'data-position'          => $position
+			        ]);
 				}
 				
 				/**
@@ -1067,7 +1074,7 @@ class Plugin
 							$transport = new \Magento\Framework\DataObject
 							(
 								[
-									'attributes' => $this->attributes->getAttributes()
+									'attributes' => $this->attributes->getAttributes() + $custom_attributes
 								]
 							);
 							
@@ -1080,6 +1087,7 @@ class Plugin
 							 * Get response
 							 */
 							$attributes = $transport->getAttributes();
+							
 							
 							$a->setAttribute('data-attributes', $this->helper->getJsonHelper()->encode($attributes));
 						}
@@ -2005,7 +2013,8 @@ class Plugin
 		        'data-category' => $this->helper->getCategory($category),
 		        'data-list'     => $this->helper->getCategoryDetailList($block->getProduct(), $category),
 		        'data-event'    => \Anowave\Ec\Helper\Constants::EVENT_ADD_TO_CART,
-		        'data-click'    => $click
+		        'data-click'    => $click,
+		        
 		    ]);
 			
 			try 
@@ -2029,6 +2038,7 @@ class Plugin
 			if ('configurable' == $block->getProduct()->getTypeId())
 			{
 				$element->setAttribute('data-configurable',1);
+				$element->setAttribute('data-selection',0);
 			}
 			
 			$options = [];

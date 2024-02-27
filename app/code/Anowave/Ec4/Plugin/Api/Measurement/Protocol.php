@@ -153,9 +153,22 @@ class Protocol
                 'events'    => $events
             ];
         };
-
+        
+        
         if ($measurement_id && $measurement_api_secret)
         {
+            /**
+             * Get Google Session ID
+             * 
+             * @var Ambiguous $gsid
+             */
+            $gsid = $interceptor->getGSID($measurement_id);
+            
+            /**
+             * Items
+             * 
+             * @var array $items
+             */
             $items = [];
             
             /**
@@ -246,6 +259,11 @@ class Protocol
                     ]
                 ]
             );
+            
+            /**
+             * Set Google Session ID
+             */
+            $data['events'][0]['params']['session_id'] = $gsid;
             
             if ($reverse)
             {

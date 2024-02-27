@@ -89,4 +89,13 @@ class Config extends \Magento\Framework\View\Element\Template
     {
         return $this->helper;
     }
+    
+    public function toHtml()
+    {
+        if ($this->isGA4Enabled() && $this->helper->getBaseHelper()->isActive())
+        {
+            return parent::toHtml();
+        }
+        else return '';
+    }
 }

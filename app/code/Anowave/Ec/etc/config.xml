@@ -55,6 +55,7 @@
 					<![CDATA[div/div/div/div/div/a[contains(@class,"tocompare")]]]>
 				</list_compare>
 				<beta_placeholders>0</beta_placeholders>
+				<optimize>0</optimize>
 				<debug>0</debug>
 				<encoding>1</encoding>
 			</selectors>
@@ -96,6 +97,13 @@
 			<cookie>
 				<enable>0</enable>
 				<mode>0</mode>
+				<widget>0</widget>
+				<widget_color>
+					<![CDATA[#000000]]>
+				</widget_color>
+				<widget_color_end>
+					<![CDATA[#000000]]>
+				</widget_color_end>
 				<mode_segment_checkall>1</mode_segment_checkall>
 				<content>
 					<![CDATA[This website (%s) is using cookies. We use them to give you the best experience. If you continue using our website, we'll assume that you are happy to receive all cookies on this website.]]>
@@ -103,6 +111,9 @@
 				<content_background_color>
 					<![CDATA[#ffffff]]>
 				</content_background_color>
+				<content_close_icon_background_color>
+					<![CDATA[#000000]]>
+				</content_close_icon_background_color>
 				<content_border_radius>8</content_border_radius>
 				<content_text_color>
 					<![CDATA[#000000]]>
@@ -144,6 +155,8 @@
 			</beta>
 			<gmp>
 				<use_measurement_protocol_only>0</use_measurement_protocol_only>
+				<use_measurement_protocol_only_keep_event>0</use_measurement_protocol_only_keep_event>
+				<use_measurement_protocol_only_keep_enhanced_conversion_data>0</use_measurement_protocol_only_keep_enhanced_conversion_data>
 				<use_measurement_protocol>0</use_measurement_protocol>
 				<use_measurement_protocol_cancel>0</use_measurement_protocol_cancel>
 				<use_measurement_protocol_refund>1</use_measurement_protocol_refund>

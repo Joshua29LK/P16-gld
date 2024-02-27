@@ -54,4 +54,7 @@
    	<event name="ec_get_checkout">
    		<observer name="facebook" instance="Anowave\Ec\Observer\Facebook\Checkout" />
    	</event>
+   	<event name="layout_load_before">
+        <observer name="ec" instance="Anowave\Ec\Observer\Layout" />
+    </event>
 </config>

@@ -276,6 +276,21 @@ class Data extends \Anowave\Package\Helper\Package
 	 */
 	protected $moduleManager;
 	
+	/**
+	 * @var \Magento\Review\Model\ReviewFactory 
+	 */
+	protected $reviewFactory;
+	
+	/**
+	 * @var \Magento\Review\Model\Rating 
+	 */
+	protected $ratingFactory;
+	
+	/**
+	 * @var \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory
+	 */
+	protected $productCollectionFactory;
+	
 	
 	/**
 	 * Check if returning customer
@@ -345,6 +360,8 @@ class Data extends \Anowave\Package\Helper\Package
 	 * @param \Anowave\Ec\Model\Logger $logger
 	 * @param \Magento\Framework\Data\Form\FormKey $formKey
 	 * @param \Magento\Framework\Module\Manager $moduleManager
+	 * @param \Magento\Review\Model\ReviewFactory $reviewFactory
+	 * @param \Magento\Review\Model\Rating $ratingFactory
 	 * @param array $data
 	 */
 	public function __construct
@@ -386,6 +403,9 @@ class Data extends \Anowave\Package\Helper\Package
 	    \Anowave\Ec\Model\Logger $logger,
 	    \Magento\Framework\Data\Form\FormKey $formKey,
 	    \Magento\Framework\Module\Manager $moduleManager,
+	    \Magento\Review\Model\ReviewFactory $reviewFactory,
+	    \Magento\Review\Model\Rating $ratingFactory,
+	    \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory,
 		array $data = []
 	)
 	{
@@ -668,6 +688,23 @@ class Data extends \Anowave\Package\Helper\Package
 		 */
 		$this->moduleManager = $moduleManager;
 		
+		/**
+		 * @var \Magento\Review\Model\ReviewFactory  $reviewFactory
+		 */
+		$this->reviewFactory = $reviewFactory;
+		
+		/**
+		 * @var \Magento\Review\Model\Rating $ratingFactory
+		 */
+		$this->ratingFactory = $ratingFactory;
+		
+		/**
+		 * Set product collection factory 
+		 * 
+		 * @var \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory
+		 */
+		$this->productCollectionFactory = $productCollectionFactory;
+		
 		if ($this->moduleManager->isEnabled('Anowave_Ec4'))
 		{
 		    /**
@@ -776,7 +813,7 @@ class Data extends \Anowave\Package\Helper\Package
 		[
 		    'payload' =>
 		    [
-		        'event' => 'begin_checkout',
+		        'event' => \Anowave\Ec\Helper\Constants::EVENT_BEGIN_CHECKOUT,
 		        'currency' => $this->getStore()->getCurrentCurrencyCode(),
 		        'ecommerce' =>
 		        [
@@ -996,22 +1033,42 @@ class Data extends \Anowave\Package\Helper\Package
 			 */
 			$variant = [];
 			
-			$data = new \Magento\Framework\DataObject(array
-			(
-				'item_id' 		    => 		 	$this->getIdentifierItem($item),
-				'item_name' 		=> 		 	$item->getName(),
-			    'price' 	        => (float)  $this->getPrice($item->getProduct()),
-				'quantity' 	        => (int) 	$item->getQty(),
-				'category'	        => 		 	$this->getCategory($category),
-			    'item_list_name'    =>          $this->getCategoryList($category),
-			    'item_list_id'      =>          $this->getCategoryList($category),
-				'item_brand'		=> 		 	$this->getBrand
-				(
-					$item->getProduct()
-				),
-			    $this->getStockDimensionIndex(true) => $this->getStock($item->getProduct())
-			));
-
+			/**
+			 * items[] array node 
+			 * 
+			 * @var array $node
+			 */
+			$node = $this->assignCategory($category,
+		    [
+		        'item_id' 		     => 		$this->getIdentifierItem($item),
+		        'item_name' 		 => 		$item->getName(),
+		        'price' 	         => (float) $this->getPrice($item->getProduct()),
+		        'quantity' 	         => (int) 	$item->getQty(),
+		        'item_list_name'     =>         $this->getCategoryList($category),
+		        'item_list_id'       =>         $this->getCategoryList($category),
+		        'item_brand'		 => 		$this->getBrand($item->getProduct()),
+		        'item_reviews_count'  =>        $this->getReviewsCount($item->getProduct()),
+		        'item_rating_summary' =>        $this->getRatingSummary($item->getProduct()),
+		        'category'            =>        $this->getCategory($category),
+		        'currency'            =>        $this->getCurrency(),
+		        $this->getStockDimensionIndex(true) => $this->getStock($item->getProduct())
+		    ]);
+			
+			
+			/**
+			 * Get custom attributes array 
+			 * 
+			 * @var array $custom_attributes
+			 */
+			$node += $this->getDataLayerAttributesArray($item->getProduct()->getSku());
+			
+			/**
+			 * Build data 
+			 * 
+			 * @var \Magento\Framework\DataObject $data
+			 */
+			$data = new \Magento\Framework\DataObject($node);
+			
 			/**
 			 * AdWords Dynamic Remarketing 
 			 * 
@@ -1579,6 +1636,8 @@ class Data extends \Anowave\Package\Helper\Package
 			        (
 			            $info->getProduct()
 		            ),
+			        'item_reviews_count'                => $this->getReviewsCount($info->getProduct()),
+			        'item_rating_summary'               => $this->getRatingSummary($info->getProduct()),
 			        $this->getStockDimensionIndex(true)	=> $this->getStock($info->getProduct()),
 			        'quantity' 							=> 1,
 			        'index'                             => 0
@@ -1586,8 +1645,10 @@ class Data extends \Anowave\Package\Helper\Package
 			    $attributes
 		    );
 			
+			$item += $this->getDataLayerAttributesArray($info->getProduct()->getSku());
+			
 			$items[] = $this->assignCategory($category, $item);
-    			
+			
 			foreach ($items as $item)
 			{
 			    $value += (float) $item['price'];
@@ -1931,7 +1992,8 @@ class Data extends \Anowave\Package\Helper\Package
 		            'currency'        => $this->getStore()->getCurrentCurrencyCode(),
 		            'coupon'          => strtoupper((string) $order->getCouponCode()),
 		            'items'           => []
-		        ]
+		        ],
+		        'currency' => $this->getStore()->getCurrentCurrencyCode()
 		    ],
 		    'facebook' =>
 		    [
@@ -1975,7 +2037,6 @@ class Data extends \Anowave\Package\Helper\Package
 		            $categories[] = $this->getStoreRootDefaultCategoryId();
 		        }
 		        
-		        
 		        try
 		        {
 		            /**
@@ -1996,23 +2057,34 @@ class Data extends \Anowave\Package\Helper\Package
 		        }
 		    }
 		    
-		    $data = new \Magento\Framework\DataObject
-		    (
-		        [
-		            'item_id' 		    => 		 	$this->getIdentifier($item->getProduct()),
-		            'item_name' 		=> 		 	$item->getName(),
-		            'price' 	        => (float) 	$this->getRevenueProduct($item),
-		            'quantity' 	        => (int) 	$item->getQtyOrdered(),
-		            'category'	        => 		 	$this->getCategory($category),
-		            'item_list_id'      =>          $this->getCategoryList($category),
-		            'item_list_name'    =>          $this->getCategoryList($category),
-		            'item_brand'		=> 		 	$this->getBrand
-		            (
-		                $item->getProduct()
+		    
+		    $node = $this->assignCategory($category,
+	        [
+	            'item_id' 		    => 		 	$this->getIdentifier($item->getProduct()),
+	            'item_name' 		=> 		 	$item->getName(),
+	            'affiliation'       =>          $this->getStoreName(),
+	            'price' 	        => (float) 	$this->getRevenueProduct($item),
+	            'quantity' 	        => (int) 	$item->getQtyOrdered(),
+	            'category'	        => 		 	$this->getCategory($category),
+	            'item_list_id'      =>          $this->getCategoryList($category),
+	            'item_list_name'    =>          $this->getCategoryList($category),
+	            'item_brand'		=> 		 	$this->getBrand
+	            (
+	                $item->getProduct()
 	                ),
-		            $this->getStockDimensionIndex(true) => $this->getStock($item->getProduct())
-		        ]
-		    );
+	            'item_reviews_count'  =>        $this->getReviewsCount($item->getProduct()),
+	            'item_rating_summary' =>        $this->getRatingSummary($item->getProduct()),
+	            $this->getStockDimensionIndex(true) => $this->getStock($item->getProduct())
+	        ]);
+		    
+		    /**
+		     * Add custom attributes
+		     *
+		     * @var array $custom_attributes
+		     */
+		    $node += $this->getDataLayerAttributesArray($item->getProduct()->getSku());
+
+		    $data = new \Magento\Framework\DataObject($node);
 		    
 		    if (\Magento\ConfigurableProduct\Model\Product\Type\Configurable::TYPE_CODE == $item->getProduct()->getTypeId())
 		    {
@@ -2222,7 +2294,11 @@ class Data extends \Anowave\Package\Helper\Package
 		                {
 		                    if (in_array($id, (array) $selections))
 		                    {
-		                        $bundles[] = $entity->getName();
+		                        $bundles[] = 
+		                        [
+		                            'ids'  => $entity->getSku(),
+		                            'name' => $entity->getName()
+		                        ];
 		                    }
 		                }
 		            }  
@@ -2231,6 +2307,8 @@ class Data extends \Anowave\Package\Helper\Package
 		        if ($bundles)
 		        {
 		            $response['ecommerce']['purchase']['bundles'] = $bundles;
+		            
+		            $data->setBundles($bundles);
 		        }
 		    }
 		    
@@ -2376,6 +2454,11 @@ class Data extends \Anowave\Package\Helper\Package
 		 * Set products
 		 */
 		$response['ecommerce']['purchase']['items'] = $products;
+		
+		/**
+		 * Set items array
+		 */
+		$response['ecommerce']['items'] = $products;
 		
 		/**
 		 * Create transport object
@@ -2994,16 +3077,16 @@ class Data extends \Anowave\Package\Helper\Package
 			
 			if (\Magento\ConfigurableProduct\Model\Product\Type\Configurable::TYPE_CODE == $product->getTypeId())
 			{
-			    
 			    $attributes = $product->getTypeInstance()->getConfigurableAttributes($product);
 			    
 				foreach ($product->getTypeInstance()->getUsedProducts($product) as $simple)
 				{
 					$simples[$simple->getId()] = 
 					[
-						'id' 		=> $this->getIdentifier($simple),
-						'name' 		=> $simple->getName(),
-						'price'		=> $simple->getPrice()
+						'id' 		 => $this->getIdentifier($simple),
+						'name' 		 => $simple->getName(),
+						'price'		 => $simple->getPrice(),
+					    'price_tier' => $simple->getTierPrice()
 					];
 					
 					$configurations = [];
@@ -3013,7 +3096,7 @@ class Data extends \Anowave\Package\Helper\Package
 					    $configurations[] = 
 					    [
 					        'value' => $attribute->getAttributeId(),
-					        'label' => $simple->getData($attribute->getProductAttribute()->getAttributeCode())
+					        'label' => $simple->getAttributeText($attribute->getProductAttribute()->getAttributeCode())
 					    ];
 					}
 					
@@ -3021,7 +3104,7 @@ class Data extends \Anowave\Package\Helper\Package
 				}
 			}
 		}
-		
+
 		return $this->getJsonHelper()->encode($simples);
 	}
 	
@@ -3329,6 +3412,27 @@ class Data extends \Anowave\Package\Helper\Package
 		}
 	
 		return trim(join(chr(47), $segments));
+	}
+	
+	/**
+	 * Count product reviews 
+	 * 
+	 * @param \Magento\Catalog\Model\Product $product
+	 * @return int
+	 */
+	public function getReviewsCount(\Magento\Catalog\Model\Product $product) : int
+	{
+	    return (int) $this->reviewFactory->create()->getResourceCollection()->addStoreFilter($this->getStore()->getId())->addStatusFilter(\Magento\Review\Model\Review::STATUS_APPROVED)->addEntityFilter('product', $product->getId())->getSize();
+	}
+	
+	/**
+	 * Get rating summary 
+	 * 
+	 * @return float
+	 */
+	public function getRatingSummary(\Magento\Catalog\Model\Product $product) : float
+	{
+	    return (float) $this->ratingFactory->getEntitySummary($product->getId())->getSum();
 	}
 	
 	/**
@@ -3913,7 +4017,7 @@ class Data extends \Anowave\Package\Helper\Package
 	 */
 	public function isAdwordsConversionTrackingActive($consent = false)
 	{
-		$active = 1 === (int) $this->getConfig('ec/adwords/conversion');
+		return 1 === (int) $this->getConfig('ec/adwords/conversion');
 		
 		/**
 		 * Check for consent
@@ -4008,13 +4112,44 @@ class Data extends \Anowave\Package\Helper\Package
 	}
 	
 	/**
-	 * Use only measurement protocol for tracking transactions
+	 * Enable server-side tracking for orders on success page
 	 * 
 	 * @return bool
 	 */
 	public function useMeasurementProtocolOnly() : bool
 	{
-	    return 1 === (int) $this->getConfig('ec/gmp/use_measurement_protocol_only');
+	    return \Anowave\Ec\Model\System\Config\Source\Server::TRACK_SERVER_SIDE_ENABLED_ON_SUCCESS === (int) $this->getConfig('ec/gmp/use_measurement_protocol_only');
+	}
+	
+	
+	/**
+	 * Enable server-side tracking for orders when they get placed
+	 * 
+	 * @return bool
+	 */
+	public function useMeasurementProtocolOnlyPlaced() : bool
+	{
+	    return \Anowave\Ec\Model\System\Config\Source\Server::TRACK_SERVER_SIDE_ENABLED_ON_PLACED === (int) $this->getConfig('ec/gmp/use_measurement_protocol_only');
+	}
+	
+	/**
+	 * Use only measurement protocol for tracking transactions
+	 *
+	 * @return bool
+	 */
+	public function useMeasurementProtocolOnlyKeepEvent() : bool
+	{
+	    return 1 === (int) $this->getConfig('ec/gmp/use_measurement_protocol_only_keep_event');
+	}
+	
+	/**
+	 * Use only measurement protocol for tracking transactions
+	 *
+	 * @return bool
+	 */
+	public function useMeasurementProtocolOnlyKeepEnhancedConversionData() : bool
+	{
+	    return 1 === (int) $this->getConfig('ec/gmp/use_measurement_protocol_only_keep_enhanced_conversion_data');
 	}
 	
 	/**
@@ -4148,7 +4283,7 @@ class Data extends \Anowave\Package\Helper\Package
 	        }
 	    }
 
-	    return $this->getJsonHelper()->encode($variable);
+	    return $variable;
 	}
 
 	/**
@@ -4214,6 +4349,16 @@ class Data extends \Anowave\Package\Helper\Package
 	public function useDebugMode() : bool
 	{
 	    return 1 === (int) $this->getConfig('ec/selectors/debug');
+	}
+	
+	/**
+	 * Optimize and render scripts in HTML
+	 * 
+	 * @return bool
+	 */
+	public function useOptimize() : bool
+	{
+	    return 1 === (int) $this->getConfig('ec/selectors/optimize');
 	}
 	
 	/**
@@ -4337,6 +4482,46 @@ class Data extends \Anowave\Package\Helper\Package
 	}
 	
 	/**
+	 * Check if cookie directive support is enabled
+	 *
+	 * @return boolean
+	 */
+	public function getKeepCookieWidget() : int
+	{
+	    return (int) $this->getConfig('ec/cookie/widget');
+	}
+	
+	/**
+	 * Get cookie widget gradient color start
+	 *
+	 * @return boolean
+	 */
+	public function getKeepCookieWidgetColor() : string
+	{
+	    return (string) $this->getConfig('ec/cookie/widget_color');
+	}
+	
+	/**
+	 * Get cookie widget gradient color end
+	 *
+	 * @return boolean
+	 */
+	public function getKeepCookieWidgetColorEnd() : string
+	{
+	    return (string) $this->getConfig('ec/cookie/widget_color_end');
+	}
+	
+	/**
+	 * Hide cookie widget
+	 * 
+	 * @return bool
+	 */
+	public function hideCookieWidget() : bool
+	{
+	    return \Anowave\Ec\Model\System\Config\Source\Consent\Widget::KEEP_HIDE === $this->getKeepCookieWidget();
+	}
+	
+	/**
 	 * Get built-in Google Consent
 	 * 
 	 * @return string
@@ -4349,7 +4534,10 @@ class Data extends \Anowave\Package\Helper\Package
 	        'analytics_storage'        => 'denied',
 	        'functionality_storage'    => 'denied',
 	        'personalization_storage'  => 'denied',
-	        'security_storage'         => 'denied'
+	        'security_storage'         => 'denied',
+	        'ad_user_data'             => 'denied',
+	        'ad_personalization'       => 'denied',
+	        'wait_for_update'          => 500
 	    ]);
 	}
 	/**
@@ -4421,7 +4609,7 @@ class Data extends \Anowave\Package\Helper\Package
 	 * 
 	 * @return boolean
 	 */
-	public function getCookieDirectiveIsSegmentMode()
+	public function getCookieDirectiveIsSegmentMode() : bool
 	{
 		return \Anowave\Ec\Model\System\Config\Source\Consent\Mode::SEGMENT === (int) $this->getCookieDirectiveConsentMode();	
 	}
@@ -4441,6 +4629,8 @@ class Data extends \Anowave\Package\Helper\Package
 				\Anowave\Ec\Helper\Constants::COOKIE_CONSENT_MARKETING_GRANTED_EVENT,
 				\Anowave\Ec\Helper\Constants::COOKIE_CONSENT_PREFERENCES_GRANTED_EVENT,
 				\Anowave\Ec\Helper\Constants::COOKIE_CONSENT_ANALYTICS_GRANTED_EVENT,
+			    \Anowave\Ec\Helper\Constants::COOKIE_CONSENT_AD_USER_DATA_EVENT,
+			    \Anowave\Ec\Helper\Constants::COOKIE_CONSENT_AD_PERSONALIZATION_EVENT
 			];
 		}
 		
@@ -4458,6 +4648,16 @@ class Data extends \Anowave\Package\Helper\Package
 	public function getCookieDirectiveBackgroundColor()
 	{
 		return $this->getConfig('ec/cookie/content_background_color');
+	}
+	
+	/**
+	 * Get cookie directive background color
+	 *
+	 * @return mixed
+	 */
+	public function getCookieDirectiveCloseIconBackgroundColor()
+	{
+	    return $this->getConfig('ec/cookie/content_close_icon_background_color');
 	}
 	
 	/**
@@ -4905,7 +5105,14 @@ class Data extends \Anowave\Package\Helper\Package
 	 */
 	public function getIdentifierItem(\Magento\Framework\Api\ExtensibleDataInterface $item)
 	{
-	    $product = $item->getProduct();
+	    if (!$this->useSimples())
+	    {
+	        $product = $this->productRepository->getById($item->getProduct()->getId());
+	    }
+	    else 
+	    {
+	        $product = $item->getProduct();
+	    };
 	    
 	    if (!$product)
 	    {
@@ -4924,7 +5131,56 @@ class Data extends \Anowave\Package\Helper\Package
 	    
 	    
 	    return $this->getIdentifier($product);
+	}
+	
+	/**
+	 * Get product attributes to be included in dataLayer[] object
+	 * @return array
+	 */
+	public function getDatalayerAttributes() : array
+	{
+	    $attributes = [];
 	    
+	    foreach($this->eavConfig->getAttributes(\Magento\Catalog\Model\Product::ENTITY) as $attribute)
+	    {
+	        if (1 === (int) $attribute['datalayer'])
+	        {
+	            $attributes[] = $attribute['attribute_code'];
+	        }
+	    }
+
+	    return $attributes;
+	}
+	
+	/**
+	 * Get attribute values by SKU 
+	 * 
+	 * @param string $sku
+	 * @return array
+	 */
+	public function getDataLayerAttributesArray(string $sku = '') : array
+	{
+	    $values = [];
+	    
+	    $attributes = $this->getDatalayerAttributes();
+	    
+	    if ($attributes)
+	    {
+    	    foreach($this->productCollectionFactory->create()->addAttributeToSelect($attributes)->addAttributeToFilter('sku', [$sku]) as $product)
+    	    {
+    	        foreach ($attributes as $attribute)
+    	        {
+    	            $values["item_$attribute"] = $product->getData($attribute);
+    	        }
+    	    }
+    	    
+    	    /**
+    	     * Filter empty or NULL values
+    	     */
+    	    $values = array_filter($values);
+    	}
+	    
+	    return $values; 
 	}
 	
 	/**

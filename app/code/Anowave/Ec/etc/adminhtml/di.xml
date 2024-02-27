@@ -29,4 +29,7 @@
 	<type name="Anowave\Package\Block\License\Field">
 	   <plugin name="ec" type="Anowave\Ec\Plugin\License" sortOrder="1" />
 	</type>
+	<type name="Magento\Catalog\Block\Adminhtml\Product\Attribute\Edit\Tab\Front">
+        <plugin name="ec" type="Anowave\Ec\Plugin\Tab\Front" sortOrder="1"/>
+    </type>
 </config>

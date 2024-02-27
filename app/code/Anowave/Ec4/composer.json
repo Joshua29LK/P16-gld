@@ -1,13 +1,13 @@
 {
 	"name" : "anowave/ec4",
-	"description" : "Magento 2 Google Tag Manager Enhanced Ecommerce (UA) Tracking (GA4)",
+	"description" : "Magento 2 Google Analytics 4 Enhanced Ecommerce Tracking",
 	"require" : {
 		"php" : "~5.5.0|~5.6.0|~7.0.0|~7.1.0|~7.2.0|~7.3.0|~7.4.0|~8.0.0|~8.1.0|~8.2.0",
 		"anowave/package" : ">0.0.0",
 		"anowave/ec" : ">=100.5.9"
 	},
 	"type" : "magento2-module",
-	"version" : "200.2.7",
+	"version" : "200.5.0",
 	"autoload" : {
 		"files" : [
 			"registration.php"
@@ -25,5 +25,6 @@
 	],
 	"support" : {
 		"email" : "developer@anowave.com"
-	}
+	},
+	"license" : "Proprietary"
 }

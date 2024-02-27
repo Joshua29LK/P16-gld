@@ -137,6 +137,12 @@
         	});
         	
         })(<?php echo $block->getHelper()->getPurchasePayloadCollection($block) ?>);
+
+        <?php if ($block->getServerSide()): ?>
+
+        	dataLayer.push(<?php echo json_encode($block->getServerSide()) ?>);
+
+        <?php endif ?>
         
         <?php
         /**
@@ -225,21 +231,18 @@
  * AdWords Conversion Tracking
  */
 ?>
-<?php if ($block->getOrders() && $block->getHelper()->supportEnhancedConversions()): ?>
+<?php if ($block->getEnhancedConversionData()): ?>
 	<script data-ommit="true">
 	
-    	<?php foreach ($block->getOrders() as $order): ?>
-    	
-        	var enhanced_conversion_data = <?php echo $block->getHelper()->getEnhancedConversionVariable($order) ?>;
-        
-        	dataLayer.push({ event: 'enhanced_conversion_data', eventVariable: enhanced_conversion_data });
+    	<?php foreach ($block->getEnhancedConversionData() as $data): ?>
+
+        	dataLayer.push({ event: 'enhanced_conversion_data', eventVariable: <?php echo json_encode($data) ?> });
         	
     	<?php endforeach ?>
     	
 	</script>
 <?php endif ?>
 <?php if ($block->getHelper()->isAdwordsConversionTrackingActive(true)):?>
-
 	<?php if (!$block->getHelper()->useAdwordsConversionTrackingGtag()): ?>
 		<?php if ($block->getOrders() && $block->getAdwords()->getGoogleConversionId()) : ?>
 			<script data-ommit="true" src="//www.googleadservices.com/pagead/conversion.js"></script>
@@ -249,14 +252,8 @@
 		    <?php endforeach ?>
 		<?php endif ?>
 	<?php else: ?>
-		<?php
-		/**
-		 * Gtag AdWords Conversion Tracking Implementation
-		 */
-		?>
-		<?php echo $block->getHelper()->getAdwordsConversionTrackingGtagSiteTag() ?>
 		<?php if ($block->getOrders()) : ?>
-			
+			<?php echo $block->getHelper()->getAdwordsConversionTrackingGtagSiteTag() ?>
 			<?php foreach ($block->getOrders() as $order): ?>
 				<script data-ommit="true">
 

@@ -46,6 +46,16 @@ class Cookie extends \Anowave\Package\Helper\Package
     protected $directiveAnalytics;
     
     /**
+	 * @var \Anowave\Ec\Model\Cookie\DirectiveUserdata
+	 */
+	protected $directiveUserdata;
+	
+	/**
+	 * @var \Anowave\Ec\Model\Cookie\DirectivePersonalization
+	 */
+	protected $directivePersonalization;
+    
+    /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
     protected $scopeConfig;
@@ -65,6 +75,8 @@ class Cookie extends \Anowave\Package\Helper\Package
      * @param \Anowave\Ec\Model\Cookie\DirectiveMarketing $directiveMarketing
      * @param \Anowave\Ec\Model\Cookie\DirectivePreferences $directivePreferences
      * @param \Anowave\Ec\Model\Cookie\DirectiveAnalytics $directiveAnalytics
+     * @param \Anowave\Ec\Model\Cookie\DirectiveUserdata $directiveUserdata
+     * @param \Anowave\Ec\Model\Cookie\DirectivePersonalization $directivePersonalization
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      */
     public function __construct
@@ -74,6 +86,8 @@ class Cookie extends \Anowave\Package\Helper\Package
         \Anowave\Ec\Model\Cookie\DirectiveMarketing $directiveMarketing,
         \Anowave\Ec\Model\Cookie\DirectivePreferences $directivePreferences,
         \Anowave\Ec\Model\Cookie\DirectiveAnalytics $directiveAnalytics,
+        \Anowave\Ec\Model\Cookie\DirectiveUserdata $directiveUserdata,
+        \Anowave\Ec\Model\Cookie\DirectivePersonalization $directivePersonalization,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
     )
     {
@@ -106,6 +120,21 @@ class Cookie extends \Anowave\Package\Helper\Package
         $this->directiveAnalytics = $directiveAnalytics;
         
         /**
+        * Set ad_user_data cookie directive
+        *
+        * @var \Anowave\Ec\Model\Cookie\DirectiveUserdata $directiveUserdata
+        */
+        $this->directiveUserdata = $directiveUserdata;
+        
+        /**
+         * Set ad_personalization cookie directive
+         *
+         * @var \Anowave\Ec\Model\Cookie\DirectivePersonalization $directivePersonalization
+         */
+        
+        $this->directivePersonalization = $directivePersonalization;
+        
+        /**
          * Set scope config 
          * 
          * @var \Magento\Framework\App\Config\ScopeConfigInterface
@@ -136,7 +165,9 @@ class Cookie extends \Anowave\Package\Helper\Package
             \Anowave\Ec\Helper\Constants::COOKIE_CONSENT_GRANTED_EVENT 				=> (int) $this->directive->get(),
             \Anowave\Ec\Helper\Constants::COOKIE_CONSENT_MARKETING_GRANTED_EVENT 	=> (int) $this->directiveMarketing->get(),
             \Anowave\Ec\Helper\Constants::COOKIE_CONSENT_PREFERENCES_GRANTED_EVENT 	=> (int) $this->directivePreferences->get(),
-            \Anowave\Ec\Helper\Constants::COOKIE_CONSENT_ANALYTICS_GRANTED_EVENT 	=> (int) $this->directiveAnalytics->get()
+            \Anowave\Ec\Helper\Constants::COOKIE_CONSENT_ANALYTICS_GRANTED_EVENT 	=> (int) $this->directiveAnalytics->get(),
+            \Anowave\Ec\Helper\Constants::COOKIE_CONSENT_AD_USER_DATA_EVENT 	    => (int) $this->directiveUserdata->get(),
+            \Anowave\Ec\Helper\Constants::COOKIE_CONSENT_AD_PERSONALIZATION_EVENT 	=> (int) $this->directivePersonalization->get(),
         ];
         
         /**
@@ -152,7 +183,6 @@ class Cookie extends \Anowave\Package\Helper\Package
          * @var array $segments
          */
         $segments = [];
-        
         
         foreach ($scope as $key => $value)
         {
@@ -195,6 +225,30 @@ class Cookie extends \Anowave\Package\Helper\Package
                         'check' => $this->getDefaultValue
                         (
                             $this->directiveAnalytics->get()
+                        )
+                    ];
+                    
+                case \Anowave\Ec\Helper\Constants::COOKIE_CONSENT_AD_USER_DATA_EVENT:
+                    
+                    $segments[\Anowave\Ec\Helper\Constants::COOKIE_CONSENT_AD_USER_DATA_EVENT] =
+                    [
+                        'label' => __('Allow sending user data to Google for advertising purposes'),
+                        'value' => __('Sets consent for sending user data related to advertising to Google.'),
+                        'check' => $this->getDefaultValue
+                        (
+                            $this->directiveUserdata->get()
+                        )
+                    ];
+                    
+                case \Anowave\Ec\Helper\Constants::COOKIE_CONSENT_AD_PERSONALIZATION_EVENT:
+                    
+                    $segments[\Anowave\Ec\Helper\Constants::COOKIE_CONSENT_AD_PERSONALIZATION_EVENT] =
+                    [
+                        'label' => __('Allow personalized advertising (remarketing)'),
+                        'value' => __('Sets consent for personalized advertising.'),
+                        'check' => $this->getDefaultValue
+                        (
+                            $this->directivePersonalization->get()
                         )
                     ];
                     

@@ -30,6 +30,13 @@ class Protocol
 	 */
 	protected $cid = null;
 	
+	/**
+	 * Google Analytics 4 session id
+	 * 
+	 * @var UUID
+	 */
+	protected $gsid = null;
+	
 	/** 
 	 * @var \Anowave\Ec\Helper\Data
 	 */
@@ -98,7 +105,12 @@ class Protocol
 	protected $cookie;
 	
 	/**
-	 * Constructor
+	 * @var \Anowave\Ec\Model\Cookie\AnalyticsSession
+	 */
+	protected $cookie_session;
+	
+	/**
+	 * Constructor 
 	 * 
 	 * @param \Anowave\Ec\Helper\Data $helper
 	 * @param \Magento\Store\Model\StoreManagerInterface $storeManager
@@ -112,6 +124,7 @@ class Protocol
 	 * @param \Anowave\Ec\Model\ResourceModel\Transaction\CollectionFactory $transactionFactory
 	 * @param \Anowave\Ec\Model\Random $random
 	 * @param \Anowave\Ec\Model\Cookie\Analytics $cookie
+	 * @param \Anowave\Ec\Model\Cookie\AnalyticsSession $cookie_session
 	 */
 	public function __construct
 	(
@@ -126,7 +139,8 @@ class Protocol
 		\Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
 	    \Anowave\Ec\Model\ResourceModel\Transaction\CollectionFactory $transactionFactory,
 	    \Anowave\Ec\Model\Random $random,
-	    \Anowave\Ec\Model\Cookie\Analytics $cookie
+	    \Anowave\Ec\Model\Cookie\Analytics $cookie,
+	    \Anowave\Ec\Model\Cookie\AnalyticsSession $cookie_session
 	)
 	{
 		/**
@@ -212,6 +226,13 @@ class Protocol
 		 * @var \Anowave\Ec\Model\Cookie\Analytics $cookie
 		 */
 		$this->cookie = $cookie;
+		
+		/**
+		 * Set analytics session cookie model 
+		 * 
+		 * @var \Anowave\Ec\Model\Cookie\AnalyticsSession $cookie_session
+		 */
+		$this->cookie_session = $cookie_session;
 	}
 	
 	/**
@@ -334,6 +355,38 @@ class Protocol
 		}
 
 		return $this->cid;
+	}
+	
+	/**
+	 * Get Google Session ID
+	 * 
+	 * @param string $measurement_id
+	 * @return \Anowave\Ec\Model\Api\Measurement\UUID
+	 */
+	public function getGSID(string $measurement_id = '')
+	{
+	    if (!$this->gsid)
+	    {
+	        if (null !== $gsid = $this->cookie_session->get($measurement_id))
+	        {
+	            $this->gsid = $gsid;
+	        }
+	        else 
+	        {
+	            if (null !== $gsid = $this->session->getGSID())
+	            {
+	                $this->gsid = $gsid;
+	            }
+	            else
+	            {
+	                $this->gsid = $this->random->getCID();
+	                
+	                $this->session->setGSID($this->gsid);
+	            }
+	        }
+	    }
+	    
+	    return $this->gsid;
 	}
 	
 	/**

@@ -2,11 +2,121 @@
 
 All notable changes to this project will be documented in this file.
 
-### SEE app/code/Anowave/Ec4/CHANGELOG.md for future updates involving BOTH Anowave_Ec and Anowave_Ec4 packages
+## [103.9.0.8084] - 22/02/2024
 
-Older versions
+### Added
 
-## [103.7.5.8084] - 06/10/2023
+- Added ability to push custom product attributes to dataLayer[] push payloads.
+
+### Fixed
+
+- Updated consent DECLINE action and stored decline consent in the consent log
+
+## [103.8.9] - 22/02/2024
+
+### Changed
+
+- Improved consent popup styling, more spacing, added more customizable options
+- Added new SVG icon for consent popup including a loader icon
+- Added CONSENT UUID to consent widget to let customer know their consent ID
+
+## [103.8.8] - 19/02/2024
+
+### Fixed
+
+- Fixed a small JS issue in the consent window
+
+## [103.8.7] - 19/02/2024
+
+### Added
+
+- Added a new close icon for the consent popup
+- Added a new widget icon for the consent popup
+- Added a loader icon to show while consent widget is rendering
+- Added ability to use a gradient color for consent widget icon
+
+## [103.8.6] - 19/02/2024
+
+### Added
+
+- Added item_reviews_count and item_rating_summary property to payloads
+- Added color picker for the new cookie widget icon to allow for more robust display
+
+### Fixed
+
+- Added missing item_category_N in 'purchase' payload for configurable products
+
+
+
+## [103.8.5] - 19/02/2024
+
+### Added
+
+- Added ability to display cookie widget icon to allow customers to change/update consent preferences
+
+### Fixed
+
+- Fixed duplicate rows issue rendering in Admin -> Reports -> GDRP consent grid
+
+## [103.8.4] - 14/02/2024
+
+### Fixed
+
+- Fixed tier_price issue
+
+## [103.8.3] - 13/02/2024
+
+### Fixed
+
+- Added CSP policy for doubleclick (connect-src)
+
+## [103.8.2] - 13/02/2024
+
+### Fixed
+
+- Fixed multiple tier price miscalculation for configurable variants
+
+## [103.8.1] - 06/02/2024
+
+### Fixed
+
+- Fixed wrong tier price related to configurable variants
+
+### Changed
+
+- Changed virtualVariantView event to view_item event
+
+## [103.8.0] - 06/02/2024
+
+### Removed
+
+Removed gtag('event', 'consent_updated');
+
+## [103.7.9] - 06/02/2024
+
+### Added
+
+- Added gtag('event', 'consent_updated'); after consent update to allow for tags to trigger properly.
+
+## [103.7.8] - 02/02/2024
+
+### Added
+
+- Added ability to server-side track orders when they get placed instead of on success page
+
+## [103.7.7] - 29/01/2024
+
+### Added
+
+- Added missing items[] array to add_to_cart/remove_from_cart events related to cart update
+
+## [103.7.6] - 25/01/2024
+
+### Added
+
+- Added bundles[] array to items[] array in purchase event payload
+
+## [103.7.5] - 06/10/2023
 
 ### Fixed
 
