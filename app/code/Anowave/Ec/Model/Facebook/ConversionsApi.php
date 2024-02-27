@@ -183,6 +183,11 @@ class ConversionsApi extends Endpoint
         $this->logger = $logger;
     }
     
+    public function trackPageView()
+    {
+        return $this;
+    }
+    
     /**
      * Track view content 
      * 

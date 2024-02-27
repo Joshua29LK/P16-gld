@@ -29,16 +29,60 @@ class PlaceAfter
     protected $transactionFactory;
     
     /**
+     * @var \Anowave\Ec\Model\Api\Measurement\Protocol
+     */
+    protected $protocol;
+    
+    /**
+     * @var \Anowave\Ec\Helper\Data
+     */
+    protected $helper;
+    
+    /**
+     * @var \Anowave\Ec\Logger\Logger
+     */
+    protected $logger;
+    
+    /**
      * Constructor
      *
      * @param \Anowave\Ec\Model\TransactionFactory $transactionFactory
      */
     public function __construct
     (
-        \Anowave\Ec\Model\TransactionFactory $transactionFactory
+        \Anowave\Ec\Model\TransactionFactory $transactionFactory,
+        \Anowave\Ec\Model\Api\Measurement\Protocol $protocol,
+        \Anowave\Ec\Helper\Data $helper,
+        \Anowave\Ec\Logger\Logger $logger
     )
     {
+        /**
+         * Set transaction factory 
+         * 
+         * @var \Anowave\Ec\Model\TransactionFactory $transactionFactory
+         */
         $this->transactionFactory = $transactionFactory;
+        
+        /**
+         * Set protocol
+         *
+         * @var \Anowave\Ec\Model\Api\Measurement\Protocol $protocol
+         */
+        $this->protocol = $protocol;
+        
+        /**
+         * Set helper
+         *
+         * @var \Anowave\Ec\Observer\Order\Cancel\After $helper
+         */
+        $this->helper = $helper;
+        
+        /**
+         * Set logger 
+         * 
+         * @var \Anowave\Ec\Plugin\Order\PlaceAfter $logger
+         */
+        $this->logger = $logger;
     }
 
     
@@ -73,6 +117,21 @@ class PlaceAfter
         }
          
         $transaction->save();
+        
+        /**
+         * Track order on placed
+         */
+        if ($this->helper->useMeasurementProtocolOnlyPlaced())
+        {
+            if (false !== $this->protocol->purchaseById($order->getId()))
+            {
+                $this->logger->info("ORDER ID ({$order->getIncrementId()}) tracked to GA4 successfully.");
+            }
+            else 
+            {
+                $this->logger->info("Failed to track {$order->getId()} to GA4.");
+            }
+        }
 
        return $order;
     }

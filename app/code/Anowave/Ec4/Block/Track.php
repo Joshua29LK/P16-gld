@@ -105,29 +105,7 @@ class Track extends \Anowave\Ec\Block\Track
         
         foreach ($checkout->products as $product)
         {
-            $item = 
-            [
-                'item_id'           => $product['item_id'],
-                'item_name'         => $product['item_name'],
-                'item_list_id'      => $product['item_list_id'],
-                'item_list_name'    => $product['item_list_name'],
-                'price'             => $product['price'],
-                'quantity'          => $product['quantity'],
-                'currency'          => $this->getHelper()->getCurrency(),
-                'item_brand'        => $product['item_brand'],
-                'category'          => $product['category'],
-                'index'             => $index++
-            ];
-            
-            if ($this->affiliation->isEnabled())
-            {
-                $item['affiliation'] = $this->affiliation->getAffiliation();
-            }
-            
-            if (isset($product['item_variant']))
-            {
-                $item['item_variant'] = $product['item_variant'];
-            }
+            $item = $product;
             
             foreach ($this->getItemCategories($product['category']) as $key => $category)
             {
@@ -138,7 +116,7 @@ class Track extends \Anowave\Ec\Block\Track
             
             $value += ((float) $item['price'] * (float) $product['quantity']);
         }
-        
+
         /**
          * Set value
          */

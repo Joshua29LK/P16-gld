@@ -55,13 +55,16 @@ class Consent extends Column
             {
                 $consent = json_decode($item['consent'], true);
                 
-                $value = [];
+                $value = 
+                [
+                    "<strong>{$item['consent_uuid']}</strong>"
+                ];
                 
                 foreach ($consent as $cookie => $state)
                 {
-                    $value[] = "<strong>$cookie</strong>";
-                    $value[] = $state ? __('Accepted') : __('Declined');
+                    $value[] = $cookie;
                 }
+                
                 
                 /**
                  * Rebuild consent line 

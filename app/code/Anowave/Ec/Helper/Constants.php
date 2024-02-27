@@ -26,6 +26,12 @@ use Anowave\Package\Helper\Package;
 class Constants extends \Anowave\Package\Helper\Package
 {
     /**
+     * Begin checkout event
+     * 
+     * @var string
+     */
+    const EVENT_BEGIN_CHECKOUT = 'begin_checkout';
+    /**
      * Add to cart event
      * 
      * @var string
@@ -133,7 +139,7 @@ class Constants extends \Anowave\Package\Helper\Package
      *
      * @var string
      */
-    const EVENT_VIRTUAL_VARIANT_VIEW = 'virtualVariantView';
+    const EVENT_VIRTUAL_VARIANT_VIEW = 'view_item';
     
     /**
      * Performance event
@@ -372,11 +378,34 @@ class Constants extends \Anowave\Package\Helper\Package
 	const COOKIE_CONSENT_ANALYTICS_GRANTED_EVENT = 'cookieConsentAnalyticsGranted';
 	
 	/**
+	 * Cookie consent ad user data
+	 * 
+	 * @var string
+	 */
+	const COOKIE_CONSENT_AD_USER_DATA_EVENT = 'cookieConsentUserdata';
+	
+	/**
+	 * Cookie consent ad user data
+	 *
+	 * @var string
+	 */
+	const COOKIE_CONSENT_AD_PERSONALIZATION_EVENT = 'cookieConsentPersonalization';
+	
+	/**
+	 * Cookie consent unique identifier cookie name
+	 * 
+	 * @var string
+	 */
+	const COOKIE_CONSENT_UUID = 'cookieUuid';
+	
+	/**
 	 * Redirect to cart event (from categories)
 	 * 
 	 * @var string
 	 */
 	const CATALOG_CATEGORY_ADD_TO_CART_REDIRECT_EVENT = 'catalogCategoryAddToCartRedirect';
+	
+	
 	
 	/**
 	 * Maximum Google Payload size 

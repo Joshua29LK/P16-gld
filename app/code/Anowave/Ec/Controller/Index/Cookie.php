@@ -54,6 +54,21 @@ class Cookie extends \Magento\Framework\App\Action\Action
 	protected $directiveAnalytics;
 	
 	/**
+	 * @var \Anowave\Ec\Model\Cookie\DirectiveUserdata
+	 */
+	protected $directiveUserdata;
+	
+	/**
+	 * @var \Anowave\Ec\Model\Cookie\DirectivePersonalization
+	 */
+	protected $directivePersonalization;
+	
+	/**
+	 * @var \Anowave\Ec\Model\Cookie\DirectiveUuid
+	 */
+	protected $directiveUuid;
+	
+	/**
 	 * @var \Anowave\Ec\Model\Cookie\DirectiveDecline
 	 */
 	protected $directiveDecline;
@@ -69,7 +84,7 @@ class Cookie extends \Magento\Framework\App\Action\Action
 	protected $logger;
 
 	/**
-	 * Constructor 
+	 * Constructor
 	 * 
 	 * @param \Magento\Framework\App\Action\Context $context
 	 * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
@@ -78,7 +93,10 @@ class Cookie extends \Magento\Framework\App\Action\Action
 	 * @param \Anowave\Ec\Model\Cookie\DirectiveMarketing $directiveMarketing
 	 * @param \Anowave\Ec\Model\Cookie\DirectivePreferences $directivePreferences
 	 * @param \Anowave\Ec\Model\Cookie\DirectiveAnalytics $directiveAnalytics
+	 * @param \Anowave\Ec\Model\Cookie\DirectiveUserdata $directiveUserdata
+	 * @param \Anowave\Ec\Model\Cookie\DirectivePersonalization $directivePersonalization
 	 * @param \Anowave\Ec\Model\Cookie\DirectiveDecline $directiveDecline
+	 * @param \Anowave\Ec\Model\Cookie\DirectiveUuid $directiveUuid
 	 * @param \Anowave\Ec\Model\ConsentFactory $consentFactory
 	 * @param \Psr\Log\LoggerInterface $logger
 	 */
@@ -91,7 +109,10 @@ class Cookie extends \Magento\Framework\App\Action\Action
 		\Anowave\Ec\Model\Cookie\DirectiveMarketing $directiveMarketing, 
 		\Anowave\Ec\Model\Cookie\DirectivePreferences $directivePreferences,
 		\Anowave\Ec\Model\Cookie\DirectiveAnalytics $directiveAnalytics,
+	    \Anowave\Ec\Model\Cookie\DirectiveUserdata $directiveUserdata,
+	    \Anowave\Ec\Model\Cookie\DirectivePersonalization $directivePersonalization,
 		\Anowave\Ec\Model\Cookie\DirectiveDecline $directiveDecline,
+	    \Anowave\Ec\Model\Cookie\DirectiveUuid $directiveUuid,
 	    \Anowave\Ec\Model\ConsentFactory $consentFactory,
 	    \Psr\Log\LoggerInterface $logger
 	)
@@ -141,11 +162,34 @@ class Cookie extends \Magento\Framework\App\Action\Action
 		$this->directiveAnalytics = $directiveAnalytics;
 		
 		/**
+		 * Set ad user data cookie
+		 * 
+		 * @var \Anowave\Ec\Model\Cookie\DirectiveUserdata $directiveUserdata
+		 */
+		$this->directiveUserdata = $directiveUserdata;
+		
+		/**
+		 * Set personalization
+		 *
+		 * @var \Anowave\Ec\Model\Cookie\DirectivePersonalization $directivePersonaliztion
+		 */
+		
+		$this->directivePersonalization = $directivePersonalization;
+		
+		/**
 		 * Set decline cookie 
 		 * 
 		 * @var \Anowave\Ec\Model\Cookie\DirectiveDecline $directiveDecline
 		 */
 		$this->directiveDecline = $directiveDecline;
+		
+		/**
+		 * Set UUID directive cookie 
+		 * 
+		 * @var \Anowave\Ec\Model\Cookie\DirectiveUuid $directiveUuid
+		 */
+		$this->directiveUuid = $directiveUuid;
+		
 		
 		/**
 		 * Set consent factory 
@@ -183,9 +227,35 @@ class Cookie extends \Magento\Framework\App\Action\Action
 			    \Anowave\Ec\Helper\Constants::COOKIE_CONSENT_DECLINE_EVENT => true
 			];
 		    
-		    $this->keep($grant);
+		    if ($this->helper->getCookieDirectiveIsSegmentMode())
+		    {
+		        foreach ($this->helper->getCookieDirectiveConsentSegments() as $segment)
+		        {
+		            switch($segment)
+		            {
+		                case \Anowave\Ec\Helper\Constants::COOKIE_CONSENT_MARKETING_GRANTED_EVENT: 		$this->directiveMarketing->set(0, $lifetime); 	    break;
+		                case \Anowave\Ec\Helper\Constants::COOKIE_CONSENT_PREFERENCES_GRANTED_EVENT:	$this->directivePreferences->set(0, $lifetime); 	    break;
+		                case \Anowave\Ec\Helper\Constants::COOKIE_CONSENT_ANALYTICS_GRANTED_EVENT:		$this->directiveAnalytics->set(0, $lifetime);	    break;
+		                case \Anowave\Ec\Helper\Constants::COOKIE_CONSENT_AD_USER_DATA_EVENT:		    $this->directiveUserdata->set(0, $lifetime); 	    break;
+		                case \Anowave\Ec\Helper\Constants::COOKIE_CONSENT_AD_PERSONALIZATION_EVENT:		$this->directivePersonalization->set(0, $lifetime); break;
+		            }
+		        }
+		    }
+		    
+		    $this->directive->set(0, $lifetime);
+		    
+		    $uuid = $this->keep($grant);
+		    
+		    if ($uuid)
+		    {
+		        $this->directiveUuid->set($uuid);
+		    }
 			
 			return $this->resultJsonFactory->create()->setData($grant);
+		}
+		else 
+		{
+		    $this->directiveDecline->delete();
 		}
 
 		/**
@@ -223,10 +293,17 @@ class Cookie extends \Magento\Framework\App\Action\Action
 				{
 					switch($segment)
 					{
-						case \Anowave\Ec\Helper\Constants::COOKIE_CONSENT_MARKETING_GRANTED_EVENT: 		$this->directiveMarketing->delete(); 	break;
-						case \Anowave\Ec\Helper\Constants::COOKIE_CONSENT_PREFERENCES_GRANTED_EVENT:	$this->directivePreferences->delete(); 	break;
-						case \Anowave\Ec\Helper\Constants::COOKIE_CONSENT_ANALYTICS_GRANTED_EVENT:		$this->directiveAnalytics->delete(); 	break;
+						case \Anowave\Ec\Helper\Constants::COOKIE_CONSENT_MARKETING_GRANTED_EVENT: 		$this->directiveMarketing->set(0, $lifetime); 	    break;
+						case \Anowave\Ec\Helper\Constants::COOKIE_CONSENT_PREFERENCES_GRANTED_EVENT:	$this->directivePreferences->set(0, $lifetime);     break;
+						case \Anowave\Ec\Helper\Constants::COOKIE_CONSENT_ANALYTICS_GRANTED_EVENT:		$this->directiveAnalytics->set(0, $lifetime);	    break;
+						case \Anowave\Ec\Helper\Constants::COOKIE_CONSENT_AD_USER_DATA_EVENT:		    $this->directiveUserdata->set(0, $lifetime); 	    break;
+						case \Anowave\Ec\Helper\Constants::COOKIE_CONSENT_AD_PERSONALIZATION_EVENT:		$this->directivePersonalization->set(0, $lifetime); break;
 					}
+					
+					/**
+					 * Decline general consent
+					 */
+					$this->directive->set(0, $lifetime);
 				}
 			}
 			
@@ -234,31 +311,42 @@ class Cookie extends \Magento\Framework\App\Action\Action
 			{
 				switch($segment)
 				{
-					case \Anowave\Ec\Helper\Constants::COOKIE_CONSENT_MARKETING_GRANTED_EVENT: 		$this->directiveMarketing->set(1, $lifetime); 	break;
-					case \Anowave\Ec\Helper\Constants::COOKIE_CONSENT_PREFERENCES_GRANTED_EVENT:	$this->directivePreferences->set(1, $lifetime); break;
-					case \Anowave\Ec\Helper\Constants::COOKIE_CONSENT_ANALYTICS_GRANTED_EVENT:		$this->directiveAnalytics->set(1, $lifetime); 	break;
+					case \Anowave\Ec\Helper\Constants::COOKIE_CONSENT_MARKETING_GRANTED_EVENT: 		$this->directiveMarketing->set(1, $lifetime); 	    break;
+					case \Anowave\Ec\Helper\Constants::COOKIE_CONSENT_PREFERENCES_GRANTED_EVENT:	$this->directivePreferences->set(1, $lifetime);     break;
+					case \Anowave\Ec\Helper\Constants::COOKIE_CONSENT_ANALYTICS_GRANTED_EVENT:		$this->directiveAnalytics->set(1, $lifetime); 	    break;
+					case \Anowave\Ec\Helper\Constants::COOKIE_CONSENT_AD_USER_DATA_EVENT:		    $this->directiveUserdata->set(1, $lifetime); 	    break;
+					case \Anowave\Ec\Helper\Constants::COOKIE_CONSENT_AD_PERSONALIZATION_EVENT:		$this->directivePersonalization->set(1, $lifetime); break;
 				}
 				
 				$grant[$segment] = true;
 			}
 		}
 		
-		$this->keep($grant);
-	
+		$uuid = $this->keep($grant);
+		
+		if ($uuid)
+		{
+		    $this->directiveUuid->set($uuid);
+		}
 		
 		return $this->resultJsonFactory->create()->setData($grant);
 	}
 	
-	public function keep(array $consent = [])
+	/**
+	 * Store consent locally 
+	 * 
+	 * @param array $consent
+	 * @return string
+	 */
+	public function keep(array $consent = []) : string
 	{
+	    $uuid = $this->uuid();
+	    
 	    try
 	    {
 	        $entity = $this->consentFactory->create();
 	        
-	        $entity->setConsentUuid
-	        (
-	            $this->uuid()
-            );
+	        $entity->setConsentUuid($uuid);
 	        $entity->setConsentIp(ip2long($_SERVER['REMOTE_ADDR']));
 	        $entity->setConsent(json_encode($consent));
 	        $entity->save();
@@ -267,6 +355,8 @@ class Cookie extends \Magento\Framework\App\Action\Action
 	    {
 	        $this->logger->error($e->getMessage());
 	    }
+	    
+	    return $uuid;
 	}
 	
 	/**

@@ -24,8 +24,8 @@ define(['jquery'], function ($)
     
     return function (widget) 
     {
-    	$.widget('mage.sidebar', widget, 
-    	{
+    	return $.widget('mage.sidebar', $.mage.sidebar, 
+		{
     		_removeItemAfter:function (elem, response) 
         	{
         		if (response.hasOwnProperty('dataLayer') && 'undefined' !== typeof dataLayer)
@@ -45,7 +45,5 @@ define(['jquery'], function ($)
             	return this._super(elem);
             }
         });
-    	
-    	return $.mage.sidebar;
     }
 });

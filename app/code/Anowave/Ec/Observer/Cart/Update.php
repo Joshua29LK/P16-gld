@@ -146,6 +146,8 @@ class Update implements ObserverInterface
 							continue;
 						}
 						
+						$items = [];
+						
 						$product = 
 						[
 							'id' 	=> $this->helper->getIdentifier($item->getProduct()),
@@ -167,6 +169,14 @@ class Update implements ObserverInterface
 							}
 						}
 						
+						$entity =
+						[
+						    'item_id'     => $product['id'],
+						    'item_name'   => $product['name'],
+						    'price'       => $product['price'],
+						    'item_brand'  => $product['brand']
+						];
+						
 						if ($categories)
 						{
 							/**
@@ -177,43 +187,37 @@ class Update implements ObserverInterface
 								end($categories)
 							);
 							
-							$product['category'] = $this->helper->getCategoryDetailList($item->getProduct(), $category);
+							$entity = $this->helper->assignCategory($category, $entity);
 						}
 						
 						if ($quantity > $item->getQty())
 						{
-							$product['quantity'] = ($quantity - $item->getQty()); 
+							$entity['quantity'] = ($quantity - $item->getQty()); 
 							
 							$push =
 							[
 							    'event' => \Anowave\Ec\Helper\Constants::EVENT_ADD_TO_CART,
 								'ecommerce' =>
 								[
-									'add' =>
+									'items' =>
 									[
-										'products' => 
-										[
-											$product
-										]
+									    $entity
 									]
 								]
 							];
 						}
 						else 
 						{
-							$product['quantity'] = ($item->getQty() - $quantity); 
+							$item['quantity'] = ($item->getQty() - $quantity); 
 							
 							$push =
 							[
 							    'event' => \Anowave\Ec\Helper\Constants::EVENT_REMOVE_FROM_CART,
 								'ecommerce' =>
 								[
-									'remove' =>
+									'items' =>
 									[
-										'products' => 
-										[
-											$product
-										]
+									    $entity
 									]
 								]
 							];

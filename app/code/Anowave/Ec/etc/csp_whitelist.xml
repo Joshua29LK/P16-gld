@@ -11,6 +11,7 @@
                 <value id="doubleclick" type="host">*.doubleclick.net</value>
                 <value id="google-analytics" type="host">*.google-analytics.com</value>
                 <value id="chart" type="host">*.gstatic.com</value>
+                <value id="googlesyndication" type="host">*.googlesyndication.com</value>
             </values>
         </policy>
         <policy id="style-src">
@@ -20,6 +21,7 @@
                 <value id="facebook" type="host">*.facebook.com</value>
                 <value id="chart" type="host">*.gstatic.com</value>
                 <value id="googletagmanager" type="host">*.googletagmanager.com</value>
+                <value id="googlesyndication" type="host">*.googlesyndication.com</value>
             </values>
         </policy>
         <policy id="img-src">
@@ -32,6 +34,7 @@
                 <value id="doubleclick" type="host">*.doubleclick.net</value>
                 <value id="googletagmanager" type="host">*.googletagmanager.com</value>
                 <value id="g-static" type="host">*.gstatic.com</value>
+                <value id="googlesyndication" type="host">*.googlesyndication.com</value>
             </values>
         </policy>
         <policy id="connect-src">
@@ -40,6 +43,8 @@
                 <value id="facebook" type="host">*.facebook.com</value>
                 <value id="facebook-net" type="host">*.facebook.net</value>
                 <value id="google" type="host">*.google.com</value>
+                <value id="doubleclick" type="host">*.doubleclick.net</value>
+                <value id="googlesyndication" type="host">*.googlesyndication.com</value>
             </values>
         </policy>
         <policy id="font-src">
@@ -48,6 +53,7 @@
                 <value id="data-font" type="host">'self' data:</value>
                 <value id="doubleclick" type="host">*.doubleclick.net</value>
                 <value id="facebook" type="host">*.facebook.com</value>
+                <value id="googlesyndication" type="host">*.googlesyndication.com</value>
             </values>
         </policy>
         <policy id="frame-src">
@@ -55,11 +61,13 @@
                 <value id="google" type="host">*.google.com</value>
                 <value id="doubleclick" type="host">*.doubleclick.net</value>
                 <value id="facebook" type="host">*.facebook.com</value>
+                <value id="googlesyndication" type="host">*.googlesyndication.com</value>
             </values>
         </policy>
         <policy id="form-action">
             <values>
                 <value id="facebook" type="host">*.facebook.com</value>
+                <value id="googlesyndication" type="host">*.googlesyndication.com</value>
             </values>
         </policy>
     </policies>

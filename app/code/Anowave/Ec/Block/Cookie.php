@@ -27,6 +27,13 @@ class Cookie extends \Magento\Framework\View\Element\Template
 	 * @var \Anowave\Ec\Helper\Data
 	 */
 	protected $_helper;
+	
+	/**
+	 * Get directive 
+	 * 
+	 * @var \Anowave\Ec\Model\Cookie\DirectiveUuid
+	 */
+	protected $directiveUuid;
 
 	/**
 	 * Constructor
@@ -39,6 +46,7 @@ class Cookie extends \Magento\Framework\View\Element\Template
 	(
 		\Magento\Framework\View\Element\Template\Context $context,
 		\Anowave\Ec\Helper\Data $helper,
+	    \Anowave\Ec\Model\Cookie\DirectiveUuid $directiveUuid,
 		array $data = []
 	) 
 	{
@@ -58,6 +66,13 @@ class Cookie extends \Magento\Framework\View\Element\Template
 		 * @var boolean
 		 */
 		$this->_isScopePrivate = false;
+		
+		/**
+		 * Set UUID cookie 
+		 * 
+		 * @var \Anowave\Ec\Model\Cookie\DirectiveUuid $directiveUuid
+		 */
+		$this->directiveUuid = $directiveUuid;
 	}
 	
 	/**
@@ -85,6 +100,21 @@ class Cookie extends \Magento\Framework\View\Element\Template
 		{
 			throw new \Exception('\Anowave\Ec\Helper\Data is not instantiated.');
 		}
+	}
+	
+	public function getSegmentMode() : bool
+	{
+	    return $this->getHelper()->getCookieDirectiveIsSegmentMode();
+	}
+	
+	/**
+	 * Get current consent UUID 
+	 * 
+	 * @return string
+	 */
+	public function getUuid()
+	{
+	    return $this->directiveUuid->get();
 	}
 	
 	/**

@@ -1,0 +1,22 @@
+<script>
+
+	const observer = new MutationObserver( (mutationList, observer) => 
+	{
+		for (const mutation of mutationList) 
+		{
+    		if (mutation.type === "attributes")
+    		{
+    			let option = document.querySelector("[name=selected_configurable_option]").value;
+
+    			if (option)
+    			{
+   				 	document.querySelector("[id=product-addtocart-button]").dataset.selection = option;
+    			}
+    		}
+		}
+		
+	});
+
+	observer.observe(document.querySelector("[name=selected_configurable_option]"), { attributes: true } );
+	
+</script>

@@ -2,7 +2,148 @@
 
 All notable changes to this project will be documented in this file.
 
-## [200.2.7.8084] - 01/11/2023
+## [200.5.0.8084] - 22/02/2024
+
+### Fixed
+
+- See \app\code\Anowave\Ec\CHANGELOG.md for ## [103.9.9] related updates
+
+## [200.4.9] - 22/02/2024
+
+### Fixed
+
+- See \app\code\Anowave\Ec\CHANGELOG.md for ## [103.8.9] related updates
+
+## [200.4.8] - 21/02/2024
+
+### Fixed
+
+- See \app\code\Anowave\Ec\CHANGELOG.md for ## [103.8.8] related updates
+
+## [200.4.7] - 21/02/2024
+
+### Fixed
+
+- See \app\code\Anowave\Ec\CHANGELOG.md for ## [103.8.7] related updates
+
+## [200.4.6] - 19/02/2024
+
+### Fixed
+
+- See \app\code\Anowave\Ec\CHANGELOG.md for ## [103.8.6] related updates
+
+## [200.4.5] - 19/02/2024
+
+### Fixed
+
+- See \app\code\Anowave\Ec\CHANGELOG.md for ## [103.8.5] related updates
+
+## [200.4.4] - 14/02/2024
+
+### Fixed
+
+- See \app\code\Anowave\Ec\CHANGELOG.md for ## [103.8.4] related updates
+
+## [200.4.3] - 14/02/2024
+
+### Fixed
+
+- See \app\code\Anowave\Ec\CHANGELOG.md for ## [103.8.3] related updates
+
+## [200.4.2] - 09/02/2024
+
+### Fixed
+
+- See \app\code\Anowave\Ec\CHANGELOG.md for ## [103.8.2] related updates
+
+
+## [200.4.1] - 09/02/2024
+
+### Fixed
+
+- See \app\code\Anowave\Ec\CHANGELOG.md for ## [103.8.1] related updates
+
+## [200.4.0] - 06/02/2024
+
+### Fixed
+
+- See \app\code\Anowave\Ec\CHANGELOG.md for ## [103.8.0] related updates
+
+## [200.3.9] - 06/02/2024
+
+### Added
+
+- See \app\code\Anowave\Ec\CHANGELOG.md for ## [103.7.9] related updates
+
+## [200.3.8] - 02/02/2024
+
+### Added
+
+- See \app\code\Anowave\Ec\CHANGELOG.md for ## [103.7.8] related updates
+
+## [200.3.7] - 29/01/2024
+
+### Fixed
+
+- See \app\code\Anowave\Ec\CHANGELOG.md for ## [103.7.7] related updates
+
+## [200.3.6] - 25/01/2024
+
+### Added
+
+- Added bundles[] array to items[] array for purchas event payload
+
+## [200.3.5] - 18/01/2024
+
+### Added
+
+- Fixed a $.mage.sidebar widget issue
+- Fixed pricing rendering issue.
+
+## [200.3.4] - 09/01/2024
+
+### Added
+
+- Added Consent Mode V2 support (ad_user_data,ad_personalization) in SEGMENT mode
+
+## [200.3.3] - 19/12/2023
+
+### Fixed
+
+- Fixed Cannot instantiate abstract class Anowave\Ec\Model\ResourceModel\Consent\Grid\Collection error
+
+## [200.3.2] - 12/12/2023
+
+### Fixed
+
+- Disabled loading of AEC() object when module is disabled from confg
+
+## [200.3.1] - 11/12/2023
+
+### Fixed
+
+- Fixed a JS error related to price-box.js when module is disabled from config
+
+## [200.3.0] - 30/11/2023
+
+### Added
+
+- Added new option in Advanced Developer Configuration called 'Optimize scripts' which if enabled will render scripts inline (HYVA style)
+
+## [200.2.9] - 29/11/2023
+
+### Added
+
+- Added ability to keep 'purchase' event when Track SERVER-SIDE Only option is enabled.
+- Added session_id to measurement protocol request params[]
+
+## [200.2.8] - 16/11/2023
+
+### Fixed
+
+- Fixed a typo in gtag('consent','updated') to gtag('consent,'update') prevening Consent Mode to firing properly
+
+## [200.2.7] - 01/11/2023
 
 ### Fixed
 

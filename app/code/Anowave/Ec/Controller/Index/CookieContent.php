@@ -24,7 +24,7 @@ namespace Anowave\Ec\Controller\Index;
 class CookieContent extends \Magento\Framework\App\Action\Action
 {
 	/**
-	 * @var \Anowave\Ec\Helper\Data
+	 * @var \Anowave\Ec\Helper\Cookie
 	 */
 	protected $helper;
 	
@@ -49,6 +49,16 @@ class CookieContent extends \Magento\Framework\App\Action\Action
 	protected $directiveAnalytics;
 	
 	/**
+	 * @var \Anowave\Ec\Model\Cookie\DirectiveUserdata
+	 */
+	protected $directiveUserdata;
+	
+	/**
+	 * @var \Anowave\Ec\Model\Cookie\DirectivePersonalization
+	 */
+	protected $directivePersonalization;
+	
+	/**
 	 * @var \Magento\Framework\View\Element\BlockFactory
 	 */
 	protected $blockFactory;
@@ -67,6 +77,8 @@ class CookieContent extends \Magento\Framework\App\Action\Action
 	 * @param \Anowave\Ec\Model\Cookie\DirectiveMarketing $directiveMarketing
 	 * @param \Anowave\Ec\Model\Cookie\DirectivePreferences $directivePreferences
 	 * @param \Anowave\Ec\Model\Cookie\DirectiveAnalytics $directiveAnalytics
+	 * @param \Anowave\Ec\Model\Cookie\DirectiveUserdata $directiveUserdata
+	 * @param \Anowave\Ec\Model\Cookie\DirectivePersonalization $directivePersonalization
 	 * @param \Magento\Framework\View\Element\BlockFactory $blockFactory
 	 * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
 	 */
@@ -78,6 +90,8 @@ class CookieContent extends \Magento\Framework\App\Action\Action
 		\Anowave\Ec\Model\Cookie\DirectiveMarketing $directiveMarketing,
 		\Anowave\Ec\Model\Cookie\DirectivePreferences $directivePreferences,
 		\Anowave\Ec\Model\Cookie\DirectiveAnalytics $directiveAnalytics,
+	    \Anowave\Ec\Model\Cookie\DirectiveUserdata $directiveUserdata,
+	    \Anowave\Ec\Model\Cookie\DirectivePersonalization $directivePersonalization,
 		\Magento\Framework\View\Element\BlockFactory $blockFactory,
 		\Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
 	)
@@ -118,6 +132,21 @@ class CookieContent extends \Magento\Framework\App\Action\Action
 		 * @var \Anowave\Ec\Model\Cookie\DirectiveAnalytics $directiveAnalytics
 		 */
 		$this->directiveAnalytics = $directiveAnalytics;
+		
+		/**
+		 * Set ad_user_data cookie directive
+		 *
+		 * @var \Anowave\Ec\Model\Cookie\DirectiveUserdata $directiveUserdata
+		 */
+		$this->directiveUserdata = $directiveUserdata;
+		
+		/**
+		 * Set ad_personalization cookie directive
+		 *
+		 * @var \Anowave\Ec\Model\Cookie\DirectivePersonalization $directivePersonalization
+		 */
+		
+		$this->directivePersonalization = $directivePersonalization;
 		
 		/**
 		 * Set block factory 

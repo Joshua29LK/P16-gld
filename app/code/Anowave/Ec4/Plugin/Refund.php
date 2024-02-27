@@ -31,7 +31,7 @@ class Refund
      * 
      * @var string
      */
-    const FALLBACK_No_CATEGORY = 'Not set';
+    const FALLBACK_NO_CATEGORY = 'Not set';
     
     /**
      * @var \Anowave\Ec4\Helper\Data
@@ -79,6 +79,11 @@ class Refund
     protected $request;
     
     /**
+     * @var \Anowave\Ec\Model\Logger
+     */
+    protected $logger;
+    
+    /**
      * Constructor 
      * 
      * @param \Anowave\Ec4\Helper\Data $helper
@@ -88,6 +93,9 @@ class Refund
      * @param \Magento\Catalog\Model\CategoryRepository $categoryRepository
      * @param \Magento\Catalog\Model\ResourceModel\Eav\AttributeFactory $attribute
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Framework\App\State $state
+     * @param \Magento\Framework\App\RequestInterface $request
+     * @param \Anowave\Ec\Model\Logger $logger
      */
     public function __construct
     (
@@ -99,7 +107,8 @@ class Refund
         \Magento\Catalog\Model\ResourceModel\Eav\AttributeFactory $attribute,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Framework\App\State $state,
-        \Magento\Framework\App\RequestInterface $request
+        \Magento\Framework\App\RequestInterface $request,
+        \Anowave\Ec\Model\Logger $logger
     )
     {
         /**
@@ -164,6 +173,13 @@ class Refund
          * @var \Anowave\Ec4\Plugin\Refund $request
          */
         $this->request = $request;
+        
+        /**
+         * Set logger 
+         * 
+         * @var \Anowave\Ec\Model\Logger $logger
+         */
+        $this->logger = $logger;
     }
     
     /**
@@ -299,7 +315,7 @@ class Refund
                     }
                     else 
                     {
-                        $item['item_category'] = __(static::FALLBACK_No_CATEGORY);
+                        $item['item_category'] = __(static::FALLBACK_NO_CATEGORY);
                     }
                     
                     
@@ -352,12 +368,16 @@ class Refund
                      
                     if (!curl_error($analytics))
                     { 
+                        $this->logger->log(json_encode($data));
+                        
                         return true;
                     } 
                 }
                 catch (\Exception $e) 
                 {
                     $this->messageManager->addErrorMessage($e->getMessage());
+                    
+                    $this->logger->log($e->getMessage());
                 }
             }
         }

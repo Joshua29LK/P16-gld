@@ -34,7 +34,7 @@ define(['jquery'], function ($)
     			
     			(function(callback)
     			{
-    				if ('undefined' !== typeof AEC.Const && 'undefined' !== typeof dataLayer)
+    				if ('undefined' !== typeof AEC && 'undefined' !== typeof AEC.Const && 'undefined' !== typeof dataLayer)
     				{
 	    				if (AEC.Const.COOKIE_DIRECTIVE)
 	    				{
@@ -60,22 +60,34 @@ define(['jquery'], function ($)
 	    					
 	    					return function()
 	    					{
-	    						dataLayer.push(
-	    						{
-	    							'event':'virtualVariantView',
-	    							'ecommerce':
-	    							{
-	    								'currencyCode': AEC.currencyCode,
-	    								'detail':
-	    								{
-	    									'actionField':
-											{
-												'list':'Configurable variants'
-											},
-											'products':[simple]
-	    								}
-	    							}
-	    						});
+	    						let list = 'Configurable swatch', item = 
+        						{
+        							item_id: 			simple.id,
+        							item_name:  		simple.name,
+        							item_list_name: 	list,
+        							item_list_id: 		list,
+        							price: 				simple.price,
+        							quantity:			1
+        						};
+        						
+        						if (simple.hasOwnProperty('configurations'))
+        						{
+        							item['configurations'] = simple.configurations;
+        						}
+        						
+        						dataLayer.push(
+        						{
+        							event:'view_item',
+        							ecommerce:
+        							{
+        								currency: AEC.currencyCode,
+        								value: item.price,
+    									items:
+										[
+											item
+										]
+        							}
+        						});
 	    						
 	    						/**
         						 * Update data-simple attribute

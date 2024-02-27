@@ -32,7 +32,7 @@ use Magento\Framework\Api\Search\AggregationInterface;
 use Psr\Log\LoggerInterface;
 
 
-abstract class Collection extends \Anowave\Ec\Model\ResourceModel\Consent\Collection implements SearchResultInterface
+class Collection extends \Anowave\Ec\Model\ResourceModel\Consent\Collection implements SearchResultInterface
 {
     /**
      * Aggregations

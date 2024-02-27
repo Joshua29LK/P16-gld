@@ -1,3 +1,4 @@
+<?php
 /**
  * Anowave Magento 2 Google Tag Manager Enhanced Ecommerce (UA) Tracking
  *
@@ -18,7 +19,16 @@
  * @license  	https://www.anowave.com/license-agreement/
  */
 
-php -f vendor/phpunit/phpunit/phpunit /path/to/test
+namespace Anowave\Ec\Model\Cookie;
 
-(ex. php -f vendor/phpunit/phpunit/phpunit app/code/Anowave/Ec/Test/Unit/Helper/DataTest.php)
+use Anowave\Ec\Model\Cookie as Cookie;
 
+class DirectiveUuid extends Directive
+{
+	/**
+	 * Cookie name for cookie that keeps customer consent
+	 * 
+	 * @var string
+	 */
+	protected $name = \Anowave\Ec\Helper\Constants::COOKIE_CONSENT_UUID;
+}

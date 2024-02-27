@@ -164,7 +164,7 @@ class UpgradeSchema implements UpgradeSchemaInterface
             }
         }
         
-        if (version_compare($context->getVersion(), '103.0.2') < 0)
+        if (version_compare($context->getVersion(), '103.2.0') < 0)
         {
             $sql = [];
             
@@ -180,6 +180,31 @@ class UpgradeSchema implements UpgradeSchemaInterface
             }
         }
         
+        if (version_compare($context->getVersion(), '103.2.2') < 0)
+        {
+            $table = $setup->getTable('catalog_eav_attribute');
+            
+            if ($setup->getConnection()->isTableExists($table) == true)
+            {
+                $columns =
+                [
+                    'datalayer' =>
+                    [
+                        
+                        'type' 		=> \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
+                        'nullable' 	=> true,
+                        'comment' 	=> 'Attribute dataLayer[] signal',
+                    ]
+                ];
+                
+                $connection = $setup->getConnection();
+                
+                foreach ($columns as $name => $definition)
+                {
+                    $connection->addColumn($table, $name, $definition);
+                }
+            }
+        }
         
         $setup->endSetup();
     }

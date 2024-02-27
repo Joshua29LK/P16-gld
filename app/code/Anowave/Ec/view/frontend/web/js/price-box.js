@@ -35,10 +35,25 @@ define(['jquery','Magento_Catalog/js/price-utils','underscore','mage/template'],
 				
 				if ('undefined' !== typeof AEC)
 				{
-					if ('undefined' !== typeof this.cache.displayPrices.finalPrice)
+					let price = null;
+					
+					if (AEC.tax)
 					{
-						let price = 1 === AEC.tax ? this.cache.displayPrices.finalPrice.amount : this.cache.displayPrices.basePrice.amount;
-						
+						if (this.cache.displayPrices.hasOwnProperty('finalPrice'))
+						{
+							price = this.cache.displayPrices.finalPrice.amount;
+						}
+					}
+					else 
+					{
+						if (this.cache.displayPrices.hasOwnProperty('basePrice'))
+						{
+							price = this.cache.displayPrices.basePrice.amount;
+						}
+					}
+
+					if (price)
+					{
 						/**
 						 * Pick button
 						 */

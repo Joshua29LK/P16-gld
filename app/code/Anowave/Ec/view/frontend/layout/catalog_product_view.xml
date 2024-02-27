@@ -1,6 +1,9 @@
 <?xml version="1.0"?>
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <body>
+    	<referenceBlock name="product.info.extrahint">
+            <block class="Anowave\Ec\Block\Track" name="ec_add" template="add.phtml"></block>
+        </referenceBlock>
         <referenceContainer name="before.body.end">
             <block class="Anowave\Ec\Block\Track" name="ec_detail_product" template="detail_collection.phtml">
                 <arguments>
