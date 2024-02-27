@@ -118,13 +118,14 @@ class Combine extends \Amasty\CommonRules\Model\Rule\Condition\Combine
         }
 
         try {
-            $message = $this->getRule()->getCustomRestrictionMessage();
+            $message = (string)$this->getRule()->getCustomRestrictionMessage();
         } catch (\Exception $e) {
             $message = '';
         }
 
         // Saving Restricted products can decrease performance.
         // We should do it only if we want to show products in restriction message.
-        return str_contains($message, '{restricted-products}') || str_contains($message, '{last-restricted-product}');
+        return strpos($message, '{restricted-products}') !== false
+            || strpos($message, '{last-restricted-product}') !== false;
     }
 }

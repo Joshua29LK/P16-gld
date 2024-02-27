@@ -11,7 +11,7 @@
         "amasty/module-shiprestriction-mftf-3": "Install module-shiprestriction-mftf-3 module to be able to run Shipping Restriction MFTF tests for Magento 2.4.1 and higher."
     },
     "type": "magento2-module",
-    "version": "2.9.0",
+    "version": "2.9.1",
     "license": [
         "proprietary"
     ],
