@@ -20,9 +20,9 @@ namespace Bss\CustomOptionImage\Model\System\Message;
 
 class CoreModuleRequired implements \Magento\Framework\Notification\MessageInterface
 {
-    const MESSAGE_IDENTITY = 'bss_option_core_module_required_of_image';
-    const BSS_OPTION_CORE_MODULE_NAME = 'Bss_CustomOptionCore';
-    const MODULE_NAME = 'Bss_CustomOptionImage';
+    public const MESSAGE_IDENTITY = 'bss_option_core_module_required_of_image';
+    public const BSS_OPTION_CORE_MODULE_NAME = 'Bss_CustomOptionCore';
+    public const MODULE_NAME = 'Bss_CustomOptionImage';
 
     /**
      * @var \Magento\Framework\Module\Manager
@@ -40,6 +40,8 @@ class CoreModuleRequired implements \Magento\Framework\Notification\MessageInter
     }
 
     /**
+     * Check option core module install
+     *
      * @return bool
      */
     protected function checkOptionCoreModuleInstall()
@@ -76,7 +78,7 @@ class CoreModuleRequired implements \Magento\Framework\Notification\MessageInter
     public function getText()
     {
         $text = __(
-            '<b>Your module "%1" can not work without BSS Commerce\'s 
+            '<b>Your module "%1" can not work without BSS Commerce\'s
                 Option Core Module included in the package</b>',
             self::MODULE_NAME
         );

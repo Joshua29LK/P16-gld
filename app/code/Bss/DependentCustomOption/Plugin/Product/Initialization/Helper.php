@@ -18,11 +18,29 @@
 
 namespace Bss\DependentCustomOption\Plugin\Product\Initialization;
 
+use Bss\DependentCustomOption\Model\ResourceModel\DependOption;
 use Magento\Catalog\Model\Product;
+use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Exception\InputException;
+use Magento\Framework\Exception\LocalizedException;
 
 class Helper
 {
+    /**
+     * @var \Bss\DependentCustomOption\Model\ResourceModel\DependOption
+     */
+    private $dependOption;
+
+    /**
+     * Constructor
+     *
+     * @param DependOption $dependOption
+     */
+    public function __construct(\Bss\DependentCustomOption\Model\ResourceModel\DependOption $dependOption)
+    {
+        $this->dependOption = $dependOption;
+    }
+
     /**
      * @param \Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper $subject
      * @param Product $product
@@ -39,6 +57,7 @@ class Helper
         $validate = true;
         if (isset($productData['options'])) {
             $validate = $this->validate($productData['options']);
+            $this->removeOption($productData['options'], $product);
         }
         if (!$validate) {
             throw new InputException(__('Invalid option dependent ids.'));
@@ -47,14 +66,42 @@ class Helper
     }
 
     /**
+     * Remove options which have other option depends on
+     *
+     * @param $options
+     * @param \Magento\Catalog\Model\Product $product
+     * @return void
+     * @throws LocalizedException
+     */
+    private function removeOption($options, $product)
+    {
+        $allDependentIds = [];
+        foreach ($product->getData('options') as $productOption) {
+            $allDependentIds[] = $productOption->getData('dependent_id');
+        }
+
+        $dependentIds = $this->getDependentIds($options);
+
+        foreach ($allDependentIds as $dependentId) {
+            if (!in_array($dependentId, $dependentIds)) {
+                $this->dependOption->removeDependentOnOptions($dependentId);
+                $this->dependOption->removeOptionByDepedentId($dependentId);
+            }
+        }
+    }
+
+    /**
      * @param array $options
+     * @param \Magento\Catalog\Model\Product|null $product
      * @return bool
+     * @throws LocalizedException
      */
     private function validate($options)
     {
         $dependentIds = $this->getDependentIds($options);
         $dependentValues = $this->getDependentValues($options);
         $diff = array_diff($dependentValues, $dependentIds);
+
         $same = false;
         foreach ($options as $option) {
             if (isset($option['dependent_id']) && isset($option['values'])) {
@@ -72,7 +119,7 @@ class Helper
             }
         }
 
-        if (!empty($diff) > 0 || $same) {
+        if ($same) {
             return false;
         }
         return true;

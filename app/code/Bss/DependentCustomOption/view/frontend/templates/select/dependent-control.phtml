@@ -39,7 +39,7 @@ $moduleConfig = $block->getConfigHelper();
                     "dcoData": <?php echo $block->getDependData() ?>,
                     "childrenDisplay": "<?php echo $moduleConfig->getChildrenDisplay() ?>",
                     "multipleParentValue": "<?php echo $block->getMultipleParentValue() ?>",
-                    "dcoRequire": "<?php echo $option->getIsRequire() ?>"
+                    "dcoRequire": <?php echo $option->getIsRequire() ? 1 : 0 ?>
                 }
             }
         }

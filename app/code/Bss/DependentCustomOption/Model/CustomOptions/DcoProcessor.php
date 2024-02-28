@@ -565,7 +565,7 @@ class DcoProcessor
     {
         $dependentOnId = explode(',', $dependentOnId);
         $row = $this->dcoResource->loadDcoByOption($productId, $dependentOnId, 3);
-        if (!$row || empty($row)) {
+        if (empty($row)) {
             return '';
         }
         $dependValue = '';

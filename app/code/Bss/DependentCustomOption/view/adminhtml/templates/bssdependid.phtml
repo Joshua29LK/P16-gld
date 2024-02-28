@@ -51,8 +51,6 @@
     require(["jquery"], function($) {
     	window.bss_depend_option = <?php /* @escapeNotVerified */ echo json_encode($bssDependOptions, JSON_FORCE_OBJECT) ?>;
         window.bss_depend_id = <?php /* @escapeNotVerified */ echo json_encode($dependentId, JSON_FORCE_OBJECT) ?>;
-        console.log(window.bss_depend_id);
-        console.log('tt');
         $(document).ready(function(){
         	$(document).on('click', '.action-delete', function (event) {
         	    var optionKey = 0;
@@ -62,7 +60,6 @@
 	        		window.bss_depend_id[$(this).val()] = false;
 	        	});
                 if ($(this).closest('tr.data-row').find('.check-depend-is-parent-option').length > 0) {
-                    console.log('vv');
                     var cloneBssDependOption = {};
                     var countLoop = 0;
                     delete window.bss_depend_option[optionKey];

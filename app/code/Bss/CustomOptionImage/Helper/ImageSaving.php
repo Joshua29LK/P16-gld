@@ -76,7 +76,9 @@ class ImageSaving
     }
 
     /**
-     * @return mixed
+     * Get Media BaseUrl
+     *
+     * @return string
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function getMediaBaseUrl()
@@ -85,11 +87,14 @@ class ImageSaving
     }
 
     /**
+     * Resize
+     *
      * @param string $image
      * @param null $width
      * @param null $height
-     * @return string
-     * @throws \Exception
+     * @return false|string
+     * @throws \Magento\Framework\Exception\FileSystemException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function resize($image, $width = null, $height = null)
     {
@@ -122,10 +127,12 @@ class ImageSaving
             $this->messageManager->addErrorMessage(__($e->getMessage()));
         }
 
-        return $this->getMediaBaseUrl().'resized/'. $width . 'x' . $height .'/'.$image;
+        return $this->getMediaBaseUrl() . 'resized/' . $width . 'x' . $height . '/' . $image;
     }
 
     /**
+     * Move image
+     *
      * @param Object $value
      * @return string
      * @throws \Magento\Framework\Exception\FileSystemException
@@ -150,6 +157,8 @@ class ImageSaving
     }
 
     /**
+     * Rename image file
+     *
      * @param string $fileName
      * @param mixed $file
      * @param string $newPath
@@ -176,7 +185,7 @@ class ImageSaving
             try {
                 $this->fileDriver->rename($mediaRootDir . $file, $mediaRootDir . $newPath . $checkDuplicateName);
             } catch (\Exception $e) {
-                $message = __("The image picture: ".$file. ", at folder: ".$mediaRootDir.", does not exist");
+                $message = __("The image picture: " . $file . ", at folder: " . $mediaRootDir . ", does not exist");
                 $this->messageManager->addErrorMessage($message);
                 return '';
             }
@@ -185,6 +194,8 @@ class ImageSaving
     }
 
     /**
+     * Move image swatch
+     *
      * @param Object $value
      * @return string
      * @throws \Magento\Framework\Exception\FileSystemException
@@ -209,7 +220,9 @@ class ImageSaving
     }
 
     /**
-     * clean template
+     * clean temp file
+     *
+     * @return void
      */
     public function cleanTempFile()
     {
@@ -226,6 +239,8 @@ class ImageSaving
     }
 
     /**
+     * Save temporary image
+     *
      * @param string $opOrder
      * @param string $valueOrder
      * @return string|null
@@ -255,6 +270,8 @@ class ImageSaving
     }
 
     /**
+     * Get File path
+     *
      * @param string $path
      * @param string $imageName
      * @return string
@@ -265,9 +282,10 @@ class ImageSaving
     }
 
     /**
+     * Duplicate image
+     *
      * @param string $oldUrl
-     * @return string
-     * @throws \Magento\Framework\Exception\FileSystemException
+     * @return string|null
      */
     public function duplicateImage($oldUrl)
     {

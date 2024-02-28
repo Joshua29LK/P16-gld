@@ -304,6 +304,39 @@ class DependOption extends AbstractDb
         );
     }
 
+    /**
+     * Delete option by dependent id
+     *
+     * @param int $dependentId
+     * @return void
+     * @throws LocalizedException
+     */
+    public function removeOptionByDepedentId($dependentId)
+    {
+        $this->getConnection()->delete(
+            $this->getMainTable(),
+            ['increment_id=?' => $dependentId]
+        );
+    }
+
+    /**
+     * Set depend value is null for option
+     *
+     * @param int $dependValue
+     * @return void
+     * @throws LocalizedException
+     */
+    public function removeDependentOnOptions($dependValue)
+    {
+        $this->getConnection()->update(
+            $this->getMainTable(),
+            ['depend_value' => null],
+            [
+                'depend_value=?' => $dependValue,
+            ]
+        );
+    }
+
     public function getOptionTitlesbyProduct($product)
     {
         $optionTitleTable =  $this->_resources->getTableName('catalog_product_option_title');

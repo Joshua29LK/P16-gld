@@ -18,6 +18,11 @@
 
 namespace Bss\CustomOptionImage\Plugin\Model\ResourceModel;
 
+use Magento\Catalog\Model\Product\Option\Value;
+use Magento\Framework\Exception\AlreadyExistsException;
+use Magento\Framework\Exception\FileSystemException;
+use Magento\Framework\Exception\LocalizedException;
+
 class OptionValuePlugin
 {
     /**
@@ -39,7 +44,6 @@ class OptionValuePlugin
      * @var \Magento\Framework\App\Request\Http
      */
     private $request;
-
     /**
      * OptionValuePlugin constructor.
      * @param \Bss\CustomOptionImage\Helper\ImageSaving $imageSaving
@@ -62,9 +66,12 @@ class OptionValuePlugin
     /**
      * Around Plugin Save Value
      *
-     * @param \Magento\Catalog\Model\Product\Option\Value $subject
+     * @param Value $subject
      * @param callable $proceed
-     * @throws \Magento\Framework\Exception\FileSystemException
+     * @return void
+     * @throws AlreadyExistsException
+     * @throws FileSystemException
+     * @throws LocalizedException|LocalizedException
      */
     public function aroundSave(
         \Magento\Catalog\Model\Product\Option\Value $subject,
@@ -96,6 +103,8 @@ class OptionValuePlugin
     }
 
     /**
+     * Check swatch image
+     *
      * @param mixed $subject
      * @return bool
      */
@@ -110,6 +119,8 @@ class OptionValuePlugin
     }
 
     /**
+     * Check image
+     *
      * @param mixed $subject
      * @return bool
      */
@@ -132,6 +143,7 @@ class OptionValuePlugin
      * @param int $index
      * @return mixed
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @throws LocalizedException
      */
     public function afterGetData(
         \Magento\Catalog\Model\Product\Option\Value $subject,
@@ -165,6 +177,8 @@ class OptionValuePlugin
     }
 
     /**
+     * Check isset image data
+     *
      * @param mixed $subject
      * @param string $key
      * @return bool
@@ -175,6 +189,8 @@ class OptionValuePlugin
     }
 
     /**
+     * Check isset swatch image data
+     *
      * @param mixed $subject
      * @param string $key
      * @return bool

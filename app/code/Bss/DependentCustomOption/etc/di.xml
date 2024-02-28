@@ -13,7 +13,7 @@
  * @category   BSS
  * @package    Bss_DependentCustomOption
  * @author     Extension Team
- * @copyright  Copyright (c) 2017-2020 BSS Commerce Co. ( http://bsscommerce.com )
+ * @copyright  Copyright (c) 2017-2022 BSS Commerce Co. ( http://bsscommerce.com )
  * @license    http://bsscommerce.com/Bss-Commerce-License.txt
  */
 -->
@@ -48,4 +48,13 @@
                 type="Bss\DependentCustomOption\Model\ProductRepository" />
     <preference for="Bss\DependentCustomOption\Api\Data\ProductSearchResultsInterface"
                 type="Bss\DependentCustomOption\Model\ProductSearchResults" />
+
+    <!-- Command migrate data v1.0.4 to now version -->
+    <type name="Magento\Framework\Console\CommandListInterface">
+        <arguments>
+            <argument name="commands" xsi:type="array">
+                <item name="bss_dco_data_migrate" xsi:type="object">Bss\DependentCustomOption\Console\Command\DataMigration</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

@@ -26,4 +26,8 @@
             </argument>
         </arguments>
     </type>
+
+    <type name="Magento\Catalog\Model\ResourceModel\Product\Option">
+        <plugin name="bss-coap-add-coi-img-after-save-and-duplicate-product" type="Bss\CustomOptionImage\Plugin\Model\ResourceModel\Product\Option" sortOrder="10"/>
+    </type>
 </config>

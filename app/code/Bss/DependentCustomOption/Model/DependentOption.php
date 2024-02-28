@@ -288,7 +288,8 @@ class DependentOption extends AbstractExtensibleModel implements DependentOption
     }
 
     /**
-     * @inheritDoc
+     * @param \Bss\DependentCustomOption\Api\Data\DependentOptionExtensionInterface $extensionAttributes
+     * @return DependentOption|void
      */
     public function setExtensionAttributes(
         \Bss\DependentCustomOption\Api\Data\DependentOptionExtensionInterface $extensionAttributes

@@ -17,19 +17,19 @@
  */
 namespace Bss\CustomOptionImage\Observer\Adminhtml;
 
-use \Magento\Framework\Event\ObserverInterface;
-use \Magento\Framework\Event\Observer as EventObserver;
+use Magento\Framework\Event\Observer as EventObserver;
+use Magento\Framework\Event\ObserverInterface;
+use Magento\Framework\UrlInterface;
+use Magento\Ui\Component\Form\Element\DataType\Text;
 use Magento\Ui\Component\Form\Element\Hidden;
 use Magento\Ui\Component\Form\Field;
-use Magento\Ui\Component\Form\Element\DataType\Text;
-use Magento\Framework\UrlInterface;
 
 class AddBackendField implements ObserverInterface
 {
-    const FIELD_UPLOAD_IMAGE_PREVIEW = 'image_url';
-    const FIELD_UPLOAD_IMAGE_BUTTON = 'bss_image_button';
-    const FIELD_UPLOAD_SWATCH_IMAGE_BUTTON = 'swatch_image_url';
-    const FIELD_UPLOAD_SWATCH_IMAGE_BUTTON_DATA = 'swatch_image_url_hidden';
+    public const FIELD_UPLOAD_IMAGE_PREVIEW = 'image_url';
+    public const FIELD_UPLOAD_IMAGE_BUTTON = 'bss_image_button';
+    public const FIELD_UPLOAD_SWATCH_IMAGE_BUTTON = 'swatch_image_url';
+    public const FIELD_UPLOAD_SWATCH_IMAGE_BUTTON_DATA = 'swatch_image_url_hidden';
 
     /**
      * @var UrlInterface
@@ -55,6 +55,8 @@ class AddBackendField implements ObserverInterface
     }
 
     /**
+     * Add Data
+     *
      * @param EventObserver $observer
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
@@ -64,6 +66,8 @@ class AddBackendField implements ObserverInterface
     }
 
     /**
+     * Get custom image field
+     *
      * @return array
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
@@ -81,6 +85,8 @@ class AddBackendField implements ObserverInterface
     }
 
     /**
+     * Get swatch image config
+     *
      * @param int $sortOrder
      * @return array
      * @throws \Magento\Framework\Exception\NoSuchEntityException
@@ -112,6 +118,8 @@ class AddBackendField implements ObserverInterface
     }
 
     /**
+     * Get swatch image config hidden
+     *
      * @param int $sortOrder
      * @return array
      */
@@ -135,6 +143,8 @@ class AddBackendField implements ObserverInterface
     }
 
     /**
+     * Get image preview field config
+     *
      * @param int $sortOrder
      * @return array
      * @throws \Magento\Framework\Exception\NoSuchEntityException
@@ -166,9 +176,10 @@ class AddBackendField implements ObserverInterface
     }
 
     /**
+     * Get upload button field config
+     *
      * @param int $sortOrder
      * @return array
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     protected function getUploadButtonFieldConfig($sortOrder)
     {
