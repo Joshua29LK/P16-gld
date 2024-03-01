@@ -1,12 +1,14 @@
 <?php
 /**
  * @author Amasty Team
- * @copyright Copyright (c) 2023 Amasty (https://www.amasty.com)
+ * @copyright Copyright (c) Amasty (https://www.amasty.com)
  * @package Shipping Rules for Magento 2
  */
 
 namespace Amasty\Shiprules\Ui;
 
+use Amasty\Shiprules\Api\Data\RuleInterface;
+use Magento\Framework\Api\Filter;
 use Magento\Framework\App\Request\DataPersistorInterface;
 use Amasty\Shiprules\Model\ResourceModel\Rule\CollectionFactory;
 use Amasty\Shiprules\Model\Rule;
@@ -50,6 +52,7 @@ class FormDataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
             return $this->loadedData;
         }
 
+        $this->collection->joinRelationTables();
         $items = $this->collection->getItems();
         /** @var Rule $rule */
         foreach ($items as $rule) {
@@ -66,5 +69,21 @@ class FormDataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         }
 
         return $this->loadedData;
+    }
+
+    // During filtering by 'rule_id',
+    // we need to indicate to which table we want to add filter,
+    // to avoid exception "Column 'rule_id' in where clause is ambiguous".
+    // Because column 'rule_id' exist in all relation tables.
+    public function addFilter(Filter $filter): void
+    {
+        if ($filter->getField() === RuleInterface::RULE_ID) {
+            $this->getCollection()->addFieldToFilter(
+                'main_table.' . RuleInterface::RULE_ID,
+                [$filter->getConditionType() => $filter->getValue()]
+            );
+        } else {
+            parent::addFilter($filter);
+        }
     }
 }

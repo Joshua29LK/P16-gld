@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 /**
  * @author Amasty Team
- * @copyright Copyright (c) 2023 Amasty (https://www.amasty.com)
+ * @copyright Copyright (c) Amasty (https://www.amasty.com)
  * @package Shipping Rules for Magento 2
  */
 
@@ -125,7 +125,16 @@ class Provider
                 continue;
             }
 
-            $total = $this->totalRegistry->getCalculatedTotal($request, $hash);
+            $newItems = [];
+            foreach ($request->getAllItems() as $item) {
+                $itemId = (int)($item->getId() ?? $item->getQuoteItemId());
+                if (isset($validItems[$itemId])) {
+                    $newItems[] = $validItems[$itemId];
+                }
+            }
+            $newRequest = clone $request;
+            $newRequest->setAllItems(array_values($newItems));
+            $total = $this->totalRegistry->getCalculatedTotal($newRequest, $hash);
 
             if ($this->validator->validateRule($rule, $request, $total)) {
                 $this->storage[$hash][] = $rule;

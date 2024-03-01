@@ -1,7 +1,7 @@
 <?php
 /**
  * @author Amasty Team
- * @copyright Copyright (c) 2023 Amasty (https://www.amasty.com)
+ * @copyright Copyright (c) Amasty (https://www.amasty.com)
  * @package Shipping Rules for Magento 2
  */
 
@@ -19,6 +19,7 @@ class Address extends \Amasty\CommonRules\Model\Rule\Condition\Address
     {
         $attributes = [
             'package_value_with_discount' => __('Subtotal'),
+            'base_subtotal_incl_tax' => __('Subtotal (Incl. Tax)'),
             'package_qty' => __('Total Items Quantity'),
             'package_weight' => __('Total Weight'),
             'dest_postcode' => __('Shipping Postcode'),
