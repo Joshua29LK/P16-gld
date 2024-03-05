@@ -32,6 +32,11 @@ class ProductOption
     protected $moduleConfig;
 
     /**
+     * @var \Bss\DependentCustomOption\Model\DependOptionFactory
+     */
+    protected $dependOptionFactory;
+
+    /**
      * OptionPlugin constructor.
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Bss\DependentCustomOption\Helper\ModuleConfig $moduleConfig
@@ -61,11 +66,16 @@ class ProductOption
             $co = $this->dependOptionFactory->create()->getCollection()
                 ->addFieldToFilter('product_id', $option->getProductId());
             $depend_value = $co->addFieldToFilter('depend_value', ['notnull' => true])->getData();
-            $array = [];
+            $depend_optionIds = [];
             foreach ($depend_value as $value) {
-                $array[] = $value['depend_value'];
+                if (!empty($value['depend_value'])) {
+                    $optionIds = explode(',', $value['depend_value']);
+                    foreach ($optionIds as $optionId) {
+                        $depend_optionIds[$optionId] = true;
+                    }
+                }
             }
-            if ($option->getIsRequire() && in_array($option->getDependentId(), $array)) {
+            if ($option->getIsRequire() && isset($depend_optionIds[$option->getDependentId()])) {
                 $option->setIsRequire(false);
             }
         }

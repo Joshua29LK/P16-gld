@@ -38,6 +38,8 @@ class Options
     }
 
     /**
+     * Around OptionHTMl
+     *
      * @param \Magento\Catalog\Block\Product\View\Options $subject
      * @param mixed $result
      * @param Option $option

@@ -34,7 +34,8 @@
         "woom/module-cmstree": "1.0.20",
         "redchamps/module-sitemap-url-exclude": "1.0.4",
         "multisafepay/magento2": "3.4.0",
-        "litespeed/module-litemage": "2.2.3"
+        "litespeed/module-litemage": "2.2.3",
+        "redchamps/module-mini-cart-scroll": "1.0.1"
     },
     "require-dev": {
 		"allure-framework/allure-phpunit": "~1.5.0",

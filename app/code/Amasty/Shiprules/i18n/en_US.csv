@@ -6,6 +6,7 @@ Conditions,Conditions
 "Unable to load Shipping Rule with ID %1. Please review the log and try again.","Unable to load Shipping Rule with ID %1. Please review the log and try again."
 "Shipping Rules","Shipping Rules"
 Subtotal,Subtotal
+"Subtotal (Incl. Tax)","Subtotal (Incl. Tax)"
 "Total Items Quantity","Total Items Quantity"
 "Total Weight","Total Weight"
 "Shipping Postcode","Shipping Postcode"

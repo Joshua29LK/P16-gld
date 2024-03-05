@@ -1,7 +1,7 @@
 <?php
 /**
  * @author Amasty Team
- * @copyright Copyright (c) 2023 Amasty (https://www.amasty.com)
+ * @copyright Copyright (c) Amasty (https://www.amasty.com)
  * @package Shipping Rules for Magento 2
  */
 
@@ -14,12 +14,15 @@ interface ConstantsInterface
     public const DATA_PERSISTOR_FORM = 'amasty_shiprules_form_data';
 
     public const FIELDS = [
-        'stores',
-        'cust_groups',
         'methods',
         'carriers',
-        'days',
         'discount_id',
         'discount_id_disable'
+    ];
+
+    public const RELATION_FIELDS = [
+        'stores',
+        'cust_groups',
+        'days'
     ];
 }

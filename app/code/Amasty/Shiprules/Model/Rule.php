@@ -1,13 +1,15 @@
 <?php
 /**
  * @author Amasty Team
- * @copyright Copyright (c) 2023 Amasty (https://www.amasty.com)
+ * @copyright Copyright (c) Amasty (https://www.amasty.com)
  * @package Shipping Rules for Magento 2
  */
 
 namespace Amasty\Shiprules\Model;
 
 use Amasty\Shiprules\Api\Data\RuleInterface;
+use Amasty\Shiprules\Model\ResourceModel\Rule as ResourceRule;
+use Amasty\Shiprules\Model\ResourceModel\Rule\RelationsResolver;
 use Amasty\Shiprules\Model\Rule\Validator\ValidatorComposite;
 use Magento\Framework\App\ObjectManager;
 
@@ -55,6 +57,12 @@ class Rule extends \Amasty\CommonRules\Model\Rule implements RuleInterface
         if (is_array($value)) {
             $this->setMethods(array_merge($value, $this->getMethods()));
         }
+
+        $this->setStores($this->getData(ResourceRule::STORES_TABLE_NAME . '.' . RelationsResolver::STORE_FIELD) ?: '0');
+        $this->setCustGroups(
+            $this->getData(ResourceRule::CUSTOMERS_TABLE_NAME . '.' . RelationsResolver::CUSTOMER_GROUP_FIELD)
+        );
+        $this->setDays($this->getData(ResourceRule::DAYS_TABLE_NAME . '.' . RelationsResolver::DAY_FIELD));
 
         return $this;
     }
@@ -110,13 +118,6 @@ class Rule extends \Amasty\CommonRules\Model\Rule implements RuleInterface
      */
     public function getStores()
     {
-        $stores = $this->_getData(RuleInterface::STORES);
-
-        if (is_string($stores)) {
-            $stores = explode(',', $stores);
-            $this->setStores($stores);
-        }
-
         return $this->_getData(RuleInterface::STORES);
     }
 

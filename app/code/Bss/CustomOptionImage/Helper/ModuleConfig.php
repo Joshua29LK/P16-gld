@@ -51,6 +51,8 @@ class ModuleConfig extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
+     * Is module enable
+     *
      * @return mixed
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
@@ -64,7 +66,9 @@ class ModuleConfig extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
-     * @return mixed
+     * Get baseUrl
+     *
+     * @return string
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function getBaseUrl()
@@ -73,6 +77,8 @@ class ModuleConfig extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
+     * Get check box sizeX
+     *
      * @return int
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
@@ -87,6 +93,8 @@ class ModuleConfig extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
+     * Get check box sizeY
+     *
      * @return int
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
@@ -101,6 +109,8 @@ class ModuleConfig extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
+     * Get radio sizeX
+     *
      * @return int
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
@@ -115,6 +125,8 @@ class ModuleConfig extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
+     * Get radio sizeY
+     *
      * @return int
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
@@ -129,6 +141,8 @@ class ModuleConfig extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
+     * Get multiple sizeX
+     *
      * @return int
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
@@ -143,6 +157,8 @@ class ModuleConfig extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
+     * Get Multiple sizeY
+     *
      * @return int
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
@@ -157,6 +173,8 @@ class ModuleConfig extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
+     * Get dropdown sizeX
+     *
      * @return int
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
@@ -171,6 +189,8 @@ class ModuleConfig extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
+     * Get dropdown sizeY
+     *
      * @return int
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
@@ -185,6 +205,8 @@ class ModuleConfig extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
+     * Get dropdown view
+     *
      * @return int
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
@@ -199,6 +221,8 @@ class ModuleConfig extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
+     * Get multiple select view
+     *
      * @return int
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
@@ -213,8 +237,10 @@ class ModuleConfig extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
+     * Get imageY
+     *
      * @param string $type
-     * @return int
+     * @return false|int
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function getImageY($type)
@@ -237,8 +263,10 @@ class ModuleConfig extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
+     * Get image X
+     *
      * @param string $type
-     * @return int
+     * @return false|int
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function getImageX($type)
@@ -261,6 +289,8 @@ class ModuleConfig extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
+     * Get StoreId
+     *
      * @return int
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
@@ -273,6 +303,8 @@ class ModuleConfig extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
+     * Get Price Display Setting
+     *
      * @return mixed
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */

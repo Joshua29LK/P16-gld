@@ -23,6 +23,7 @@ use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
 class Collection extends AbstractCollection
 {
     /**
+     * constructor
      * @inheritdoc
      */
     public function _construct()

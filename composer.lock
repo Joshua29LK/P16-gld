@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c52aefc7037944b16507f50805d57c7a",
+    "content-hash": "8e2fc6bfb07a4c846f96d0e648305b20",
     "packages": [
         {
             "name": "2tvenom/cborencode",
@@ -19865,6 +19865,35 @@
             ],
             "description": "RedChamps Core Module",
             "time": "2021-07-22T12:43:12+00:00"
+        },
+        {
+            "name": "redchamps/module-mini-cart-scroll",
+            "version": "1.0.1",
+            "source": {
+                "type": "git",
+                "url": "git@bitbucket.org:redchampsTeam/mini-cart-scroll.git",
+                "reference": "8a332876e343c100d6776be5ee4c52411a441aea"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://repo.redchamps.com//dist/redchamps/module-mini-cart-scroll/redchamps-module-mini-cart-scroll-1.0.1-3abf0a.zip",
+                "reference": "8a332876e343c100d6776be5ee4c52411a441aea",
+                "shasum": "d9a5ad98e2a82bf2adc586778ba74fc19e2c6d66"
+            },
+            "require": {
+                "redchamps/module-core": "*"
+            },
+            "type": "magento2-module",
+            "autoload": {
+                "psr-4": {
+                    "RedChamps\\MiniCartScroll\\": ""
+                },
+                "files": [
+                    "registration.php"
+                ]
+            },
+            "description": "This extension allows automatically scrolling to mini-cart and opening it as soon as product is added to cart.",
+            "time": "2024-02-27T12:08:33+00:00"
         },
         {
             "name": "redchamps/module-sitemap-url-exclude",

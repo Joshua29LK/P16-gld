@@ -13,7 +13,7 @@
  * @category   BSS
  * @package    Bss_DependentCustomOption
  * @author     Extension Team
- * @copyright  Copyright (c) 2017-2022 BSS Commerce Co. ( http://bsscommerce.com )
+ * @copyright  Copyright (c) 2017-2023 BSS Commerce Co. ( http://bsscommerce.com )
  * @license    http://bsscommerce.com/Bss-Commerce-License.txt
  */
 -->
@@ -31,7 +31,7 @@
                 <field id="enable" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
                     <label>Enable</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                    <comment><![CDATA[Version 1.1.4]]></comment>
+                    <comment><![CDATA[Version 1.1.8]]></comment>
                 </field>
                 <field id="children_display" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
                     <label>Display child values</label>

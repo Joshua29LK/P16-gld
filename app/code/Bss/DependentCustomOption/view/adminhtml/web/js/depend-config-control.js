@@ -11,7 +11,7 @@
  * @category   BSS
  * @package    Bss_DependentCustomOption
  * @author     Extension Team
- * @copyright  Copyright (c) 2017-2020 BSS Commerce Co. ( http://bsscommerce.com )
+ * @copyright  Copyright (c) 2017-2023 BSS Commerce Co. ( http://bsscommerce.com )
  * @license    http://bsscommerce.com/Bss-Commerce-License.txt
  */
 define([
@@ -215,7 +215,7 @@ define([
                     this.value($('#' + this.multiselectId).val().join(','));
                 }
             }
-            if ($('#' + this.multiselectId+ ' option').length > 0 && (!$('#' + this.multiselectId).val() || $('#' + this.multiselectId).val().length == 0)) {
+            if ($('#' + this.multiselectId+ ' option').length > 0 && !$('#' + this.multiselectId).val().length) {
                 this.value('');
             }
         },

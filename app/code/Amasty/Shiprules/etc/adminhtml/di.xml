@@ -2,7 +2,7 @@
 <!--
 /**
  * @author Amasty Team
- * @copyright Copyright (c) 2023 Amasty (https://www.amasty.com)
+ * @copyright Copyright (c) Amasty (https://www.amasty.com)
  * @package Shipping Rules for Magento 2
  */-->
 
@@ -41,4 +41,25 @@
             <argument name="resource" xsi:type="object">Amasty\Shiprules\Model\ResourceModel\Rule</argument>
         </arguments>
     </type>
+
+    <type name="Amasty\Shiprules\Ui\Component\Grid\Rule\DataProvider">
+        <arguments>
+            <argument name="modifiersPool" xsi:type="object">Amasty\Shiprules\Ui\Component\Grid\Rule\Modifier\Pool</argument>
+        </arguments>
+    </type>
+
+    <virtualType name="Amasty\Shiprules\Ui\Component\Grid\Rule\Modifier\Pool" type="Magento\Ui\DataProvider\Modifier\Pool">
+        <arguments>
+            <argument name="modifiers" xsi:type="array">
+                <item name="modify_stores" xsi:type="array">
+                    <item name="class" xsi:type="string">Amasty\Shiprules\Ui\Component\Grid\Rule\Modifiers\ModifyStores</item>
+                    <item name="sortOrder" xsi:type="number">10</item>
+                </item>
+                <item name="modify_cust_groups" xsi:type="array">
+                    <item name="class" xsi:type="string">Amasty\Shiprules\Ui\Component\Grid\Rule\Modifiers\ModifyCustGroups</item>
+                    <item name="sortOrder" xsi:type="number">20</item>
+                </item>
+            </argument>
+        </arguments>
+    </virtualType>
 </config>

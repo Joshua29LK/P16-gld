@@ -3,7 +3,7 @@
     "description": "Shipping Rules By Amasty",
     "require": {
         "php": ">=7.3",
-        "amasty/base": ">=1.14.6",
+        "amasty/base": ">=1.14.7",
         "amasty/system-common-rules": ">=2.4.7",
         "amasty/module-shippingarea": "*"
     },
@@ -11,7 +11,7 @@
         "amasty/module-shiprules-mftf-3": "Install module-shiprules-mftf-3 module to be able to run Shipping Rules MFTF tests for Magento 2.4 and higher."
     },
     "type": "magento2-module",
-    "version": "2.8.6",
+    "version": "2.9.1",
     "license": [
         "proprietary"
     ],

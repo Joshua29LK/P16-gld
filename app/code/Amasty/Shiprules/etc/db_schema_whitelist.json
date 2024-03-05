@@ -41,6 +41,40 @@
         },
         "constraint": {
             "PRIMARY": true
+        },
+        "index": {
+            "AMASTY_SHIPRULES_RULE_IS_ACTIVE_STORES_CUST_GROUPS_DAYS_TIME_FROM_TIME_TO": true,
+            "AMASTY_SHIPRULES_RULE_IS_ACTIVE_TIME_FROM_TIME_TO": true
+        }
+    },
+    "amasty_shiprules_rule_stores": {
+        "column": {
+            "rule_id": true,
+            "store_id": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "FK_E13520CC320FC34417449FD2B48DDD5F": true
+        }
+    },
+    "amasty_shiprules_rule_customer_groups": {
+        "column": {
+            "rule_id": true,
+            "customer_group": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "FK_48266ED9482E3D374C4BAAD9A5E978FC": true
+        }
+    },
+    "amasty_shiprules_rule_days": {
+        "column": {
+            "rule_id": true,
+            "day": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "AMASTY_SHIPRULES_RULE_DAYS_RULE_ID_AMASTY_SHIPRULES_RULE_RULE_ID": true
         }
     },
     "amasty_shiprules_attribute": {

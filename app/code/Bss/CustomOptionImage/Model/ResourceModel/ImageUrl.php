@@ -46,10 +46,11 @@ class ImageUrl extends AbstractDb
     }
 
     /**
+     * Get image option url
+     *
      * @param int $optionId
      * @param string $type
      * @return bool|mixed
-     * @throws \Zend_Db_Statement_Exception
      */
     public function getImageOptionUrl($optionId, $type = 'image_url')
     {
@@ -65,6 +66,8 @@ class ImageUrl extends AbstractDb
     }
 
     /**
+     * Load by option tyeId
+     *
      * @param int $optionTypeId
      * @return array
      * @throws \Magento\Framework\Exception\LocalizedException
@@ -82,6 +85,9 @@ class ImageUrl extends AbstractDb
     }
 
     /**
+     * Convert old to new config
+     *
+     * @return void
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function convertOldToNewConfig()
@@ -111,6 +117,8 @@ class ImageUrl extends AbstractDb
     }
 
     /**
+     * Check config exist
+     *
      * @param string $oldPath
      * @return string
      */
@@ -124,8 +132,11 @@ class ImageUrl extends AbstractDb
     }
 
     /**
+     * Update old config
+     *
      * @param string $newPath
      * @param string $oldPath
+     * @return void
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function updateOldConfig($newPath, $oldPath)
@@ -144,8 +155,9 @@ class ImageUrl extends AbstractDb
     }
 
     /**
+     * Check Old Module
+     *
      * @return string
-     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function checkOldModule()
     {
@@ -160,7 +172,9 @@ class ImageUrl extends AbstractDb
     }
 
     /**
-     * @return string
+     * Remove Old Module Setup
+     *
+     * @return void
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function removeOldModuleSetup()

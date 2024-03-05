@@ -37,6 +37,11 @@ class OptionValuePlugin
     protected $dependOption;
 
     /**
+     * @var \Bss\DependentCustomOption\Model\ResourceModel\DependOption
+     */
+    protected $resourceDependOption;
+
+    /**
      * OptionValuePlugin constructor.
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Bss\DependentCustomOption\Model\DependOptionFactory $dependOptionFactory

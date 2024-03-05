@@ -23,25 +23,30 @@ use Magento\Framework\Model\AbstractModel;
 class ImageUrl extends AbstractModel
 {
     /**
+     * ImageUrl constructor.
      * @inheritdoc
      */
     public function _construct()
     {
         $this->_init(\Bss\CustomOptionImage\Model\ResourceModel\ImageUrl::class);
     }
-
     /**
+     * Rebuild Url
+     *
      * @throws \Exception
+     * @return void
      */
     public function rebuildUrl()
     {
         try {
             $oldUrl = $this->getImageUrl();
-            $cutStart = strpos($oldUrl, 'pub/media/');
-            if ($cutStart !== false) {
-                $newUrl = substr($oldUrl, $cutStart + 10);
-                $this->setImageUrl($newUrl);
-                $this->save();
+            if ($oldUrl) {
+                $cutStart = strpos($oldUrl, 'pub/media/');
+                if ($cutStart !== false) {
+                    $newUrl = substr($oldUrl, $cutStart + 10);
+                    $this->setImageUrl($newUrl);
+                    $this->save();
+                }
             }
         } catch (\Exception $exception) {
             throw new \LogicException(__($exception->getMessage()));
@@ -49,6 +54,8 @@ class ImageUrl extends AbstractModel
     }
 
     /**
+     * Get image option url
+     *
      * @param int $optionId
      * @param string $type
      * @return int|null
@@ -60,6 +67,8 @@ class ImageUrl extends AbstractModel
     }
 
     /**
+     * Load by option tyeId
+     *
      * @param int $optionTypeId
      * @return ImageUrl
      * @throws \Magento\Framework\Exception\LocalizedException

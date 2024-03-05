@@ -38,7 +38,7 @@ $moduleConfig = $block->getConfigHelper();
                     "optionType": "<?php echo $option->getType() ?>",
                     "optionId": "<?php echo $option->getId() ?>",
                     "dependId": "<?php echo $option->getDependentId() ?>",
-                    "dcoRequire": "<?php echo $option->getIsRequire() ?>",
+                    "dcoRequire": <?php echo $option->getIsRequire() ? 1 : 0 ?> ,
                     "childrenDisplay": "<?php echo $moduleConfig->getChildrenDisplay() ?>"
                 }
             }

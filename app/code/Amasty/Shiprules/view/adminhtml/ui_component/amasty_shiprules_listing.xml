@@ -2,7 +2,7 @@
 <!--
 /**
  * @author Amasty Team
- * @copyright Copyright (c) 2023 Amasty (https://www.amasty.com)
+ * @copyright Copyright (c) Amasty (https://www.amasty.com)
  * @package Shipping Rules for Magento 2
  */-->
 
@@ -27,7 +27,7 @@
 
     <dataSource name="amasty_shiprules_listing_data_source">
         <argument name="dataProvider" xsi:type="configurableObject">
-            <argument name="class" xsi:type="string">Amasty\CommonRules\Ui\DataProvider\AbstractDataProvider</argument>
+            <argument name="class" xsi:type="string">Amasty\Shiprules\Ui\Component\Grid\Rule\DataProvider</argument>
             <argument name="name" xsi:type="string">amasty_shiprules_listing_data_source</argument>
             <argument name="primaryFieldName" xsi:type="string">rule_id</argument>
             <argument name="requestFieldName" xsi:type="string">id</argument>

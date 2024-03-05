@@ -19,14 +19,20 @@
 namespace Bss\CustomOptionImage\Controller\Adminhtml\Json;
 
 use Magento\Backend\App\Action\Context;
+use Magento\Framework\App\ResponseInterface;
+use Magento\Framework\Controller\Result\Json;
+use Magento\Framework\Controller\ResultInterface;
 
+/**
+ * @SuppressWarnings(PHPMD.AllPurposeAction)
+ */
 class Uploader extends \Magento\Backend\App\Action
 {
     /**
      *
      * @see _isAllowed()
      */
-    const ADMIN_RESOURCE = 'Bss_CustomOptionImage::config';
+    public const ADMIN_RESOURCE = 'Bss_CustomOptionImage::config';
 
     /**
      * @var \Bss\CustomOptionImage\Helper\ImageSaving
@@ -40,6 +46,7 @@ class Uploader extends \Magento\Backend\App\Action
 
     /**
      * Uploader constructor.
+     *
      * @param Context $context
      * @param \Bss\CustomOptionImage\Helper\ImageSaving $imageSaving
      * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
@@ -55,7 +62,9 @@ class Uploader extends \Magento\Backend\App\Action
     }
 
     /**
-     * @return \Magento\Framework\Controller\Result\Json
+     * Set data
+     *
+     * @return ResponseInterface|Json|ResultInterface
      */
     public function execute()
     {

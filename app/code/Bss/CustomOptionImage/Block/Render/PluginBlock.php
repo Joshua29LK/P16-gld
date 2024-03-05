@@ -47,10 +47,9 @@ class PluginBlock extends \Magento\Framework\View\Element\Template
      */
     protected $baseMediaUrl = null;
 
-    protected $replaceUrl;
-
     /**
      * PluginBlock constructor.
+     *
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Bss\CustomOptionImage\Helper\ModuleConfig $moduleConfig
      * @param \Bss\CustomOptionImage\Helper\ImageSaving $imageSaving
@@ -80,6 +79,8 @@ class PluginBlock extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Get config helper
+     *
      * @return \Bss\CustomOptionImage\Helper\ModuleConfig
      */
     public function getConfigHelper()
@@ -88,6 +89,8 @@ class PluginBlock extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Get base media url
+     *
      * @return string|null
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
@@ -100,7 +103,10 @@ class PluginBlock extends \Magento\Framework\View\Element\Template
     }
 
     /**
-     * @return string
+     * Get image list
+     *
+     * @return bool|string
+     * @throws \Magento\Framework\Exception\FileSystemException
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function getImageList()
@@ -122,7 +128,9 @@ class PluginBlock extends \Magento\Framework\View\Element\Template
     }
 
     /**
-     * @return string
+     * Get swatch image
+     *
+     * @return bool|string
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function getSwatchImage()
@@ -132,17 +140,10 @@ class PluginBlock extends \Magento\Framework\View\Element\Template
         foreach ($values as $value) {
             $valueData = $value->getData();
             if ($valueData['swatch_image_url']) {
-                $imgThumb = $this->imageSaving->getMediaBaseUrl().$valueData['swatch_image_url'];
-                $img = $this->imageSaving->getMediaBaseUrl().$valueData['swatch_image_url'];
-                $imgFull = $this->imageSaving->getMediaBaseUrl().$valueData['swatch_image_url'];
-
                 $result[$value->getOptionTypeId()][] = [
-                    'thumb' => $imgThumb,
-                    'img' => $img,
-                    'full' => $imgFull,
-                    'thumb_webp' => $this->getWebpUrl($imgThumb),
-                    'img_webp' => $this->getWebpUrl($img),
-                    'full_webp' => $this->getWebpUrl($imgFull),
+                    'thumb' => $this->imageSaving->getMediaBaseUrl() . $valueData['swatch_image_url'],
+                    'img' => $this->imageSaving->getMediaBaseUrl() . $valueData['swatch_image_url'],
+                    'full' => $this->imageSaving->getMediaBaseUrl() . $valueData['swatch_image_url'],
                     'caption' => '',
                     'position' => 0,
                     'isMain' => false,
@@ -156,29 +157,13 @@ class PluginBlock extends \Magento\Framework\View\Element\Template
     }
 
     /**
-     * @param $url
-     * @return mixed|string
-     */
-    public function getWebpUrl($url)
-    {
-        try {
-            if (!$this->replaceUrl) {
-                $this->replaceUrl =
-                    \Magento\Framework\App\ObjectManager::getInstance()->get('Bss\ConvertImageWebp\Model\ReplaceUrl');
-            }
-
-            return $this->replaceUrl->replaceUrl($url);
-        } catch (\Exception $e) {
-        }
-
-        return $url;
-    }
-
-    /**
+     * Get image url
+     *
      * @param string $image
      * @param null $imageWidth
      * @param null $imageHeight
-     * @return string
+     * @return false|string
+     * @throws \Magento\Framework\Exception\FileSystemException
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function getImageUrl($image, $imageWidth = null, $imageHeight = null)
@@ -190,7 +175,6 @@ class PluginBlock extends \Magento\Framework\View\Element\Template
             $imageHeight = $this->moduleConfig->getImageY($this->getOption()->getType());
         }
 
-        $image = $this->imageSaving->resize($image, $imageWidth, $imageHeight);
-        return $image;
+        return $this->imageSaving->resize($image, $imageWidth, $imageHeight);
     }
 }
