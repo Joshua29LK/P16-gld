@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "8e2fc6bfb07a4c846f96d0e648305b20",
+    "content-hash": "6c72482f5cf5d293e3be3653524875f9",
     "packages": [
         {
             "name": "2tvenom/cborencode",
@@ -20955,11 +20955,11 @@
         },
         {
             "name": "swissup/easytabs",
-            "version": "1.12.7",
+            "version": "1.12.8",
             "dist": {
                 "type": "zip",
-                "url": "https://ci.swissuplabs.com/api/swissup/easytabs/download/1.12.7",
-                "reference": "d6cb64060eb2b7f3680081f4d0968f5e4230c496",
+                "url": "https://ci.swissuplabs.com/api/swissup/easytabs/download/1.12.8",
+                "reference": "e84d77d93a753894c67f4b6aea9ab12bd1fce4ef",
                 "shasum": ""
             },
             "require": {
@@ -20971,10 +20971,10 @@
             ],
             "description": "Custom tabs for product and CMS pages",
             "support": {
-                "source": "https://github.com/swissup/easytabs/tree/1.12.7",
+                "source": "https://github.com/swissup/easytabs/tree/1.12.8",
                 "issues": "https://github.com/swissup/easytabs/issues"
             },
-            "time": "2023-11-03T08:47:06+00:00"
+            "time": "2024-02-02T12:53:11+00:00"
         },
         {
             "name": "swissup/module-core",
@@ -21006,11 +21006,11 @@
         },
         {
             "name": "swissup/module-easytabs",
-            "version": "1.12.7",
+            "version": "1.12.8",
             "dist": {
                 "type": "zip",
-                "url": "https://ci.swissuplabs.com/api/swissup/module-easytabs/download/1.12.7",
-                "reference": "bdb739ad5e54c6fda7a2d528aae07083c1b8d965",
+                "url": "https://ci.swissuplabs.com/api/swissup/module-easytabs/download/1.12.8",
+                "reference": "d0bb0ba5ef6a6624dc301d9c3c66c7073c10f222",
                 "shasum": ""
             },
             "require": {
@@ -21055,10 +21055,10 @@
                 "tabs"
             ],
             "support": {
-                "source": "https://github.com/swissup/module-easytabs/tree/1.12.7",
+                "source": "https://github.com/swissup/module-easytabs/tree/1.12.8",
                 "issues": "https://github.com/swissup/module-easytabs/issues"
             },
-            "time": "2023-11-03T08:45:07+00:00"
+            "time": "2024-02-02T12:48:32+00:00"
         },
         {
             "name": "swissup/module-marketplace",
@@ -28319,5 +28319,5 @@
     "prefer-lowest": false,
     "platform": [],
     "platform-dev": [],
-    "plugin-api-version": "2.3.0"
+    "plugin-api-version": "2.2.0"
 }
