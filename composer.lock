@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "6c72482f5cf5d293e3be3653524875f9",
+    "content-hash": "dc0a5bec90c10ba206190a0200666c01",
     "packages": [
         {
             "name": "2tvenom/cborencode",
@@ -2197,11 +2197,11 @@
         },
         {
             "name": "geissweb/module-euvat",
-            "version": "1.20.10.1",
+            "version": "1.21.1",
             "dist": {
                 "type": "zip",
-                "url": "https://packages.geissweb.de/composer/download/file/m/geissweb_module-euvat/h/b761b5b66f930bf8981de3247b0080e0886cd9bb/v/1.20.10.1",
-                "reference": "b761b5b66f930bf8981de3247b0080e0886cd9bb"
+                "url": "https://packages.geissweb.de/composer/download/file/m/geissweb_module-euvat/h/dc41dc7564b15c8bcf65a54db522f4c99e01d4a8/v/1.21.1.0",
+                "reference": "dc41dc7564b15c8bcf65a54db522f4c99e01d4a8"
             },
             "require": {
                 "ext-curl": "*",
@@ -2209,12 +2209,26 @@
                 "ext-pcre": "*",
                 "ext-soap": "*",
                 "magento/framework": ">=102.0.7",
+                "magento/module-backend": "*",
+                "magento/module-catalog": "*",
+                "magento/module-catalog-inventory": "*",
+                "magento/module-checkout": "*",
+                "magento/module-config": "*",
+                "magento/module-customer": "*",
+                "magento/module-directory": "*",
+                "magento/module-eav": "*",
+                "magento/module-quote": "*",
+                "magento/module-sales": "*",
+                "magento/module-shipping": "*",
+                "magento/module-store": "*",
+                "magento/module-tax": "*",
+                "magento/module-ui": "*",
+                "magento/module-weee": "*",
                 "php": ">=7.4"
             },
             "type": "magento2-module",
             "extra": {
-                "_gw_magento_module_name": "Geissweb_Euvat",
-                "_gw_magento_codepool": "app/code"
+                "_gw_magento_module_name": "Geissweb_Euvat"
             },
             "autoload": {
                 "files": [
@@ -2235,7 +2249,7 @@
                 }
             ],
             "description": "Improved VAT handling for merchants dealing with or in the EU.",
-            "time": "2023-12-19T07:43:17+00:00"
+            "time": "2024-02-21T10:57:36+00:00"
         },
         {
             "name": "gmostafa/php-graphql-client",
@@ -28319,5 +28333,5 @@
     "prefer-lowest": false,
     "platform": [],
     "platform-dev": [],
-    "plugin-api-version": "2.2.0"
+    "plugin-api-version": "2.3.0"
 }
