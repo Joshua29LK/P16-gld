@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "6c569758553164b09f7155b5b756c787",
+    "content-hash": "747adf90cfcf2534ea5b0c8e987a2dc2",
     "packages": [
         {
             "name": "2tvenom/cborencode",
@@ -19911,6 +19911,74 @@
             },
             "description": "This extension allows automatically scrolling to mini-cart and opening it as soon as product is added to cart.",
             "time": "2024-02-27T12:08:33+00:00"
+        },
+        {
+            "name": "redchamps/module-modal-box",
+            "version": "1.0.3",
+            "source": {
+                "type": "git",
+                "url": "git@bitbucket.org:redchampsTeam/modal-box.git",
+                "reference": "a4026aa03d8c399c76682529b8c0b93ce0cdfa9a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://repo.redchamps.com//dist/redchamps/module-modal-box/redchamps-module-modal-box-1.0.3-4d8d4f.zip",
+                "reference": "a4026aa03d8c399c76682529b8c0b93ce0cdfa9a",
+                "shasum": "fcd7e77ce540380118af6e08ccefd8bca273d173"
+            },
+            "type": "magento2-module",
+            "autoload": {
+                "psr-4": {
+                    "RedChamps\\ModalBox\\": ""
+                },
+                "files": [
+                    "registration.php"
+                ]
+            },
+            "license": [
+                "RedChamps EULA"
+            ],
+            "description": "This extension will provide pure javascript modal box for other redchamps extensions.",
+            "time": "2022-09-04T14:54:11+00:00"
+        },
+        {
+            "name": "redchamps/module-share-cart",
+            "version": "1.4.2",
+            "source": {
+                "type": "git",
+                "url": "git@bitbucket.org:redchampsTeam/share-cart.git",
+                "reference": "309f054a887b64a3d137295abd78f7c16d7d76c3"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://repo.redchamps.com//dist/redchamps/module-share-cart/redchamps-module-share-cart-1.4.2-bc58f1.zip",
+                "reference": "309f054a887b64a3d137295abd78f7c16d7d76c3",
+                "shasum": "f943dff4b7f8583feaa11d63cd02ae368f87fed0"
+            },
+            "require": {
+                "magento/module-sales": "*",
+                "redchamps/module-core": "*",
+                "redchamps/module-modal-box": "*"
+            },
+            "suggest": {
+                "redchamps/module-share-cart-graph-ql": "*",
+                "redchamps/module-share-cart-sms": "*"
+            },
+            "type": "magento2-module",
+            "autoload": {
+                "files": [
+                    "registration.php"
+                ],
+                "psr-4": {
+                    "RedChamps\\ShareCart\\": "",
+                    "Twilio\\": "twilio/sdk/Twilio"
+                }
+            },
+            "license": [
+                "RedChamps EULA"
+            ],
+            "description": "This extension will allow to share shopping cart via an email, link, WhatsApp.",
+            "time": "2023-11-03T06:24:18+00:00"
         },
         {
             "name": "redchamps/module-sitemap-url-exclude",
