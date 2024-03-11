@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "dc0a5bec90c10ba206190a0200666c01",
+    "content-hash": "6c569758553164b09f7155b5b756c787",
     "packages": [
         {
             "name": "2tvenom/cborencode",
@@ -17783,16 +17783,19 @@
         },
         {
             "name": "mirasvit/module-search-ultimate",
-            "version": "2.1.10",
+            "version": "2.2.49",
             "dist": {
                 "type": "tar",
-                "url": "https://packages.mirasvit.com/37782:CDEW07982F/downloads/mirasvit-module-search-ultimate-2.1.10-8e23ad.tar",
-                "reference": "2fafaea87057156496a9f99d380d8e0961210d12"
+                "url": "https://packages.mirasvit.com/37782:CDEW07982F/downloads/mirasvit-module-search-ultimate-2.2.49-bf70f4.tar",
+                "reference": "4f741e31f6875470373881831c4bbf7fee3e098e"
             },
             "require": {
                 "magento/framework": "103.0.*",
                 "mirasvit/module-core": "dev-master|^1.3.0",
                 "mirasvit/module-report": "dev-master|*"
+            },
+            "conflict": {
+                "mirasvit/module-blog-mx": "<2.0.0"
             },
             "type": "magento2-module",
             "autoload": {
@@ -17825,7 +17828,7 @@
                 "proprietary"
             ],
             "description": "Search Ultimate",
-            "time": "2023-05-02T06:19:04+00:00"
+            "time": "2024-03-07T13:41:06+00:00"
         },
         {
             "name": "monolog/monolog",
