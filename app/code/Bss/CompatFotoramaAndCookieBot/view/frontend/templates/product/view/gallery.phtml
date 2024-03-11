@@ -1,0 +1,51 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+/**
+ * Product media data template
+ *
+ * @var $block \Magento\ProductVideo\Block\Product\View\Gallery
+ */
+?>
+<script type="text/x-magento-init">
+    {
+        "[data-gallery-role=gallery-placeholder]": {
+            "Magento_ProductVideo/js/fotorama-add-video-events": {
+                "videoData": <?= /* @noEscape */ $block->getMediaGalleryDataJson() ?>,
+                "videoSettings": <?= /* @noEscape */ $block->getVideoSettingsJson() ?>,
+                "optionsVideoData": <?= /* @noEscape */ $block->getOptionsMediaGalleryDataJson() ?>
+    }
+}
+}
+</script>
+<script type="text/javascript">
+    window.addEventListener('CookiebotOnLoad', function (e) {
+        if (Cookiebot.consent.marketing) {
+            if (document.querySelector('.fotorama-video-container').classList.contains('hide-after')) {
+                document.querySelector('.fotorama-video-container').classList.remove('hide-after');
+            }
+            if (window.getComputedStyle(document.querySelector('.fotorama-video-container'), '::after').content == 'none') {
+                if (!document.querySelector('.fotorama-video-container').classList.contains('show-after')) {
+                    document.querySelector('.fotorama-video-container').classList.add('show-after');
+                }
+            }
+            if (document.querySelector('.product-video iframe')) {
+                document.querySelector('.product-video iframe').show();
+            }
+        } else {
+            if (document.querySelector('.fotorama-video-container').classList.contains('show-after')) {
+                document.querySelector('.fotorama-video-container').classList.remove('show-after');
+            }
+            if (!document.querySelector('.fotorama-video-container').classList.contains('hide-after')) {
+                document.querySelector('.fotorama-video-container').classList.add('hide-after');
+            }
+            if (document.querySelector('.product-video iframe')) {
+                document.querySelector('.product-video iframe').hide();
+            }
+        }
+    }, false);
+
+</script>
