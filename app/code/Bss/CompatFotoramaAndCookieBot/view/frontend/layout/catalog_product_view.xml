@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<!--
+/**
+* Copyright © Magento, Inc. All rights reserved.
+* See COPYING.txt for license details.
+*/
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceContainer name="product.info.media">
+            <block class="MagicToolbox\Magic360\Block\Product\View\Gallery" name="product.info.media.magic360" template="product/view/gallery.phtml" />
+            <!-- NOTE: to display Magic 360 spin separately -->
+            <block class="Magento\Framework\View\Element\Template" name="product.info.media.spin" after="product.info.media.magic360" template="MagicToolbox_Magic360::product/view/spin.phtml" />
+            <block class="MagicToolbox\Magic360\Block\Product\View\ProductVideoGallery" name="product.info.media.video" after="product.info.media.magic360" template="Bss_CompatFotoramaAndCookieBot::product/view/gallery.phtml" />
+        </referenceContainer>
+    </body>
+</page>
