@@ -24,7 +24,7 @@
         "swissup/easytabs": "1.12.8",
         "rosell-dk/webp-convert": "^2.9",
         "dotsquares/module-advance-discount": "^1.0",
-        "magmodules/magento2-channable": "^1.16",
+        "magmodules/magento2-channable": "1.17.0",
         "magefan/module-blog": "2.11.2",
         "geissweb/module-euvat": "1.21.1",
         "magevision/module-update-order-email-address": "2.4.2",
