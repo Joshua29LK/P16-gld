@@ -25,7 +25,7 @@
         "rosell-dk/webp-convert": "^2.9",
         "dotsquares/module-advance-discount": "^1.0",
         "magmodules/magento2-channable": "^1.16",
-        "magefan/module-blog": "2.11.0.1",
+        "magefan/module-blog": "2.11.2",
         "geissweb/module-euvat": "1.21.1",
         "magevision/module-update-order-email-address": "2.4.2",
         "weltpixel/m2-weltpixel-google-cards": "1.11.19",
@@ -36,7 +36,8 @@
         "multisafepay/magento2": "3.4.0",
         "litespeed/module-litemage": "2.2.3",
         "redchamps/module-mini-cart-scroll": "1.0.1",
-        "redchamps/module-share-cart": "1.4.2"
+        "redchamps/module-share-cart": "1.4.2",
+        "magefan/module-community": "^2.1"
     },
     "require-dev": {
 		"allure-framework/allure-phpunit": "~1.5.0",
