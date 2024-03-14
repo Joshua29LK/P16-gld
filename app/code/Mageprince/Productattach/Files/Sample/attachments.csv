@@ -1,3 +1,0 @@
-productattach_id,name,description,file,file_ext,url,store,customer_group,active
-,"Pdf Attachment",test description,/m/myfile.pdf,pdf,https://www.google.com/,"0,1","0,1,2,3",1
-,"Image Attachment",test description,/t/testimage.jpg,jpg,,"0,1","0,1,2,3",1

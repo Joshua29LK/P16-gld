@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ccae09a09b6fd9bd566b99b84813fb1a",
+    "content-hash": "7de0c22b9e15525468ae1cf05634b5a6",
     "packages": [
         {
             "name": "2tvenom/cborencode",
@@ -17563,6 +17563,28 @@
                 "source": "https://github.com/magento/zf1/tree/1.15.1"
             },
             "time": "2022-06-21T01:22:39+00:00"
+        },
+        {
+            "name": "mageprince/module-product-attachment",
+            "version": "2.2.7",
+            "dist": {
+                "type": "zip",
+                "url": "https://repo.magento.com/archives/mageprince/module-product-attachment/mageprince-module-product-attachment-2.2.7.0.zip",
+                "shasum": "b4e5e49dcde8e5c21b9884bfc3e4d7cad2e70e75"
+            },
+            "type": "magento2-module",
+            "autoload": {
+                "files": [
+                    "registration.php"
+                ],
+                "psr-4": {
+                    "Mageprince\\Productattach\\": ""
+                }
+            },
+            "license": [
+                "Commercial"
+            ],
+            "description": "Magento2 Product Attachment Module"
         },
         {
             "name": "magevision/module-update-order-email-address",
