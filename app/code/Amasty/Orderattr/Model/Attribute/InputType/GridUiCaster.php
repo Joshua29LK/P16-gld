@@ -1,7 +1,7 @@
 <?php
 /**
  * @author Amasty Team
- * @copyright Copyright (c) 2023 Amasty (https://www.amasty.com)
+ * @copyright Copyright (c) Amasty (https://www.amasty.com)
  * @package Custom Checkout Fields for Magento 2
  */
 
@@ -66,7 +66,7 @@ class GridUiCaster
         }
 
         if ($inputType->getSourceModel()) {
-            $config['options'] = $attribute->getSource()->getAllOptions();
+            $config['options'] = $attribute->getSource()->getAllOptions(true, true);
         }
         switch ($inputType->getFrontendInputType()) {
             case 'date':

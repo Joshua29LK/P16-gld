@@ -1,7 +1,7 @@
 <?php
 /**
  * @author Amasty Team
- * @copyright Copyright (c) 2023 Amasty (https://www.amasty.com)
+ * @copyright Copyright (c) Amasty (https://www.amasty.com)
  * @package Custom Checkout Fields for Magento 2
  */
 
@@ -9,6 +9,7 @@ namespace Amasty\Orderattr\Model\ResourceModel\Attribute;
 
 use Amasty\Orderattr\Api\Data\CheckoutAttributeInterface;
 use Amasty\Orderattr\Model\Config\Source\CheckoutStep;
+use Amasty\Orderattr\Model\Indexer\Conditions\AbstractIndexer;
 use Amasty\Orderattr\Model\ResourceModel\Attribute\Attribute as AttributeResource;
 use Amasty\Orderattr\Model\ResourceModel\Entity\Entity;
 
@@ -54,15 +55,17 @@ class Collection extends \Magento\Eav\Model\ResourceModel\Entity\Attribute\Colle
     }
 
     /**
-     * Specify "checkout_step" filter
-     *
-     * @return $this
+     * Specify "checkout_step" filter.
+     * It's needed to consider existed order attributes to show them in the storefront order page.
      */
-    public function addFilterUnassignedOnCheckout()
+    public function addFilterUnassignedOnCheckout(array $attrCodes = []): void
     {
-        return $this->addFieldToFilter(
+        $this->addFieldToFilter(
             'additional_table.' . CheckoutAttributeInterface::CHECKOUT_STEP,
             ['neq' => CheckoutStep::NONE]
+        )->getSelect()->orWhere(
+            'main_table.' . CheckoutAttributeInterface::ATTRIBUTE_CODE . ' IN (?)',
+            $attrCodes
         );
     }
 
@@ -115,7 +118,7 @@ class Collection extends \Magento\Eav\Model\ResourceModel\Entity\Attribute\Colle
             null
         );
         $this->addFieldToFilter(
-            AttributeResource::CUSTOMER_GROUP_TABLE_NAME. '.customer_group_id',
+            AttributeResource::CUSTOMER_GROUP_TABLE_NAME . '.customer_group_id',
             (int) $groupId
         );
         return $this;
@@ -157,5 +160,23 @@ class Collection extends \Magento\Eav\Model\ResourceModel\Entity\Attribute\Colle
             'additional_table.' . \Amasty\Orderattr\Api\Data\CheckoutAttributeInterface::SORTING_ORDER,
             $direction
         );
+    }
+
+    /**
+     * @param string[] $productIds
+     */
+    public function addConditionsFilter(array $productIds): void
+    {
+        $this->joinLeft(
+            AbstractIndexer::MAIN_TABLE,
+            'main_table.' . CheckoutAttributeInterface::ATTRIBUTE_ID . '='
+            . AbstractIndexer::MAIN_TABLE . '.' . AbstractIndexer::ATTRIBUTE_ID,
+            null
+        )->getSelect()->where(
+            AbstractIndexer::MAIN_TABLE . '.' . AbstractIndexer::PRODUCT_ID . ' IN(?)
+                OR ISNULL(additional_table.' . CheckoutAttributeInterface::CONDITIONS_SERIALIZED . ')',
+            $productIds
+        );
+        $this->addAttributeGrouping();
     }
 }

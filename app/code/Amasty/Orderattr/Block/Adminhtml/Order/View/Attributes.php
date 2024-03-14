@@ -1,13 +1,16 @@
 <?php
 /**
  * @author Amasty Team
- * @copyright Copyright (c) 2023 Amasty (https://www.amasty.com)
+ * @copyright Copyright (c) Amasty (https://www.amasty.com)
  * @package Custom Checkout Fields for Magento 2
  */
 
 namespace Amasty\Orderattr\Block\Adminhtml\Order\View;
 
+use Amasty\Orderattr\Model\Attribute\RelationValidator;
+use Amasty\Orderattr\Model\Entity\EntityData;
 use Magento\Backend\Block\Template\Context;
+use Magento\Framework\App\ObjectManager;
 use Magento\Sales\Model\Order;
 use Amasty\Orderattr\Model\Value\Metadata\Form;
 
@@ -23,15 +26,24 @@ class Attributes extends \Magento\Backend\Block\Widget
      */
     private $entityResolver;
 
+    /**
+     * @var RelationValidator
+     */
+    private $relationValidator;
+
     public function __construct(
         Context $context,
         \Amasty\Orderattr\Model\Value\Metadata\FormFactory $metadataFormFactory,
         \Amasty\Orderattr\Model\Entity\EntityResolver $entityResolver,
-        array $data = []
+        array $data = [],
+        RelationValidator $relationValidator = null //todo: move to not optional
     ) {
         parent::__construct($context, $data);
         $this->metadataFormFactory = $metadataFormFactory;
         $this->entityResolver = $entityResolver;
+        $this->relationValidator = $relationValidator ?? ObjectManager::getInstance()->create(
+            RelationValidator::class
+        );
     }
 
     /**
@@ -43,18 +55,36 @@ class Attributes extends \Magento\Backend\Block\Widget
     public function getOrderAttributesData()
     {
         $orderAttributesData = [];
-        $entity = $this->entityResolver->getEntityByOrder($this->getOrder());
-        if ($entity->isObjectNew()) {
-            return [];
-        }
+        $order = $this->getOrder();
+        $entity = $this->entityResolver->getEntityByOrder($order);
         $form = $this->createEntityForm($entity);
-        $outputData = $form->outputData(\Magento\Eav\Model\AttributeDataFactory::OUTPUT_FORMAT_HTML);
+        $outputData = $form->outputData(Form::FORMAT_TO_VALIDATE_RELATIONS);
+
+        // array: dependent_attribute_code => bool
+        // if true - value should be shown
+        $attributesToShow = $this->relationValidator->getAttributesToShow($outputData, $entity);
+
         foreach ($outputData as $attributeCode => $data) {
-            if (!empty($data)) {
-                $orderAttributesData[] = [
-                    'label' => $form->getAttribute($attributeCode)->getStoreLabel($this->getOrder()->getStoreId()),
-                    'value' => $data
-                ];
+            // $attributesToShow contains only dependent attributes.
+            //  if there is no attribute in the array - value should be shown.
+            if (!array_key_exists($attributeCode, $attributesToShow) || $attributesToShow[$attributeCode]) {
+                $attribute = $form->getAttribute($attributeCode);
+                if (!empty($data)) {
+                    if (is_array($data)) {
+                        $data = current($data);
+                    }
+                    $orderAttributesData[] = [
+                        'label' => $attribute->getStoreLabel($order->getStoreId()),
+                        'value' => $data
+                    ];
+                } elseif ($entity->getCustomAttribute($attributeCode)
+                    && ($entity->getCustomAttribute($attributeCode)->getValue() === null)
+                ) {
+                    $orderAttributesData[] = [
+                        'label' => $attribute->getStoreLabel($order->getStoreId()),
+                        'value' => __('Option was deleted')
+                    ];
+                }
             }
         }
 
@@ -69,13 +99,33 @@ class Attributes extends \Magento\Backend\Block\Widget
      */
     protected function createEntityForm($entity)
     {
+        $order = $this->getOrder();
         /** @var Form $formProcessor */
         $formProcessor = $this->metadataFormFactory->create();
         $formProcessor->setFormCode('adminhtml_order_view')
             ->setEntity($entity)
-            ->setStore($this->getOrder()->getStore());
+            ->setStore($order->getStore())
+            ->setProductIds($this->getProductIds($order))
+            ->setShippingMethod((string)$order->getShippingMethod())
+            ->setCustomerGroupId((int)$order->getCustomerGroupId());
 
         return $formProcessor;
+    }
+
+    /**
+     * @param Order $order
+     * @return string[]
+     */
+    private function getProductIds(Order $order): array
+    {
+        $productIds = [];
+        foreach ($order->getAllItems() as $item) {
+            if ($item->getProduct()) {
+                $productIds[] = $item->getProduct()->getId();
+            }
+        }
+
+        return $productIds;
     }
 
     /**

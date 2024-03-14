@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 /**
  * @author Amasty Team
- * @copyright Copyright (c) 2023 Amasty (https://www.amasty.com)
+ * @copyright Copyright (c) Amasty (https://www.amasty.com)
  * @package Custom Checkout Fields for Magento 2
  */
 
@@ -43,7 +43,7 @@ class File extends EavFile
     {
         $value = parent::extractValue($request);
 
-        if (is_array($value)) {
+        if (is_array($value) && !empty($value)) {
             $this->saveFileFromOldForm($value);
             $value = $this->getEntity()->getData($this->getAttribute()->getAttributeCode());
         }
@@ -79,8 +79,14 @@ class File extends EavFile
             if ($format == AttributeDataFactory::OUTPUT_FORMAT_HTML && $value) {
                 $value = $this->getFileUploader()->getFileInfo($value);
             }
-
         }
+
+        if ($value && is_string($value)) {
+            $valueData = [];
+            $valueData['value'] = $this->getFileUploader()->getFileInfo($value);
+            $value = $valueData;
+        }
+
         return $value;
     }
 

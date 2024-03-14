@@ -1,3 +1,4 @@
+<!-- ko if: shouldDisplay($parents) -->
 <div class="order-attributes">
     <div class="order-attributes-form fieldset address">
         <!-- ko foreach: { data: elems, as: 'element' } -->
@@ -5,3 +6,4 @@
         <!-- /ko -->
     </div>
 </div>
+<!-- /ko -->

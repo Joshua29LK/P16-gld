@@ -1,5 +1,6 @@
 @order-attributes-form__margin-top: 20px;
 @order-attributes-form__margin-bottom: 20px;
+@order-attributes-file-upload__color: #727272;
 
 & when (@media-common = true) {
     .field {
@@ -38,21 +39,31 @@
 
     .order-attributes {
         .order-attributes-form {
+            /* phpcs:ignore Magento2.Less.SemicolonSpacing.NotAtEnd */
             &.fieldset .field:last-child {
                 .lib-css(margin-bottom, @order-attributes-form__margin-bottom);
             }
 
             .lib-css(margin-top, @order-attributes-form__margin-top);
         }
+
+        .file-uploader {
+            .file-uploader-meta {
+                color: @order-attributes-file-upload__color;
+            }
+        }
     }
 
-    // Fix content height when store pickup selected
+    //  Fix content height when store pickup selected
+    /* phpcs:ignore Magento2.Less.AvoidId.IdSelectorUsage */
     #store-pickup {
         &.selected-store-pickup {
+            /* phpcs:ignore Magento2.Less.AvoidId.IdSelectorUsage */
             ~ #shipping,
+            /* phpcs:ignore Magento2.Less.AvoidId.IdSelectorUsage */
             ~ #opc-shipping_method {
                 position: absolute;
             }
         }
     }
- }
+}

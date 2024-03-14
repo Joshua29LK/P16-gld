@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 /**
  * @author Amasty Team
- * @copyright Copyright (c) 2023 Amasty (https://www.amasty.com)
+ * @copyright Copyright (c) Amasty (https://www.amasty.com)
  * @package Custom Checkout Fields for Magento 2
  */
 
@@ -14,9 +14,11 @@ use Amasty\Orderattr\Api\CheckoutAttributeRepositoryInterface;
 use Amasty\Orderattr\Api\Data\CheckoutAttributeInterface;
 use Amasty\Orderattr\Controller\Adminhtml\Attribute;
 use Amasty\Orderattr\Model\ResourceModel\Entity\Entity;
+use Amasty\Orderattr\Model\Rule\RuleFactory;
 use Laminas\Uri\Uri;
 use Magento\Backend\App\Action\Context;
 use Magento\Eav\Model\Config;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Store\Model\Store;
 
@@ -37,16 +39,23 @@ class Save extends Attribute
      */
     private $uri;
 
+    /**
+     * @var RuleFactory
+     */
+    private $ruleFactory;
+
     public function __construct(
         Context $context,
         Config $eavConfig,
         CheckoutAttributeRepositoryInterface $attributeRepository,
-        Uri $uri
+        Uri $uri,
+        RuleFactory $ruleFactory = null // TODO move to not optional
     ) {
         parent::__construct($context);
         $this->eavConfig = $eavConfig;
         $this->attributeRepository = $attributeRepository;
         $this->uri = $uri;
+        $this->ruleFactory = $ruleFactory ?? ObjectManager::getInstance()->get(RuleFactory::class);
     }
 
     /**
@@ -138,7 +147,17 @@ class Save extends Attribute
 
         $data = $this->prepareValidationRules($data, $attribute);
 
+        $data[CheckoutAttributeInterface::CONDITIONS_SERIALIZED] = $this->prepareConditions($data['rule'] ?? []);
+
         return $data;
+    }
+
+    private function prepareConditions(array $conditions)
+    {
+        $rule = $this->ruleFactory->create();
+        $rule->loadPost($conditions);
+
+        return $rule->getConditions()->asArray();
     }
 
     /**

@@ -1,7 +1,7 @@
 <?php
 /**
  * @author Amasty Team
- * @copyright Copyright (c) 2023 Amasty (https://www.amasty.com)
+ * @copyright Copyright (c) Amasty (https://www.amasty.com)
  * @package Custom Checkout Fields for Magento 2
  */
 
@@ -23,6 +23,11 @@ class SearchResult
      * @var ResourceConnection
      */
     private $resource;
+
+    /**
+     * @var string
+     */
+    private $flatTable;
 
     /**
      * @var array
@@ -63,12 +68,12 @@ class SearchResult
 
     protected function addColumnsToGrid($select, $orderField)
     {
-        if ((string)$select == "") {
+        $connection = $this->resource->getConnection();
+        if (((string)$select == "") || !$connection->isTableExists($this->flatTable)) {
             return $select;
         }
 
         if (!$this->columns) {
-            $connection = $this->resource->getConnection();
             $fields = $connection->describeTable($this->flatTable);
             unset($fields['parent_id']);
             unset($fields['entity_id']);

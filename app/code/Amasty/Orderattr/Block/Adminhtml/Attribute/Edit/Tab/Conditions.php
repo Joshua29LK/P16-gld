@@ -1,11 +1,17 @@
 <?php
 /**
  * @author Amasty Team
- * @copyright Copyright (c) 2023 Amasty (https://www.amasty.com)
+ * @copyright Copyright (c) Amasty (https://www.amasty.com)
  * @package Custom Checkout Fields for Magento 2
  */
 
 namespace Amasty\Orderattr\Block\Adminhtml\Attribute\Edit\Tab;
+
+use Amasty\Orderattr\Model\Rule\RuleFactory;
+use Magento\Backend\Block\Widget\Form\Renderer\Fieldset;
+use Magento\Framework\App\ObjectManager;
+use Magento\Rule\Block\ConditionsFactory;
+use Magento\Rule\Model\Condition\AbstractCondition;
 
 class Conditions extends \Magento\Backend\Block\Widget\Form\Generic
 {
@@ -24,17 +30,38 @@ class Conditions extends \Magento\Backend\Block\Widget\Form\Generic
      */
     private $configProvider;
 
+    /**
+     * @var Fieldset
+     */
+    private $rendererFieldset;
+
+    /**
+     * @var ConditionsFactory
+     */
+    private $conditionsFactory;
+
+    /**
+     * @var RuleFactory
+     */
+    private $ruleFactory;
+
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Framework\Registry $registry,
         \Magento\Framework\Data\FormFactory $formFactory,
         \Magento\Shipping\Model\Config $shippingConfig,
         \Amasty\Orderattr\Model\ConfigProvider $configProvider,
-        array $data = []
+        array $data = [],
+        ConditionsFactory $conditionsFactory = null, // TODO move to not optional
+        Fieldset $rendererFieldset = null, // TODO move to not optional
+        RuleFactory $ruleFactory = null // TODO move to not optional
     ) {
         parent::__construct($context, $registry, $formFactory, $data);
         $this->shippingConfig = $shippingConfig;
         $this->configProvider = $configProvider;
+        $this->conditionsFactory = $conditionsFactory ?? ObjectManager::getInstance()->get(ConditionsFactory::class);
+        $this->rendererFieldset = $rendererFieldset ?? ObjectManager::getInstance()->get(Fieldset::class);
+        $this->ruleFactory = $ruleFactory ?? ObjectManager::getInstance()->get(RuleFactory::class);
     }
 
     /**
@@ -95,9 +122,48 @@ class Conditions extends \Magento\Backend\Block\Widget\Form\Generic
             ]
         );
 
+        $conditionsModel = $this->ruleFactory->create();
+        $conditionsModel->setConditions([])
+            ->setConditionsSerialized($model->getConditionsSerialized())
+            ->getConditions()
+            ->setJsFormObject('attribute_conditions');
+
+        $renderer = $this->rendererFieldset->setTemplate('Magento_CatalogRule::promo/fieldset.phtml')
+            ->setNameInLayout('amasty_orderattr_conditions')
+            ->setNewChildUrl(
+                $this->getUrl(
+                    'amorderattr/attribute/newConditionHtml',
+                    ['form_namespace' => 'attribute_conditions', 'form' => 'attribute_conditions']
+                )
+            );
+
         $fieldset = $form->addFieldset(
-            'conditions_fieldset',
-            ['legend' => __('Manage Conditions')]
+            'attribute_conditions',
+            [
+                'legend' => __(
+                    'Display the attribute only if the following conditions are met (leave blank to display it always)'
+                )
+            ]
+        )->setRenderer($renderer);
+
+        $fieldset->addField(
+            'conditions',
+            'text',
+            [
+                'name'   => 'conditions',
+                'label'  => __('Conditions'),
+                'title'  => __('Conditions'),
+                'data-form-part' => 'attribute_conditions'
+            ]
+        )->setRule(
+            $conditionsModel
+        )->setRenderer(
+            $this->conditionsFactory->create()
+        );
+
+        $fieldset = $form->addFieldset(
+            'shipping_fieldset',
+            ['legend' => __('Shipping Conditions')]
         );
 
         $fieldset->addField(

@@ -27,11 +27,11 @@ define([
          *
          * @private
          */
-        _updateOrderSubmit: function () {
+        _updateOrderSubmit: function (shouldDisable, fn) {
             var shippingMethod = $(this.options.shippingSubmitFormSelector)
                 .find(this.options.shippingSelector).val().split('_');
 
-            this._super();
+            this._super(shouldDisable, fn);
 
             quote.shippingMethod({
                 'carrier_code': shippingMethod[0],

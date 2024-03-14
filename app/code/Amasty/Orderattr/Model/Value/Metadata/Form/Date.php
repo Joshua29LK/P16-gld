@@ -1,15 +1,17 @@
 <?php
 /**
  * @author Amasty Team
- * @copyright Copyright (c) 2023 Amasty (https://www.amasty.com)
+ * @copyright Copyright (c) Amasty (https://www.amasty.com)
  * @package Custom Checkout Fields for Magento 2
  */
 
 namespace Amasty\Orderattr\Model\Value\Metadata\Form;
 
+use Amasty\Orderattr\Model\DateFormat;
+use Laminas\Validator\Date as DateValidator;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Validator\Exception as ValidatorException;
-use Zend_Locale_Format;
 
 /**
  * EAV Entity Attribute Date with time Data Model
@@ -21,14 +23,21 @@ class Date extends \Magento\Eav\Model\Attribute\Data\Date
      */
     protected $configProvider;
 
+    /**
+     * @var DateFormat
+     */
+    private $dateFormatConvertor;
+
     public function __construct(
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Psr\Log\LoggerInterface $logger,
         \Magento\Framework\Locale\ResolverInterface $localeResolver,
-        \Amasty\Orderattr\Model\ConfigProvider $configProvider
+        \Amasty\Orderattr\Model\ConfigProvider $configProvider,
+        DateFormat $dateFormat = null //todo: move to not optional
     ) {
         parent::__construct($localeDate, $logger, $localeResolver);
         $this->configProvider = $configProvider;
+        $this->dateFormatConvertor = $dateFormat ?? ObjectManager::getInstance()->get(DateFormat::class);
     }
 
     /**
@@ -106,20 +115,30 @@ class Date extends \Magento\Eav\Model\Attribute\Data\Date
             return [__('"%1" does not fit the entered date format.', $label)];
         }
 
-        $validator = new \Zend_Validate_Date([
-            'format' => $this->_dateFilterFormat(),
+        $validator = new DateValidator([
+            'format' =>   $this->getConvertedFormat(),
             'locale' => $this->_localeResolver->getLocale(),
         ]);
-        $validator->setMessage(__('"%1" invalid type entered.', $label), \Zend_Validate_Date::INVALID);
-        $validator->setMessage(__('"%1" is not a valid date.', $label), \Zend_Validate_Date::INVALID_DATE);
+        $validator->setMessage(__('"%1" invalid type entered.', $label), DateValidator::INVALID);
+        $validator->setMessage(__('"%1" is not a valid date.', $label), DateValidator::INVALID_DATE);
         $validator->setMessage(
             __('"%1" does not fit the entered date format.', $label),
-            \Zend_Validate_Date::FALSEFORMAT
+            DateValidator::FALSEFORMAT
         );
         if (!$validator->isValid($value)) {
             return array_unique($validator->getMessages());
         }
 
         return [];
+    }
+
+    /**
+     * Convert date format to format accessible for DateTime class
+     */
+    private function getConvertedFormat(): string
+    {
+        $format = $this->_dateFilterFormat();
+
+        return $this->dateFormatConvertor->convert($format);
     }
 }

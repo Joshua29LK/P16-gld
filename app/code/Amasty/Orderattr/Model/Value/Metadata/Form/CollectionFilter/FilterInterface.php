@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 /**
  * @author Amasty Team
- * @copyright Copyright (c) 2023 Amasty (https://www.amasty.com)
+ * @copyright Copyright (c) Amasty (https://www.amasty.com)
  * @package Custom Checkout Fields for Magento 2
  */
 
@@ -16,8 +16,9 @@ interface FilterInterface
 {
     /**
      * @param Collection $collection
-     * @throws \Exception
+     * @param array|null $customAttributes
      * @return void
+     * @throws \Exception
      */
-    public function apply(Collection $collection): void;
+    public function apply(Collection $collection, array $customAttributes = null): void;
 }

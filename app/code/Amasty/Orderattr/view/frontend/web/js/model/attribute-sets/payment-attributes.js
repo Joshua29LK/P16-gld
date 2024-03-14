@@ -5,9 +5,11 @@ define([
 
     var attributesTypes = [
             'amastyShippingAttributes',
+            'amastyShippingBeforeAttributes',
             'amastyPaymentAttributes',
             'amastySummaryAttributes',
             'amastyShippingMethodAttributes',
+            'amastyShippingMethodAfterAttributes',
             'before-place-order.amastyPaymentMethodAttributes'
         ],
         formCode = 'amasty_checkout';

@@ -1,7 +1,7 @@
 <?php
 /**
  * @author Amasty Team
- * @copyright Copyright (c) 2023 Amasty (https://www.amasty.com)
+ * @copyright Copyright (c) Amasty (https://www.amasty.com)
  * @package Custom Checkout Fields for Magento 2
  */
 
@@ -36,8 +36,10 @@ class Text extends \Magento\Eav\Model\Attribute\Data\Text
      */
     public function outputValue($format = AttributeDataFactory::OUTPUT_FORMAT_TEXT)
     {
-        if ($this->getAttribute()->getfrontendInput() === AttributeDataFactory::OUTPUT_FORMAT_HTML) {
-            return $this->getAttribute()->getDefaultValue();
+        $attribute = $this->getAttribute();
+        if ($attribute->getfrontendInput() === AttributeDataFactory::OUTPUT_FORMAT_HTML &&
+            !($this->getEntity()->getData($attribute->getAttributeCode()))) {
+            return $attribute->getDefaultValue();
         }
 
         return parent::outputValue($format);

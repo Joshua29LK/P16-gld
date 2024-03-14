@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 /**
  * @author Amasty Team
- * @copyright Copyright (c) 2023 Amasty (https://www.amasty.com)
+ * @copyright Copyright (c) Amasty (https://www.amasty.com)
  * @package Custom Checkout Fields for Magento 2
  */
 
@@ -58,10 +58,7 @@ class Date implements SpecificationProcessorInterface
             $element['value'] = date($format, strtotime($element['value']));
         }
 
-        $element['validation'] = [
-            'amorder-attr-validate-date' => [
-                'dateFormat' => $this->configProvider->getDateFormatJs()
-            ]
-        ];
+        $element['validation']['amorder-attr-validate-date'] =
+            ['dateFormat' => $this->configProvider->getDateFormatJs()];
     }
 }

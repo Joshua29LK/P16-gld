@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 /**
  * @author Amasty Team
- * @copyright Copyright (c) 2023 Amasty (https://www.amasty.com)
+ * @copyright Copyright (c) Amasty (https://www.amasty.com)
  * @package Custom Checkout Fields for Magento 2
  */
 
-namespace Amasty\Orderattr\Setup\Patch\Data;
+namespace Amasty\Orderattr\Setup\Patch\DeclarativeSchemaApplyBefore;
 
 use Amasty\Orderattr\Api\Data\CheckoutEntityInterface;
 use Amasty\Orderattr\Model\ResourceModel\Entity\Entity as EntityResource;
@@ -46,6 +46,10 @@ class ChangeDuplicateEntries implements DataPatchInterface
     public function apply(): self
     {
         $this->entityTable = $this->resourceConnection->getTableName(EntityResource::TABLE_NAME);
+
+        if (!$this->resourceConnection->getConnection()->isTableExists($this->entityTable)) {
+            return $this;
+        }
         $this->deleteDuplicatesForQuote();
         $newEntityIds = $this->generateNewEntityIds();
         $this->changeIdsInTables($newEntityIds);

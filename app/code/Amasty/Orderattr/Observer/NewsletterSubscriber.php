@@ -1,16 +1,18 @@
 <?php
 /**
  * @author Amasty Team
- * @copyright Copyright (c) 2023 Amasty (https://www.amasty.com)
+ * @copyright Copyright (c) Amasty (https://www.amasty.com)
  * @package Custom Checkout Fields for Magento 2
  */
 
 namespace Amasty\Orderattr\Observer;
 
 use Amasty\Orderattr\Model\ConfigProvider;
+use Magento\Framework\App\ObjectManager;
 use Magento\Newsletter\Model\SubscriberFactory;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Newsletter\Model\Subscriber;
+use Magento\Newsletter\Model\SubscriptionManager;
 use Magento\Sales\Model\Order;
 use Magento\Framework\Event\Observer;
 use Magento\Customer\Model\Session as CustomerSession;
@@ -56,6 +58,11 @@ class NewsletterSubscriber implements ObserverInterface
      */
     private $emailValidator;
 
+    /**
+     * @var SubscriptionManager|null
+     */
+    private $subscriptionManager;
+
     public function __construct(
         SubscriberFactory $subscriberFactory,
         ConfigProvider $configProvider,
@@ -70,6 +77,15 @@ class NewsletterSubscriber implements ObserverInterface
         $this->storeManager = $storeManager;
         $this->customerAccountManagement = $customerAccountManagement;
         $this->emailValidator = $emailValidator;
+        $this->initializeSubscriptionManager();
+    }
+
+    private function initializeSubscriptionManager(): void
+    {
+        // SubscriptionManager appears in m2.4. For compatibility with m2.3 use OM
+        if (class_exists(SubscriptionManager::class)) {
+            $this->subscriptionManager = ObjectManager::getInstance()->get(SubscriptionManager::class);
+        }
     }
 
     /**
@@ -88,8 +104,7 @@ class NewsletterSubscriber implements ObserverInterface
 
         if (!empty($orderAttributes)) {
             foreach ($orderAttributes as $attribute) {
-                if (
-                    $this->configProvider->getValue('checkout/subscribe') == $attribute->getAttributeCode()
+                if ($this->configProvider->getValue('checkout/subscribe') == $attribute->getAttributeCode()
                     && $attribute->getValue() > 0
                 ) {
                     $needSubscribe = true;
@@ -98,16 +113,27 @@ class NewsletterSubscriber implements ObserverInterface
             }
         }
 
-        if (
-            $needSubscribe
+        if ($needSubscribe
             && $this->validateEmailFormat($email)
             && $this->validateGuestSubscription()
             && $this->validateEmailAvailable($email)
         ) {
+            // for magento >=2.4.0
+            if ($this->subscriptionManager) {
+                $storeId = (int)$this->storeManager->getStore()->getId();
+
+                if ($this->customerSession->isLoggedIn()) {
+                    $this->subscriptionManager->subscribeCustomer($this->customerSession->getCustomerId(), $storeId);
+                } else {
+                    $this->subscriptionManager->subscribe($email, $storeId);
+                }
+
+                return;
+            }
+            //for magento <2.4.0
             /** @var Subscriber $subscriber */
             $subscriber = $this->subscriberFactory->create()->loadByEmail($email);
-
-            if (!$subscriber->getId() && $subscriber->getSubscriberStatus() != Subscriber::STATUS_SUBSCRIBED) {
+            if (!$subscriber->getId() && ($subscriber->getSubscriberStatus() !== Subscriber::STATUS_SUBSCRIBED)) {
                 $this->subscriberFactory->create()->subscribe($email);
             }
         }

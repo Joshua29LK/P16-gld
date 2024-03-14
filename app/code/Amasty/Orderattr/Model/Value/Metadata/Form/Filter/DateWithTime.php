@@ -1,7 +1,7 @@
 <?php
 /**
  * @author Amasty Team
- * @copyright Copyright (c) 2023 Amasty (https://www.amasty.com)
+ * @copyright Copyright (c) Amasty (https://www.amasty.com)
  * @package Custom Checkout Fields for Magento 2
  */
 
@@ -10,6 +10,9 @@
  */
 namespace Amasty\Orderattr\Model\Value\Metadata\Form\Filter;
 
+use Amasty\Orderattr\Model\DateFormat;
+use Laminas\Validator\Date as DateValidator;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Stdlib\DateTime;
 
 class DateWithTime implements \Magento\Framework\Data\Form\Filter\FilterInterface
@@ -17,7 +20,7 @@ class DateWithTime implements \Magento\Framework\Data\Form\Filter\FilterInterfac
     /**
      * Sometimes Magento is not returning seconds - remove seconds from pattern before validate
      */
-    public const DATETIME_INTERNAL_VALIDATION_FORMAT = 'yyyy-MM-dd HH:mm';
+    public const DATETIME_INTERNAL_VALIDATION_FORMAT = 'Y-m-d H:i:s';
 
     /**
      * @var string
@@ -31,15 +34,22 @@ class DateWithTime implements \Magento\Framework\Data\Form\Filter\FilterInterfac
      */
     protected $localeResolver;
 
+    /**
+     * @var DateFormat
+     */
+    private $dateFormatConvertor;
+
     public function __construct(
         $format = null,
-        \Magento\Framework\Locale\ResolverInterface $localeResolver = null
+        \Magento\Framework\Locale\ResolverInterface $localeResolver = null,
+        DateFormat $dateFormatConvertor = null //todo: move to not optional
     ) {
         if ($format === null) {
             $format = DateTime::DATETIME_INTERNAL_FORMAT;
         }
         $this->dateFormat = $format;
         $this->localeResolver = $localeResolver;
+        $this->dateFormatConvertor = $dateFormatConvertor ?? ObjectManager::getInstance()->get(DateFormat::class);
     }
 
     /**
@@ -55,18 +65,8 @@ class DateWithTime implements \Magento\Framework\Data\Form\Filter\FilterInterfac
             return $value;
         }
 
-        $filterInput = new \Zend_Filter_LocalizedToNormalized(
-            ['date_format' => $this->dateFormat, 'locale' => $this->localeResolver->getLocale()]
-        );
-        $filterInternal = new \Zend_Filter_NormalizedToLocalized(
-            ['date_format' => DateTime::DATETIME_INTERNAL_FORMAT, 'locale' => $this->localeResolver->getLocale()]
-        );
-
-        //parse date
-        $value = $filterInput->filter($value);
-        $value = $filterInternal->filter($value);
-
-        return $value;
+        return \DateTime::createFromFormat($this->dateFormatConvertor->convert($this->dateFormat), $value)
+            ->format('Y-m-d H:i:s');
     }
 
     /**
@@ -81,19 +81,10 @@ class DateWithTime implements \Magento\Framework\Data\Form\Filter\FilterInterfac
         if (!$this->validateOutputDate($value)) {
             return $value;
         }
-        $options = [
-            'date_format' => DateTime::DATETIME_INTERNAL_FORMAT,
-            'locale'      => $this->localeResolver->getLocale()
-        ];
-        $filterInternal = new \Zend_Filter_NormalizedToLocalized(
-            ['date_format' => $this->dateFormat, 'locale' => $this->localeResolver->getLocale()]
-        );
 
-        //parse date
-        $value = \Zend_Locale_Format::getDate($value, $options);
-        $value = $filterInternal->filter($value);
+        $date = (new \DateTime($value))->format($this->dateFormatConvertor->convert($this->dateFormat));
 
-        return $value;
+        return str_replace(['am', 'pm'], ['AM', 'PM'], $date);
     }
 
     /**
@@ -106,12 +97,19 @@ class DateWithTime implements \Magento\Framework\Data\Form\Filter\FilterInterfac
      */
     public function validateInputDate($value)
     {
+        $dateFormat = $this->dateFormatConvertor->convert($this->dateFormat);
+
+        return $this->validateDate($dateFormat, $value);
+    }
+
+    private function validateDate($dateFormat, $value)
+    {
         $options = [
-            'date_format' => str_replace('s', '', $this->dateFormat),
-            'locale'      => $this->localeResolver->getLocale()
+            'format' => $dateFormat,
+            'locale' => $this->localeResolver->getLocale()
         ];
 
-        return \Zend_Locale_Format::checkDateFormat($value, $options);
+        return (new DateValidator($options))->isValid($value);
     }
 
     /**
@@ -124,11 +122,8 @@ class DateWithTime implements \Magento\Framework\Data\Form\Filter\FilterInterfac
      */
     public function validateOutputDate($value)
     {
-        $options = [
-            'date_format' => self::DATETIME_INTERNAL_VALIDATION_FORMAT,
-            'locale'      => $this->localeResolver->getLocale()
-        ];
+        $dateFormat = self::DATETIME_INTERNAL_VALIDATION_FORMAT;
 
-        return \Zend_Locale_Format::checkDateFormat($value, $options);
+        return $this->validateDate($dateFormat, $value);
     }
 }

@@ -2,7 +2,7 @@
 <!--
 /**
  * @author Amasty Team
- * @copyright Copyright (c) 2023 Amasty (https://www.amasty.com)
+ * @copyright Copyright (c) Amasty (https://www.amasty.com)
  * @package Custom Checkout Fields for Magento 2
  */-->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -16,7 +16,19 @@
             <field name="parent_id" xsi:type="filterable" dataType="int"/>
         </fieldset>
 
-        <saveHandler class="Magento\Framework\Indexer\SaveHandler\Grid"/>
+        <saveHandler class="Amasty\Orderattr\Model\Indexer\SaveHandler\Grid"/>
         <structure class="Amasty\Orderattr\Model\Indexer\GridStructure"/>
+    </indexer>
+    <indexer id="amasty_product_order_attribute" view_id="amasty_product_order_attribute"
+             class="Amasty\Orderattr\Model\Indexer\Conditions\ProductIndexer"
+             shared_index="amasty_order_attribute_product_index">
+        <title translate="true">Amasty: Order Attributes - Attribute Conditions</title>
+        <description translate="true">Indexed conditions/product association</description>
+    </indexer>
+    <indexer id="amasty_order_attribute_product" view_id="amasty_order_attribute_product"
+             class="Amasty\Orderattr\Model\Indexer\Conditions\AttributeIndexer"
+             shared_index="amasty_order_attribute_product_index">
+        <title translate="true">Amasty: Order Attributes - Attribute Conditions</title>
+        <description translate="true">Indexed conditions/attribute association</description>
     </indexer>
 </config>

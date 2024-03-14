@@ -1,7 +1,7 @@
 <?php
 /**
  * @author Amasty Team
- * @copyright Copyright (c) 2023 Amasty (https://www.amasty.com)
+ * @copyright Copyright (c) Amasty (https://www.amasty.com)
  * @package Custom Checkout Fields for Magento 2
  */
 
@@ -9,7 +9,10 @@ namespace Amasty\Orderattr\Model\Attribute\Frontend;
 
 use Amasty\Orderattr\Api\Data\CheckoutAttributeInterface;
 use Amasty\Orderattr\Model\Config\Source\CheckoutStep;
+use Amasty\Orderattr\Model\QuoteProducts;
 use Amasty\Orderattr\Model\ResourceModel\Attribute\CollectionFactory;
+use Magento\Framework\App\ObjectManager;
+use Magento\Quote\Model\Quote;
 use Magento\Store\Model\StoreManagerInterface;
 
 class CollectionProvider
@@ -34,12 +37,19 @@ class CollectionProvider
      */
     private $collection;
 
+    /**
+     * @var QuoteProducts
+     */
+    private $quoteProducts;
+
     public function __construct(
         StoreManagerInterface $storeManager,
-        CollectionFactory $collectionFactory
+        CollectionFactory $collectionFactory,
+        QuoteProducts $quoteProducts = null //todo: move to not optional
     ) {
         $this->storeManager = $storeManager;
         $this->collection = $collectionFactory->create();
+        $this->quoteProducts = $quoteProducts ?? ObjectManager::getInstance()->create(QuoteProducts::class);
         $this->collection->setOrder(CheckoutAttributeInterface::SORTING_ORDER, 'ASC');
         $this->collection->addFieldToFilter(CheckoutAttributeInterface::IS_VISIBLE_ON_FRONT, 1);
     }
@@ -47,9 +57,10 @@ class CollectionProvider
     /**
      * @return \Amasty\Orderattr\Api\Data\CheckoutAttributeInterface[]
      */
-    public function getAttributes()
+    public function getAttributes(?Quote $quote = null)
     {
         $this->collection->addStoreFilter($this->storeManager->getStore()->getId());
+        $this->collection->addConditionsFilter($this->quoteProducts->getProductIds($quote));
 
         return $this->collection->getItems();
     }

@@ -20,6 +20,10 @@ define(
         relationRegistry
     ) {
         return Component.extend({
+            defaults: {
+                paymentMethodParentName: 'checkout.steps.billing-step.payment.payments-list'
+            },
+
             isVisible: ko.observable(false),
 
             relationRegistry: false,
@@ -54,6 +58,33 @@ define(
                     checkoutProvider.on(self.amScope, function (scopeData) {
                         checkoutData.setCheckoutData(self.amScope, scopeData);
                     });
+                });
+            },
+
+            /**
+             * If there are multiple payment methods available
+             * then we need to display order attributes markup only once due to the input id duplication.
+             *
+             * @param {Object[]} parents - Array of parents Ui components
+             * @returns {boolean}
+             */
+            shouldDisplay: function (parents) {
+                const paymentMethodComponent = this.getPaymentMethodComponent(parents);
+
+                return paymentMethodComponent?.getCode() === paymentMethodComponent?.isChecked();
+            },
+
+            /**
+             * Get payment method component if order attributes placed inside it
+             *
+             * @param {Object[]} parents - Array of parents Ui components
+             * @returns {Object|undefined} - Payment method component or undefined
+             */
+            getPaymentMethodComponent: function (parents) {
+                return parents.find((parent) => {
+                    return parent?.parentName === this.paymentMethodParentName
+                        && typeof parent?.getCode === 'function'
+                        && typeof parent?.isChecked === 'function';
                 });
             },
 

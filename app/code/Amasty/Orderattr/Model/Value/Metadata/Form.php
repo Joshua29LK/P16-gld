@@ -1,18 +1,19 @@
 <?php
 /**
  * @author Amasty Team
- * @copyright Copyright (c) 2023 Amasty (https://www.amasty.com)
+ * @copyright Copyright (c) Amasty (https://www.amasty.com)
  * @package Custom Checkout Fields for Magento 2
  */
 
 namespace Amasty\Orderattr\Model\Value\Metadata;
 
+use Amasty\Orderattr\Model\Attribute\RelationValidator;
 use Amasty\Orderattr\Model\Config\Source\CheckoutStep;
-use Amasty\Orderattr\Model\ResourceModel\Attribute\Relation\RelationDetails\CollectionFactory;
-use Amasty\Orderattr\Model\Value\Metadata\Form\CollectionFilter\FilterPool;
-use Magento\Framework\App\RequestInterface;
 use Amasty\Orderattr\Model\ResourceModel\Attribute\Relation\RelationDetails\CollectionFactory
     as RelationDetailsCollectionFactory;
+use Amasty\Orderattr\Model\Value\Metadata\Form\CollectionFilter\FilterPool;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\App\RequestInterface;
 
 /**
  * @method \Amasty\Orderattr\Model\Attribute\Attribute[] getAllowedAttributes()
@@ -21,6 +22,8 @@ use Amasty\Orderattr\Model\ResourceModel\Attribute\Relation\RelationDetails\Coll
  */
 class Form extends \Magento\Eav\Model\Form
 {
+    public const FORMAT_TO_VALIDATE_RELATIONS = 'amasty_relations';
+
     /**
      * Current module pathname
      *
@@ -46,6 +49,11 @@ class Form extends \Magento\Eav\Model\Form
     private $customerGroupId;
 
     /**
+     * @var array
+     */
+    private $productIds;
+
+    /**
      * @var \Amasty\Orderattr\Model\ResourceModel\Attribute\CollectionFactory
      */
     private $attributeCollectionFactory;
@@ -65,6 +73,11 @@ class Form extends \Magento\Eav\Model\Form
      */
     private $forbiddenAttributesCodes = [];
 
+    /**
+     * @var RelationValidator
+     */
+    private $relationValidator;
+
     public function __construct(
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Eav\Model\Config $eavConfig,
@@ -75,7 +88,8 @@ class Form extends \Magento\Eav\Model\Form
         \Magento\Framework\Validator\ConfigFactory $validatorConfigFactory,
         \Amasty\Orderattr\Model\ResourceModel\Attribute\CollectionFactory $attributeCollectionFactory,
         RelationDetailsCollectionFactory $attributeRelationCollectionFactory,
-        FilterPool $collectionFilterPool
+        FilterPool $collectionFilterPool,
+        RelationValidator $relationValidator = null //todo: move to not optional
     ) {
         parent::__construct(
             $storeManager,
@@ -90,6 +104,9 @@ class Form extends \Magento\Eav\Model\Form
         $this->attributeCollectionFactory = $attributeCollectionFactory;
         $this->attributeRelationCollectionFactory = $attributeRelationCollectionFactory;
         $this->collectionFilterPool = $collectionFilterPool;
+        $this->relationValidator = $relationValidator ?? ObjectManager::getInstance()->create(
+            RelationValidator::class
+        );
     }
 
     /**
@@ -133,8 +150,12 @@ class Form extends \Magento\Eav\Model\Form
                 $collection->addShippingMethodsFilter($this->getShippingMethod());
             }
 
+            if (!empty($this->getProductIds())) {
+                $collection->addConditionsFilter($this->getProductIds());
+            }
+
             foreach ($this->collectionFilterPool->getAll() as $filter) {
-                $filter->apply($collection);
+                $filter->apply($collection, $this->getEntity()->getCustomAttributes());
             }
         }
 
@@ -178,8 +199,10 @@ class Form extends \Magento\Eav\Model\Form
     protected function _isAttributeOmitted($attribute)
     {
         if ($this->_ignoreInvisible
-            && (!$this->isAttributeVisibleForCurrentFormCode($attribute)
-                || ($this->getShippingMethod()
+            && (
+                !$this->isAttributeVisibleForCurrentFormCode($attribute)
+                || (
+                    $this->getShippingMethod()
                     && !empty($attribute->getShippingMethods())
                     && !in_array($this->getShippingMethod(), $attribute->getShippingMethods())
                 )
@@ -215,6 +238,18 @@ class Form extends \Magento\Eav\Model\Form
         return $this;
     }
 
+    public function getProductIds(): ?array
+    {
+        return $this->productIds;
+    }
+
+    public function setProductIds(array $productIds): Form
+    {
+        $this->productIds = $productIds;
+
+        return $this;
+    }
+
     /**
      * Whether the specified attribute needs to skip rendering/validation
      *
@@ -237,7 +272,9 @@ class Form extends \Magento\Eav\Model\Form
                         $attribute->getCheckoutStep(),
                         [
                             CheckoutStep::SHIPPING_STEP,
-                            CheckoutStep::SHIPPING_METHODS
+                            CheckoutStep::SHIPPING_METHODS,
+                            CheckoutStep::SHIPPING_STEP_BEFORE,
+                            CheckoutStep::SHIPPING_METHODS_AFTER
                         ]
                     );
             case 'amasty_checkout_virtual':
@@ -316,81 +353,13 @@ class Form extends \Magento\Eav\Model\Form
             }
         }
 
-        /** @var \Amasty\Orderattr\Model\ResourceModel\Attribute\Relation\RelationDetails\Collection $collection */
-        $collection = $this->attributeRelationCollectionFactory->create();
-        $collection->joinDependAttributeCode();
-
-        $attributesToSave = [];
-        /** @var \Amasty\Orderattr\Model\Attribute\Relation\RelationDetails $relation */
-        foreach ($collection->getItems() as $relation) {
-            if (!array_key_exists($relation->getData('parent_attribute_code'), $data)
-                || (
-                    isset($attributesToSave[$relation->getData('parent_attribute_code')])
-                    && !$attributesToSave[$relation->getData('parent_attribute_code')]
-                )
-            ) {
-                $attributesToSave[$relation->getData('dependent_attribute_code')] = false;
-                $attributesToSave = $this->validateNestedRelations($attributesToSave, $collection);
-                //unset nested
-            } else {
-                foreach ($data as $attributeCode => $attributeValue) {
-                    // is attribute have relations
-                    if ($relation->getData('parent_attribute_code') == $attributeCode) {
-                        $code = $relation->getData('dependent_attribute_code');
-                        if (is_array($attributeValue) && count($attributeValue) === 1) {
-                            $attributeValue = explode(',', current($attributeValue));
-                        }
-                        /**
-                         * Is not to show - hide;
-                         * false - value should to be saved and validated
-                         */
-                        $attributesToSave[$code] = (bool)
-                            (isset($attributesToSave[$code]) && $attributesToSave[$code])
-                            || $relation->getOptionId() == $attributeValue
-                            || (is_array($attributeValue) && in_array($relation->getOptionId(), $attributeValue));
-                    }
-                }
-            }
-        }
-        $attributesToSave = $this->validateNestedRelations($attributesToSave, $collection);
+        $attributesToSave = $this->relationValidator->validateRelations($data);
         foreach (array_keys($this->getAllowedAttributes()) as $attributeCode) {
             if (array_key_exists($attributeCode, $attributesToSave) && !$attributesToSave[$attributeCode]) {
                 unset($this->_allowedAttributes[$attributeCode]);
                 $this->forbiddenAttributesCodes[] = $attributeCode;
             }
         }
-    }
-
-    /**
-     * Check relation chain.
-     * Example: we have
-     *      relation1 - attribute1 = someAttribute1, dependAttribute1 = hidedSelect1
-     *      relation2 - attribute2 = hidedSelect1, dependAttribute2 = someAttribute2
-     *  where relation1.dependAttribute1 == relation2.attribute2
-     *
-     * @param array                                                                               $isValidArray
-     * @param \Amasty\Orderattr\Model\ResourceModel\Attribute\Relation\RelationDetails\Collection $relations
-     *
-     * @return array
-     */
-    private function validateNestedRelations($isValidArray, $relations)
-    {
-        $isNestedFind = false;
-        foreach ($relations->getItems() as $relation) {
-            $parentCode = $relation->getData('parent_attribute_code');
-            $dependCode = $relation->getData('dependent_attribute_code');
-            if (array_key_exists($parentCode, $isValidArray) && !$isValidArray[$parentCode]
-                && (!array_key_exists($dependCode, $isValidArray) || $isValidArray[$dependCode])
-            ) {
-                $isValidArray[$dependCode] = false;
-                $isNestedFind = true;
-            }
-        }
-        if ($isNestedFind) {
-            $isValidArray = $this->validateNestedRelations($isValidArray, $relations);
-        }
-
-        return $isValidArray;
     }
 
     /**

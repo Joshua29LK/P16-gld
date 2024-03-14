@@ -1,7 +1,7 @@
 <?php
 /**
  * @author Amasty Team
- * @copyright Copyright (c) 2023 Amasty (https://www.amasty.com)
+ * @copyright Copyright (c) Amasty (https://www.amasty.com)
  * @package Custom Checkout Fields for Magento 2
  */
 
@@ -86,22 +86,25 @@ class LayoutProcessor implements LayoutProcessorInterface
                     $paths = [$paths];
                 }
                 foreach ($paths as $pathName => $path) {
+                    $attributeData = [
+                        'displayArea' => $checkoutPlace['displayArea'][$pathName] ?? null,
+                        'component' => 'Amasty_Orderattr/js/view/order-attributes',
+                        'name' => $checkoutPlace['scope'] . 'Container',
+                        'amScope' => $checkoutPlace['scope'],
+                        'template' => $checkoutPlace['template'],
+                        'children' => $this->inputTypeProvider->getFrontendElements(
+                            $attributes,
+                            'amastyCheckoutProvider',
+                            $checkoutPlace['scope']
+                        )
+                    ];
+                    if (isset($checkoutPlace['sortOrder'])) {
+                        $attributeData['sortOrder'] = $checkoutPlace['sortOrder'];
+                    }
+
                     $this->setJsLayoutValue(
                         $path,
-                        ['order-attributes-fields.' . $pathName =>
-                            [
-                                'displayArea' => $checkoutPlace['displayArea'][$pathName] ?? null,
-                                'component' => 'Amasty_Orderattr/js/view/order-attributes',
-                                'name' => $checkoutPlace['scope'] . 'Container',
-                                'amScope' => $checkoutPlace['scope'],
-                                'template' => $checkoutPlace['template'],
-                                'children' => $this->inputTypeProvider->getFrontendElements(
-                                    $attributes,
-                                    'amastyCheckoutProvider',
-                                    $checkoutPlace['scope']
-                                )
-                            ]
-                        ]
+                        ['order-attributes-fields.' . $pathName => $attributeData]
                     );
                 }
             }
