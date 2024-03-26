@@ -1,7 +1,7 @@
 <?php
 /**
  * @author Amasty Team
- * @copyright Copyright (c) 2023 Amasty (https://www.amasty.com)
+ * @copyright Copyright (c) Amasty (https://www.amasty.com)
  * @package Custom Checkout Fields for Magento 2
  */
 
@@ -22,7 +22,7 @@ class Boolean extends \Magento\Eav\Model\Attribute\Data\Boolean
             $value = $this->getEntity()->getData($attribute->getAttributeCode());
         }
 
-        if ($attribute->getIsRequired() && $value == '-1') {
+        if ($attribute->getIsRequired() && ($value == '-1' || $value == '')) {
             $label = __($attribute->getStoreLabel());
             $errors[] = __('"%1" is a required value.', $label);
         }

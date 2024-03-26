@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "6c569758553164b09f7155b5b756c787",
+    "content-hash": "7de0c22b9e15525468ae1cf05634b5a6",
     "packages": [
         {
             "name": "2tvenom/cborencode",
@@ -1969,10 +1969,10 @@
         },
         {
             "name": "fooman/pdfcustomiser-implementation-m2",
-            "version": "117.4.0",
+            "version": "117.4.3",
             "dist": {
                 "type": "zip",
-                "url": "https://customer-repos.fooman.co.nz/glasdiscount.nl-946dcd10154054a475815dc5862bee90abe3eea1/dist/fooman/pdfcustomiser-implementation-m2/fooman-pdfcustomiser-implementation-m2-117.4.0.zip"
+                "url": "https://customer-repos.fooman.co.nz/glasdiscount.nl-946dcd10154054a475815dc5862bee90abe3eea1/dist/fooman/pdfcustomiser-implementation-m2/fooman-pdfcustomiser-implementation-m2-117.4.3.zip"
             },
             "require": {
                 "ext-intl": "*",
@@ -2023,14 +2023,14 @@
         },
         {
             "name": "fooman/pdfcustomiser-m2",
-            "version": "8.9.1",
+            "version": "8.10.0",
             "dist": {
                 "type": "zip",
-                "url": "/var/lib/jenkins/workspace/Repogen/Production - regenerate all repositories/store_data/artifacts/Fooman_PdfCustomiser-8.9.1.zip",
-                "shasum": "9fc433db8867eb3085b3b097badb713889a2aae8"
+                "url": "/var/lib/jenkins/workspace/Repogen/Production - regenerate all repositories/store_data/artifacts/Fooman_PdfCustomiser-8.10.0.zip",
+                "shasum": "20229875f71f02cef1084aad0e53703cc75f6b76"
             },
             "require": {
-                "fooman/pdfcustomiser-implementation-m2": "117.4.0",
+                "fooman/pdfcustomiser-implementation-m2": "117.4.3",
                 "magento/framework": ">=102.0.0 < 102.0.8 || >=103.0.0 < 103.0.7",
                 "php": "~7.1.3||~7.2.0||~7.3.0||~7.4.0||~8.0.0||~8.1.0||~8.2.0"
             },
@@ -2123,16 +2123,16 @@
         },
         {
             "name": "fooman/tcpdf",
-            "version": "6.6.5-p1",
+            "version": "6.6.5-p2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/fooman/TCPDF.git",
-                "reference": "2931d466b68517404429495609b7d7e1cebdf6b4"
+                "reference": "3c8c735982f6d9bf74085cca63a196b6fcc583d7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/fooman/TCPDF/zipball/2931d466b68517404429495609b7d7e1cebdf6b4",
-                "reference": "2931d466b68517404429495609b7d7e1cebdf6b4",
+                "url": "https://api.github.com/repos/fooman/TCPDF/zipball/3c8c735982f6d9bf74085cca63a196b6fcc583d7",
+                "reference": "3c8c735982f6d9bf74085cca63a196b6fcc583d7",
                 "shasum": ""
             },
             "require": {
@@ -2185,7 +2185,7 @@
                 "qrcode"
             ],
             "support": {
-                "source": "https://github.com/fooman/TCPDF/tree/6.6.5-p1"
+                "source": "https://github.com/fooman/TCPDF/tree/6.6.5-p2"
             },
             "funding": [
                 {
@@ -2193,7 +2193,7 @@
                     "type": "custom"
                 }
             ],
-            "time": "2023-10-06T03:09:31+00:00"
+            "time": "2024-03-06T23:31:13+00:00"
         },
         {
             "name": "geissweb/module-euvat",
@@ -4997,21 +4997,21 @@
         },
         {
             "name": "magefan/module-blog",
-            "version": "2.11.0.1",
+            "version": "2.11.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/magefan/module-blog.git",
-                "reference": "e0171de765f8180ae361851c90039782ad6e5e85"
+                "reference": "ed0985c8000e9269d60c231ec2c768f5b90b4bfa"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/magefan/module-blog/zipball/e0171de765f8180ae361851c90039782ad6e5e85",
-                "reference": "e0171de765f8180ae361851c90039782ad6e5e85",
+                "url": "https://api.github.com/repos/magefan/module-blog/zipball/ed0985c8000e9269d60c231ec2c768f5b90b4bfa",
+                "reference": "ed0985c8000e9269d60c231ec2c768f5b90b4bfa",
                 "shasum": ""
             },
             "require": {
                 "magefan/module-blog-graph-ql": ">=2.1.9",
-                "magefan/module-community": ">=2.1.16",
+                "magefan/module-community": ">=2.1.18",
                 "magefan/module-wysiwyg-advanced": ">=2.0.15"
             },
             "suggest": {
@@ -5030,9 +5030,9 @@
             "description": "Implements Blog functionality on Magento 2 store",
             "support": {
                 "issues": "https://github.com/magefan/module-blog/issues",
-                "source": "https://github.com/magefan/module-blog/tree/2.11.0.1"
+                "source": "https://github.com/magefan/module-blog/tree/2.11.2"
             },
-            "time": "2023-09-06T14:32:43+00:00"
+            "time": "2024-02-26T11:24:07+00:00"
         },
         {
             "name": "magefan/module-blog-graph-ql",
@@ -5067,16 +5067,16 @@
         },
         {
             "name": "magefan/module-community",
-            "version": "2.1.17",
+            "version": "2.1.18",
             "source": {
                 "type": "git",
                 "url": "https://github.com/magefan/module-community.git",
-                "reference": "b3ddc6e80d072a2cdaa321767eaa01168cbd25a8"
+                "reference": "e11552cfec79f4f013b2c0b31cf5f05b7cc01344"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/magefan/module-community/zipball/b3ddc6e80d072a2cdaa321767eaa01168cbd25a8",
-                "reference": "b3ddc6e80d072a2cdaa321767eaa01168cbd25a8",
+                "url": "https://api.github.com/repos/magefan/module-community/zipball/e11552cfec79f4f013b2c0b31cf5f05b7cc01344",
+                "reference": "e11552cfec79f4f013b2c0b31cf5f05b7cc01344",
                 "shasum": ""
             },
             "require": {
@@ -5092,11 +5092,12 @@
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
+            "description": "Magefan core module, required for other Magefan extensions",
             "support": {
                 "issues": "https://github.com/magefan/module-community/issues",
-                "source": "https://github.com/magefan/module-community/tree/2.1.17"
+                "source": "https://github.com/magefan/module-community/tree/2.1.18"
             },
-            "time": "2023-09-28T07:42:22+00:00"
+            "time": "2024-01-05T09:17:20+00:00"
         },
         {
             "name": "magefan/module-wysiwyg-advanced",
@@ -17564,6 +17565,28 @@
             "time": "2022-06-21T01:22:39+00:00"
         },
         {
+            "name": "mageprince/module-product-attachment",
+            "version": "2.2.7",
+            "dist": {
+                "type": "zip",
+                "url": "https://repo.magento.com/archives/mageprince/module-product-attachment/mageprince-module-product-attachment-2.2.7.0.zip",
+                "shasum": "b4e5e49dcde8e5c21b9884bfc3e4d7cad2e70e75"
+            },
+            "type": "magento2-module",
+            "autoload": {
+                "files": [
+                    "registration.php"
+                ],
+                "psr-4": {
+                    "Mageprince\\Productattach\\": ""
+                }
+            },
+            "license": [
+                "Commercial"
+            ],
+            "description": "Magento2 Product Attachment Module"
+        },
+        {
             "name": "magevision/module-update-order-email-address",
             "version": "2.4.2",
             "dist": {
@@ -17606,11 +17629,11 @@
         },
         {
             "name": "magmodules/magento2-channable",
-            "version": "1.16.0",
+            "version": "1.17.0",
             "dist": {
                 "type": "zip",
-                "url": "https://repo.magento.com/archives/magmodules/magento2-channable/magmodules-magento2-channable-1.16.0.0.zip",
-                "shasum": "ac87ffa795f92198b3a5c0fe0a7611aec5253a1d"
+                "url": "https://repo.magento.com/archives/magmodules/magento2-channable/magmodules-magento2-channable-1.17.0.0.zip",
+                "shasum": "0e17f7b71c288cd518b1bc658d1cca40ff1017aa"
             },
             "require": {
                 "ext-json": "*",
@@ -19911,6 +19934,74 @@
             },
             "description": "This extension allows automatically scrolling to mini-cart and opening it as soon as product is added to cart.",
             "time": "2024-02-27T12:08:33+00:00"
+        },
+        {
+            "name": "redchamps/module-modal-box",
+            "version": "1.0.3",
+            "source": {
+                "type": "git",
+                "url": "git@bitbucket.org:redchampsTeam/modal-box.git",
+                "reference": "a4026aa03d8c399c76682529b8c0b93ce0cdfa9a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://repo.redchamps.com//dist/redchamps/module-modal-box/redchamps-module-modal-box-1.0.3-4d8d4f.zip",
+                "reference": "a4026aa03d8c399c76682529b8c0b93ce0cdfa9a",
+                "shasum": "fcd7e77ce540380118af6e08ccefd8bca273d173"
+            },
+            "type": "magento2-module",
+            "autoload": {
+                "psr-4": {
+                    "RedChamps\\ModalBox\\": ""
+                },
+                "files": [
+                    "registration.php"
+                ]
+            },
+            "license": [
+                "RedChamps EULA"
+            ],
+            "description": "This extension will provide pure javascript modal box for other redchamps extensions.",
+            "time": "2022-09-04T14:54:11+00:00"
+        },
+        {
+            "name": "redchamps/module-share-cart",
+            "version": "1.4.2",
+            "source": {
+                "type": "git",
+                "url": "git@bitbucket.org:redchampsTeam/share-cart.git",
+                "reference": "309f054a887b64a3d137295abd78f7c16d7d76c3"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://repo.redchamps.com//dist/redchamps/module-share-cart/redchamps-module-share-cart-1.4.2-bc58f1.zip",
+                "reference": "309f054a887b64a3d137295abd78f7c16d7d76c3",
+                "shasum": "f943dff4b7f8583feaa11d63cd02ae368f87fed0"
+            },
+            "require": {
+                "magento/module-sales": "*",
+                "redchamps/module-core": "*",
+                "redchamps/module-modal-box": "*"
+            },
+            "suggest": {
+                "redchamps/module-share-cart-graph-ql": "*",
+                "redchamps/module-share-cart-sms": "*"
+            },
+            "type": "magento2-module",
+            "autoload": {
+                "files": [
+                    "registration.php"
+                ],
+                "psr-4": {
+                    "RedChamps\\ShareCart\\": "",
+                    "Twilio\\": "twilio/sdk/Twilio"
+                }
+            },
+            "license": [
+                "RedChamps EULA"
+            ],
+            "description": "This extension will allow to share shopping cart via an email, link, WhatsApp.",
+            "time": "2023-11-03T06:24:18+00:00"
         },
         {
             "name": "redchamps/module-sitemap-url-exclude",

@@ -1,0 +1,23 @@
+<?php /* @var $block \RedChamps\ShareCart\Block\Buttons\MiniCart\Button */ ?>
+<?php $configProvider = $block->getConfigProvider()?>
+<button id="<?= /* @noEscape */$block->getContainerId()?>" type="button" onclick="openShareCartPopup()" class="share-cart-btn"  title="Share Shopping Cart">
+    <span class="mx-auto"><?= /* @noEscape */__('Share Shopping Cart')?></span>
+</button>
+<script>
+    function openShareCartPopup() {
+        var miniCartCloseBtn = document.getElementById("btn-minicart-close");
+        if (miniCartCloseBtn && miniCartCloseBtn.length) {
+            miniCartCloseBtn.click();
+        }
+        <?php if (!$configProvider->isCustomerLoggedIn() && $configProvider->getCaptchaConfig('enabled')) :?>
+        <?php $captchaJsURL = "https://www.google.com/recaptcha/api.js?render=" . $configProvider->getCaptchaConfig('site_key')?>
+        if(document.querySelectorAll('script[src="<?= /* @noEscape */$captchaJsURL?>"]').length <= 0) {
+            var scriptTag = document.createElement('script');
+            scriptTag.setAttribute('src',"<?= /* @noEscape */$captchaJsURL?>");
+            document.head.appendChild(scriptTag);
+        }
+        <?php endif;?>
+        document.querySelector(".top-actions li:first-child").click();
+        openShareCartForm();
+    }
+</script>

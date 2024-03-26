@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 /**
  * @author Amasty Team
- * @copyright Copyright (c) 2023 Amasty (https://www.amasty.com)
+ * @copyright Copyright (c) Amasty (https://www.amasty.com)
  * @package Custom Checkout Fields for Magento 2
  */
 
@@ -53,7 +53,7 @@ class ConvertAttributeValue
                 ->setValue($attributeValue->getValue());
         }
 
-        $optionIds = explode(',', $attributeValue->getValue());
+        $optionIds = explode(',', (string)$attributeValue->getValue());
 
         return $this->attributeValueFactory->create()
             ->setAttributeCode($attributeValue->getAttributeCode())

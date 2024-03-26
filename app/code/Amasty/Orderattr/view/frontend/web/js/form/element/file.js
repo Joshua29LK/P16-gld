@@ -1,8 +1,9 @@
 define([
+    'jquery',
     'underscore',
     'Magento_Ui/js/form/element/file-uploader',
     'Amasty_Orderattr/js/form/relationAbstract'
-], function (_, Abstract, relationAbstract) {
+], function ($, _, Abstract, relationAbstract) {
     'use strict';
 
     // relationAbstract - attribute dependencies
@@ -46,6 +47,18 @@ define([
             }
 
             return _.first(this.value()).name;
-        }
+        },
+
+        /**
+         * Wcag compatibility for uploader label
+         *
+         * @param {string} inputName
+         * @returns {void}
+         */
+        performClick: function (inputName) {
+            if (this.inputName === inputName) {
+                $(this.$fileInput).click();
+            }
+        },
     });
 });

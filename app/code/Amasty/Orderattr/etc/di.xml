@@ -2,7 +2,7 @@
 <!--
 /**
  * @author Amasty Team
- * @copyright Copyright (c) 2023 Amasty (https://www.amasty.com)
+ * @copyright Copyright (c) Amasty (https://www.amasty.com)
  * @package Custom Checkout Fields for Magento 2
  */-->
 
@@ -16,6 +16,8 @@
     <preference for="Amasty\Orderattr\Api\GuestCheckoutDataRepositoryInterface" type="Amasty\Orderattr\Model\Entity\GuestCheckoutDataRepository" />
     <preference for="Amasty\Orderattr\Api\Data\AttributeValueInterface"
                 type="Amasty\Orderattr\Model\Entity\EntityData\AttributeValue" />
+    <preference for="Amasty\Orderattr\Api\Data\FileContentInterface" type="Amasty\Orderattr\Model\File\Content" />
+    <preference for="Amasty\Orderattr\Api\UploadFileInterface" type="Amasty\Orderattr\Model\File\Uploader" />
 
     <virtualType name="OrderAttributesReservedList" type="Magento\Catalog\Model\Product\ReservedAttributeList" shared="false">
         <arguments>
@@ -217,7 +219,7 @@
             <argument name="displayEmptyOption" xsi:type="boolean">false</argument>
             <argument name="sourceModel" xsi:type="string">Magento\Eav\Model\Entity\Attribute\Source\Table</argument>
             <argument name="backendModel" xsi:type="string">Magento\Eav\Model\Entity\Attribute\Backend\ArrayBackend</argument>
-            <argument name="dataModel" xsi:type="string">Magento\Eav\Model\Attribute\Data\Multiselect</argument>
+            <argument name="dataModel" xsi:type="string">Amasty\Orderattr\Model\Value\Metadata\Form\MultiSelect</argument>
             <argument name="backendType" xsi:type="string">varchar</argument>
             <argument name="frontendInputType" xsi:type="string">checkboxes</argument>
             <argument name="frontendUiComponent" xsi:type="string">Amasty_Orderattr/js/form/element/checkboxes</argument>
@@ -252,7 +254,7 @@
             <argument name="backendType" xsi:type="string">varchar</argument>
             <argument name="frontendInputType" xsi:type="string">file</argument>
             <argument name="frontendUiComponent" xsi:type="string">Amasty_Orderattr/js/form/element/file</argument>
-            <argument name="frontendTmpl" xsi:type="string">ui/form/element/uploader/uploader</argument>
+            <argument name="frontendTmpl" xsi:type="string">Amasty_Orderattr/form/element/uploader/uploader</argument>
             <argument name="columnUiComponent" xsi:type="string">Magento_Ui/js/grid/columns/column</argument>
             <argument name="filterableInGrid" xsi:type="boolean">true</argument>
             <argument name="displayFutureCheckout" xsi:type="boolean">false</argument>
@@ -340,7 +342,37 @@
                     <item name="place_code" xsi:type="const">Amasty\Orderattr\Model\Config\Source\CheckoutStep::SHIPPING_STEP</item>
                     <item name="scope" xsi:type="string">amastyShippingAttributes</item>
                     <item name="show_in_shipping_information" xsi:type="boolean">true</item>
-                    <item name="template" xsi:type="string">Amasty_Orderattr/order-attributes</item>
+                    <item name="template" xsi:type="string">Amasty_Orderattr/order-attributes-div</item>
+                </item>
+                <item name="shippingAddressBefore" xsi:type="array">
+                    <item name="isCustomerLogged" xsi:type="boolean">false</item>
+                    <item name="path" xsi:type="array">
+                        <item name="store-pickup-shipping-address" xsi:type="string">components.checkout.children.steps.children.store-pickup.children.store-selector.children</item>
+                        <item name="default" xsi:type="string">components.checkout.children.steps.children.shipping-step.children.shippingAddress.children.before-fields.children</item>
+                    </item>
+                    <item name="displayArea" xsi:type="array">
+                        <item name="store-pickup-shipping-address" xsi:type="string">after-selected-location</item>
+                    </item>
+                    <item name="place_code" xsi:type="const">Amasty\Orderattr\Model\Config\Source\CheckoutStep::SHIPPING_STEP_BEFORE</item>
+                    <item name="scope" xsi:type="string">amastyShippingBeforeAttributes</item>
+                    <item name="show_in_shipping_information" xsi:type="boolean">true</item>
+                    <item name="template" xsi:type="string">Amasty_Orderattr/order-attributes-div</item>
+                </item>
+                <item name="shippingAddressBeforeCustomerLogged" xsi:type="array">
+                    <item name="isCustomerLogged" xsi:type="boolean">true</item>
+                    <item name="path" xsi:type="array">
+                        <item name="store-pickup-shipping-address" xsi:type="string">components.checkout.children.steps.children.store-pickup.children.store-selector.children</item>
+                        <item name="beforedefault" xsi:type="string">components.checkout.children.steps.children.shipping-step.children.shippingAddress.children</item>
+                    </item>
+                    <item name="displayArea" xsi:type="array">
+                        <item name="store-pickup-shipping-address" xsi:type="string">after-selected-location</item>
+                        <item name="beforedefault" xsi:type="string">address-list</item>
+                    </item>
+                    <item name="place_code" xsi:type="const">Amasty\Orderattr\Model\Config\Source\CheckoutStep::SHIPPING_STEP_BEFORE</item>
+                    <item name="scope" xsi:type="string">amastyShippingBeforeAttributes</item>
+                    <item name="sortOrder" xsi:type="number">0</item>
+                    <item name="show_in_shipping_information" xsi:type="boolean">true</item>
+                    <item name="template" xsi:type="string">Amasty_Orderattr/order-attributes-div</item>
                 </item>
                 <item name="shippingAddressCustomerLogged" xsi:type="array">
                     <item name="isCustomerLogged" xsi:type="boolean">true</item>
@@ -369,11 +401,24 @@
                     <item name="show_in_shipping_information" xsi:type="boolean">true</item>
                     <item name="template" xsi:type="string">Amasty_Orderattr/order-attributes-div</item>
                 </item>
+                <item name="shippingMethodAfter" xsi:type="array">
+                    <item name="path" xsi:type="array">
+                        <item name="store-pickup-shipping-method" xsi:type="string">components.checkout.children.steps.children.store-pickup.children.store-selector.children</item>
+                        <item name="default" xsi:type="string">components.checkout.children.steps.children.shipping-step.children.shippingAddress.children.shippingAdditional.children</item>
+                    </item>
+                    <item name="displayArea" xsi:type="array">
+                        <item name="store-pickup-shipping-method" xsi:type="string">after-selected-location</item>
+                    </item>
+                    <item name="place_code" xsi:type="const">Amasty\Orderattr\Model\Config\Source\CheckoutStep::SHIPPING_METHODS_AFTER</item>
+                    <item name="scope" xsi:type="string">amastyShippingMethodAfterAttributes</item>
+                    <item name="show_in_shipping_information" xsi:type="boolean">true</item>
+                    <item name="template" xsi:type="string">Amasty_Orderattr/order-attributes-div</item>
+                </item>
                 <item name="paymentAttributes" xsi:type="array">
                     <item name="path" xsi:type="string">components.checkout.children.steps.children.billing-step.children.payment.children.beforeMethods.children</item>
                     <item name="place_code" xsi:type="const">Amasty\Orderattr\Model\Config\Source\CheckoutStep::PAYMENT_STEP</item>
                     <item name="scope" xsi:type="string">amastyPaymentAttributes</item>
-                    <item name="template" xsi:type="string">Amasty_Orderattr/order-attributes</item>
+                    <item name="template" xsi:type="string">Amasty_Orderattr/order-attributes-div</item>
                 </item>
                 <item name="beforePlaceOrder" xsi:type="array">
                     <item name="path" xsi:type="string">components.checkout.children.steps.children.billing-step.children.payment.children.payments-list.children.before-place-order.children</item>
@@ -433,4 +478,18 @@
             </argument>
         </arguments>
     </type>
+
+    <type name="Magento\Framework\Setup\Declaration\Schema\Operations\CreateTable">
+        <arguments>
+            <argument name="columnTriggers" xsi:type="array">
+                <item name="AmorderattrMigrateEntityId" xsi:type="object">Amasty\Orderattr\Model\Setup\OrderAttributeEntityIncrement\MigrateEntityIdColumnData</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <virtualType name="Amasty\Orderattr\Model\Indexer\SaveHandler\Grid" type="Magento\Framework\Indexer\SaveHandler\Grid">
+        <arguments>
+            <argument name="flatScopeResolver" xsi:type="object">Amasty\Orderattr\Model\Indexer\FlatScopeResolver</argument>
+        </arguments>
+    </virtualType>
 </config>

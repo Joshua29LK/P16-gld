@@ -1,15 +1,12 @@
 <?php
 /**
  * @author Amasty Team
- * @copyright Copyright (c) 2023 Amasty (https://www.amasty.com)
+ * @copyright Copyright (c) Amasty (https://www.amasty.com)
  * @package Custom Checkout Fields for Magento 2
  */
 
 namespace Amasty\Orderattr\Model\ResourceModel\Value\Plugin\Order\Grid;
 
-/**
- * Class Columns
- */
 class Columns
 {
     /**
@@ -104,6 +101,10 @@ class Columns
                     $this->gridUiCaster->execute($attribute, $columnsComponent->getContext())
                 );
                 $column->prepare();
+                $columnConfig = $column->getConfig();
+                if (isset($columnConfig['options']) && $columnConfig['dataType'] !== 'date') {
+                    $column->setData('options', $columnConfig['options']);
+                }
 
                 $columnsComponent->addComponent($attributeCode, $column);
             }

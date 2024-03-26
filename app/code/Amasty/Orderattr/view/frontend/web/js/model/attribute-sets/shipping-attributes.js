@@ -4,7 +4,9 @@ define([], function () {
     return {
         'attributeTypes': [
             'amastyShippingAttributes',
-            'amastyShippingMethodAttributes'
+            'amastyShippingBeforeAttributes',
+            'amastyShippingMethodAttributes',
+            'amastyShippingMethodAfterAttributes'
         ],
         'formCode': 'amasty_checkout_shipping'
     }

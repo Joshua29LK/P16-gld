@@ -2,7 +2,7 @@
 <!--
 /**
  * @author Amasty Team
- * @copyright Copyright (c) 2023 Amasty (https://www.amasty.com)
+ * @copyright Copyright (c) Amasty (https://www.amasty.com)
  * @package Custom Checkout Fields for Magento 2
  */-->
 <routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -55,6 +55,12 @@
     </route>
     <route url="/V1/amasty_orderattr/guestCheckoutData" method="POST">
         <service class="Amasty\Orderattr\Api\GuestCheckoutDataRepositoryInterface" method="save"/>
+        <resources>
+            <resource ref="anonymous" />
+        </resources>
+    </route>
+    <route url="/V1/amasty_orderattr/uploadFile" method="POST">
+        <service class="Amasty\Orderattr\Api\UploadFileInterface" method="upload"/>
         <resources>
             <resource ref="anonymous" />
         </resources>

@@ -24,7 +24,7 @@ define([
             }
 
             _.each(result, function(value, code) {
-                if (_.isArray(value)) {
+                if (_.isArray(value) && value.length) {
                     fileValue = _.first(value);
                     if (!_.isEmpty(fileValue) && _.isObject(fileValue)) {
                         value = fileValue.file;

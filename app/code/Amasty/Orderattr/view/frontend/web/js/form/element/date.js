@@ -7,9 +7,10 @@ define([
     'Amasty_Orderattr/js/form/relationAbstract',
     'moment',
     'Magento_Ui/js/lib/validation/validator',
+    'Amasty_Orderattr/js/model/datepicker-keydown-events',
     'mage/calendar',
     'mage/translate'
-], function ($, ko, _, utils, DateForm, relationAbstract, moment, validator) {
+], function ($, ko, _, utils, DateForm, relationAbstract, moment, validator, datepickerKeydownEvents) {
     'use strict';
 
     validator.addRule(
@@ -148,6 +149,23 @@ define([
     });
 
     return DateForm.extend(relationAbstract).extend({
+        defaults: {
+            options: {
+                changeYear: true,
+                changeMonth: true,
+                showButtonPanel: true,
+                timeInput: true,
+                showOn: 'both'
+            }
+        },
+
+        initConfig: function () {
+            this._super();
+            datepickerKeydownEvents.addInputName(this.inputName);
+            datepickerKeydownEvents.initialize();
+            return this;
+        },
+
         isFieldInvalid: function () {
             return this.error() && this.error().length ? this : null;
         }

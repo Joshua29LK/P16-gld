@@ -1,12 +1,13 @@
 <?php
 /**
  * @author Amasty Team
- * @copyright Copyright (c) 2023 Amasty (https://www.amasty.com)
+ * @copyright Copyright (c) Amasty (https://www.amasty.com)
  * @package Custom Checkout Fields for Magento 2
  */
 
 namespace Amasty\Orderattr\Model\ResourceModel\Attribute;
 
+use Amasty\Orderattr\Api\Data\CheckoutAttributeInterface;
 use Amasty\Orderattr\Model\Attribute\InputType\InputTypeProvider;
 use Magento\Eav\Model\ResourceModel\Entity\Type;
 use Magento\Framework\Model\AbstractModel;
@@ -27,7 +28,10 @@ class Attribute extends \Magento\Eav\Model\ResourceModel\Entity\Attribute
      *
      * @var array
      */
-    protected $_serializableFields = [EntityAttribute::VALIDATE_RULES => [[], []]];
+    protected $_serializableFields = [
+        EntityAttribute::VALIDATE_RULES => [[], []],
+        CheckoutAttributeInterface::CONDITIONS_SERIALIZED => [[], []]
+    ];
 
     /**
      * @var InputTypeProvider
@@ -56,6 +60,12 @@ class Attribute extends \Magento\Eav\Model\ResourceModel\Entity\Attribute
         $availableStores = $object->getData('store_ids');
         if (is_array($availableStores)) {
             $connection = $this->getConnection();
+
+            //set origin 'store_ids' to check if we need do reindex.
+            $select = $connection->select()->from($this->getTable(self::STORE_TABLE_NAME), 'store_id')
+                ->where('attribute_id =?', $object->getId());
+            $object->setOrigData('store_ids', $connection->fetchCol($select));
+
             if ($object->getId()) {
                 $condition = ['attribute_id =?' => $object->getId()];
                 $connection->delete($this->getTable(self::STORE_TABLE_NAME), $condition);

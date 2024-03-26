@@ -8,10 +8,12 @@ define([
         /**
          * Validate checkout agreements
          *
+         * @param {bool|undefined} hideError
+         *
          * @returns {boolean}
          */
-        validate: function() {
-            window.orderAttributesPreSend = validateForm(formData.attributeTypes);
+        validate: function(hideError = false) {
+            window.orderAttributesPreSend = validateForm(formData.attributeTypes, hideError);
             return window.orderAttributesPreSend;
         }
     }

@@ -1,11 +1,14 @@
 <?php
 /**
  * @author Amasty Team
- * @copyright Copyright (c) 2023 Amasty (https://www.amasty.com)
+ * @copyright Copyright (c) Amasty (https://www.amasty.com)
  * @package Custom Checkout Fields for Magento 2
  */
 
 namespace Amasty\Orderattr\Block\Adminhtml\Attribute\Edit;
+
+use Amasty\Base\Model\Serializer;
+use Magento\Framework\App\ObjectManager;
 
 class Js extends \Magento\Backend\Block\Template
 {
@@ -14,13 +17,20 @@ class Js extends \Magento\Backend\Block\Template
      */
     private $inputTypeProvider;
 
+    /**
+     * @var Serializer
+     */
+    private $serializer;
+
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Amasty\Orderattr\Model\Attribute\InputType\InputTypeProvider $inputTypeProvider,
-        array $data = []
+        array $data = [],
+        Serializer $serializer = null // TODO move to not optional
     ) {
         parent::__construct($context, $data);
         $this->inputTypeProvider = $inputTypeProvider;
+        $this->serializer = $serializer ?? ObjectManager::getInstance()->get(Serializer::class);
     }
 
     /**
@@ -46,6 +56,6 @@ class Js extends \Magento\Backend\Block\Template
      */
     public function encode($row)
     {
-        return \Zend_Json::encode($row);
+        return $this->serializer->serialize($row);
     }
 }

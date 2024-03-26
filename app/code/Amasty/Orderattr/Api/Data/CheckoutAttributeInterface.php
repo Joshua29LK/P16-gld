@@ -1,7 +1,7 @@
 <?php
 /**
  * @author Amasty Team
- * @copyright Copyright (c) 2023 Amasty (https://www.amasty.com)
+ * @copyright Copyright (c) Amasty (https://www.amasty.com)
  * @package Custom Checkout Fields for Magento 2
  */
 
@@ -34,6 +34,7 @@ interface CheckoutAttributeInterface extends \Magento\Eav\Api\Data\AttributeInte
     public const INCLUDE_IN_EMAIL = 'include_in_email';
     public const REQUIRED_ON_FRONT_ONLY = 'required_on_front_only';
     public const INPUT_FILTER = 'input_filter';
+    public const CONDITIONS_SERIALIZED = 'conditions_serialized';
     /**#@-*/
 
     /**
@@ -202,4 +203,15 @@ interface CheckoutAttributeInterface extends \Magento\Eav\Api\Data\AttributeInte
      * @return \Amasty\Orderattr\Api\Data\CheckoutAttributeInterface
      */
     public function setInputFilter($inputFilter);
+
+    /**
+     * @return string|null
+     */
+    public function getConditionsSerialized(): ?string;
+
+    /**
+     * @param string|null $conditionsSerialized
+     * @return void
+     */
+    public function setConditionsSerialized(?string $conditionsSerialized): void;
 }

@@ -1,7 +1,7 @@
 <?php
 /**
  * @author Amasty Team
- * @copyright Copyright (c) 2023 Amasty (https://www.amasty.com)
+ * @copyright Copyright (c) Amasty (https://www.amasty.com)
  * @package Custom Checkout Fields for Magento 2
  */
 
@@ -20,8 +20,6 @@ use Magento\Framework\Indexer\StateInterface;
  */
 class EntityData extends \Magento\Framework\Model\AbstractExtensibleModel implements EntityDataInterface
 {
-    public const ROW_ID = 'row_id';
-
     /**
      * @var string
      */

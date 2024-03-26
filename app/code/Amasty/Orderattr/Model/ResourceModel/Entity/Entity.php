@@ -1,7 +1,7 @@
 <?php
 /**
  * @author Amasty Team
- * @copyright Copyright (c) 2023 Amasty (https://www.amasty.com)
+ * @copyright Copyright (c) Amasty (https://www.amasty.com)
  * @package Custom Checkout Fields for Magento 2
  */
 
@@ -19,12 +19,10 @@ use Magento\Framework\Model\AbstractModel;
 class Entity extends \Magento\Eav\Model\Entity\AbstractEntity
 {
     public const ENTITY_TYPE_CODE = 'amasty_checkout';
-
     public const GRID_INDEXER_ID = 'amasty_order_attribute_grid';
-
-    public const INITIAL_AUTOINCREMENT_VALUE = 1;
-
+    public const INITIAL_AUTOINCREMENT_VALUE = 0;
     public const TABLE_NAME = 'amasty_order_attribute_entity';
+    public const ENTITY_INCREMENT_TABLE = 'amasty_order_attribute_entity_increment';
 
     /**
      * @var string
@@ -193,8 +191,6 @@ class Entity extends \Magento\Eav\Model\Entity\AbstractEntity
      * Generate new entity_id to object
      * entity_id can be not unique in checkout attributes
      *
-     * This method resolves the race condition problem when customers try to save two or more
-     * order attributes at the same time and records receive same entity IDs.
      * Entity ID receives the next auto increment value and automatically increases auto increment value
      * simultaneously to make sure that the next order attribute to be saved won't receive the same entity ID.
      * The logic of picking the next entity ID has been moved to the save handler
@@ -202,38 +198,35 @@ class Entity extends \Magento\Eav\Model\Entity\AbstractEntity
      *
      * @return int
      */
-    public function reserveEntityId()
+    public function reserveEntityId(): int
     {
-        $nextEntityId = $this->getNextAutoIncrement();
-        $this->updateAutoIncrement($nextEntityId + 1);
-        return $nextEntityId;
+        $newEntityId = $this->getLastEntityId() + 1;
+        $this->insertNewEntityId($newEntityId);
+
+        return $newEntityId;
     }
 
     /**
-     * @param int $autoIncrement
+     * @param int $increment
      */
-    protected function updateAutoIncrement(int $autoIncrement): void
+    protected function insertNewEntityId(int $increment): void
     {
-        $this->getConnection()->query(
-            sprintf(
-                'ALTER TABLE %s AUTO_INCREMENT = %s',
-                $this->getConnection()->quoteTableAs($this->getEntityTable()),
-                $autoIncrement
-            )
-        );
+        $bind['entity_id'] = $increment;
+        $this->getConnection()->insert($this->getTable(self::ENTITY_INCREMENT_TABLE), $bind);
     }
 
     /**
      * @return int
      */
-    protected function getNextAutoIncrement(): int
+    protected function getLastEntityId(): int
     {
-        $tableStatus = $this->getConnection()->showTableStatus($this->getEntityTable());
-        if ($tableStatus && !empty($tableStatus['Auto_increment'])) {
-            return $tableStatus['Auto_increment'];
-        }
+        $select = $this->getConnection()->select()
+        ->from($this->getTable(self::ENTITY_INCREMENT_TABLE))
+        ->order('entity_id DESC')
+        ->limit(1);
+        $lastEntity = $this->getConnection()->fetchOne($select);
 
-        return self::INITIAL_AUTOINCREMENT_VALUE;
+        return $lastEntity ?: self::INITIAL_AUTOINCREMENT_VALUE;
     }
 
     protected function _collectSaveData($object)
@@ -299,6 +292,7 @@ class Entity extends \Magento\Eav\Model\Entity\AbstractEntity
          * @var array $delete
          */
         $connection = $this->getConnection();
+        $isUpdate = true;
         $insertEntity = true;
         $entityTable = $this->getEntityTable();
         $entityIdField = $this->getEntityIdField();
@@ -309,19 +303,18 @@ class Entity extends \Magento\Eav\Model\Entity\AbstractEntity
             // make entity Duplicate with same entity_id
             $bind = [
                 CheckoutEntityInterface::PARENT_ENTITY_TYPE => $newObject->getParentEntityType(),
-                CheckoutEntityInterface::PARENT_ID => $newObject->getParentId(),
                 CheckoutEntityInterface::ENTITY_ID => $entityId
             ];
             $select = $connection->select()
-                ->from($entityTable, $entityIdField)
+                ->from($entityTable, CheckoutEntityInterface::PARENT_ID)
                 ->where(CheckoutEntityInterface::ENTITY_ID . " = :" . CheckoutEntityInterface::ENTITY_ID)
-                ->where(CheckoutEntityInterface::PARENT_ID . " = :" . CheckoutEntityInterface::PARENT_ID)
                 ->where(
                     CheckoutEntityInterface::PARENT_ENTITY_TYPE . " = :"
                     . CheckoutEntityInterface::PARENT_ENTITY_TYPE
                 );
             $result = $connection->fetchOne($select, $bind);
             if ($result) {
+                $isUpdate = $newObject->getParentId() !== (int)$result;
                 $insertEntity = false;
             }
         } else {
@@ -336,13 +329,13 @@ class Entity extends \Magento\Eav\Model\Entity\AbstractEntity
         if ($insertEntity) {
             if (!empty($entityId)) {
                 $entityRow[$entityIdField] = $entityId;
-                $connection->insertOnDuplicate($entityTable, $entityRow);
+                $connection->insertForce($entityTable, $entityRow);
             } else {
                 $connection->insert($entityTable, $entityRow);
                 $entityId = $connection->lastInsertId($entityTable);
             }
             $newObject->setId($entityId);
-        } else {
+        } elseif ($isUpdate) {
             $where = sprintf('%s=%d', $connection->quoteIdentifier($entityIdField), $entityId);
             $where .= sprintf(
                 ' AND %s=%d',
@@ -352,7 +345,7 @@ class Entity extends \Magento\Eav\Model\Entity\AbstractEntity
             $where .= sprintf(
                 ' AND %s=%d',
                 $connection->quoteIdentifier(CheckoutEntityInterface::PARENT_ENTITY_TYPE),
-                CheckoutEntityInterface::PARENT_ENTITY_TYPE
+                $newObject->getParentEntityType()
             );
             $connection->update($entityTable, $entityRow, $where);
         }

@@ -1,0 +1,27 @@
+{
+    "name": "amasty/module-order-attributes-subscription-package",
+    "description": "Order Attributes Subscription Package by Amasty",
+    "require": {
+        "php": ">=7.3",
+        "amasty/base": ">=1.14.7",
+        "amasty/orderattr": ">=3.11.0"
+    },
+    "suggest": {
+        "amasty/module-orderattr-hyva-compatibility": "Install this package to insure Amasty Order Attributes extension works with Hyv\u00e4 Theme.",
+        "amasty/module-orderattr-graphql": "Install this package to insure Amasty Order Attributes extension works with GraphQl."
+    },
+    "homepage": "https://amasty.com/",
+    "type": "magento2-module",
+    "version": "3.11.0",
+    "license": [
+        "proprietary"
+    ],
+    "autoload": {
+        "files": [
+            "registration.php"
+        ],
+        "psr-4": {
+            "Amasty\\OrderAttributesSubscriptionPackage\\": ""
+        }
+    }
+}

@@ -1,7 +1,7 @@
 <?php
 /**
  * @author Amasty Team
- * @copyright Copyright (c) 2023 Amasty (https://www.amasty.com)
+ * @copyright Copyright (c) Amasty (https://www.amasty.com)
  * @package Custom Checkout Fields for Magento 2
  */
 
@@ -10,9 +10,11 @@ namespace Amasty\Orderattr\Model\Entity;
 use Amasty\Orderattr\Api\CheckoutDataRepositoryInterface;
 use Amasty\Orderattr\Api\Data\EntityDataInterface;
 use Amasty\Orderattr\Model\Entity\EntityResolver;
+use Amasty\Orderattr\Model\QuoteProducts;
 use Amasty\Orderattr\Model\Value\Metadata\Form;
 use Amasty\Orderattr\Model\Entity\Handler\Save;
 use Amasty\Orderattr\Model\Value\Metadata\FormFactory;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\InputException;
 use Magento\Quote\Api\CartRepositoryInterface;
 
@@ -47,16 +49,23 @@ class CheckoutDataRepository implements CheckoutDataRepositoryInterface
      */
     private $cartRepository;
 
+    /**
+     * @var QuoteProducts
+     */
+    private $quoteProducts;
+
     public function __construct(
         Save $saveHandler,
         EntityResolver $entityResolver,
         FormFactory $metadataFormFactory,
-        CartRepositoryInterface $cartRepository
+        CartRepositoryInterface $cartRepository,
+        QuoteProducts $quoteProducts = null //todo: move to not optional
     ) {
         $this->saveHandler = $saveHandler;
         $this->entityResolver = $entityResolver;
         $this->metadataFormFactory = $metadataFormFactory;
         $this->cartRepository = $cartRepository;
+        $this->quoteProducts = $quoteProducts ?? ObjectManager::getInstance()->create(QuoteProducts::class);
     }
 
     /**
@@ -84,7 +93,8 @@ class CheckoutDataRepository implements CheckoutDataRepositoryInterface
             $checkoutFormCode,
             $shippingMethodCode,
             $cart->getCustomerGroupId(),
-            $cart->getStore()
+            $cart->getStore(),
+            $this->quoteProducts->getProductIds($cart)
         );
 
         $request = $form->prepareRequest($entityData->getData());
@@ -128,15 +138,22 @@ class CheckoutDataRepository implements CheckoutDataRepositoryInterface
      *
      * @return Form
      */
-    protected function createEntityForm($entity, $checkoutFormCode, $shippingMethod, $customerGroupId, $store)
-    {
+    protected function createEntityForm(
+        $entity,
+        $checkoutFormCode,
+        $shippingMethod,
+        $customerGroupId,
+        $store,
+        $productIds
+    ) {
         /** @var Form $formProcessor */
         $formProcessor = $this->metadataFormFactory->create();
         $formProcessor->setFormCode($checkoutFormCode)
             ->setShippingMethod($shippingMethod)
             ->setCustomerGroupId($customerGroupId)
             ->setStore($store)
-            ->setEntity($entity);
+            ->setEntity($entity)
+            ->setProductIds($productIds);
 
         return $formProcessor;
     }

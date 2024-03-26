@@ -4,7 +4,9 @@
 "Delete Attribute","Delete Attribute"
 "Edit Order Attribute ""%1""","Edit Order Attribute ""%1"""
 "New Order Attribute","New Order Attribute"
-"Manage Conditions","Manage Conditions"
+"Display the attribute only if the following conditions are met (leave blank to display it always)","Display the attribute only if the following conditions are met (leave blank to display it always)"
+Conditions,Conditions
+"Shipping Conditions","Shipping Conditions"
 "Shipping Methods","Shipping Methods"
 "Please, note that if shipping methods are NOT selected in the field,
                     order attributes will be displayed on the checkout page right after the page load.
@@ -62,6 +64,7 @@
 "Attribute Configuration","Attribute Configuration"
 "Title, Tooltip, Options","Title, Tooltip, Options"
 "Save Order Attributes","Save Order Attributes"
+"Option was deleted","Option was deleted"
 Edit,Edit
 "Delete Relation","Delete Relation"
 "Are you sure you want to do this?","Are you sure you want to do this?"
@@ -108,7 +111,10 @@ None,None
 "Attribute with ID ""%1"" is not Order Attribute.","Attribute with ID ""%1"" is not Order Attribute."
 Yes,Yes
 No,No
-"Shipping Address","Shipping Address"
+"Above Shipping Address","Above Shipping Address"
+"Below Shipping Address","Below Shipping Address"
+"Above Shipping Methods","Above Shipping Methods"
+"Below Shipping Methods","Below Shipping Methods"
 "Above Payment Method","Above Payment Method"
 "Below Payment Method","Below Payment Method"
 "Order Summary","Order Summary"
@@ -121,6 +127,7 @@ No,No
 "Unable to remove entityData. Error: %1","Unable to remove entityData. Error: %1"
 "Quote doesn't exist.","Quote doesn't exist."
 "Unable to save Order Attributes. Error: %1","Unable to save Order Attributes. Error: %1"
+"Base64 Decode File Error","Base64 Decode File Error"
 "Additional Information","Additional Information"
 """%1"" is a required value.","""%1"" is a required value."
 """%1"" does not fit the entered date format.","""%1"" does not fit the entered date format."
@@ -141,6 +148,8 @@ Delete,Delete
 "Additional Information:","Additional Information:"
 label,label
 "Additional Info","Additional Info"
+Upload,Upload
+"Click here or drag and drop to add files.","Click here or drag and drop to add files."
 "Invalid date","Invalid date"
 "Edit Amasty Order Attributes","Edit Amasty Order Attributes"
 "Checkout Settings","Checkout Settings"
@@ -184,6 +193,9 @@ Html,Html
 "Single File Upload","Single File Upload"
 "Order Attributes Grid by Amasty","Order Attributes Grid by Amasty"
 "Rebuild Sales grid index by Amasty","Rebuild Sales grid index by Amasty"
+"Amasty: Order Attributes - Attribute Conditions","Amasty: Order Attributes - Attribute Conditions"
+"Indexed conditions/product association","Indexed conditions/product association"
+"Indexed conditions/attribute association","Indexed conditions/attribute association"
 "Add New Order Attribute","Add New Order Attribute"
 "Attribute ID","Attribute ID"
 "Attribute Code","Attribute Code"

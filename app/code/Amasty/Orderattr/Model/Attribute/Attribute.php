@@ -1,16 +1,19 @@
 <?php
 /**
  * @author Amasty Team
- * @copyright Copyright (c) 2023 Amasty (https://www.amasty.com)
+ * @copyright Copyright (c) Amasty (https://www.amasty.com)
  * @package Custom Checkout Fields for Magento 2
  */
 
 namespace Amasty\Orderattr\Model\Attribute;
 
 use Amasty\Orderattr\Api\Data\CheckoutAttributeInterface;
-use Amasty\Orderattr\Model\ResourceModel\Entity\Entity;
 use Amasty\Orderattr\Model\Attribute\InputType\InputTypeProvider;
+use Amasty\Orderattr\Model\Indexer\Conditions\AttributeProcessor;
+use Amasty\Orderattr\Model\ResourceModel\Entity\Entity;
 use Magento\Framework\Api\AttributeValueFactory;
+use Magento\Framework\App\Area;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Stdlib\DateTime\DateTimeFormatterInterface;
 
 /**
@@ -51,6 +54,11 @@ class Attribute extends \Magento\Eav\Model\Attribute implements CheckoutAttribut
      */
     private $indexerRegistry;
 
+    /**
+     * @var AttributeProcessor|mixed
+     */
+    private $attributeProcessor;
+
     public function __construct(
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
@@ -72,7 +80,8 @@ class Attribute extends \Magento\Eav\Model\Attribute implements CheckoutAttribut
         \Magento\Framework\Indexer\IndexerRegistry $indexerRegistry,
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
-        array $data = []
+        array $data = [],
+        AttributeProcessor $attributeProcessor = null // TODO move to not optional
     ) {
         parent::__construct(
             $context,
@@ -97,6 +106,7 @@ class Attribute extends \Magento\Eav\Model\Attribute implements CheckoutAttribut
         );
         $this->inputTypeProvider = $inputTypeProvider;
         $this->indexerRegistry = $indexerRegistry;
+        $this->attributeProcessor = $attributeProcessor ?? ObjectManager::getInstance()->get(AttributeProcessor::class);
     }
 
     /**
@@ -139,6 +149,21 @@ class Attribute extends \Magento\Eav\Model\Attribute implements CheckoutAttribut
         }
 
         return $key;
+    }
+
+    public function getValidateRules(): array
+    {
+        $rules = parent::getValidateRules();
+
+        if ((isset($rules['max_text_length']) || isset($rules['min_text_length']))
+            && empty($rules['input_validation'])
+        ) {
+            // Length validation works only if isset $rules['input_validation']
+            //@see \Magento\Eav\Model\Attribute\Data\Text::validateLength()
+            $rules['input_validation'] = 'validate-attribute-length';
+        }
+
+        return $rules;
     }
 
     /**
@@ -188,11 +213,17 @@ class Attribute extends \Magento\Eav\Model\Attribute implements CheckoutAttribut
     {
         try {
             return (parent::getIsRequired()
-                || ($this->_appState->getAreaCode() == 'frontend' && $this->getRequiredOnFrontOnly())
+                || ($this->isFrontArea() && $this->getRequiredOnFrontOnly())
             );
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             return parent::getIsRequired();
         }
+    }
+
+    private function isFrontArea(): bool
+    {
+        return ($this->_appState->getAreaCode() == Area::AREA_FRONTEND)
+            || ($this->_appState->getAreaCode() == Area::AREA_GRAPHQL);
     }
 
     /**
@@ -218,10 +249,17 @@ class Attribute extends \Magento\Eav\Model\Attribute implements CheckoutAttribut
      */
     public function afterSave()
     {
-        if (($this->isObjectNew() && $this->isShowOnGrid())
-            || (!$this->isObjectNew() && $this->dataHasChangedFor(CheckoutAttributeInterface::SHOW_ON_GRIDS))
+        $isObjectNew = $this->isObjectNew();
+        if (($isObjectNew && $this->isShowOnGrid())
+            || (!$isObjectNew && $this->dataHasChangedFor(CheckoutAttributeInterface::SHOW_ON_GRIDS))
         ) {
             $this->_getResource()->addCommitCallback([$this, 'invalidate']);
+        }
+
+        if ($isObjectNew || $this->dataHasChangedFor(CheckoutAttributeInterface::CONDITIONS_SERIALIZED)
+            || $this->dataHasChangedFor('store_ids')
+        ) {
+            $this->attributeProcessor->reindexRow((int)$this->getAttributeId());
         }
 
         return parent::afterSave();
@@ -655,5 +693,15 @@ class Attribute extends \Magento\Eav\Model\Attribute implements CheckoutAttribut
     public function isScopeGlobal()
     {
         return true;
+    }
+
+    public function getConditionsSerialized(): ?string
+    {
+        return $this->getData(CheckoutAttributeInterface::CONDITIONS_SERIALIZED);
+    }
+
+    public function setConditionsSerialized(?string $conditionsSerialized): void
+    {
+        $this->setData(CheckoutAttributeInterface::CONDITIONS_SERIALIZED, $conditionsSerialized);
     }
 }

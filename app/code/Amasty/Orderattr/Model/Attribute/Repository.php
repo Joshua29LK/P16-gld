@@ -1,7 +1,7 @@
 <?php
 /**
  * @author Amasty Team
- * @copyright Copyright (c) 2023 Amasty (https://www.amasty.com)
+ * @copyright Copyright (c) Amasty (https://www.amasty.com)
  * @package Custom Checkout Fields for Magento 2
  */
 
@@ -11,6 +11,7 @@ use Amasty\Orderattr\Api\CheckoutAttributeRepositoryInterface;
 use Amasty\Orderattr\Model\ResourceModel\Entity\Entity;
 use Amasty\Orderattr\Api\Data\CheckoutAttributeInterface;
 use Amasty\Orderattr\Model\Attribute\InputType\InputTypeProvider;
+use Laminas\Validator\Regex;
 use Magento\Eav\Api\Data\AttributeInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\StateException;
@@ -227,7 +228,7 @@ class Repository implements CheckoutAttributeRepositoryInterface
      */
     protected function validateCode($code)
     {
-        $validatorAttrCode = new \Zend_Validate_Regex(['pattern' => '/^[a-z][a-z_0-9]{0,30}$/']);
+        $validatorAttrCode = new Regex(['pattern' => '/^[a-z][a-z_0-9]{0,30}$/']);
         if (!$validatorAttrCode->isValid($code)) {
             throw InputException::invalidFieldValue('attribute_code', $code);
         }

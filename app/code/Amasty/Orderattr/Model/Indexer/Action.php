@@ -1,14 +1,15 @@
 <?php
 /**
  * @author Amasty Team
- * @copyright Copyright (c) 2023 Amasty (https://www.amasty.com)
+ * @copyright Copyright (c) Amasty (https://www.amasty.com)
  * @package Custom Checkout Fields for Magento 2
  */
 
 namespace Amasty\Orderattr\Model\Indexer;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\ResourceConnection\SourceProviderInterface;
-use Amasty\Orderattr\Api\Data\EntityDataInterface;
+use Magento\Framework\Search\Request\Dimension;
 
 class Action extends \Magento\Framework\Indexer\Action\Entity
 {
@@ -26,5 +27,19 @@ class Action extends \Magento\Framework\Indexer\Action\Entity
         }
 
         return $collection;
+    }
+
+    public function executeFull(): void
+    {
+        $dimension = new Dimension('replica', '_replica');
+
+        $this->prepareFields();
+        $indexer = $this->getSaveHandler();
+        $indexer->cleanIndex([$dimension]);
+        $indexer->saveIndex([$dimension], $this->prepareDataSource());
+
+        // use OM to avoid loading dependencies of parent class
+        $tableSwitcher = ObjectManager::getInstance()->get(GridTableSwitcher::class);
+        $tableSwitcher->switchTables();
     }
 }

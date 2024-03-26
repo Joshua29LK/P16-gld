@@ -1,7 +1,7 @@
 <?php
 /**
  * @author Amasty Team
- * @copyright Copyright (c) 2023 Amasty (https://www.amasty.com)
+ * @copyright Copyright (c) Amasty (https://www.amasty.com)
  * @package Custom Checkout Fields for Magento 2
  */
 
@@ -152,7 +152,7 @@ trait AbstractPdfTrait
             foreach ($outputData as $attributeCode => $data) {
                 if (!empty($data)) {
                     $orderAttributesData[] = [
-                        'label' => $form->getAttribute($attributeCode)->getDefaultFrontendLabel(),
+                        'label' => $form->getAttribute($attributeCode)->getStoreLabel(),
                         'value' => $this->resolveValue($data)
                     ];
                 }

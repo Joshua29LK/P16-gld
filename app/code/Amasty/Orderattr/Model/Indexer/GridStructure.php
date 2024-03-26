@@ -1,14 +1,14 @@
 <?php
 /**
  * @author Amasty Team
- * @copyright Copyright (c) 2023 Amasty (https://www.amasty.com)
+ * @copyright Copyright (c) Amasty (https://www.amasty.com)
  * @package Custom Checkout Fields for Magento 2
  */
 
 namespace Amasty\Orderattr\Model\Indexer;
 
+use Amasty\Orderattr\Model\Indexer\FlatScopeResolver;
 use Magento\Framework\App\ResourceConnection;
-use Magento\Framework\Indexer\ScopeResolver\FlatScopeResolver;
 use Magento\Framework\DB\Ddl\Table;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\Indexer\GridStructure as ParentGridStructure;
@@ -43,7 +43,7 @@ class GridStructure extends ParentGridStructure
      */
     protected function createFlatTable($tableName, array $fields)
     {
-        $adapter = $this->getWriteAdapter();
+        $adapter = $this->resource->getConnection('write');
         $table = $adapter->newTable($tableName);
         $table->addColumn(
             'entity_id',
@@ -73,13 +73,5 @@ class GridStructure extends ParentGridStructure
             $table->addColumn($name, $type, $size);
         }
         $adapter->createTable($table);
-    }
-
-    /**
-     * @return false|AdapterInterface
-     */
-    private function getWriteAdapter()
-    {
-        return $this->resource->getConnection('write');
     }
 }

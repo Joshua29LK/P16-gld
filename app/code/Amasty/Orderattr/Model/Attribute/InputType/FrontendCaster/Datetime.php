@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 /**
  * @author Amasty Team
- * @copyright Copyright (c) 2023 Amasty (https://www.amasty.com)
+ * @copyright Copyright (c) Amasty (https://www.amasty.com)
  * @package Custom Checkout Fields for Magento 2
  */
 
@@ -14,6 +14,7 @@ use Amasty\Orderattr\Api\Data\CheckoutAttributeInterface;
 use Amasty\Orderattr\Model\Config\Source\DateFormat;
 use Amasty\Orderattr\Model\ConfigProvider;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Locale\Bundle\DataBundle;
 use Magento\Framework\Locale\ResolverInterface;
 
 class Datetime implements SpecificationProcessorInterface
@@ -46,6 +47,7 @@ class Datetime implements SpecificationProcessorInterface
     {
         $validationRules = $attribute->getValidationRules();
         $format = DateFormat::$formats[$this->configProvider->getDateFormat()]['format'];
+        $localeData = (new DataBundle())->get($this->locale);
 
         if (!isset($element['additionalClasses'])) {
             $element['additionalClasses'] = '';
@@ -58,8 +60,8 @@ class Datetime implements SpecificationProcessorInterface
             'timeFormat' =>  $this->configProvider->getTimeFormatJs(),
             'showOn' => 'both',
             'storeLocale' => $this->locale,
-            'amNames' => [\Zend_Locale_Data::getContent($this->locale, 'am')],
-            'pmNames' => [\Zend_Locale_Data::getContent($this->locale, 'pm')],
+            'amNames' => [$localeData['calendar']['gregorian']['AmPmMarkers'][0]],
+            'pmNames' => [$localeData['calendar']['gregorian']['AmPmMarkers'][1]],
         ];
 
         if (!empty($element['value'])) {
