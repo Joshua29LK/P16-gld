@@ -22,30 +22,33 @@
 }
 </script>
 <script type="text/javascript">
-    window.addEventListener('CookiebotOnLoad', function (e) {
-        if (Cookiebot.consent.marketing) {
-            if (document.querySelector('.fotorama-video-container').classList.contains('hide-after')) {
-                document.querySelector('.fotorama-video-container').classList.remove('hide-after');
-            }
-            if (window.getComputedStyle(document.querySelector('.fotorama-video-container'), '::after').content == 'none') {
-                if (!document.querySelector('.fotorama-video-container').classList.contains('show-after')) {
-                    document.querySelector('.fotorama-video-container').classList.add('show-after');
+    window.addEventListener('load', function() {
+        window.addEventListener('CookiebotOnLoad', function (e) {
+            if(document.querySelector('.fotorama-video-container')) {
+                if (Cookiebot.consent.marketing) {
+                    if (document.querySelector('.fotorama-video-container').classList.contains('hide-after')) {
+                        document.querySelector('.fotorama-video-container').classList.remove('hide-after');
+                    }
+                    if (window.getComputedStyle(document.querySelector('.fotorama-video-container'), '::after').content == 'none') {
+                        if (!document.querySelector('.fotorama-video-container').classList.contains('show-after')) {
+                            document.querySelector('.fotorama-video-container').classList.add('show-after');
+                        }
+                    }
+                    if (document.querySelector('.product-video iframe')) {
+                        document.querySelector('.product-video iframe').show();
+                    }
+                } else {
+                    if (document.querySelector('.fotorama-video-container').classList.contains('show-after')) {
+                        document.querySelector('.fotorama-video-container').classList.remove('show-after');
+                    }
+                    if (!document.querySelector('.fotorama-video-container').classList.contains('hide-after')) {
+                        document.querySelector('.fotorama-video-container').classList.add('hide-after');
+                    }
+                    if (document.querySelector('.product-video iframe')) {
+                        document.querySelector('.product-video iframe').hide();
+                    }
                 }
             }
-            if (document.querySelector('.product-video iframe')) {
-                document.querySelector('.product-video iframe').show();
-            }
-        } else {
-            if (document.querySelector('.fotorama-video-container').classList.contains('show-after')) {
-                document.querySelector('.fotorama-video-container').classList.remove('show-after');
-            }
-            if (!document.querySelector('.fotorama-video-container').classList.contains('hide-after')) {
-                document.querySelector('.fotorama-video-container').classList.add('hide-after');
-            }
-            if (document.querySelector('.product-video iframe')) {
-                document.querySelector('.product-video iframe').hide();
-            }
-        }
-    }, false);
-
+        }, false);
+    })
 </script>
