@@ -38,7 +38,8 @@
         "redchamps/module-share-cart": "1.4.2",
         "magefan/module-community": "^2.1",
         "fooman/pdfcustomiser-m2": "8.10.0",
-        "mageprince/module-product-attachment": "2.2.7"
+        "mageprince/module-product-attachment": "2.2.7",
+        "addwish/awext": "^1.1"
     },
     "require-dev": {
 		"allure-framework/allure-phpunit": "~1.5.0",

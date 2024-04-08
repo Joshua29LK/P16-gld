@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "7de0c22b9e15525468ae1cf05634b5a6",
+    "content-hash": "7525b2ee344ab7aa376c0532adb2e90e",
     "packages": [
         {
             "name": "2tvenom/cborencode",
@@ -50,6 +50,28 @@
                 "source": "https://github.com/2tvenom/CBOREncode/tree/1.0.2"
             },
             "time": "2020-10-27T07:22:41+00:00"
+        },
+        {
+            "name": "addwish/awext",
+            "version": "1.1.63",
+            "dist": {
+                "type": "zip",
+                "url": "https://repo.magento.com/archives/addwish/awext/addwish-awext-1.1.63.0.zip",
+                "shasum": "ac5d25409281ab9c4cb415f99613e5ab37ea4bd4"
+            },
+            "type": "magento2-module",
+            "autoload": {
+                "files": [
+                    "registration.php"
+                ],
+                "psr-4": {
+                    "Addwish\\Awext\\": ""
+                }
+            },
+            "license": [
+                "Commercial"
+            ],
+            "description": "Addwish"
         },
         {
             "name": "astock/stock-api-libphp",
@@ -28427,5 +28449,5 @@
     "prefer-lowest": false,
     "platform": [],
     "platform-dev": [],
-    "plugin-api-version": "2.3.0"
+    "plugin-api-version": "2.6.0"
 }
