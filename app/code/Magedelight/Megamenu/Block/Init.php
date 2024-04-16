@@ -22,7 +22,7 @@ class Init extends \Magento\Backend\Block\AbstractBlock
     protected function _construct()
     {
         $page = $this->pageConfig;
-        $page->addPageAsset('Magedelight_Megamenu::css/font-awesome/css/font-awesome.min.css');
+        //$page->addPageAsset('Magedelight_Megamenu::css/font-awesome/css/font-awesome.min.css');
         $page->addPageAsset('Magedelight_Megamenu::js/megamenu/megamenu.js');
         $page->addPageAsset('Magedelight_Megamenu::js/megamenu/burgermenu.js');
     }
