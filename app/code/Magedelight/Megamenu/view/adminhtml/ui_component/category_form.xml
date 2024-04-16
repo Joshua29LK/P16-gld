@@ -4,7 +4,7 @@
     <fieldset name="magedelight_megamenu">
         <argument name="data" xsi:type="array">
             <item name="config" xsi:type="array">
-                <item name="label" xsi:type="string" translate="true">Mega Menu (For Desktop Only)</item>
+                <item name="label" xsi:type="string" translate="true">Mega Menu</item>
                 <item name="collapsible" xsi:type="boolean">true</item>
                 <item name="sortOrder" xsi:type="number">140</item>
             </item>
@@ -23,7 +23,7 @@
                 </item>
             </argument>
             <htmlContent name="html_content">
-                <argument name="block" xsi:type="object">Magedelight\Megamenu\Block\Adminhtml\Category\Burger</argument>
+                <block name="mdCategoryBurger" class="Magedelight\Megamenu\Block\Adminhtml\Category\Burger" />
             </htmlContent>
         </container>
         <!--
@@ -65,10 +65,25 @@
                  </imports>
             </settings>
         </field>
+        <field name="md_menu_title">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="sortOrder" xsi:type="number">24</item>
+                    <item name="dataType" xsi:type="string">string</item>
+                    <item name="formElement" xsi:type="string">input</item>
+                    <item name="label" xsi:type="string" translate="true">Menu Title</item>
+                </item>
+            </argument>
+            <!-- <settings>
+                 <imports>
+                    <link name="visible">${ $.provider}:data.visibleMegamenuTab</link>
+                 </imports>
+            </settings> -->
+        </field>
         <field name="md_label">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
-                    <item name="sortOrder" xsi:type="number">30</item>
+                    <item name="sortOrder" xsi:type="number">26</item>
                     <item name="dataType" xsi:type="string">string</item>
                     <item name="formElement" xsi:type="string">input</item>
                     <item name="label" xsi:type="string" translate="true">Menu Label Text</item>
@@ -79,6 +94,18 @@
                     <link name="visible">${ $.provider}:data.visibleMegamenuTab</link>
                  </imports>
             </settings>
+        </field>
+        <field name="md_label_shape" formElement="radioset">
+            <argument name="data" xsi:type="array">
+                <item name="options" xsi:type="object">Magedelight\Megamenu\Model\Category\Attribute\Source\MenuLabelShape</item>
+                <item name="config" xsi:type="array">
+                    <item name="sortOrder" xsi:type="number">22</item>
+                    <item name="dataType" xsi:type="string">string</item>
+                    <item name="formElement" xsi:type="string">radioset</item>
+                    <item name="label" xsi:type="string" translate="true">Menu Label Shape</item>
+                    <item name="additionalClasses" xsi:type="string">md-label-shape</item>
+                </item>
+            </argument>
         </field>
         <field name="md_label_text_color">
             <argument name="data" xsi:type="array">
@@ -159,6 +186,24 @@
                     </settings>
                 </wysiwyg>
             </formElements>
+        </field>
+        <field name="category_icon_image">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="dataType" xsi:type="string">string</item>
+                    <item name="source" xsi:type="string">category</item>
+                    <item name="label" xsi:type="string" translate="true">Category Icon Image</item>
+                    <item name="visible" xsi:type="boolean">true</item>
+                    <item name="formElement" xsi:type="string">fileUploader</item>
+                    <item name="elementTmpl" xsi:type="string">ui/form/element/uploader/uploader</item>
+                    <item name="previewTmpl" xsi:type="string">Magento_Catalog/image-preview</item>
+                    <item name="required" xsi:type="boolean">false</item>
+                    <item name="sortOrder" xsi:type="number">60</item>
+                    <item name="uploaderConfig" xsi:type="array">
+                        <item name="url" xsi:type="url" path="catalog/category_image/upload"/>
+                    </item>
+                </item>
+            </argument>
         </field>
     </fieldset>
 </form>

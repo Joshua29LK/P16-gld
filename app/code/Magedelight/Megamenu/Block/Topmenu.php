@@ -1,26 +1,15 @@
-<?php
-
-/**
- * Magedelight
- * Copyright (C) 2017 Magedelight <info@magedelight.com>
- *
- * @category Magedelight
- * @package Magedelight_Megamenu
- * @copyright Copyright (c) 2017 Mage Delight (http://www.magedelight.com/)
- * @license http://opensource.org/licenses/gpl-3.0.html GNU General Public License,version 3 (GPL-3.0)
- * @author Magedelight <info@magedelight.com>
- */
+<?php /** @noinspection PhpComposerExtensionStubsInspection */
 
 namespace Magedelight\Megamenu\Block;
 
 use Magento\Framework\Data\Tree\Node;
-use Magento\Theme\Block\Html\Topmenu as MagentoTopmenu;
-use Magento\Framework\View\Element\Template;
-use Magento\Framework\Data\TreeFactory;
 use Magento\Framework\Data\Tree\NodeFactory;
-use Magedelight\Megamenu\Model\MenuFactory;
-use Magedelight\Megamenu\Model\MenuItemsFactory;
-use Magento\Cms\Model\BlockFactory;
+use Magento\Framework\Data\TreeFactory;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\View\Element\Template;
+use Magento\Theme\Block\Html\Topmenu as MagentoTopmenu;
+use Magedelight\Megamenu\Model\Menu;
+use Magento\Framework\View\Element\TemplateFactory;
 
 /**
  * Class Topmenu
@@ -29,848 +18,97 @@ use Magento\Cms\Model\BlockFactory;
  */
 class Topmenu extends MagentoTopmenu
 {
-    /**
-     * @var \Magedelight\Megamenu\Model\MenuFactory
-     */
-    protected $menuFactory;
+    const MEGA_MENU_TEMPLATE = 'Magedelight_Megamenu::menu/topmenu.phtml';
+    const ALL_CATEGORY_MENU = 'all-category';
+    const AMAZON_MENU = 'amazon-menu';
+    const PRIMARY_NONE = 0;
+
+    protected $registry;
+
+    protected $helper;
+
+    protected $customerSession;
+
+    protected $megamenuManagement;
+
+    protected $_page;
 
     /**
-     * @var \Magedelight\Megamenu\Model\MenuItemsFactory
+     * @var \Magedelight\Megamenu\Api\Data\ConfigInterface
      */
-    protected $menuItemsFactory;
+    public $primaryMenu;
 
-    /**
-     * @var int
-     */
-    protected $primaryMenuId;
+    public $primaryMenuId = 0;
 
-    /**
-     * @var \Magedelight\Megamenu\Model\Menu
-     */
-    protected $primaryMenu;
-
-    /**
-     * @var \Magento\Cms\Model\BlockFactory
-     */
-    private $blockFactory;
-
-    /**
-     * @var \Magento\Customer\Model\Session
-     */
-    public $customerSession;
-
-    /**
-     * @var \Magento\Framework\Registry
-     */
-    public $registry;
-
-    /**
-     * @var \Magento\Catalog\Model\Category
-     */
-    protected $categoryRepository;
-    /**
-     * @var \Magento\Catalog\Helper\Category
-     */
-    private $categoryHelper;
-    /**
-     * @var \Magento\Catalog\Model\Indexer\Category\Flat\State
-     */
-    private $categoryFlatState;
-    /**
-     * @var \Magento\Catalog\Model\CategoryFactory
-     */
-    private $categoryFactory;
-
-    public $output;
+    public $categoryData;
 
     protected $mdColumnCount = 10;
 
+    protected $getDescription;
+
+    protected $output;
+
+    protected $categoryRepository;
+
+    public $allCategoryMenu;
+
+    public $allCategoryMenuData = [];
+
+    public $allCategoryMenuId = 0;
+    /**
+     * @var \Magento\Catalog\Model\CategoryFactory
+     */
+    protected $categoryFactory;
+    /**
+     * @var TemplateFactory
+     */
+    protected $templateFactory;
     /**
      * Topmenu constructor.
      * @param Template\Context $context
      * @param NodeFactory $nodeFactory
      * @param TreeFactory $treeFactory
-     * @param MenuFactory $menuFactory
-     * @param MenuItemsFactory $menuItemsFactory
-     * @param BlockFactory $blockFactory
-     * @param \Magento\Cms\Model\Page $page
-     * @param \Magento\Customer\Model\Session $session
      * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Catalog\Model\CategoryRepository $categoryRepository
+     * @param \Magento\Customer\Model\SessionFactory $session
+     * @param \Magento\Cms\Model\Page $page
+     * @param \Magedelight\Megamenu\Helper\Data $helper
+     * @param \Magedelight\Megamenu\Model\MegamenuManagement $megamenuManagement
+     * @param \Magento\Catalog\Api\CategoryRepositoryInterface $categoryRepository
      * @param array $data
      */
     public function __construct(
         Template\Context $context,
         NodeFactory $nodeFactory,
         TreeFactory $treeFactory,
-        MenuFactory $menuFactory,
-        MenuItemsFactory $menuItemsFactory,
-        BlockFactory $blockFactory,
-        \Magento\Cms\Model\Page $page,
-        \Magento\Customer\Model\Session $session,
         \Magento\Framework\Registry $registry,
-        \Magento\Catalog\Model\CategoryRepository $categoryRepository,
-        \Magento\Catalog\Helper\Category $categoryHelper,
-        \Magento\Catalog\Model\Indexer\Category\Flat\State $categoryFlatState,
-        \Magento\Catalog\Model\CategoryFactory $categoryFactory,
+        \Magento\Customer\Model\SessionFactory $session,
+        \Magento\Cms\Model\Page $page,
+        \Magedelight\Megamenu\Helper\Data $helper,
+        \Magedelight\Megamenu\Model\MegamenuManagement $megamenuManagement,
         \Magento\Catalog\Helper\Output $output,
+        \Magento\Catalog\Api\CategoryRepositoryInterface $categoryRepository,
+        \Magento\Catalog\Model\CategoryFactory $categoryFactory,
+        TemplateFactory $templateFactory,
         array $data = []
     ) {
         parent::__construct($context, $nodeFactory, $treeFactory, $data);
-        $this->menuFactory = $menuFactory;
-        $this->menuItemsFactory = $menuItemsFactory;
-        $this->_scopeInterface = $context->getScopeConfig();
-        $this->blockFactory = $blockFactory;
-        $this->_page = $page;
-        $this->customerSession = $session;
         $this->registry = $registry;
-        $this->categoryRepository = $categoryRepository;
-        $this->storeManager = $context->getStoreManager();
-        $this->categoryHelper = $categoryHelper;
-        $this->categoryFlatState = $categoryFlatState;
-        $this->categoryFactory = $categoryFactory;
+        $this->customerSession = $session;
+        $this->helper = $helper;
+        $this->megamenuManagement = $megamenuManagement;
+        $this->_page = $page;
         $this->output = $output;
+        $this->categoryRepository = $categoryRepository;
+        $this->categoryFactory = $categoryFactory;
+        $this->templateFactory = $templateFactory;
     }
 
-    /**         /**
-     * Get block cache life time
-     *
+    /**
      * @return int
-     * @since 100.1.0
      */
     protected function getCacheLifetime()
     {
         return parent::getCacheLifetime() ?: 3600;
-    }
-
-    /**
-     * Get current category id
-     */
-    public function getCurentCat()
-    {
-        $category = $this->registry->registry('current_category'); //get current category
-        if (isset($category) and ! empty($category->getId())) {
-            return $category->getId();
-        }
-    }
-
-    /**
-     * Get current page id
-     */
-    public function getCurentPage()
-    {
-        if ($this->_page->getId()) {
-            return $pageId = $this->_page->getId();
-        }
-    }
-
-    /**
-     * Set Template for menubased on its type
-     *
-     * @param string
-     */
-    public function setCustomTemplate($template)
-    {
-        if (!$this->getConfigBurgerStatus()) {
-            $this->primaryMenuId = $this->getStoreMenuId();
-            $this->primaryMenu = $this->menuFactory->create()->load($this->primaryMenuId);
-            if (($this->primaryMenu->getMenuType() == 2) and ( $this->primaryMenu->getIsActive() == 1) and
-                ( $this->getConfigMenuStatus() == 1)) {
-                /* Set Megamenu Custom Template */
-                $this->setTemplate('Magedelight_Megamenu::menu/topmenu.phtml');
-            } else {
-                /* Set Magento Custom Template */
-                $this->setTemplate($template);
-            }
-        } else {
-            $this->setTemplate('Magedelight_Megamenu::menu/burger.phtml');
-        }
-    }
-
-    /**
-     * Get store identifier
-     *
-     * @return  int
-     */
-    public function getStoreId()
-    {
-        return $this->storeManager->getStore()->getId();
-    }
-
-    /**
-     * Retrieve Menu Id for the current store
-     *
-     * @return int
-     */
-    public function getConfigMenuStatus()
-    {
-        return $this->_scopeInterface->getValue(
-            'magedelight/general/megamenu_status',
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-        );
-    }
-
-    /**
-     * Retrieve Menu Id for the current store
-     *
-     * @return int
-     */
-    public function getStoreMenuId()
-    {
-        $menu_id = $this->_scopeInterface->getValue(
-            'magedelight/general/primary_menu',
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-        );
-        $currentCustomerGroupId = $this->customerSession->getCustomerGroupId();
-
-        $menu = $this->menuFactory->create()->load($menu_id);
-        $customerGroupsArray = explode(',', trim($menu->getCustomerGroups()));
-        if (!in_array($currentCustomerGroupId, $customerGroupsArray) || $menu->getIsActive() != 1) {
-            $menu_id = '';
-        }
-        if (empty($menu_id)) {
-            $current_store_id = $this->getStoreId();
-            $menuCollection = $this->menuFactory->create()->getCollection()
-                    ->addStoreFilter($current_store_id)
-                    ->addFieldToFilter('is_active', '1')
-                    ->addFieldToFilter('customer_groups', ['finset' => $currentCustomerGroupId])
-                    ->setPageSize(1)
-                    ->setCurPage(1);
-            foreach ($menuCollection as $singleCollection) {
-                return $menu_id = $singleCollection->getMenuId();
-            }
-        }
-        if (empty($menu_id)) {
-            $menuCollection = $this->menuFactory->create()->getCollection()
-                    ->addStoreFilter(0)
-                    ->addFieldToFilter('is_active', '1')
-                    ->addFieldToFilter('customer_groups', ['finset' => $currentCustomerGroupId])
-                    ->setPageSize(1)
-                    ->setCurPage(1);
-            foreach ($menuCollection as $singleCollection) {
-                return $menu_id = $singleCollection->getMenuId();
-            }
-        }
-
-        return $menu_id;
-    }
-
-    /**
-     * Check item children
-     *
-     * @param int
-     * @return int
-     */
-    protected function hasChildrenItems($parentId)
-    {
-        $count = $this->menuItemsFactory->create()->getCollection()
-                ->addFieldToFilter('menu_id', $this->primaryMenuId)
-                ->addFieldToFilter('item_parent_id', $parentId)
-                ->count();
-        return $count;
-    }
-
-    /**
-     * Retrieve Inline menu Style for extra css
-     *
-     * @return string
-     */
-    public function menuStyleHtml()
-    {
-        $menuStyle = $this->primaryMenu->getMenuStyle();
-    
-        // Check if $menuStyle is not null and is a string
-        if (!empty($menuStyle) && is_string($menuStyle)) {
-            return '<style>' . trim($menuStyle) . '</style>';
-        }
-    
-        return '';
-    }
-
-    /**
-     * Get top menu html
-     *
-     * @param string $outermostClass
-     * @param string $childrenWrapClass
-     * @param int $limit
-     * @return string
-     */
-    public function getHtml($outermostClass = '', $childrenWrapClass = '', $limit = 0)
-    {
-        /* Burger menu for desktop */
-        if ($this->getConfigBurgerStatus()) {
-            /* Start Burgermenu code */
-                $this->_eventManager->dispatch(
-                    'page_block_html_topmenu_gethtml_before',
-                    ['menu' => $this->_menu, 'block' => $this,'request' => $this->getRequest()]
-                );
-
-                $this->_menu->setOutermostClass($outermostClass);
-                $this->_menu->setChildrenWrapClass($childrenWrapClass);
-
-                $html = $this->_getHtml($this->_menu, $childrenWrapClass, $limit);
-
-                 $transportObject = new \Magento\Framework\DataObject(['html' => $html]);
-
-                 $this->_eventManager->dispatch(
-                     'page_block_html_topmenu_gethtml_after',
-                     ['menu' => $this->_menu, 'transportObject' => $transportObject]
-                 );
-                $html = $transportObject->getHtml();
-                return $html;
-        }
-
-        /* Start Megamenu code */
-        $this->_eventManager->dispatch(
-            'page_block_html_topmenu_gethtml_before',
-            ['menu' => $this->_menu, 'block' => $this,'request' => $this->getRequest()]
-        );
-
-        $this->_menu->setOutermostClass($outermostClass);
-        $this->_menu->setChildrenWrapClass($childrenWrapClass);
-
-        if (($this->primaryMenu->getMenuType() == 2) and ( $this->primaryMenu->getIsActive() == 1) and
-            ( $this->getConfigMenuStatus() == 1)) {
-            $menuItems = $this->menuItemsFactory->create()->getCollection()
-                    ->addFieldToFilter('menu_id', $this->primaryMenuId)
-                    ->addFieldToFilter('item_parent_id', 0)
-                    ->setOrder('sort_order', 'ASC');
-            $html = '';
-            foreach ($menuItems as $item) {
-                $childrenWrapClass = "level0 nav-1 first parent main-parent";
-                $html .= $this->setMegamenu($item, $childrenWrapClass);
-            }
-        } elseif (($this->primaryMenu->getMenuType() == 1) and
-            ( $this->primaryMenu->getIsActive() == 1) and ( $this->getConfigMenuStatus() == 1)) {
-            $menuItems = $this->menuItemsFactory->create()->getCollection()
-                    ->addFieldToFilter('menu_id', $this->primaryMenuId)
-                    ->addFieldToFilter('item_parent_id', 0);
-            $parent = 'root';
-            $level = 0;
-            $html = $this->setPrimaryMenu($menuItems, $level, $parent, $outermostClass);
-        } else {
-            $html = $this->_getHtml($this->_menu, $childrenWrapClass, $limit);
-        }
-
-        $transportObject = new \Magento\Framework\DataObject(['html' => $html]);
-        $this->_eventManager->dispatch(
-            'page_block_html_topmenu_gethtml_after',
-            ['menu' => $this->_menu, 'transportObject' => $transportObject]
-        );
-        $html = $transportObject->getHtml();
-        return $html;
-    }
-
-    /**
-     * Recursively generates top menu html from data that is specified in $menuTree
-     *
-     * @param array $menuItems
-     * @param int $level
-     * @param int $parent
-     * @param string $outermostClass
-     * @return string
-     */
-    public function setPrimaryMenu($menuItems, $level = 0, $parent = '', $outermostClass = '')
-    {
-        $html = '';
-        $class = 'level0 level-top parent ui-menu-item';
-        $linkClass = 'level-top ';
-        if ($parent != 'root') {
-            $html .= '<ul class="level' . $level . ' submenu">';
-            $linkClass = '';
-        }
-        foreach ($menuItems as $menuItem) {
-            $menuItemId = $menuItem->getItemId();
-            $linkurl = $menuItem->getItemLink();
-            $dataclass = $menuItem->getItemClass();
-
-            if (!$linkurl) {
-                $linkurl = $this->generateMenuUrl($menuItem);
-            }
-
-            $hasChildren = $this->hasChildrenItems($menuItemId);
-
-            if ($hasChildren) {
-                $class = 'level' . $level . ' parent';
-            } else {
-                $class = 'level' . $level;
-            }
-
-            if ($menuItem->getItemType() == 'category') {
-                if ($menuItem->getObjectId() == $this->getCurentCat()) {
-                    $class .= ' active';
-                }
-            } elseif ($menuItem->getItemType() == 'pages') {
-                if ($menuItem->getObjectId() == $this->getCurentPage()) {
-                    $class .= ' active';
-                }
-            }
-
-            $html .= '<li class="' . $class . ' ' . $linkClass . ' ' . $dataclass . '">';
-
-            if ($hasChildren) {
-                $html .= '<a href="' . $linkurl . '" class="' . $linkClass .
-                    ' ui-corner-all"><span class="megaitemicons">' .
-                    $menuItem->getItemFontIcon() . '</span> <span>' .
-                    $this->escapeHtml($this->generateMenuName($menuItem)) . '</span></a>';
-
-                $menuItems = $this->menuItemsFactory->create()->getCollection()
-                        ->addFieldToFilter('menu_id', $this->primaryMenuId)
-                        ->addFieldToFilter('item_parent_id', $menuItemId);
-
-                //Get list of child menu
-                $html .= $this->setPrimaryMenu($menuItems, $level + 1);
-            } else {
-                $html .= '<a href="' . $linkurl . '" class="' . $linkClass .
-                    ' ui-corner-all "><span class="megaitemicons">' .
-                    $menuItem->getItemFontIcon() . '</span> <span>' .
-                    $this->escapeHtml($this->generateMenuName($menuItem)) . '</span></a>';
-            }
-            $html .= '</li>';
-        }
-        if ($parent != 'root') {
-            $html .= '</ul>';
-        }
-        return $html;
-    }
-
-    /**
-     * Retrieve menu url based on there type
-     *
-     * @param MenuFactory $menuItem
-     * @return string
-     */
-    public function generateMenuUrl($menuItem)
-    {
-        $linkurl = $menuItem->getItemLink();
-        $url = '';
-        if ($menuItem->getItemType() == "link" && !empty($linkurl)) {
-            return $linkurl;
-        }
-        if ($menuItem->getItemType() == "category") {
-            $url = $this->categoryRepository->get($menuItem->getObjectId(), $this->getStoreId())->getUrl();
-        }
-        if ($menuItem->getItemType() == "pages") {
-            $url = $this->storeManager->getStore()->getBaseUrl() . $menuItem->getItemLink();
-        }
-        return $url;
-    }
-
-    /**
-     * Retrieve menu name based on there type
-     *
-     * @param MenuFactory $menuItem
-     * @return string
-     */
-    public function generateMenuName($menuItem)
-    {
-        if ($menuItem->getItemType() == "category") {
-            $name = $this->categoryRepository->get(
-                $menuItem->getObjectId(),
-                $this->getStoreId()
-            )->getName();
-        } else {
-            $name = $menuItem->getItemName();
-        }
-        return $name;
-    }
-
-    /**
-     * Retrive Active Class
-     */
-    public function getActiveClass($menuItem)
-    {
-        if ($menuItem->getItemType() == 'category') {
-            if ($menuItem->getObjectId() == $this->getCurentCat()) {
-                return ' active';
-            }
-        } elseif ($menuItem->getItemType() == 'pages') {
-            if ($menuItem->getObjectId() == $this->getCurentPage()) {
-                return ' active';
-            }
-        }
-        return '';
-    }
-
-    /**
-     * Retrieve Html for Mega block
-     *
-     */
-    protected function setMegamenu($menuTree, $childrenWrapClass)
-    {
-        $html = '';
-        $parentId = $menuTree->getItemId();
-        $dataclass = $menuTree->getItemClass();
-        $animationOption = $menuTree->getAnimationOption();
-        $class = $this->getActiveClass($menuTree);
-
-        if ($menuTree->getItemType() == 'megamenu') {
-            $class .= ' dropdown';
-            $megaMenuLink = $menuTree->getItemLink()?$menuTree->getItemLink():'#';
-            $html .= '<li class="menu-dropdown-icon category-item nav-'.$menuTree->getItemId().' ' . $class . ' ' . $dataclass . '"><a href="'.$megaMenuLink.'" class=""><span class="megaitemicons">' . $menuTree->getItemFontIcon() . '</span> ' . $this->generateMenuName($menuTree) . '</a>';
-        } else {
-            $sub_cat_disaply = $menuTree->getCategoryDisplay();
-            $cat_vertical_menu = $menuTree->getCategoryVerticalMenu();
-            $catVerticalMenuBg = $menuTree->getCategoryVerticalMenuBg();
-            $header_enable = 0;
-            $header_block = "";
-            $left_enable = 0;
-            $left_block = "";
-            $right_enable = 0;
-            $right_block = "";
-            $footer_enable = 0;
-            $footer_block = "";
-            $header_title = "0";
-            $left_title = "0";
-            $right_title = "0";
-            $footer_title = "0";
-            if ($menuTree->getCategoryColumns()) {
-                $categoryColumns = json_decode($menuTree->getCategoryColumns());
-                foreach ($categoryColumns as $categoryColumn) {
-                    if ($categoryColumn->type === 'header') {
-                        $header_enable = (int) $categoryColumn->enable;
-                        $header_block = $categoryColumn->value;
-                        $header_title = $categoryColumn->showtitle;
-                    }
-
-                    if ($categoryColumn->type === 'left') {
-                        $left_enable = (int) $categoryColumn->enable;
-                        $left_block = $categoryColumn->value;
-                        $left_title = $categoryColumn->showtitle;
-                    }
-
-                    if ($categoryColumn->type === 'right') {
-                        $right_enable = (int) $categoryColumn->enable;
-                        $right_block = $categoryColumn->value;
-                        $right_title = $categoryColumn->showtitle;
-                    }
-
-                    if ($categoryColumn->type === 'bottom') {
-                        $footer_enable = (int) $categoryColumn->enable;
-                        $footer_block = $categoryColumn->value;
-                        $footer_title = $categoryColumn->showtitle;
-                    }
-                }
-            }
-            $columnCount = 0;
-            if ($left_enable || $right_enable) {
-                $columnCount++;
-            }
-
-            $catDisplay = false;
-            $menuAdd = false;
-            $verticalMenu = false;
-            $verticalMenuClass = '';
-            $rightContentClass = '';
-            $subcats = [];
-            if ($menuTree->getItemType() === 'category' && (int) $sub_cat_disaply === (int) 1) {
-                $categoryLoad = $this->categoryRepository->get($menuTree->getObjectId(), $this->getStoreId());
-                $subcats = $categoryLoad->getChildrenCategories();
-                if (!empty($subcats)) {
-                    $catDisplay = true;
-                    $menuAdd = true;
-                    if ((int) $cat_vertical_menu === (int) 1) {
-                        $verticalMenu = true;
-                        $verticalMenuClass = 'menu-vertical-wrapper';
-                        $rightContentClass = 'col-menu-3';
-                    }
-                }
-            }
-
-            if ($header_enable || $left_enable || $right_enable || $footer_enable) {
-                $catDisplay = true;
-            }
-
-            $linkurl = $this->generateMenuUrl($menuTree);
-
-            if ($catDisplay) {
-                $class .= ' dropdown';
-                if ($verticalMenu) {
-                    $columnCount = 1;
-                } else {
-                    $columnCount++;
-                }
-
-                $menuColumnCount = 1;
-                if ($columnCount === 3) {
-                    $menuColumnCount = $columnCount - 1;
-                }
-                if ($columnCount === 2) {
-                    $columnCount++;
-                }
-                if ($columnCount === 1) {
-                    $menuColumnCount = 4;
-                }
-                $html .= '<li class="menu-dropdown-icon category-item nav-'.$menuTree->getItemId().' '. $class . ' ' . $dataclass . '"><a href="' . $linkurl . '"><span class="megaitemicons">' . $menuTree->getItemFontIcon() . '</span> ' . $this->generateMenuName($menuTree) . '</a>';
-
-                $html .= '<ul class="animated ' . $animationOption . ' column' . $columnCount . " " . $verticalMenuClass . '" style="animation-duration: 0.7s;">';
-
-                if ($header_enable) {
-                    $headerblockObject = $this->getLayout()->createBlock('Magento\Cms\Block\Block')
-                        ->setBlockId($header_block);
-                    $headerblock = $this->blockFactory->create()->load($header_block);
-                    $html .= '<li class="megaStaticBlock menu-header">';
-                    if ($header_title === '1') {
-                        $html .= '<h2>' . $headerblock->getTitle() . '</h2>';
-                    }
-                    $html .= '<ul><li>' . $headerblockObject->toHtml() . '</li>';
-                    $html .= '</ul></li>';
-                }
-
-                if ($left_enable && !$verticalMenu) {
-                    $leftblockObject = $this->getLayout()->createBlock('Magento\Cms\Block\Block')
-                        ->setBlockId($left_block);
-                    $leftblock = $this->blockFactory->create()->load($left_block);
-                    $html .= '<li class="megaStaticBlock menu-sidebar-left">';
-                    if ($left_title === '1') {
-                        $html .= '<h2>' . $leftblock->getTitle() . '</h2>';
-                    }
-                    $html .= '<ul><li>' . $leftblockObject->toHtml() . '</li>';
-                    $html .= '</ul></li>';
-                }
-                if ($right_enable) {
-                    $colClass = 'col-menu-9';
-                } else {
-                    $colClass = '';
-                }
-                $html .= '<li class="megaStaticBlock menu-content ' . $colClass . '">';
-
-                if (!empty($subcats)) {
-                    if ($verticalMenu) {
-                        $verticalHtml = '<div class="col-menu-9 vertical-menu-content">';
-                        $html .= '<div class="col-menu-3 vertical-menu-left" style="background:#'.$catVerticalMenuBg.';">';
-                        $html .= '<ul class="">';
-                        $firstVerticalMenu = 1;
-                        $firstVerticalMenuClass = '';
-                        $verticalclass = '';
-                        foreach ($subcats as $subcat) {
-                            if ($subcat->getId() == $this->getCurentCat()) {
-                                $verticalclass = 'active';
-                            }
-                            $_category = $this->categoryRepository->get($subcat->getId(), $this->getStoreId());
-                            $childrenCats = $_category->getChildrenCategories();
-
-                            if (!empty($childrenCats)) {
-                                $addDropdownClass = " dropdown";
-                            } else {
-                                $addDropdownClass = "";
-                            }
-
-                            $html .= '<li class="menu-vertical-items nav-'.$menuTree->getItemId().' '. $verticalclass . $addDropdownClass . '" data-toggle="subcat-tab-' . $_category->getId() . '"><a href="' . $_category->getUrl() . '">' . $_category->getName() . '</a></li>';
-                            $verticalHtml .= '';
-
-                            if (!empty($childrenCats)) {
-                                if (count($childrenCats) >= 3) {
-                                    $columnCountForVerticalMenu = 3;
-                                } else {
-                                    $columnCountForVerticalMenu = count($childrenCats);
-                                }
-
-                                $verticalHtml .= '<div id="subcat-tab-' . $_category->getId() . '" class="vertical-subcate-content ' . $firstVerticalMenuClass . '"><ul class="menu-vertical-child column' . $columnCountForVerticalMenu . '">';
-                                foreach ($childrenCats as $childrenCat) {
-                                    $verticalclass = '';
-                                    if ($childrenCat->getId() == $this->getCurentCat()) {
-                                        $verticalclass = 'active';
-                                    }
-                                    $childrenCatLoad = $this->categoryRepository->get($childrenCat->getId(), $this->getStoreId());
-                                    $verticalHtml .= '<li class="' . $verticalclass . '"><h4 class="level-3-cat"><a href="' . $childrenCatLoad->getUrl() . '">' . $childrenCatLoad->getName() . '</a></h4>';
-                                    $childrenCatsNew = $childrenCatLoad->getChildrenCategories();
-                                    if (count($childrenCatsNew) > 0) {
-                                        $verticalHtml .= '<ul>';
-                                        foreach ($childrenCatsNew as $childrenCatNew) {
-                                            $verticalclass = '';
-                                            if ($childrenCatNew->getId() == $this->getCurentCat()) {
-                                                $verticalclass = 'active';
-                                            }
-                                            $childrenCatNewLoad = $this->categoryRepository->get($childrenCatNew->getId(), $this->getStoreId());
-                                            $verticalHtml .= '<li class="' . $verticalclass . '"><a href="' . $childrenCatNewLoad->getUrl() . '">' . $childrenCatNewLoad->getName() . '</a>';
-                                            $verticalHtml .= '</li>';
-                                        }
-                                        $verticalHtml .= '</ul>';
-                                    }
-                                    $verticalHtml .= '</li>';
-                                }
-                                $verticalHtml .= '</ul></div>';
-                            }
-                            $firstVerticalMenu++;
-                        }
-
-                        $verticalHtml .= '</div>';
-                        $html .= '</ul>';
-                        $html .= '</div>' . $verticalHtml;
-                    } else {
-                        $html .= '<ul class="column' . $menuColumnCount . '">';
-                        foreach ($subcats as $subcat) {
-                            $verticalclass = '';
-                            if ($subcat->getId() == $this->getCurentCat()) {
-                                $verticalclass = 'active';
-                            }
-                            $_category = $this->categoryRepository->get($subcat->getId(), $this->getStoreId());
-                            $childrenCats = $_category->getChildrenCategories();
-
-                            $html .= '<li class="category-item nav-'.$menuTree->getItemId().'-'.$subcat->getId().' ' . $verticalclass . '"><a href="' . $_category->getUrl() . '">' . $_category->getName() . '</a>';
-                            if (!empty($childrenCats)) {
-                                $html .= '<ul class="level3">';
-                                foreach ($childrenCats as $childrenCat) {
-                                    $verticalclass = '';
-                                    if ($childrenCat->getId() == $this->getCurentCat()) {
-                                        $verticalclass = 'active';
-                                    }
-                                    $childrenCatLoad = $this->categoryRepository->get($childrenCat->getId(), $this->getStoreId());
-                                    $html .= '<li class="' . $verticalclass . '"><a href="' . $childrenCatLoad->getUrl() . '">' . $childrenCatLoad->getName() . '</a></li>';
-                                }
-                                $html .= '</ul>';
-                            }
-                            $html .= '</li>';
-                        }
-                        $html .= '</ul>';
-                    }
-                }
-
-                $html .= '</li>';
-
-                if ($right_enable) {
-                    $rightblockObject = $this->getLayout()->createBlock('Magento\Cms\Block\Block')
-                        ->setBlockId($right_block);
-                    $rightblock = $this->blockFactory->create()->load($right_block);
-                    $html .= '<li class="megaStaticBlock menu-sidebar-right ' . $rightContentClass . '">';
-                    if ($right_title === '1') {
-                        $html .= '<h2>' . $rightblock->getTitle() . '</h2>';
-                    }
-                    $html .= '<ul><li>' . $rightblockObject->toHtml() . '</li>';
-                    $html .= '</ul></li>';
-                }
-
-                if ($footer_enable) {
-                    $footerblockObject = $this->getLayout()->createBlock('Magento\Cms\Block\Block')
-                        ->setBlockId($footer_block);
-                    $footerblock = $this->blockFactory->create()->load($footer_block);
-                    $html .= '<li class="megaStaticBlock menu-footer">';
-                    if ($footer_title === '1') {
-                        $html .= '<h2>' . $footerblock->getTitle() . '</h2>';
-                    }
-                    $html .= '<ul><li>' . $footerblockObject->toHtml() . '</li>';
-                    $html .= '</ul></li>';
-                }
-
-                $html .= '</ul></li>';
-            } else {
-                $html .= '<li class="' . $class . ' ' . $dataclass . '"><a href="' . $linkurl . '"><span class="megaitemicons">' . $menuTree->getItemFontIcon() . '</span> ' . $this->generateMenuName($menuTree) . '</a></li>';
-            }
-        }
-        $hasChildrenMenu = $menuTree->getItemColumns();
-        $menuitemtype = $menuTree->getItemType();
-        if (!empty($hasChildrenMenu)) {
-            if ($menuitemtype == 'megamenu') {
-                $html .= $this->setChildMegamenuColumn($hasChildrenMenu, $animationOption);
-                $html .= '</ul></li>';
-            }
-        }
-        return $html;
-    }
-
-    /**
-     * Retrieve Html for Mega block
-     *
-     */
-    public function setChildMegamenuColumn($childrenMenu, $animationOption)
-    {
-        $menuitems = json_decode($childrenMenu);
-        $totalColumn = count($menuitems);
-
-        $childHtml = '<ul class="animated ' . $animationOption . ' column' . $totalColumn . '">';
-
-        for ($i = 0; $i < $totalColumn; $i++) {
-            $type = $menuitems[$i]->type;
-            if ($type == 'menu') {
-                $subMenuId = $menuitems[$i]->value;
-
-                $menus = $this->menuFactory->create()->load($subMenuId)->getData();
-                $showtitle = $menuitems[$i]->showtitle;
-                $childHtml .= '<li class="megaNormalMenu">';
-                if ($showtitle == '1') {
-                    if (isset($menus['menu_name']) and ! empty($menus['menu_name'])) {
-                        $childHtml .= '<h2>' . $menus['menu_name'] . '</h2>';
-                    }
-                }
-                $childHtml .= '<ul>';
-                $menuItems = $this->menuItemsFactory->create()->getCollection()
-                        ->addFieldToFilter('menu_id', $subMenuId)
-                        ->addFieldToFilter('item_parent_id', 0)
-                        ->setOrder('sort_order', 'ASC');
-
-                foreach ($menuItems as $menuitem) {
-                    $class = $this->getActiveClass($menuitem);
-                    $linkurl = $this->generateMenuUrl($menuitem);
-                    $dataclass = $menuitem->getItemClass();
-
-                    $childHtml .= '<li class="' . $class . ' ' . $dataclass . '"><a href="' . $linkurl . '"><span class="megaitemicons">' . $menuitem->getItemFontIcon() . '</span> ' . $this->generateMenuName($menuitem) . '</a></li>';
-                }
-                $childHtml .= '</ul></li>';
-            }
-            if ($type == 'block') {
-                $subBlockId = $menuitems[$i]->value;
-                $blockObject = $this->getLayout()->createBlock('Magento\Cms\Block\Block')
-                    ->setBlockId($subBlockId);
-                $block = $this->blockFactory->create()->load($subBlockId);
-                $childHtml .= '<li class="megaStaticBlock">';
-                $showtitle = $menuitems[$i]->showtitle;
-                if ($showtitle == '1') {
-                    $childHtml .= '<h2>' . $block->getTitle() . '</h2>';
-                }
-                $childHtml .= '<ul><li>' . $blockObject->toHtml() . '</li></ul></li>';
-            }
-            if ($type == 'category') {
-                $category_id = $menuitems[$i]->value;
-                $category = $this->categoryRepository->get($category_id, $this->getStoreId());
-                $subcats = $category->getChildrenCategories();
-                $childHtml .= '<li class="megaStaticBlock">';
-                $showtitle = $menuitems[$i]->showtitle;
-                if (count($subcats) > 0) {
-                    if ($showtitle == '1') {
-                        $childHtml .= '<h2>' . $category->getName() . '</h2>';
-                    }
-
-                    $childHtml .= '<ul>';
-                    foreach ($subcats as $subcat) {
-                        $_category = $this->categoryRepository->get($subcat->getId(), $this->getStoreId());
-                        $_categoryName = $_category->getName();
-                        $_categoryUrl = $_category->getUrl();
-                        $childHtml .= '<li><a href="' . $_categoryUrl . '">' . $_categoryName . '</a></li>';
-                    }
-                    $childHtml .= '</ul>';
-                } else {
-                    $categoryUrl = $category->getUrl();
-                    $categoryName = $category->getName();
-                    $childHtml .= '<ul><li><a href="' . $categoryUrl . '">' . $categoryName . '</a></li></ul>';
-                }
-                $childHtml .= '</li>';
-            }
-        }
-        return $childHtml;
-    }
-
-    public function getMenuDesign()
-    {
-        return $this->primaryMenu->getMenuDesignType();
-    }
-
-    public function getMenuAlignment()
-    {
-        return $this->primaryMenu->getMenuAlignment();
-    }
-
-    public function isSticky()
-    {
-        return $this->primaryMenu->getIsSticky();
-    }
-
-    public function animationTime()
-    {
-        return $this->_scopeInterface->getValue(
-            'magedelight/general/animation_time',
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-        );
     }
 
     /**
@@ -897,55 +135,1044 @@ class Topmenu extends MagentoTopmenu
         return array_merge(parent::getCacheTags(), $this->getIdentities());
     }
 
-
-    public function getConfigBurgerStatus()
+    /**
+     * @return mixed
+     */
+    public function getCurrentCat()
     {
-        $burgerMenuStatus =  $this->_scopeInterface->getValue(
-            'magedelight/general/hamburger_menu',
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        $category = $this->registry->registry('current_category');
+        if (isset($category) and ! empty($category->getId())) {
+            return $category->getId();
+        }
+        return '';
+    }
+
+    /**
+     * @return int
+     */
+    public function getCurentPage()
+    {
+        if ($this->_page->getId()) {
+            return $pageId = $this->_page->getId();
+        }
+        return '';
+    }
+
+    /**
+     * @param $template
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     */
+    public function setCustomTemplate($template)
+    {
+        $this->setTemplate($template);
+        if ($this->helper->isEnabled()) {
+            $_customerSession = $this->customerSession->create();
+            if ($_customerSession->isLoggedIn()) {
+                $this->primaryMenu = $this->megamenuManagement->getMenuData($_customerSession->getCustomerId())->getMenu();
+            } else {
+                $this->primaryMenu = $this->megamenuManagement->getMenuData()->getMenu();
+            }
+            $this->primaryMenuId = $this->primaryMenu->getMenuId();
+
+            if ($this->primaryMenu->getIsActive()) {
+                if ($this->primaryMenu->getMenuType() == Menu::MEGA_MENU) {
+                    $this->setTemplate(self::MEGA_MENU_TEMPLATE);
+                }
+            } elseif ($this->helper->isHumbergerMenu()) {
+                $this->setTemplate(self::MEGA_MENU_TEMPLATE);
+            }
+        }
+    }
+
+    /**
+     * @param string $outermostClass
+     * @param string $childrenWrapClass
+     * @param int $limit
+     * @return string
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     */
+    public function getHtml($outermostClass = '', $childrenWrapClass = '', $limit = 0)
+    {
+        return $this->getMegaMenuHtml($outermostClass, $childrenWrapClass, $limit);
+    }
+    /**
+     * @param string $outermostClass
+     * @param string $childrenWrapClass
+     * @param int $limit
+     * @return string
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     */
+    public function getAllCategoryMenuHtml($menuId, $outermostClass = '', $childrenWrapClass = '', $limit = 0)
+    {
+        return $this->getAllCategoryMegaMenuHtml($menuId, $outermostClass, $childrenWrapClass, $limit);
+    }
+    /**
+     * @param string $outermostClass
+     * @param string $childrenWrapClass
+     * @param int $limit
+     * @return string
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     */
+    public function getAllCategoryRightMenuHtml($menuId, $outermostClass = '', $childrenWrapClass = '', $limit = 0)
+    {
+        return $this->getAllCategoryRightMegaMenuHtml($menuId, $outermostClass, $childrenWrapClass, $limit);
+    }
+
+    /**
+     * @param string $outermostClass
+     * @param string $childrenWrapClass
+     * @param int $limit
+     * @return string
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     */
+    public function getBurgerHtml($outermostClass = '', $childrenWrapClass = '', $limit = 0)
+    {
+        return $this->getHumbergerMenuHtml($outermostClass, $childrenWrapClass, $limit);
+    }
+
+    /**
+     * @param $outermostClass
+     * @param $childrenWrapClass
+     * @param $limit
+     * @return string
+     */
+    public function getHumbergerMenuHtml($outermostClass, $childrenWrapClass, $limit)
+    {
+        $this->_eventManager->dispatch(
+            'page_block_html_topmenu_gethtml_before',
+            ['menu' => $this->_menu, 'block' => $this,'request' => $this->getRequest()]
         );
 
-        if ($this->getConfigMenuStatus() && $burgerMenuStatus) {
+        $this->_menu->setOutermostClass($outermostClass);
+        $this->_menu->setChildrenWrapClass($childrenWrapClass);
+
+        $html = $this->_getHtml($this->_menu, $childrenWrapClass, $limit);
+
+        $transportObject = new \Magento\Framework\DataObject(['html' => $html]);
+
+        $this->_eventManager->dispatch(
+            'page_block_html_topmenu_gethtml_after',
+            ['menu' => $this->_menu, 'transportObject' => $transportObject]
+        );
+        $html = $transportObject->getHtml();
+        return $html;
+    }
+    /**
+     * @param $outermostClass
+     * @param $childrenWrapClass
+     * @param $limit
+     * @return string
+     */
+    public function getAmazonMenuHtml()
+    {
+        $amazonMenu = $this->megamenuManagement->loadAllMegaMenus()
+                            ->addFieldToFilter('menu_design_type', self::AMAZON_MENU)
+                            ->getFirstItem();
+        if ($amazonMenu) {
+            $amazonMenuId = $amazonMenu->getMenuId();
+            $amazonMenuItems = $this->megamenuManagement->loadMenuItems(0, 'ASC', $amazonMenuId);
+        }
+        $amazonMenuArray = [];
+        $level = 0;
+        foreach ($amazonMenuItems as $menuItem) {
+            $itemData = [];
+            $itemData['item_name'] = $menuItem->getItemName();
+            $itemData['item_type'] = $menuItem->getItemType();
+            $itemData['category_id'] = $menuItem->getObjectId();
+            $itemData['category_display'] = $menuItem->getCategoryDisplay();
+            $itemData['item_font_icon'] = $menuItem->getItemFontIcon();
+
+            if ($menuItem->getItemType() == 'pages' || $menuItem->getItemType() == 'link') {
+                $itemData['item_link'] = $menuItem->getItemLink();
+            } else {
+                $itemData['item_link'] = $this->megamenuManagement->generateMenuUrl($menuItem) ? : '#';
+            }
+            $itemData['open_in_newtab_text'] = '';
+
+            if ((int) $menuItem->getOpenInNewTab()) {
+                $itemData['open_in_newtab_text'] = 'target="_blank"';
+            }
+            if ($menuItem->getItemType() == 'category' && $menuItem->getCategoryDisplay()) {
+                $_category = $this->megamenuManagement->getCategoryById($menuItem->getObjectId());
+
+                $itemData['vertical_cat_exclude'] = $menuItem->getVerticalCatExclude();
+                $itemData['item_label'] = $_category->getMdLabel() ?? '';
+                $itemData['item_label_color'] = $_category->getMdLabelTextColor();
+                $itemData['item_label_bg_color'] = $_category->getMdLabelBackgroundColor();
+                $itemData['item_label_shape'] = $_category->getMdLabelShape();
+
+                $childCategories = $this->megamenuManagement->getChildrenCategories($_category);
+                $childCategoryData = [];
+                $childCategoryTempData = [];
+                foreach ($childCategories as $childCategory) {
+                    if (!in_array(
+                        $childCategory->getEntityId(),
+                        explode(',', $itemData['vertical_cat_exclude'] ?? '')
+                    )) {
+                        $childCategory = $this->megamenuManagement->getCategoryById($childCategory->getEntityId());
+                        $level = 1;
+                        $childCategoryTempData['category_id'] = $childCategory->getEntityId();
+                        $childCategoryTempData['item_name'] = $childCategory->getName();
+                        $childCategoryTempData['item_link'] = $childCategory->getUrl();
+                        $childCategoryTempData['level'] = $level;
+                        $childCategoryTempData['item_class'] = 'md-amazon-title';
+
+                        $childCategoryTempData['item_label'] = $childCategory->getMdLabel() ?? '';
+                        $childCategoryTempData['item_label_color'] = $childCategory->getMdLabelTextColor();
+                        $childCategoryTempData['item_label_bg_color'] = $childCategory->getMdLabelBackgroundColor();
+                        $childCategoryTempData['item_label_shape'] = $childCategory->getMdLabelShape();
+
+                        $childCategoryData[] = $childCategoryTempData;
+                        $subChildCategories = $this->megamenuManagement->getChildrenCategories($childCategory);
+                        foreach ($subChildCategories as $subChildCategory) {
+                            if (!in_array(
+                                $subChildCategory->getEntityId(),
+                                explode(',', $itemData['vertical_cat_exclude'] ?? '')
+                            )) {
+                                $subChildCategory = $this->megamenuManagement->getCategoryById($subChildCategory->getEntityId());
+                                $level = 2;
+                                $childCategoryTempData['category_id'] = $subChildCategory->getEntityId();
+                                $childCategoryTempData['item_name'] = $subChildCategory->getName();
+                                $childCategoryTempData['item_link'] = $subChildCategory->getUrl();
+                                $childCategoryTempData['level'] = $level;
+                                $childCategoryTempData['item_class'] = 'child-level-3';
+
+                                $childCategoryTempData['item_label'] = $subChildCategory->getMdLabel() ?? '';
+                                $childCategoryTempData['item_label_color'] = $subChildCategory->getMdLabelTextColor();
+                                $childCategoryTempData['item_label_bg_color'] = $subChildCategory->getMdLabelBackgroundColor();
+                                $childCategoryTempData['item_label_shape'] = $subChildCategory->getMdLabelShape();
+
+                                $childCategoryData[] = $childCategoryTempData;
+                            }
+                        }
+                    }
+                }
+                $itemData['child_category'] = $childCategoryData;
+            }
+            $itemData['item_class'] = 'amazon-menu-item '.'child-level-'.$level;
+            $itemData['level'] = $level;
+
+            if ($menuItem->getCategoryDisplay()) {
+                $itemData['category_display'] = $menuItem->getCategoryDisplay();
+            }
+            $amazonMenuArray[] = $itemData;
+        }
+        $html = '';
+        $html .= '<ul class="amz-menu md-translateX">';
+        foreach ($amazonMenuArray as $key => $amazonMenu) {
+            $liClass = '';
+            if ($amazonMenu['category_display']) {
+                $liClass .= 'md-amazon-parent';
+            }
+            $fontIcon = '<span class="megaitemicons">'.$amazonMenu['item_font_icon'].'</span>';
+            $html .= '<li class='.$liClass.'>';
+            $html .= '<a href="'.$amazonMenu['item_link'].'" '.$amazonMenu['open_in_newtab_text'].'
+            data-menu-id="'.$amazonMenu['category_id'].'">' . $fontIcon . $amazonMenu['item_name'].'</a>';
+            if (isset($amazonMenu['item_label']) && $amazonMenu['item_label'] != '') {
+                $inlineStyle = 'style="color: '.$amazonMenu['item_label_color'].'; background-color:'.$amazonMenu['item_label_bg_color'].'"';
+                $html .= '<span class="md-label-text '.$amazonMenu['item_label_shape'].'"'.$inlineStyle.'>'.$amazonMenu['item_label'].'</span>';
+            }
+            $html .= '</li>';
+        }
+        $html .= '</ul>';
+        $childHtml = '';
+        foreach ($amazonMenuArray as $key => $amazonMenu) {
+            if (isset($amazonMenu['category_display']) && (int) $amazonMenu['category_display'] == 1) {
+                $childMenuArray = $amazonMenu['child_category'];
+                $liClass = '';
+                $childHtml .= '<ul class="amz-menu md-translateX-right" data-menu-id="'.$amazonMenu['category_id'].'">';
+                $childHtml .= '<li'.$liClass.'><a href="#" class="md-menu-back-btn">Main Menu</a></li>';
+                foreach ($childMenuArray as $key => $childMenu) {
+                    $childHtml .= '<li class='.$childMenu['item_class'].'>';
+                    $childHtml .= '<a href="'.$childMenu['item_link'].'">'.$childMenu['item_name'].'</a>';
+                    if (isset($childMenu['item_label']) && $childMenu['item_label'] != '') {
+                        $inlineStyle = 'style="color: '.$childMenu['item_label_color'].'; background-color:'.$childMenu['item_label_bg_color'].'"';
+                        $childHtml .= '<span class="md-label-text '.$childMenu['item_label_shape'].'"'.$inlineStyle.'>'.$childMenu['item_label'].'</span>';
+                    }
+                    $childHtml .= '</li>';
+                }
+                $childHtml .= '</ul>';
+            }
+        }
+        $html .= $childHtml;
+        $transportObject = new \Magento\Framework\DataObject(['html' => $html]);
+        $html = $transportObject->getHtml();
+        return $html;
+    }
+    /**
+     * @param $outermostClass
+     * @param $childrenWrapClass
+     * @param $limit
+     * @return string
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     */
+    public function getMegaMenuHtml($outermostClass, $childrenWrapClass, $limit)
+    {
+        $this->_eventManager->dispatch(
+            'page_block_html_topmenu_gethtml_before',
+            ['menu' => $this->_menu, 'block' => $this,'request' => $this->getRequest()]
+        );
+        $this->_menu->setOutermostClass($outermostClass);
+        $this->_menu->setChildrenWrapClass($childrenWrapClass);
+
+        $html = $this->_getHtml($this->_menu, $childrenWrapClass, $limit);
+
+        if ($this->helper->isEnabled() && $this->isPrimaryMenuSelected()) {
+            if ($this->primaryMenu->getIsActive()) {
+                $menuItems = $this->megamenuManagement->loadMenuItems(0, 'ASC');
+                if ($this->primaryMenu->getMenuType() == Menu::MEGA_MENU) {
+                    $html = '';
+                    foreach ($menuItems as $item) {
+                        $childrenWrapClass = "level0 nav-1 first parent main-parent";
+                        if ($this->isCategoryInactive($item)) {
+                            continue;
+                        }
+                        $html .= $this->setMegamenu($item, $childrenWrapClass);
+                    }
+                } else {
+                    $parent = 'root';
+                    $level = 0;
+                    $html = $this->setPrimaryMenu($menuItems, $level, $parent, $outermostClass);
+                }
+            }
+        }
+        $transportObject = new \Magento\Framework\DataObject(['html' => $html]);
+        $this->_eventManager->dispatch(
+            'page_block_html_topmenu_gethtml_after',
+            ['menu' => $this->_menu, 'transportObject' => $transportObject]
+        );
+        $html = $transportObject->getHtml();
+        return $html;
+    }
+    /**
+     * @param $outermostClass
+     * @param $childrenWrapClass
+     * @param $limit
+     * @return string
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     */
+    public function getAllCategoryMegaMenuHtml($menuId, $outermostClass, $childrenWrapClass, $limit)
+    {
+        $this->allCategoryMenu = $this->getAllCategoryMenuObj($menuId);
+        if ($this->helper->isEnabled() && $this->allCategoryMenu->getIsActive()) {
+            $menuItems = $this->megamenuManagement->loadMenuItems(0, 'ASC', $menuId); // static id
+            if ($this->allCategoryMenu->getMenuType() == Menu::MEGA_MENU) {
+                /* If Megamenu then It will display here */
+                $html = '';
+                foreach ($menuItems as $item) {
+                    $childrenWrapClass = "level0 nav-1 first parent main-parent";
+                    if ($this->isCategoryInactive($item)) {
+                        continue;
+                    }
+                    $html .= $this->setAllCategoryLeftMegamenu($menuId, $item, $childrenWrapClass);
+                }
+            } else {
+                $parent = 'root';
+                $level = 0;
+                $html = $this->setPrimaryMenu($menuItems, $level, $parent, $outermostClass, $menuId);
+            }
+        } else {
+            $html = $this->_getHtml($this->_menu, $childrenWrapClass, $limit);
+        }
+        $transportObject = new \Magento\Framework\DataObject(['html' => $html]);
+        $html = $transportObject->getHtml();
+        return $html;
+    }
+    /**
+     * @param $outermostClass
+     * @param $childrenWrapClass
+     * @param $limit
+     * @return string
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     */
+    public function getAllCategoryRightMegaMenuHtml($menuId, $outermostClass, $childrenWrapClass, $limit)
+    {
+        $this->allCategoryMenu = $this->getAllCategoryMenuObj($menuId);
+        if ($this->helper->isEnabled() && $this->allCategoryMenu->getIsActive()) {
+            $menuItems = $this->megamenuManagement->loadMenuItems(0, 'ASC', $menuId); // static id
+            if ($this->allCategoryMenu->getMenuType() == Menu::MEGA_MENU) {
+                /* If Megamenu then It will display here */
+                $html = '';
+                foreach ($menuItems as $item) {
+                    $childrenWrapClass = "level0 nav-1 first parent main-parent";
+                    if ($this->isCategoryInactive($item)) {
+                        continue;
+                    }
+                    $html .= $this->setAllCategoryRightMegamenu($item, $childrenWrapClass);
+                }
+            } else {
+                $parent = 'root';
+                $level = 0;
+                $html = $this->setPrimaryMenu($menuItems, $level, $parent, $outermostClass);
+            }
+        } else {
+            $html = $this->_getHtml($this->_menu, $childrenWrapClass, $limit);
+        }
+        $transportObject = new \Magento\Framework\DataObject(['html' => $html]);
+        $html = $transportObject->getHtml();
+        return $html;
+    }
+
+    /**
+     * @param $menuItems
+     * @param $level
+     * @param $parent
+     * @param $outermostClass
+     * @return string
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    public function setPrimaryMenu($menuItems, $level = 0, $parent = '', $outermostClass = '', $menuId = '')
+    {
+        $megaMenuItemData = [
+            'menu_block' => $this,
+            'menu_items' => $menuItems,
+            'level' => $level,
+            'parent_node' => $parent,
+            'menu_management' => $this->megamenuManagement,
+            'menu' => ($menuId) ? $this->megamenuManagement->loadMenuById($menuId) : ''
+        ];
+        /*$megaMenuItemBlock = $this->getLayout()->createBlock('Magento\Framework\View\Element\Template');*/
+        $megaMenuItemBlock = $this->templateFactory->create();
+        /** @var $megaMenuItemBlock \Magento\Framework\View\Element\Template */
+        $megaMenuItemBlock->setData($megaMenuItemData);
+        $megaMenuItemBlock->setTemplate('Magedelight_Megamenu::menu/items/primaryMenu.phtml');
+        return trim(preg_replace('/\s\s+/', ' ', $megaMenuItemBlock->toHtml()));
+    }
+
+    /**
+     * @param $item \Magedelight\Megamenu\Model\MenuItems|\Magedelight\Megamenu\Api\Data\MenuItemsInterface
+     * @param $key
+     * @param $value
+     * @return mixed
+     */
+    public function getCmsBlockConfig($item, $key, $value)
+    {
+        $blockType = ['header','bottom','left','right'];
+        if ($value == 'enable') {
+            $initValue = 0;
+        }
+        if ($value == 'block') {
+            $initValue = "";
+        }
+        if ($value == 'title') {
+            $initValue = "0";
+        }
+        $config[$key] = [$value => $initValue];
+        if ($item->getCategoryColumns()) {
+            $categoryColumns = json_decode($item->getCategoryColumns());
+            foreach ($categoryColumns as $categoryColumn) {
+                foreach ($blockType as $type) {
+                    if ($categoryColumn->type === $type) {
+                        $config[$type] = [
+                            'enable' => (int) $categoryColumn->enable,
+                            'block' => $categoryColumn->value,
+                            'title' => $categoryColumn->showtitle
+                        ];
+                    }
+                }
+            }
+        }
+        return $config[$key][$value];
+    }
+
+    /**
+     * @param $item \Magedelight\Megamenu\Model\MenuItems|\Magedelight\Megamenu\Api\Data\MenuItemsInterface
+     * @param $childrenWrapClass
+     * @return string
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     */
+    public function setMegamenu($item, $childrenWrapClass)
+    {
+        $html = '';
+        $megaMenuItemData = [
+            'menu_block' => $this,
+            'menu_item' => $item,
+            'menu_management' => $this->megamenuManagement,
+            'primary_menu'=> $this->primaryMenu
+        ];
+        /*$megaMenuItemBlock = $this->getLayout()->createBlock('Magento\Framework\View\Element\Template');*/
+        $megaMenuItemBlock = $this->templateFactory->create();
+        /** @var $megaMenuItemBlock \Magento\Framework\View\Element\Template */
+        $megaMenuItemBlock->setData($megaMenuItemData);
+        if ($item->getItemType() == 'megamenu') {
+            $megaMenuItemBlock->setTemplate('Magedelight_Megamenu::menu/items/megaMenuItemBlock.phtml');
+            $html .= trim(preg_replace('/\s\s+/', ' ', $megaMenuItemBlock->toHtml()));
+        } else {
+            if ($this->primaryMenu->getMenuDesignType() == 'horizontal-vertical') {
+                $megaMenuItemBlock->setTemplate('Magedelight_Megamenu::menu/items/horVerMenuItemBlock.phtml');
+            } else {
+                $megaMenuItemBlock->setTemplate('Magedelight_Megamenu::menu/items/menuItemBlock.phtml');
+            }
+            $html .= trim(preg_replace('/\s\s+/', ' ', $megaMenuItemBlock->toHtml()));
+        }
+        return $html;
+    }
+    /**
+     * @param $item \Magedelight\Megamenu\Model\MenuItems|\Magedelight\Megamenu\Api\Data\MenuItemsInterface
+     * @param $childrenWrapClass
+     * @return string
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     */
+    public function setAllCategoryLeftMegamenu($menuId, $item, $childrenWrapClass)
+    {
+        $html = '';
+        $megaMenuItemData = [
+            'menu_block' => $this,
+            'menu_item' => $item,
+            'menu_management' => $this->megamenuManagement,
+            'menu_id' => $menuId
+        ];
+        /*$megaMenuItemBlock = $this->getLayout()->createBlock('Magento\Framework\View\Element\Template');*/
+        /** @var $megaMenuItemBlock \Magento\Framework\View\Element\Template */
+        $megaMenuItemBlock = $this->templateFactory->create();
+        $megaMenuItemBlock->setData($megaMenuItemData);
+        $megaMenuItemBlock->setTemplate('Magedelight_Megamenu::menu/items/allCategoryMenuItemBlockFirstLevel.phtml');
+            $html .= trim(preg_replace('/\s\s+/', ' ', $megaMenuItemBlock->toHtml()));
+        return $html;
+    }
+    /**
+     * @param $item \Magedelight\Megamenu\Model\MenuItems|\Magedelight\Megamenu\Api\Data\MenuItemsInterface
+     * @param $childrenWrapClass
+     * @return string
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     */
+    public function setAllCategoryRightMegamenu($item, $childrenWrapClass)
+    {
+        $html = '';
+        $megaMenuItemData = [
+            'menu_block' => $this,
+            'menu_item' => $item,
+            'menu_management' => $this->megamenuManagement
+        ];
+        /*$megaMenuItemBlock = $this->getLayout()->createBlock('Magento\Framework\View\Element\Template');*/
+        /** @var $megaMenuItemBlock \Magento\Framework\View\Element\Template */
+        $megaMenuItemBlock = $this->templateFactory->create();
+        $megaMenuItemBlock->setData($megaMenuItemData);
+        if ($item->getItemType() == 'megamenu') {
+            $megaMenuItemBlock->setTemplate('Magedelight_Megamenu::menu/items/allCategoryMegaMenuItemBlock.phtml');
+            $html .= trim(preg_replace('/\s\s+/', ' ', $megaMenuItemBlock->toHtml()));
+        } else {
+            $megaMenuItemBlock->setTemplate('Magedelight_Megamenu::menu/items/allCategoryMenuItemBlock.phtml');
+            $html .= trim(preg_replace('/\s\s+/', ' ', $megaMenuItemBlock->toHtml()));
+        }
+        return $html;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMenuClass()
+    {
+        $class = "menu ";
+        $class .= $this->primaryMenu->getMenuDesignType().' ';
+        $class .= $this->primaryMenu->getMenuAlignment() ?? '';
+        $class .= $this->primaryMenu->getIsSticky() == '1' ? 'stickymenu ' : '';
+        return $class;
+    }
+
+    /**
+     * @param $menuItem \Magedelight\Megamenu\Model\MenuItems|\Magedelight\Megamenu\Api\Data\MenuItemsInterface
+     * @return string
+     */
+    public function getActiveClass($menuItem)
+    {
+        if ($menuItem->getItemType() == 'category') {
+            if ($menuItem->getObjectId() == $this->getCurrentCat()) {
+                return ' active';
+            }
+        } elseif ($menuItem->getItemType() == 'pages') {
+            if ($menuItem->getObjectId() == $this->getCurentPage()) {
+                return ' active';
+            }
+        }
+        return '';
+    }
+
+    /**
+     * @param $menuItems
+     * @param $key
+     * @return string
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    public function getChildColumnForMenuType($menuItems, $key)
+    {
+        $megaMenuItemData = [
+            'menu_block' => $this,
+            'menu_items' => $menuItems,
+            'items_key' => $key,
+            'menu_management' => $this->megamenuManagement
+        ];
+        /*$megaMenuItemBlock = $this->getLayout()->createBlock('Magento\Framework\View\Element\Template');*/
+        /** @var $megaMenuItemBlock \Magento\Framework\View\Element\Template */
+        $megaMenuItemBlock = $this->templateFactory->create();
+        $megaMenuItemBlock->setData($megaMenuItemData);
+        $megaMenuItemBlock->setTemplate('Magedelight_Megamenu::menu/items/megaMenuItemBlock/typeMenu.phtml');
+        return trim(preg_replace('/\s\s+/', ' ', $megaMenuItemBlock->toHtml()));
+    }
+
+    /**
+     * @param $menuItems
+     * @param $key
+     * @return string
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    public function getChildColumnForMenuTypeBlock($menuItems, $key)
+    {
+        $megaMenuItemData = [
+            'menu_block' => $this,
+            'menu_items' => $menuItems,
+            'items_key' => $key,
+            'menu_management' => $this->megamenuManagement
+        ];
+        /*$megaMenuItemBlock = $this->getLayout()->createBlock('Magento\Framework\View\Element\Template');*/
+        /** @var $megaMenuItemBlock \Magento\Framework\View\Element\Template */
+        $megaMenuItemBlock = $this->templateFactory->create();
+        $megaMenuItemBlock->setData($megaMenuItemData);
+        $megaMenuItemBlock->setTemplate('Magedelight_Megamenu::menu/items/megaMenuItemBlock/typeBlock.phtml');
+        return trim(preg_replace('/\s\s+/', ' ', $megaMenuItemBlock->toHtml()));
+    }
+
+    /**
+     * @param $menuItems
+     * @param $key
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     */
+    public function getChildColumnForMenuTypeCategory($menuItems, $key)
+    {
+        $category = $this->megamenuManagement->getCategoryById($menuItems[$key]->value);
+        if ($category) {
+            $megaMenuItemData = [
+                'menu_block' => $this,
+                'menu_items' => $menuItems,
+                'items_key' => $key,
+                'menu_management' => $this->megamenuManagement,
+                'category' => $category,
+                'sub_category' => $this->megamenuManagement->getChildrenCategoriesById($category->getId())
+            ];
+            /*$megaMenuItemBlock = $this->getLayout()->createBlock('Magento\Framework\View\Element\Template');*/
+            /** @var $megaMenuItemBlock \Magento\Framework\View\Element\Template */
+            $megaMenuItemBlock = $this->templateFactory->create();
+            $megaMenuItemBlock->setData($megaMenuItemData);
+            $megaMenuItemBlock->setTemplate('Magedelight_Megamenu::menu/items/megaMenuItemBlock/typeCategory.phtml');
+            return trim(preg_replace('/\s\s+/', ' ', $megaMenuItemBlock->toHtml()));
+        }
+    }
+
+    /**
+     * @param $menuItems
+     * @param $key
+     * @param $category
+     * @param $subCats
+     * @return string
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     */
+    public function getChildColumnForSubCategory($menuItems, $key, $category, $subCats, $skipTitle = false, $level = 1)
+    {
+        $childHtml = '';
+        if (!$skipTitle) {
+            $categoryArray = $this->prepareCategoryItemsForMenuColumn($subCats, $menuItems[$key]);
+        } else {
+            $categoryArray = $subCats;
+        }
+        /** @var $category \Magento\Catalog\Model\Category */
+        if ($menuItems[$key]->showtitle == '1' && !$skipTitle) {
+            $childHtml .= '<h2>' . __($category->getName()) . '</h2>';
+        }
+
+        $childHtml .= '<ul class="child-column-megamenu-block child-level-'.$level.'">';
+        foreach ($categoryArray as $cat) {
+            $verticalclass = $cat['id'] == $this->getCurrentCat() ? 'active' : '';
+            $liClass = count($cat['childrens']) > 0 ? 'cat-has-child' : 'cat-no-child';
+            $childHtml .= '<li class="'.$liClass.' '.$verticalclass.'">';
+            $childHtml .= '<a href="'.$cat['url'].'">'.__($cat['label']).'</a>';
+            if (!empty($cat['childrens'])) {
+                $childHtml .= $this->getChildColumnForSubCategory($menuItems, $key, $category, $cat['childrens'], true, $level+1);
+            }
+            $childHtml .= '</li>';
+        }
+        $childHtml .= '</ul>';
+        return $childHtml;
+    }
+
+    /**
+     * @param $subcats
+     * @param $item
+     * @param int $level
+     * @return array
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     */
+    public function prepareCategoryItemsForMenuColumn($subcats, $item, $level = 1)
+    {
+        $leftArray = [];
+        foreach ($subcats as $subcat) {
+            $maxLevel = $item->categoryLevel ? (int) $item->categoryLevel : 2;
+            if ($maxLevel < $level) {
+                break;
+            }
+            //$_category = $this->megamenuManagement->getCategoryById($subcat->getId());
+            $childrenCats = $this->megamenuManagement->getChildrenCategoriesById($subcat->getId());
+            $group = [
+                'id' => $subcat->getId(),
+                'label' => $subcat->getName(),
+                'url' => $subcat->getUrl(),
+                'position' => $subcat->getPosition(),
+                'childrens' => $this->prepareCategoryItemsForMenuColumn($childrenCats, $item, $level+1)
+            ];
+            $leftArray[] = $group;
+        }
+        return $this->sortByOrder($leftArray, $item);
+    }
+
+    /**
+     * @param $categoryArray
+     * @param $item
+     * @return mixed
+     */
+    public function sortByOrder($categoryArray, $item)
+    {
+        usort($categoryArray, function ($x, $y) {
+            return strcasecmp($x['position'], $y['position']);
+        });
+        if ($item->catSortBy && $item->catSortOrder) {
+            if ($item->catSortBy == 'name' && $item->catSortOrder == 'asc') {
+                usort($categoryArray, function ($x, $y) {
+                    return strcasecmp($x['label'], $y['label']);
+                });
+            }
+            if ($item->catSortBy == 'name' && $item->catSortOrder == 'desc') {
+                usort($categoryArray, function ($x, $y) {
+                    return strcasecmp($y['label'], $x['label']);
+                });
+            }
+            if ($item->catSortBy == 'position' && $item->catSortOrder == 'desc') {
+                usort($categoryArray, function ($x, $y) {
+                    return strcasecmp($y['position'], $x['position']);
+                });
+            }
+        }
+        return $categoryArray;
+    }
+
+    /**
+     * @param $subcats
+     * @param $item
+     * @param bool $childs
+     * @param int $level
+     * @return string
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     */
+    public function setChildCategoryColumn($subcats, $item, $columnCount = 0, $childs = false, $level = 1)
+    {
+        if (!$childs) {
+            $categoryArray = $this->prepareCategoryItems($subcats, $item);
+        } else {
+            $categoryArray = $subcats;
+        }
+        if (!$categoryArray) {
+            return '';
+        }
+        $html = '';
+        $ulClass = '';
+        $countChild = '';
+        if ($columnCount !== 0) {
+            $ulClass .= 'column'.$columnCount.' child-level-1';
+        } else {
+            $ulClass .= 'child-level-'.$level;
+        }
+        $openInNewTabText = '';
+        if ($item->getOpenInNewTab()) {
+            $openInNewTabText = 'target="_blank"';
+        }
+        $html .= '<ul class="'.$ulClass.'">';
+        foreach ($categoryArray as $cat) {
+            $verticalclass = $cat['id'] == $this->getCurrentCat() ? 'active' : '';
+            $uniqueClass = 'category-item nav-'.$item->getItemId().'-'.$cat['id'];
+            if ($item->getCategoryDisplay()) {
+                $countChild = $this->getCategoryCount($cat['id']);
+            }
+            if ($item->getProductDisplay()) {
+                $countChild = $this->getProductCount($cat['id']);
+            }
+            $liClass = $uniqueClass.' '.$verticalclass;
+            $html .= '<li class='.$liClass.'">';
+            $html .= '<a href="'.$cat['url'].'" '.$openInNewTabText.'>'.__($cat['label']).$countChild.$this->getCategoryMenuLabelHtml($cat['id']).'</a>';
+            if ($item->getProductDisplay()) {
+                $html .= $this->getCategoryProducts($cat, $item, $level+1);
+            } else {
+                //$html .= $this->setChildCategoryColumn($cat['childrens'],$item,0,true,$level+1);
+                $html .= $this->setVerticalChildCategoryColumn($cat['childrens'], $item, 0, true, $level+1);
+            }$html .= '</li>';
+        }
+        $html .= '</ul>';
+        return $html;
+    }
+    /**
+     * @param $subcats
+     * @param $item
+     * @param bool $childs
+     * @param int $level
+     * @return string
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     */
+    public function setAllCatChildCategoryColumn($subcats, $item, $menuId, $columnCount = 0, $childs = false, $level = 1)
+    {
+        if (!$childs) {
+            $categoryArray = $this->prepareCategoryItems($subcats, $item);
+        } else {
+            $categoryArray = $subcats;
+        }
+
+        if (!$categoryArray) {
+            return '';
+        }
+        $html = '';
+        $ulClass = '';
+        $isLevel2 = false;
+        $count = 0;
+        $hidden = '';
+        $noOfSubCategoryToShow = $this->getNoOfSubCategoryToShow($menuId);
+        if ($columnCount !== 0) {
+            $ulClass .= 'column'.$columnCount.' child-level-1';
+        } else {
+            $ulClass .= 'child-level-'.$level;
+            if ($level == 2) {
+                $isLevel2 = true;
+            }
+        }
+        $html .= '<ul class="'.$ulClass.'">';
+        foreach ($categoryArray as $cat) {
+            $catIconImgHtml = $this->getCategoryIconImageHtml($cat['id']);
+            $countChild = $this->getChildCategoryCount($cat);
+            $verticalclass = $cat['id'] == $this->getCurrentCat() ? 'active' : '';
+            $uniqueClass = 'category-item nav-'.$item->getItemId().'-'.$cat['id'];
+            $liClass = $uniqueClass.' '.$verticalclass;
+            if ($isLevel2 && $count == $noOfSubCategoryToShow) {
+                $hidden = 'style="display: none"';
+            }
+            $html .= '<li class="'.$liClass.'" '.$hidden.'>';
+            $html .= '<a href="'.$cat['url'].'">'.$catIconImgHtml.__($cat['label']).'<span class="category_count">'.$countChild.'</span>'.$this->getCategoryMenuLabelHtml($cat['id']).'</a>';
+            $html .= $this->setAllCatChildCategoryColumn($cat['childrens'], $item, $menuId, 0, true, $level+1);
+            $html .= '</li>';
+            $count++;
+        }
+        //if($this->isAllCategoryMegaMenuSelected($menuId)){
+        if ($isLevel2 && count($categoryArray) > $noOfSubCategoryToShow) {
+            $html .= '<li class="show_less" '.$hidden.'><a href="#">Show Less</a></li><li class="show_more"><a href="#">Show More</a></li>';
+        }
+        //}
+        $html .= '</ul>';
+        return $html;
+    }
+
+    /**
+     * @param $subcats
+     * @return array
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     */
+    public function prepareCategoryItems($subcats, $item, $level = 1)
+    {
+        $leftArray = [];
+        $sortArray = "";
+        /** @var $subcats \Magento\Catalog\Model\ResourceModel\Category\Collection */
+        if ($item->getVerticalCatSortby() && $item->getVerticalCatSortorder()) {
+            $sortArray = [
+                'sort_by' => $item->getVerticalCatSortby(),
+                'sort_order' => $item->getVerticalCatSortorder()
+            ];
+        }
+        foreach ($subcats as $subcat) {
+            if (in_array($subcat->getId(), $this->getExcludeCategoryItemId($item))) {
+                continue;
+            }
+            $maxLevel = $item->getVerticalCatLevel() ? (int) $item->getVerticalCatLevel() : 2;
+            if ($maxLevel < $level) {
+                break;
+            }
+            $_category = $this->megamenuManagement->getCategoryById($subcat->getId());
+            $childrenCats = $this->megamenuManagement->getChildrenCategoriesById($subcat->getId(), $sortArray);
+            $group = [
+                'id' => $subcat->getId(),
+                'label' => $_category->getMdMenuTitle() ? $_category->getMdMenuTitle() : $_category->getName(),
+                'url' => $_category->getUrl(),
+                'childrens' => $this->prepareCategoryItems($childrenCats, $item, $level+1)
+            ];
+            $leftArray[] = $group;
+        }
+        return $leftArray;
+    }
+
+    /**
+     * @param $item
+     * @return array
+     */
+    public function getExcludeCategoryItemId($item)
+    {
+        $categories = [];
+        $excludeCategory = $item->getVerticalCatExclude();
+        if ($excludeCategory) {
+            $categories = explode(',', $excludeCategory);
+        }
+        return $categories;
+    }
+
+    /**
+     * @param $item
+     * @param $subcats
+     * @return string
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     */
+    public function setVerticalCategoryItem($item, $subcats)
+    {
+        $leftArray = $this->prepareCategoryItems($subcats, $item);
+        $childHtml = '<div class="col-menu-9 vertical-menu-content">';
+        $html = '<div class="col-menu-3 vertical-menu-left" style="background:#'.$item->getCategoryVerticalMenuBg().';">';
+        $html .= '<ul class="vertical-menu-left-nav">';
+        $level = 1;
+        foreach ($leftArray as $key => $subcat) {
+            $verticalclass = $subcat['id'] == $this->getCurrentCat() ? 'active' : '';
+            $addDropdownClass = !empty($childrenCats) ? " dropdown" : "";
+            $uniqueClass = 'menu-vertical-items nav-'.$item->getItemId();
+            $liClass = $uniqueClass.' '.$verticalclass.' '.$addDropdownClass;
+            $datToggle = 'subcat-tab-'.$subcat['id'];
+            $html .= '<li class="'.$liClass.'" data-toggle="'.$datToggle.'">';
+            $html .= '<a href="'.$subcat['url'].'">'.__($subcat['label']).'</a>';
+            $html .= '</li>';
+            if ($item->getProductDisplay()) {
+                $childHtml .= '<div id="'. $datToggle .'" class="vertical-subcate-content">';
+                $childHtml .= $this->getCategoryProducts($subcat, $item, $level+1);
+                $childHtml .= '</div>';
+            } else {
+                $childHtml .= $this->setVerticalRightParentItem($subcat);
+            }
+        }
+        $html .= '</ul>';
+        // End Left Column
+        $html .= '</div>';
+        $childHtml .= '</div>';
+        return $html.$childHtml;
+    }
+
+    /**
+     * @param $childrens
+     * @return string
+     */
+    public function setVerticalRightParentItem($childrens)
+    {
+        $html = '';
+        $columnCountForVerticalMenu = count($childrens['childrens']) >= 3 ? 3 : count($childrens['childrens']);
+        $html .= '<div id="subcat-tab-' . $childrens['id'] . '" class="vertical-subcate-content">';
+        $html .= '<ul class="menu-vertical-child child-level-3 column' . $columnCountForVerticalMenu . '">';
+        foreach ($childrens['childrens'] as $child) {
+            $verticalclass = $child['id'] == $this->getCurrentCat() ? 'active' : '';
+            $html .= '<li class="' . $verticalclass . '">';
+            $html .= '<h4 class="level-3-cat">';
+            $html .= '<a href="' . $child['url'] . '">' . $child['label'] . '</a>';
+            $html .= '</h4>';
+            $html .= $this->setVerticalRightChildItem($child);
+            $html .= '</li>';
+        }
+        $html .= '</ul>';
+        $html .= '</div>';
+        return $html;
+    }
+
+    /**
+     * @param $childrens
+     * @return string
+     */
+    public function setVerticalRightChildItem($childrens, $level = 4)
+    {
+        $html = '';
+        if (empty($childrens['childrens'])) {
+            return '';
+        }
+        $html .= '<ul class="menu-vertical-child-item child-level-'.$level.'">';
+        foreach ($childrens['childrens'] as $child) {
+            $verticalclass = $child['id'] == $this->getCurrentCat() ? 'active' : '';
+            $html .= '<li class="' . $verticalclass . '">';
+            $html .= '<a href="' . $child['url'] . '">' . $child['label'] . '</a>';
+            if (!empty($child['childrens'])) {
+                $html .= $this->setVerticalRightChildItem($child, $level+1);
+            }
+            $html .= '</li>';
+        }
+        $html .= '</ul>';
+        return $html;
+    }
+
+    /**
+     * @param $id
+     * @return mixed
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    public function getBlockObjectHtml($id)
+    {
+        $blockObject = $this->getLayout()->createBlock('Magento\Cms\Block\Block');
+        $blockObject->setBlockId($id);
+        return $blockObject->toHtml();
+    }
+
+    /**
+     * @param $id
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    public function createCmsBlockHtml($id, $title, $class)
+    {
+        $html = '';
+        $headerblock = $this->megamenuManagement->loadCmsBlock($id);
+        $html .= '<li class="'.$class.'">';
+        if ($title === '1') {
+            $html .= '<h2>' . $headerblock->getTitle() . '</h2>';
+        }
+        $html .= '<ul><li>' . $this->getBlockObjectHtml($id) . '</li>';
+        $html .= '</ul></li>';
+        return $html;
+    }
+
+    /**
+     * @return string
+     */
+    public function menuStyleHtml()
+    {
+        if (!is_null($this->primaryMenu->getMenuStyle())) {
+            if (!empty(trim($this->primaryMenu->getMenuStyle()))) {
+                 return '<style>' . $this->primaryMenu->getMenuStyle() . '</style>';
+            }
+        }
+        return '';
+    }
+
+    /**
+     * @return mixed
+     */
+    public function animationTime()
+    {
+        return $this->helper->getConfig('magedelight/general/animation_time');
+    }
+
+    /**
+     * @return bool
+     */
+    public function getConfigBurgerStatus()
+    {
+        if ($this->helper->isEnabled() && $this->helper->isHumbergerMenu()) {
             return true;
         }
 
         return false;
     }
-
-     /**
-      * Return categories helper
-      */
-    public function getCategoryHelper()
-    {
-        return $this->categoryHelper;
-    }
-
-    /**
-     * Retrieve current store categories
-     *
-     * @param bool|string $sorted
-     * @param bool $asCollection
-     * @param bool $toLoad
-     * @return \Magento\Framework\Data\Tree\Node\Collection|\Magento\Catalog\Model\Resource\Category\Collection|array
-     */
-    public function getStoreCategories($sorted = false, $asCollection = false, $toLoad = true)
-    {
-        return $this->categoryHelper->getStoreCategories($sorted, $asCollection, $toLoad);
-    }
-    /**
-     * Retrieve child store categories
-     *
-     */
-    public function getChildCategories($category)
-    {
-        if ($this->categoryFlatState->isFlatEnabled() && $category->getUseFlatResource()) {
-             $subcategories = (array)$category->getChildrenNodes();
-        } else {
-            $subcategories = $category->getChildren();
-        }
-            return $subcategories;
-    }
-
 
     /**
      * @param Node $item
@@ -955,7 +1182,7 @@ class Topmenu extends MagentoTopmenu
     {
         $classes = parent::_getMenuItemClasses($item);
 
-         /* Burger menu for desktop */
+        /* Burger menu for desktop */
         if ($this->getConfigBurgerStatus()) {
             if ($item->getLevel() == 1) {
                 if (!empty($this->mdColumnCount) && $this->mdColumnCount != 0) {
@@ -985,8 +1212,7 @@ class Topmenu extends MagentoTopmenu
 
         if ($childLevel == 0) {
             $catIdArray = explode('-', $child->getId());
-            // $this->categoryData = $this->categoryFactory->create()->load(end($catIdArray));
-            $this->categoryData = $this->categoryFactory->create()->setStoreId($this->getStoreId())->load(end($catIdArray));
+            $this->categoryData = $this->megamenuManagement->getCategoryById(end($catIdArray));
             $getLabel = $this->categoryData->getData('md_label');
             $this->getDescription = $this->categoryData->getData('md_category_editor');
             $color = $this->categoryData->getData('md_label_text_color');
@@ -1018,5 +1244,329 @@ class Topmenu extends MagentoTopmenu
         }
 
         return $html;
+    }
+    /**
+     * @return object
+     */
+    public function getPrimaryMenuObj()
+    {
+        if ($this->helper->isEnabled()) {
+            $_customerSession = $this->customerSession->create();
+            if ($_customerSession->isLoggedIn()) {
+                $this->primaryMenu = $this->megamenuManagement->getMenuData($_customerSession->getCustomerId())->getMenu();
+            } else {
+                $this->primaryMenu = $this->megamenuManagement->getMenuData()->getMenu();
+            }
+        }
+        return $this->primaryMenu;
+    }
+    /**
+     * @param $outermostClass
+     * @param $childrenWrapClass
+     * @param $limit
+     * @return string
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     */
+    public function getHorizontalMenuHtml($outermostClass, $childrenWrapClass, $limit)
+    {
+        $this->primaryMenu = $this->getPrimaryMenuObj();
+        if ($this->helper->isEnabled() && $this->primaryMenu->getIsActive()) {
+            $menuItems = $this->megamenuManagement->loadMenuItems(0, 'ASC');
+            if ($this->primaryMenu->getMenuType() == Menu::MEGA_MENU) {
+                $html = '';
+                foreach ($menuItems as $item) {
+                    $childrenWrapClass = "level0 nav-1 first parent main-parent";
+                    $html .= $this->setMegamenu($item, $childrenWrapClass);
+                }
+            } else {
+                $parent = 'root';
+                $level = 0;
+                $html = $this->setPrimaryMenu($menuItems, $level, $parent, $outermostClass);
+            }
+        } else {
+            $html = $this->_getHtml($this->getMenu(), $childrenWrapClass, $limit);
+        }
+        $transportObject = new \Magento\Framework\DataObject(['html' => $html]);
+        $html = $transportObject->getHtml();
+        return $html;
+    }
+    /*
+    *@param $item
+    *@return bool
+    */
+    public function isCategoryInactive($item)
+    {
+        try {
+            if ($item->getItemType() == 'category') {
+                $category = $this->categoryRepository->get($item->getObjectId());
+                if (!$category->getIsActive()) {
+                    return true;
+                }
+            }
+        } catch (NoSuchEntityException $e) {
+            return false;
+        }
+        return false;
+    }
+    /**
+     * @return int
+     */
+    public function isAllCategoryMegaMenuSelected($menuId)
+    {
+        if ($this->helper->isEnabled()) {
+            $allCategoryMenu = $this->getAllCategoryMenuObj($menuId);
+            if ($allCategoryMenu->getIsActive() &&
+                $allCategoryMenu->getMenuType() == Menu::MEGA_MENU
+                && $allCategoryMenu->getMenuDesignType() == self::ALL_CATEGORY_MENU) {
+                return true;
+            }
+        }
+        return false;
+    }
+    public function getNoOfSubCategoryToShow($menuId)
+    {
+        $allCategoryMenu = $this->getAllCategoryMenuObj($menuId);
+        if ($this->isAllCategoryMegaMenuSelected($menuId)) {
+            return $allCategoryMenu->getNoOfSubCategoryToShow();
+        }
+        return 3;
+    }
+    /**
+     * @return object
+     */
+    public function getAllCategoryMenuObj($menuId)
+    {
+        if (!$this->helper->isEnabled()) {
+            return null;
+        }
+        if (isset($this->allCategoryMenuData[$menuId])) {
+            return $this->allCategoryMenuData[$menuId];
+        }
+        $this->allCategoryMenuData[$menuId] = $this->megamenuManagement->loadMenuById($menuId);
+
+        return $this->allCategoryMenuData[$menuId];
+    }
+    public function getAllCategoryMenuTitle($menuId)
+    {
+        $allCategoryMenuObj = $this->getAllCategoryMenuObj($menuId);
+        return $allCategoryMenuObj->getVerticalMenuTitle();
+    }
+    /**
+     * @return String
+     */
+    public function getAllCategoryNavigationClass($menuId)
+    {
+        $verticalNavigationClasses = '';
+        if ($this->isAllCategoryMegaMenuSelected($menuId)) {
+            $verticalNavigationClasses = 'all-category-megamenu-navigation';
+        } else {
+            $verticalNavigationClasses =  'vertical-navigation';
+        }
+        return $verticalNavigationClasses;
+    }
+    public function getShowVerticalMenuOn($menuId)
+    {
+        $allCategoryMenuObj = $this->getAllCategoryMenuObj($menuId);
+        return $allCategoryMenuObj->getShowVerticalMenuOn();
+    }
+    public function getCategoryIconImageHtml($categoryId)
+    {
+        $category = $this->categoryRepository->get($categoryId);
+        $catImageHtml = '';
+        if ($_imgUrl = $this->getCategoryIconImage()->getUrl($category)) {
+            $catImageHtml = '<span class="category-icon-image"><img src="'
+                . $this->escapeUrl($_imgUrl)
+                . '" alt="'
+                . $this->escapeHtmlAttr($category->getName())
+                . '" title="'
+                . $this->escapeHtmlAttr($category->getName())
+                . '" /></span>';
+        }
+        return $catImageHtml;
+    }
+
+    public function getChildCategoryCount($cat)
+    {
+        $categoryId = $cat['id'];
+        $category = $this->categoryRepository->get($categoryId);
+        $childCatCount = '';
+        if ($countChild = $category->getChildrenCount()) {
+            $childCatCount = ' ('.$countChild.')';
+        }
+        return $childCatCount;
+    }
+
+    public function getAllCategoryMenuItems()
+    {
+        $allCategoryMenuItemCollection = $this->megamenuManagement->loadAllMegaMenus();
+        $allCategoryMenuItemCollection = $allCategoryMenuItemCollection->addFieldToFilter('menu_design_type', self::ALL_CATEGORY_MENU);
+        return $allCategoryMenuItemCollection;
+    }
+
+    public function isAllCategoryMenuCreated()
+    {
+        if ($this->getAllCategoryMenuItems() && count($this->getAllCategoryMenuItems()) > 0) {
+            return true;
+        }
+        return false;
+    }
+    /**
+     * @param \Magento\Framework\Data\Tree\Node $child
+     * @param string $childLevel
+     * @param string $childrenWrapClass
+     * @param int $limit
+     * @return string
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    public function getCategoryMenuLabelHtml($categoryId)
+    {
+        $html = '';
+        $this->categoryData = $this->megamenuManagement->getCategoryById($categoryId);
+        $getLabel = $this->categoryData->getData('md_label');
+        $this->getDescription = $this->categoryData->getData('md_category_editor');
+        $color = $this->categoryData->getData('md_label_text_color');
+        $backgroundColor = $this->categoryData->getData('md_label_background_color');
+        $labelShape = $this->categoryData->getData('md_label_shape') ? $this->categoryData->getData('md_label_shape') : '' ;
+        if (isset($getLabel) && $getLabel != '') {
+            $html .= '<span class="md-label-text '.$labelShape.'" style="color:'. $color .'!important;background-color:'.
+            $backgroundColor .'!important; ">' .__($getLabel).'</span>';
+        }
+        return $html;
+    }
+    public function isAllCategoryMegamenu($menuId)
+    {
+        $menu = $this->megamenuManagement->loadMenuById($menuId);
+        if ($menu->getMenuType() == Menu::MEGA_MENU) {
+            return true;
+        }
+        return false;
+    }
+    /**
+     * @return int|null
+     */
+    public function isPrimaryMenuSelected()
+    {
+        $primaryMenu = $this->helper->isPrimaryMenuSelected();
+        if ($primaryMenu === self::PRIMARY_NONE) {
+            return null;
+        }
+
+        $menu = $this->megamenuManagement->loadMenuById($primaryMenu);
+        if (!$menu->getIsActive()) {
+            return null;
+        }
+
+        return $primaryMenu;
+    }
+
+    public function getDisplayPosition($menuId)
+    {
+        $allCategoryMenuObj = $this->getAllCategoryMenuObj($menuId);
+        return $allCategoryMenuObj->getDisplayPosition();
+    }
+    public function getDisplayOverlay($menuId)
+    {
+        $allCategoryMenuObj = $this->getAllCategoryMenuObj($menuId);
+        return $allCategoryMenuObj->getDisplayOverlay();
+    }
+    public function getPrimaryMenuDisplayOverlay()
+    {
+        if ($this->primaryMenu->getDisplayOverlay()) {
+            return true;
+        }
+        return false;
+    }
+    public function getCategoryProducts($cat, $item, $level)
+    {
+        $html = '';
+        $categoryId = $cat['id'];
+        $categoryUrl = $cat['url'];
+        $sortBy = $item->getVerticalCatSortby();
+        $sortOrder = $item->getVerticalCatSortorder();
+        $ulClass = 'child-level-'.$level;
+        $showMoreStatus = $this->primaryMenu->getShowViewMore();
+        $noOfSubCategoryToShow = $this->primaryMenu->getNoOfSubCategoryToShow();
+        $excludeProductIds = explode(',', $item->getVerticalCatExclude() ?? '');
+        $category = $this->categoryFactory->create()->load($categoryId);
+        $categoryProducts = $category->getProductCollection()
+                                ->addAttributeToSelect('name')
+                                ->addAttributeToSelect('url_key')
+                                ->addAttributeToSelect('md_menu_label')
+                                ->addAttributeToSelect('md_menu_label_shape')
+                                ->addAttributeToSelect('md_label_text_color')
+                                ->addAttributeToSelect('md_label_background_color')
+                                ->setOrder($sortBy, $sortOrder)
+                                ->addAttributeToFilter('entity_id', ['nin' => $excludeProductIds])
+                                ->setPageSize($noOfSubCategoryToShow);
+        if ($categoryProducts->getSize() < 1) {
+            return '';
+        }
+        $html .= '<ul class="'.$ulClass.'">';
+        foreach ($categoryProducts as $product) {
+            $html .= '<li class="product-item"><a href="'.$product->getProductUrl().'" title="Explore '.$product->getName().'">';
+            $html .= __($product->getName());
+            if ($product->getMdMenuLabel()) {
+                $inlineStyle = 'style="color: '.$product->getMdLabelTextColor().'; background-color:'.$product->getMdLabelBackgroundColor().'"';
+                $html .= '<span class="md-label-text '.$product->getMdMenuLabelShape().'" '.$inlineStyle.'>'.$product->getMdMenuLabel().'</span>';
+            }
+            $html .= '</a></li>';
+        }
+        /*if(count($categoryProducts) > $noOfSubCategoryToShow){*/
+        if ($showMoreStatus) {
+            $html .= '<li class="view_more"><a href="'.$categoryUrl.'">View More</a></li>';
+        }
+        /*}*/
+        $html .= '</ul>';
+        return $html;
+    }
+    public function getAmazonMenus()
+    {
+        $megaMenuCollection = $this->megamenuManagement->loadAllMegaMenus();
+        $megaMenuCollection = $megaMenuCollection->addFieldToFilter('menu_design_type', self::AMAZON_MENU);
+        return $megaMenuCollection;
+    }
+    public function isAmazonMenuCreated()
+    {
+        if ($this->getAmazonMenus() && count($this->getAmazonMenus()) > 0) {
+            return true;
+        }
+        return false;
+    }
+    public function setVerticalChildCategoryColumn($subcats, $item, $columnCount = 0, $childs = false, $level = 1)
+    {
+        $html = '';
+        $ulClass = 'child-level-'.$level;
+        $html .= '<div class="md-hv-right">';
+        $html .= '<ul class="'.$ulClass.'">';
+        foreach ($subcats as $subcat) {
+            $html .= '<li class="product-item"><a href="'.$subcat['url'].'" title="Explore '.$subcat['label'].'">';
+            $html .= __($subcat['label']);
+            $html .= $this->getCategoryMenuLabelHtml($subcat['id']);
+            $html .= '</a></li>';
+        }
+        $html .= '</ul>';
+        $html .= '</div>';
+        return $html;
+    }
+    public function getCategoryCount($catId)
+    {
+        $showCatCount = $this->primaryMenu->getShowCategoryCount();
+        $countChild = '';
+        if ($showCatCount) {
+            $categoryLoad = $this->megamenuManagement->getCategoryById($catId);
+            $countChild = '<span class="category-count"> ('.$categoryLoad->getChildrenCount().')</span>';
+        }
+        return $countChild;
+    }
+    public function getProductCount($catId)
+    {
+        $showCatCount = $this->primaryMenu->getShowCategoryCount();
+        $countChild = '';
+        if ($showCatCount) {
+            $categoryLoad = $this->megamenuManagement->getCategoryById($catId);
+            $countChild = '<span class="category-count"> ('.$categoryLoad->getProductCollection()->count().')</span>';
+        }
+        return $countChild;
     }
 }

@@ -1,11 +1,11 @@
 <?php
 /**
- * Magedelight
- * Copyright (C) 2017 Magedelight <info@magedelight.com>
+ * MageDelight
+ * Copyright (C) 2023 Magedelight <info@magedelight.com>
  *
- * @category Magedelight
+ * @category MageDelight
  * @package Magedelight_Megamenu
- * @copyright Copyright (c) 2017 Mage Delight (http://www.magedelight.com/)
+ * @copyright Copyright (c) 2023 Magedelight (http://www.magedelight.com/)
  * @license http://opensource.org/licenses/gpl-3.0.html GNU General Public License,version 3 (GPL-3.0)
  * @author Magedelight <info@magedelight.com>
  */
@@ -25,12 +25,19 @@ class Collection extends AbstractCollection
      * @var string
      */
     protected $_idFieldName = 'menu_id';
-    
+    /**
+     * @var boolean
+     */
+    protected $_previewFlag;
     /**
      * @var \Magento\Framework\EntityManager\MetadataPool
      */
     protected $metadataPool;
-    
+    /**
+     * @var \Magento\Store\Model\StoreManagerInterface
+     */
+    protected $storeManager;
+
     /**
      * @param \Magento\Framework\Data\Collection\EntityFactoryInterface $entityFactory
      * @param \Psr\Log\LoggerInterface $logger
@@ -68,7 +75,7 @@ class Collection extends AbstractCollection
             'Magedelight\Megamenu\Model\ResourceModel\Menu'
         );
     }
-    
+
     /**
      * Perform operations after collection load
      *
@@ -81,7 +88,7 @@ class Collection extends AbstractCollection
 
         return parent::_afterLoad();
     }
-    
+
     /**
      * Perform operations after collection load
      *
@@ -92,7 +99,7 @@ class Collection extends AbstractCollection
     protected function performAfterLoad($tableName, $linkField)
     {
         $linkedIds = $this->getColumnValues($linkField);
-        
+
         if (count($linkedIds)) {
             $connection = $this->getConnection();
             $select = $connection->select()->from(['megamenu_entity_store' => $this->getTable($tableName)])
@@ -103,7 +110,7 @@ class Collection extends AbstractCollection
                 foreach ($result as $storeData) {
                     $storesData[$storeData[$linkField]][] = $storeData['store_id'];
                 }
-               
+
                 foreach ($this as $item) {
                     $linkedId = $item->getData($linkField);
                     if (!isset($storesData[$linkedId])) {
@@ -129,7 +136,7 @@ class Collection extends AbstractCollection
             }
         }
     }
-    
+
      /**
       * Add filter by store
       *
@@ -144,7 +151,7 @@ class Collection extends AbstractCollection
         }
         return $this;
     }
-    
+
     /**
      * Perform adding filter by store
      *
@@ -168,7 +175,7 @@ class Collection extends AbstractCollection
 
         $this->addFilter('store_id', ['in' => $store], 'public');
     }
-    
+
     /**
      * Perform operations before rendering filters
      *
@@ -179,7 +186,7 @@ class Collection extends AbstractCollection
         $entityMetadata = 'menu_id';
         $this->joinStoreRelationTable('megamenu_menus_store', $entityMetadata);
     }
-    
+
     /**
      * Join store relation table if there is store filter
      *

@@ -1,0 +1,82 @@
+<?php
+/** @noinspection PhpComposerExtensionStubsInspection */
+/** @noinspection PhpUnhandledExceptionInspection */
+/** @var  $item \Magedelight\Megamenu\Model\MenuItems|\Magedelight\Megamenu\Api\Data\MenuItemsInterface */
+/** @var  $menuBlock \Magedelight\Megamenu\Block\Topmenu */
+/** @var  $menuManagement \Magedelight\Megamenu\Model\MegamenuManagement */
+$menuBlock = $block->getData('menu_block');
+$menuItems = $block->getData('menu_items');
+$menuManagement = $block->getData('menu_management');
+$menu = $block->getData('menu');
+$level = (int) $block->getData('level');
+$parent = $block->getData('parent_node');
+$class = 'level0 level-top parent ui-menu-item';
+$linkClass = 'level-top ';
+$menuLabelHtml = '';
+$categoryIcon = '';
+if ($parent != 'root'):
+    ?>
+<ul class="level<?= $level ?> submenu">
+    <?php $linkClass = '';
+endif; ?>
+<?php foreach ($menuItems as $menuItem):
+    $menuItemId = $menuItem->getItemId();
+    $linkurl = $menuItem->getItemLink();
+    $dataclass = $menuItem->getItemClass();
+    if (!$linkurl) {
+        $linkurl = $menuManagement->generateMenuUrl($menuItem);
+    }
+    $menuId = '';
+    if ($menu) { $menuId = $menu->getMenuId(); }
+    $hasChildren = $menuManagement->loadMenuItems($menuItemId, 'ASC', $menuId)->count();
+    if ($hasChildren) {
+        $class = 'level' . $level . ' parent';
+    } else {
+        $class = 'level' . $level;
+    }
+    if ($menuItem->getItemType() == 'category') {
+        if ($menuItem->getObjectId() == $menuBlock->getCurrentCat()) {
+            $class .= ' active';
+        }
+        if ($menu) {
+            if ($menu->getMenuType() == '1' && $menu->getMenuDesignType() == 'all-category') {
+                $menuLabelHtml = $menuBlock->getCategoryMenuLabelHtml($menuItem->getObjectId());
+                $categoryIcon = $menuBlock->getCategoryIconImageHtml($menuItem->getObjectId());
+            }
+        }
+    } elseif ($menuItem->getItemType() == 'pages') {
+        if ($menuItem->getObjectId() == $menuBlock->getCurentPage()) {
+            $class .= ' active';
+        }
+    }
+
+    $openInNewtabText = '';
+
+    if ((int) $menuItem->getOpenInNewTab()) {
+        $openInNewtabText = 'target="_blank"';
+    }
+    ?>
+    <li class="category-item <?= $class ?> <?= $linkClass ?> <?= $dataclass ?>">
+    <?php if ($hasChildren) { ?>
+        <a href="<?= $linkurl ?>" class="<?= $linkClass ?> ui-corner-all" <?= $openInNewtabText ?>>
+            <?= $categoryIcon ?>
+            <span class="megaitemicons"><?= $menuItem->getItemFontIcon() ?></span>
+            <span><?= __($menuManagement->generateMenuItemName($menuItem)) ?></span>
+            <?= $menuLabelHtml ?>
+        </a>
+        <?php $childMenuItems = $menuManagement->loadMenuItems($menuItemId, 'ASC', $menuId);?>
+        <?php $menuId = ($menu) ? $menu->getMenuId() : ''; ?>
+        <?php echo $menuBlock->setPrimaryMenu($childMenuItems, $level + 1, '', '', $menuId); ?>
+    <?php } else { ?>
+        <a href="<?= $linkurl ?>" class="<?= $linkClass ?> ui-corner-all" <?= $openInNewtabText ?>>
+            <?= $categoryIcon ?>
+            <span class="megaitemicons"><?= $menuItem->getItemFontIcon() ?></span>
+            <span><?= __($menuManagement->generateMenuItemName($menuItem)) ?></span>
+            <?= $menuLabelHtml ?>
+        </a>
+    <?php } ?>
+    </li>
+<?php endforeach; ?>
+<?php if ($parent != 'root') { ?>
+</ul>
+<?php } ?>

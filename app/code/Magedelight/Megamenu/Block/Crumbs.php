@@ -1,11 +1,11 @@
 <?php
 /**
- * Magedelight
- * Copyright (C) 2017 Magedelight <info@magedelight.com>
+ * MageDelight
+ * Copyright (C) 2023 Magedelight <info@magedelight.com>
  *
- * @category Magedelight
+ * @category MageDelight
  * @package Magedelight_Megamenu
- * @copyright Copyright (c) 2017 Mage Delight (http://www.magedelight.com/)
+ * @copyright Copyright (c) 2023 Magedelight (http://www.magedelight.com/)
  * @license http://opensource.org/licenses/gpl-3.0.html GNU General Public License,version 3 (GPL-3.0)
  * @author Magedelight <info@magedelight.com>
  */
@@ -13,12 +13,13 @@
 namespace Magedelight\Megamenu\Block;
 
 use Magento\Catalog\Helper\Data;
+use Magento\Framework\App\Request\Http;
+use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\Template\Context;
-use Magento\Store\Model\Store;
 use Magento\Framework\Registry;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 
-class Crumbs extends \Magento\Framework\View\Element\Template
+class Crumbs extends Template
 {
     /**
      * Catalog data
@@ -30,6 +31,22 @@ class Crumbs extends \Magento\Framework\View\Element\Template
      * @var ScopeConfigInterface
      */
     private $scopeConfig;
+    /**
+     * @var Context
+     */
+    private $context;
+    /**
+     * @var Registry
+     */
+    private $registry;
+    /**
+     * @var Http
+     */
+    private $request;
+    /**
+     * @var array
+     */
+    private $data;
 
     /**
      * Crumbs constructor.
@@ -44,33 +61,33 @@ class Crumbs extends \Magento\Framework\View\Element\Template
         Data $catalogData,
         Registry $registry,
         ScopeConfigInterface $scopeConfig,
-        \Magento\Framework\App\Request\Http $request,
+        Http $request,
         array $data = []
     ) {
+        parent::__construct($context, $data);
+        $this->context = $context;
         $this->catalogData = $catalogData;
         $this->registry = $registry;
-        $this->request = $request;
         $this->scopeConfig = $scopeConfig;
-        parent::__construct($context, $data);
+        $this->request = $request;
+        $this->data = $data;
     }
 
+    /**
+     * @return array
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     */
     public function getCrumbs()
     {
-        $categoriesIds = $this->request->getParam('category');
         $evercrumbs = [];
         $evercrumbs[] = [
-            'label' => 'Home',
-            'title' => 'Go to Home Page',
+            'label' => __('Home'),
+            'title' => __('Go to Home Page'),
             'link' => $this->_storeManager->getStore()->getBaseUrl()
         ];
         $product = $this->registry->registry('current_product');
-        
-        $userCategoryPathInUrl = $this->scopeConfig->getValue(
-            'catalog/seo/product_use_categories',
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-        );
-
-        if (($userCategoryPathInUrl) && (!is_null($categoriesIds))) {
+        $path = $this->catalogData->getBreadcrumbPath();
+        if ($path) {
             $path = $this->catalogData->getBreadcrumbPath();
             foreach ($path as $k => $p) {
                 $evercrumbs[] = [

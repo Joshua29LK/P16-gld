@@ -1,11 +1,11 @@
 <?php
 /**
- * Magedelight
- * Copyright (C) 2017 Magedelight <info@magedelight.com>
+ * MageDelight
+ * Copyright (C) 2023 Magedelight <info@magedelight.com>
  *
- * @category Magedelight
+ * @category MageDelight
  * @package Magedelight_Megamenu
- * @copyright Copyright (c) 2017 Mage Delight (http://www.magedelight.com/)
+ * @copyright Copyright (c) 2023 Magedelight (http://www.magedelight.com/)
  * @license http://opensource.org/licenses/gpl-3.0.html GNU General Public License,version 3 (GPL-3.0)
  * @author Magedelight <info@magedelight.com>
  */
@@ -30,6 +30,11 @@ class PostDataProcessor
     protected $messageManager;
 
     /**
+     * @var \Magento\Framework\App\ProductMetadataInterface
+     */
+    protected $productMetadata;
+
+    /**
      * @param \Magento\Framework\Stdlib\DateTime\Filter\Date $dateFilter
      * @param \Magento\Framework\Message\ManagerInterface $messageManager
      * @param \Magento\Framework\View\Model\Layout\Update\ValidatorFactory $validatorFactory
@@ -37,11 +42,13 @@ class PostDataProcessor
     public function __construct(
         \Magento\Framework\Stdlib\DateTime\Filter\Date $dateFilter,
         \Magento\Framework\Message\ManagerInterface $messageManager,
-        \Magento\Framework\View\Model\Layout\Update\ValidatorFactory $validatorFactory
+        \Magento\Framework\View\Model\Layout\Update\ValidatorFactory $validatorFactory,
+        \Magento\Framework\App\ProductMetadataInterface $productMetadata
     ) {
         $this->dateFilter = $dateFilter;
         $this->messageManager = $messageManager;
         $this->validatorFactory = $validatorFactory;
+        $this->productMetadata = $productMetadata;
     }
 
     /**
@@ -53,7 +60,14 @@ class PostDataProcessor
     public function filter($data)
     {
         $filterRules = [];
-        return (new \Zend_Filter_Input($filterRules, [], $data))->getUnescaped();
+        $version = $this->productMetadata->getVersion();
+        if (version_compare($version, '2.4.6', '>=')) {
+            return (new \Magento\Framework\Filter\FilterInput($filterRules, [], $data))->getUnescaped();
+        } else {
+            //@codingStandardsIgnoreStart
+            return (new \Zend_Filter_Input($filterRules, [], $data))->getUnescaped();
+            //@codingStandardsIgnoreEnd
+        }
     }
 
     /**
@@ -73,7 +87,7 @@ class PostDataProcessor
         foreach ($data as $field => $value) {
             if (in_array($field, array_keys($requiredFields)) && $value === '') {
                 $errorNo = false;
-                $this->messageManager->addError(
+                $this->messageManager->addErrorMessage(
                     __('To apply changes you should fill in required "%1" field', $requiredFields[$field])
                 );
             }
