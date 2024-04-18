@@ -62,16 +62,16 @@ class ScheduleTest extends TestCase
     /**
      * @param int $lastSendDate
      * @param int $currentTime
-     * @param array $timeIntervals
+     * @param array|null $timeIntervals
      * @param bool $result
      * @dataProvider isNeedToSendDataProvider
      * @return void
      */
-    public function testIsNeedToSend(int $lastSendDate, int $currentTime, array $timeIntervals, bool $result): void
+    public function testIsNeedToSend(int $lastSendDate, int $currentTime, ?array $timeIntervals, bool $result): void
     {
         $flag = 'amasty_base_instance_registration';
         $this->scheduleConfigMock
-            ->expects($this->once())
+            ->expects($this->any())
             ->method('getLastSendDate')
             ->willReturn($lastSendDate);
         $this->scheduleConfigMock
@@ -84,7 +84,7 @@ class ScheduleTest extends TestCase
             ->with($flag)
             ->willReturn($this->scheduleConfigMock);
         $this->dateTime
-            ->expects($this->once())
+            ->expects($this->any())
             ->method('gmtTimestamp')
             ->willReturn($currentTime);
 
@@ -117,6 +117,12 @@ class ScheduleTest extends TestCase
                 1640198000,
                 ScheduleConfig::TIME_INTERVALS => [],
                 false
+            ],
+            [
+                ScheduleConfig::LAST_SEND_DATE => 1640198457,
+                1640198000,
+                ScheduleConfig::TIME_INTERVALS => null,
+                true
             ]
         ];
     }

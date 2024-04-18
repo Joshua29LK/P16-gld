@@ -3,6 +3,22 @@
 //  ____________________________________________
 
 //
+//  Variables
+//  --------------------------------------------
+@ambase__irs__badge-success__bg-color: #3fb87e;
+@ambase__irs__badge-info__bg-color: #bad9ff;
+@ambase__irs__badge-pending__bg-color: #dbdbdb;
+@ambase__irs__badge-warning__bg-color: #ffe49f;
+@ambase__irs__badge-error__bg-color: #f26f5d;
+
+@ambase__irs__tooltip__text-color: #1a1a1a;
+@ambase__irs__tooltip-success__bg-color: #e7f5ee;
+@ambase__irs__tooltip-info__bg-color: #e7edf5;
+@ambase__irs__tooltip-pending__bg-color: #fbfbfb;
+@ambase__irs__tooltip-warning__bg-color: #fcf7ea;
+@ambase__irs__tooltip-error__bg-color: #fceaea;
+
+//
 //  Common
 //  --------------------------------------------
 
@@ -161,6 +177,176 @@
             display: table;
             table-layout: fixed;
             width: 100%;
+        }
+
+        .ambase-license-tooltip {
+            display: inline-block;
+            /* phpcs:disable Magento2.Less.ColonSpacing.AfterNewline */
+            .lib-tooltip(
+                @_tooltip-position: right,
+                @_tooltip-color: @ambase__irs__tooltip__text-color,
+                @_tooltip-padding: 0
+            );
+            /* phpcs:enable Magento2.Less.ColonSpacing.AfterNewline */
+
+            &:after {
+                vertical-align: middle;
+                margin-left: 1.1rem;
+            }
+
+            .ambase-license-tooltip-content {
+                padding: 1rem;
+
+                &:first-child {
+                    border-top-left-radius: .6rem;
+                    border-top-right-radius: .6rem;
+                }
+
+                &:last-child {
+                    border-bottom-left-radius: .6rem;
+                    border-bottom-right-radius: .6rem;
+                }
+
+                &.ambase-license-tooltip-content-success {
+                    background-color: @ambase__irs__tooltip-success__bg-color;
+                }
+
+                &.ambase-license-tooltip-content-pending {
+                    background-color: @ambase__irs__tooltip-pending__bg-color;
+                }
+
+                &.ambase-license-tooltip-content-info {
+                    background-color: @ambase__irs__tooltip-info__bg-color;
+                }
+
+                &.ambase-license-tooltip-content-warning {
+                    background-color: @ambase__irs__tooltip-warning__bg-color;
+                }
+
+                &.ambase-license-tooltip-content-error {
+                    background-color: @ambase__irs__tooltip-error__bg-color;
+                }
+            }
+
+            &.ambase-license-tooltip-pending {
+                &:after {
+                    content: url('@{baseDir}Amasty_Base/images/irs/module/tooltip/pending.svg');
+                }
+
+                .tooltip-content {
+                    background-color: @ambase__irs__tooltip-pending__bg-color;
+                }
+
+                .tooltip-content:after {
+                    border-right-color: @ambase__irs__tooltip-pending__bg-color;
+                }
+            }
+
+            &.ambase-license-tooltip-info {
+                &:after {
+                    content: url('@{baseDir}Amasty_Base/images/irs/module/tooltip/info.svg');
+                }
+
+                .tooltip-content {
+                    background-color: @ambase__irs__tooltip-info__bg-color;
+                }
+
+                .tooltip-content:after {
+                    border-right-color: @ambase__irs__tooltip-info__bg-color;
+                }
+            }
+
+            &.ambase-license-tooltip-success {
+                &:after {
+                    content: url('@{baseDir}Amasty_Base/images/irs/module/tooltip/success.svg');
+                }
+
+                .tooltip-content {
+                    background-color: @ambase__irs__tooltip-success__bg-color;
+                }
+
+                .tooltip-content:after {
+                    border-right-color: @ambase__irs__tooltip-success__bg-color;
+                }
+            }
+
+            &.ambase-license-tooltip-warning {
+                &:after {
+                    content: url('@{baseDir}Amasty_Base/images/irs/module/tooltip/warning.svg');
+                }
+
+                .tooltip-content {
+                    background-color: @ambase__irs__tooltip-warning__bg-color;
+                }
+
+                .tooltip-content:after {
+                    border-right-color: @ambase__irs__tooltip-warning__bg-color;
+                }
+            }
+
+            &.ambase-license-tooltip-error {
+                &:after {
+                    content: url('@{baseDir}Amasty_Base/images/irs/module/tooltip/error.svg');
+                }
+
+                .tooltip-content {
+                    background-color: @ambase__irs__tooltip-error__bg-color;
+                }
+
+                .tooltip-content:after {
+                    border-right-color: @ambase__irs__tooltip-error__bg-color;
+                }
+            }
+
+            .tooltip-content {
+                border: none;
+                border-radius: .6rem;
+                /* phpcs:ignore: Magento2.Less.ZeroUnits.ZeroUnitFound */
+                box-shadow: 0 2px 8px 0 rgba(13,40,95,0.2);
+                font-size: 1.3rem;
+                font-weight: 400;
+                left: calc(~'100% + .5rem');
+                top: -.5rem;
+
+                &:before {
+                    border-right-color: rgba(13, 40, 95, .05);
+                }
+            }
+        }
+
+        .ambase-license-badge {
+            border-radius: .4rem;
+            display: inline-block;
+            font-size: 1.1rem;
+            font-weight: 700;
+            max-width: 9.5rem;
+            padding: .2rem .5rem;
+            text-align: center;
+            text-transform: uppercase;
+            vertical-align: middle;
+            width: 100%;
+
+            &.ambase-license-badge-pending {
+                background-color: @ambase__irs__badge-pending__bg-color;
+            }
+
+            &.ambase-license-badge-info {
+                background-color: @ambase__irs__badge-info__bg-color;
+            }
+
+            &.ambase-license-badge-warning {
+                background-color: @ambase__irs__badge-warning__bg-color;
+            }
+
+            &.ambase-license-badge-success {
+                background-color: @ambase__irs__badge-success__bg-color;
+                color: @color-white;
+            }
+
+            &.ambase-license-badge-error {
+                background-color: @ambase__irs__badge-error__bg-color;
+                color: @color-white;
+            }
         }
     }
 

@@ -151,6 +151,7 @@ Edit,Edit
 "Total Overview","Total Overview"
 "Today & Live","Today & Live"
 statistics,statistics
+loading…,loading…
 "Go to statistic","Go to statistic"
 Details,Details
 "Sales Overview","Sales Overview"
@@ -158,8 +159,6 @@ Details,Details
 "Conversion Funnel","Conversion Funnel"
 "Visitors vs. Orders","Visitors vs. Orders"
 "Conversion Overview","Conversion Overview"
-funnel_from,funnel_from
-funnel_to,funnel_to
 "Products viewed:","Products viewed:"
 "Added to cart:","Added to cart:"
 "Unique visitors:","Unique visitors:"

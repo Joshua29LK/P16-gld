@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 /**
  * @author Amasty Team
- * @copyright Copyright (c) 2023 Amasty (https://www.amasty.com)
+ * @copyright Copyright (c) Amasty (https://www.amasty.com)
  * @package Advanced Reports Base for Magento 2
  */
 
@@ -15,6 +15,8 @@ use Amasty\Reports\Model\ResourceModel\Filters\RequestFiltersProvider;
 
 class Store
 {
+    public const SESSION_KEY = 'amreports_store';
+
     /**
      * @var Session
      */
@@ -41,10 +43,17 @@ class Store
         $params = $this->requestFiltersProvider->execute();
         $storeId = $params[RequestFiltersProvider::REPORTS_KEY]['store'] ?? $params['store'] ?? null;
         if ($storeId === null) {
-            $storeId = $this->session->getAmreportsStore();
+            $storeId = $this->session->getData(self::SESSION_KEY, false);
+        } else {
+            if ((int)$storeId) {
+                $this->setCurrentStore((int)$storeId);
+            } else {
+                // if $storeId === 0 - clear data from session
+                $this->session->getData(self::SESSION_KEY, true);
+            }
         }
 
-        return (int) $storeId;
+        return (int)$storeId;
     }
 
     /**

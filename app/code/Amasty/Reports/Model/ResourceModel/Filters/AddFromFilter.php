@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 /**
  * @author Amasty Team
- * @copyright Copyright (c) 2023 Amasty (https://www.amasty.com)
+ * @copyright Copyright (c) Amasty (https://www.amasty.com)
  * @package Advanced Reports Base for Magento 2
  */
 
@@ -33,21 +33,15 @@ class AddFromFilter
      */
     private $getLocalDate;
 
-    /**
-     * @var DateTime
-     */
-    private $dateTime;
-
     public function __construct(
         GetDefaultFromDate $getDefaultFromDate,
         GetLocalDate $getLocalDate,
         RequestFiltersProvider $filtersProvider,
-        DateTime $dateTime
+        ?DateTime $dateTime = null // @deprecated
     ) {
         $this->filtersProvider = $filtersProvider;
         $this->getDefaultFromDate = $getDefaultFromDate;
         $this->getLocalDate = $getLocalDate;
-        $this->dateTime = $dateTime;
     }
 
     /**
@@ -57,13 +51,22 @@ class AddFromFilter
         $object,
         string $dateFiled = 'created_at',
         string $tablePrefix = 'main_table',
-        ?string $defaultFrom = null
+        ?string $defaultFrom = null,
+        string $filterName = 'from'
     ): void {
         $filters = $this->filtersProvider->execute();
         if ($defaultFrom !== null) {
             $from = $defaultFrom;
         } else {
-            $from = $filters['from'] ?? $this->dateTime->gmtDate('Y-m-d', $this->getDefaultFromDate->execute());
+            $default = $this->getDefaultFromDate->getDate();
+            if (isset($filters[$filterName])) {
+                $from = $filters[$filterName];
+                if ($from !== $default) {
+                    $this->getDefaultFromDate->setDefaultValue($from);
+                }
+            } else {
+                $from = $default;
+            }
         }
 
         if ($from) {

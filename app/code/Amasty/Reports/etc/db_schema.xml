@@ -2,7 +2,7 @@
 <!--
 /**
  * @author Amasty Team
- * @copyright Copyright (c) 2023 Amasty (https://www.amasty.com)
+ * @copyright Copyright (c) Amasty (https://www.amasty.com)
  * @package Advanced Reports Base for Magento 2
  */-->
 <schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -137,6 +137,10 @@
           <column name="entity_id"/>
           <column name="quote_id"/>
         </constraint>
+
+        <index referenceId="AMASTY_REPORTS_ABANDONED_CART_QUOTE_ID" indexType="btree">
+            <column name="quote_id"/>
+        </index>
     </table>
 
     <table name="amasty_reports_notification" resource="default" engine="innodb" comment="Amasty Reports Schedule Notifications Table">

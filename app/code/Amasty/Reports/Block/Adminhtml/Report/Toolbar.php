@@ -1,20 +1,27 @@
 <?php
 /**
  * @author Amasty Team
- * @copyright Copyright (c) 2023 Amasty (https://www.amasty.com)
+ * @copyright Copyright (c) Amasty (https://www.amasty.com)
  * @package Advanced Reports Base for Magento 2
  */
 
 namespace Amasty\Reports\Block\Adminhtml\Report;
 
+use Amasty\Reports\Block\Adminhtml\Framework\Data\FormFactory as ReportFormFactory;
 use Amasty\Reports\Block\Adminhtml\Navigation;
 use Amasty\Reports\Helper\Data;
+use Amasty\Reports\Model\OptionSource\Rule\FormValue;
 use Amasty\Reports\Model\Source\IndexedAttributes;
+use Amasty\Reports\Model\Store as StoreFilterResolver;
+use Amasty\Reports\Model\Utilities\GetDefaultFromDate;
+use Amasty\Reports\Model\Utilities\GetDefaultToDate;
 use Magento\Backend\Block\Template\Context;
 use Magento\Eav\Model\ResourceModel\Entity\Attribute\Collection;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Data\Form\AbstractForm;
 use Magento\Framework\Data\FormFactory;
 use Magento\Framework\Registry;
+use Magento\Framework\Stdlib\DateTime\DateTime;
 use Magento\Store\Model\System\Store;
 
 class Toolbar extends \Magento\Backend\Block\Widget\Form\Generic
@@ -45,14 +52,29 @@ class Toolbar extends \Magento\Backend\Block\Widget\Form\Generic
     private $navigation;
 
     /**
-     * @var \Amasty\Reports\Model\OptionSource\Rule\FormValue
+     * @var FormValue
      */
     private $formValueRules;
 
     /**
-     * @var \Amasty\Reports\Block\Adminhtml\Framework\Data\FormFactory
+     * @var ReportFormFactory
      */
     private $reportFormFactory;
+
+    /**
+     * @var GetDefaultFromDate
+     */
+    private $getDefaultFromDate;
+
+    /**
+     * @var GetDefaultToDate
+     */
+    private $getDefaultToDate;
+
+    /**
+     * @var StoreFilterResolver|mixed
+     */
+    private $store;
 
     public function __construct(
         Context $context,
@@ -62,10 +84,13 @@ class Toolbar extends \Magento\Backend\Block\Widget\Form\Generic
         Data $helper,
         Navigation $navigation,
         Collection $eavCollection,
-        \Amasty\Reports\Model\OptionSource\Rule\FormValue $formValueRules,
-        \Amasty\Reports\Block\Adminhtml\Framework\Data\FormFactory $reportFormFactory,
+        FormValue $formValueRules,
+        ReportFormFactory $reportFormFactory,
         IndexedAttributes $indexedAttributes,
-        array $data = []
+        array $data = [],
+        GetDefaultFromDate $getDefaultFromDate = null, // TODO move to not optional
+        GetDefaultToDate $getDefaultToDate = null,
+        StoreFilterResolver $store = null
     ) {
         $this->systemStore = $systemStore;
         parent::__construct($context, $registry, $formFactory, $data);
@@ -75,6 +100,9 @@ class Toolbar extends \Magento\Backend\Block\Widget\Form\Generic
         $this->formValueRules = $formValueRules;
         $this->reportFormFactory = $reportFormFactory;
         $this->indexedAttributes = $indexedAttributes;
+        $this->getDefaultFromDate = $getDefaultFromDate ?? ObjectManager::getInstance()->get(GetDefaultFromDate::class);
+        $this->getDefaultToDate = $getDefaultToDate ?? ObjectManager::getInstance()->get(GetDefaultToDate::class);
+        $this->store = $store ?? ObjectManager::getInstance()->get(StoreFilterResolver::class);
     }
 
     /**
@@ -118,7 +146,7 @@ class Toolbar extends \Magento\Backend\Block\Widget\Form\Generic
             'format' => $dateFormat,
             'value' => isset($params['from'])
                 ? $params['from']
-                : $this->_localeDate->date($this->helper->getDefaultFromDate())
+                : $this->getDefaultFromDate->getDate()
         ]);
 
         $parentElement->addField('to', 'date', [
@@ -129,7 +157,7 @@ class Toolbar extends \Magento\Backend\Block\Widget\Form\Generic
             'date_format' => $dateFormat,
             'value' =>  isset($params['to'])
                 ? $params['to']
-                : $this->_localeDate->date($this->helper->getDefaultToDate())
+                : $this->getDefaultToDate->getDate()
         ]);
 
         return $this;
@@ -142,15 +170,13 @@ class Toolbar extends \Magento\Backend\Block\Widget\Form\Generic
      */
     protected function addControls(AbstractForm $form)
     {
-        $params = $this->getRequest()->getParam('amreports');
-
         $form->addField('store', 'select', [
             'name'      => 'store',
             'values'    => $this->systemStore->getStoreValuesForForm(false, true),
             'class'     => 'amreports-select right',
             'wrapper_class' => 'amreports-select-block amreports-select-store',
             'no_span'   => true,
-            'value' => isset($params['store']) ? $params['store'] : 0
+            'value' => $this->store->getCurrentStoreId()
         ]);
 
         return $this;

@@ -30,20 +30,20 @@ define([
             this.storeForm = $('[data-role="amreports-toolbar"]').find('#report_toolbar');
             $(this.storeForm).change($.proxy(this.changeStore, this));
 
-            $('[data-reports-js="options-item"]').on( "click", function() {
+            $('[data-reports-js="options-item"]').on( "click", function () {
                 self.changeWidget($(this));
                 $(optionsContainer).hide();
             });
 
-            $("body").on( "click", function() {
+            $("body").on( "click", function () {
                 $(optionsContainer).hide();
             });
 
-            $('[data-amreports-js="tab-funnel-rate"]').on( "click", function(e) {
+            $('[data-amreports-js="tab-funnel-rate"]').on( "click", function (e) {
                 self.openReport(e);
             });
 
-            $('[data-reports-js="options-switch"]').on( "click", function(e) {
+            $('[data-reports-js="options-switch"]').on( "click", function (e) {
                 if (!$(document.activeElement).is('a')) {
                     $(optionsContainer).hide();
                     $(this).find(optionsContainer).toggle();
@@ -51,15 +51,17 @@ define([
                 }
             });
 
-            $(document).ready(function() {
+            $(document).ready(function () {
                 self.funnelFormReload();
                 self.salesFormReload();
+                $('[data-reports-js="total-widget"]').each(function (index, element) {
+                    self.changeWidget($(element));
+                })
             });
         },
 
-        changeStore: function() {
+        changeStore: function () {
             var formData = $(this.storeForm).serializeArray(),
-                requestData = {},
                 reloadUrl = $(this.storeForm).attr('action');
 
             for (var i = 0; i < formData.length; i++) {
@@ -72,14 +74,14 @@ define([
             window.location.href = reloadUrl;
         },
 
-        changeWidget: function(elem) {
+        changeWidget: function (elem) {
             var requestData = {},
                 widget = '[data-reports-js="widget"]',
                 self = this;
 
             requestData['parent'] = elem.data('parent');
             requestData['widget'] = elem.attr('name');
-            requestData['group'] = $('[data-reports-tabs].-current').attr('data-amrepgroup-js');
+            requestData['group'] = elem.closest('[data-amrepgroup-js]').data('amrepgroup-js');
             $.ajax({
                 url: '',
                 method: 'GET',
@@ -88,9 +90,11 @@ define([
                     self._showLoader();
                 },
                 success: function (response) {
-                    var detailLink = elem.parents(widget).find('[data-reports-js="detail-widget"]');
-                    elem.parents(widget).find('[data-reports-js="header-widget"]').html(response.title);
-                    elem.parents(widget).find('[data-reports-js="total-widget"]').html(response.value);
+                    const widgetElements = elem.parents(widget),
+                        detailLink = widgetElements.find('[data-reports-js="detail-widget"]');
+
+                    widgetElements.find('[data-reports-js="header-widget"]').html(response.title);
+                    widgetElements.find('[data-reports-js="total-widget"]').html(response.value);
                     if (typeof response.link !== 'undefined') {
                         detailLink.removeClass('amreports-detail-disabled');
                         detailLink.attr('href', response.link);
@@ -185,7 +189,7 @@ define([
                         return;
                     }
                     chartData = [];
-                    for(var i=0; i<response.items.length;i++) {
+                    for (var i=0; i<response.items.length; i++) {
                         chartData.push({
                             date: response.items[i].period,
                             value: response.items[i].total

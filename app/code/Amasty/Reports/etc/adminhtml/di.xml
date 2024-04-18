@@ -2,7 +2,7 @@
 <!--
 /**
  * @author Amasty Team
- * @copyright Copyright (c) 2023 Amasty (https://www.amasty.com)
+ * @copyright Copyright (c) Amasty (https://www.amasty.com)
  * @package Advanced Reports Base for Magento 2
  */-->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
@@ -10,6 +10,21 @@
         <arguments>
             <argument name="reportTypes" xsi:type="array">
                 <item name="amasty_reports_customers_customers" xsi:type="string">Amasty\Reports\Model\ResourceModel\Customers\Customers\Statistic</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Ui\Model\Export\MetadataProvider">
+        <arguments>
+            <argument name="data" xsi:type="array">
+                <item name="amasty_report_sales_order_items_listing" xsi:type="array">
+                    <item name="order_date" xsi:type="string">order_date</item>
+                </item>
+                <item name="amasty_report_catalog_product_performance_listing" xsi:type="array">
+                    <item name="date" xsi:type="string">date</item>
+                </item>
+                <item name="amasty_report_customers_abandoned_listing" xsi:type="array">
+                    <item name="created_at" xsi:type="string">created_at</item>
+                </item>
             </argument>
         </arguments>
     </type>
