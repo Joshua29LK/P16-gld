@@ -1,0 +1,283 @@
+//
+// Common
+// _____________________________________________
+
+& when (@media-common = true) {
+
+    .amazon-nav-open{
+        &.amz-nav-open{
+            .md-amazon-menu{
+                display: block;
+                left: 0;
+            }
+            .md-menu-overlay {
+                position: fixed;
+                top: 0;
+                left: 0;
+                z-index: 99998;
+                width: 100vw;
+                height: 100vh;
+                background-color: rgba(0, 0, 0, 0.8);
+            }
+        }
+        .md-amazon-menu{
+            display: none;
+            width: 100%;
+            height: 100vh;
+            max-width: 360px;
+            margin-bottom: 25px;
+            position: fixed;
+            top: 0;
+            left: -100%;
+            z-index: 99999;
+            overflow: visible;
+            background: #fff;
+
+            .md-menu-close-btn{
+                top:10px;
+                right: 20px;
+                z-index: 1;
+                font-size: 0;
+                position: absolute;
+                cursor: pointer;
+                &::before{
+                    content: '\e616';
+                    font-size: 12px;
+                    color: #757575;
+                    line-height: 26px;
+                    font-family: 'luma-icons';
+                    margin: 0;
+                    vertical-align: top;
+                    display: inline-block;
+                    font-weight: normal;
+                    overflow: hidden;
+                    text-align: center;
+                    border: solid 1px #757575;
+                    width: 26px;
+                    height: 26px;
+                    background: #fff;
+                }
+            }
+        }
+    }
+    .section-item-content{
+        .horizontal{
+            .lib-vendor-prefix-display();
+            .lib-vendor-box-align (center);
+        }
+        .amazon-menu-btn{
+            padding-left: 10px;
+            padding-right: 10px;
+            position: absolute;
+            z-index: 1;
+            a{
+                font-size: 0;
+                &::before{
+                    -webkit-font-smoothing: antialiased;
+                    -moz-osx-font-smoothing: grayscale;
+                    font-size: 28px;
+                    line-height: inherit;
+                    color: #fff;
+                    content: '\e609';
+                    font-family: 'luma-icons';
+                    vertical-align: middle;
+                    display: inline-block;
+                    font-weight: normal;
+                    overflow: hidden;
+                    speak: none;
+                    text-align: center;
+                }
+            }
+        }
+        .md-amazon-menu-content{
+            position: relative;
+            height: 100%;
+            overflow-x: hidden;
+            ul{
+                li{
+                    margin: 0;
+                    padding: 10px 25px;
+                    position: relative;
+                    a{
+                        text-transform: capitalize;
+                        font-size: 14px;
+                        color: #222;
+                        text-decoration: none;
+                        &.md-menu-back-btn{
+                            font-weight: 700;
+                            color: #1979c3;
+                            &::before{
+                                content: "\f104";
+                                font-size: 16px;
+                                vertical-align: top;
+                                font-weight: normal;
+                                font-family: "FontAwesome";
+                                color: #1979c3;
+                                line-height: 21px;
+                                margin: 0px 10px 0 0;
+                            }
+                        }
+                    }
+                    &.md-amazon-title{
+                        border-top: 1px solid #dfdfdf;
+                        margin-top: 3px;
+                        a{
+                            font-size: 16px;
+                            font-weight: 700;
+                            color: #000;
+                        }
+                    }
+                    &.md-amazon-parent{
+                        a{
+                            &::after{
+                                content: "\f105";
+                                font-size: 16px;
+                                vertical-align: top;
+                                font-weight: normal;
+                                font-family: "FontAwesome";
+                                color: #000;
+                                line-height: 21px;
+                                margin: 0px 20px 0 0;
+                                position: absolute;
+                                right: 0;
+                            }
+                        }
+                    }
+                    &.child-level-3 {
+                        margin-left: 15px;
+                    }
+                    &:hover{
+                        background: #f5f5f5;
+                        a{
+                            color: #000;
+                            &.md-menu-back-btn{
+                                &::before{
+                                    color: #000;
+                                }
+                            }
+                        }
+                    }
+                    .md-label-text {
+                        margin-left: 5px;
+                        background: #000000;
+                        color: #ffffff;
+                        padding: 2px 3px;
+                        font-size: 10px;
+                        font-weight: 700;
+
+                        &.square{
+                            border-radius: 3px;
+                        }
+
+                        &.rounded{
+                            border-radius: 25px;
+                            padding: 1px 5px;
+                        }
+
+                        &.square-pointer{
+                            padding: 0 3px;
+                            position: absolute;
+                            top: 2px;
+                            margin-left: -2px;
+                            border-radius: 3px;
+                            &::after{
+                                content: "";
+                                width: 0;
+                                height: 0;
+                                border-top: 6px solid transparent;
+                                position: absolute;
+                                border-right: 6px solid transparent;
+                                bottom: -5px;
+                                left: 11px;
+                                border-top-color: #00a98f;
+                            }
+                        }
+
+                        &.circle{
+                            border-radius: 100%;
+                            padding: 5px 8px;
+                        }
+
+                        &.circle-pointer{
+                            padding: 2px 5px;
+                            position: absolute;
+                            top: 2px;
+                            margin-left: -2px;
+                            border-radius: 100%;
+                            &::after{
+                                content: "";
+                                width: 0;
+                                height: 0;
+                                border-top: 6px solid transparent;
+                                position: absolute;
+                                border-right: 6px solid transparent;
+                                bottom: -5px;
+                                left: 11px;
+                                border-top-color: #00a98f;
+                            }
+                        }
+                    }
+                }
+                &.amz-menu{
+                    margin: 0;
+                    position: absolute;
+                    right: 0;
+                    left: 0;
+                    top: 40px;
+                    will-change: transform;
+                    visibility: hidden;
+                    padding: 0;
+                    list-style-type: none;
+                    transition: transform 250ms ease-in-out;
+                    -webkit-transition: transform 250ms ease-in-out;
+                    -moz-transition: transform 250ms ease-in-out;
+                    -ms-transition: transform 250ms ease-in-out;
+                    -o-transition: transform 250ms ease-in-out;
+
+                    &.hmenu-visible{
+                        visibility: visible;
+                    }
+                    &.md-translateX-right {
+                        transform: translateX(100%);
+                        -webkit-transform: translateX(100%);
+                        -moz-transform: translateX(100%);
+                        -ms-transform: translateX(100%);
+                        -o-transform: translateX(100%);
+                    }
+                    &.md-translateX-left {
+                        transform: translateX(-100%);
+                        -webkit-transform: translateX(-100%);
+                        -moz-transform: translateX(-100%);
+                        -ms-transform: translateX(-100%);
+                        -o-transform: translateX(-100%);
+                    }
+                    &.md-translateX {
+                        transform: translateX(0);
+                        -webkit-transform: translateX(0);
+                        -moz-transform: translateX(0);
+                        -ms-transform: translateX(0);
+                        -o-transform: translateX(0);
+                    }
+                }
+            }
+        }
+    }
+}
+
+//
+//  Desktop
+//  _____________________________________________
+
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
+
+}
+
+//
+//  Mobile
+//  _____________________________________________
+
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__m) {
+    .section-item-content .amazon-menu-btn {
+       display: none;
+    }
+}

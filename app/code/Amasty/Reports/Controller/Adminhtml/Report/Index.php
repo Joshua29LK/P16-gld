@@ -1,7 +1,7 @@
 <?php
 /**
  * @author Amasty Team
- * @copyright Copyright (c) 2023 Amasty (https://www.amasty.com)
+ * @copyright Copyright (c) Amasty (https://www.amasty.com)
  * @package Advanced Reports Base for Magento 2
  */
 
@@ -236,18 +236,7 @@ class Index extends ReportController
      */
     protected function createFunnelData()
     {
-        list($from, $to) = $this->getFromTo();
-
-        return $this->jsonHelper->jsonEncode($this->dashboardModel->getConversionFunnel($from, $to));
-    }
-
-    private function getFromTo(): array
-    {
-        $filters = $this->request->getParam('amreports');
-        $from = $this->getLocalFromDate->execute($filters['funnel_from'] ?? null);
-        $to = $this->getLocalToDate->execute($filters['funnel_to'] ?? null);
-
-        return [$from, $to];
+        return $this->jsonHelper->jsonEncode($this->dashboardModel->getConversionFunnel());
     }
 
     /**

@@ -18,4 +18,8 @@
     <event name="admin_system_config_save">
         <observer name="amasty_base_config_save" instance="Amasty\Base\Observer\SaveConfig"/>
     </event>
+
+    <event name="admin_system_config_changed_section_amasty_products">
+        <observer name="Amasty_Base::sendVerifyRequest" instance="Amasty\Base\Observer\Adminhtml\SendVerifyRequest"/>
+    </event>
 </config>

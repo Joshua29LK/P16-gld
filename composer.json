@@ -35,7 +35,7 @@
         "multisafepay/magento2": "3.4.0",
         "litespeed/module-litemage": "2.2.3",
         "redchamps/module-mini-cart-scroll": "1.0.1",
-        "redchamps/module-share-cart": "1.4.3",
+        "redchamps/module-share-cart": "1.4.4",
         "magefan/module-community": "^2.1",
         "fooman/pdfcustomiser-m2": "8.10.0",
         "mageprince/module-product-attachment": "2.2.7",

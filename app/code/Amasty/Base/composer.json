@@ -3,10 +3,11 @@
     "description": "Amasty Base",
     "require": {
         "php": ">=7.3",
-        "ext-dom": "*"
+        "ext-dom": "*",
+        "monolog/monolog": ">=1.17"
     },
     "type": "magento2-module",
-    "version": "1.14.7",
+    "version": "1.15.1",
     "license": [
         "proprietary"
     ],

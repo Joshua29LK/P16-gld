@@ -36,7 +36,11 @@ class Converter
 
     public function convertToObject(array $data): InstanceInfo
     {
-        $addIfEmpty = [InstanceInfo::DOMAINS => [], InstanceInfo::MODULES => []];
+        $addIfEmpty = [
+            InstanceInfo::DOMAINS => [],
+            InstanceInfo::MODULES => [],
+            InstanceInfo::CUSTOMER_INSTANCE_KEY => []
+        ];
         foreach ($addIfEmpty as $field => $value) {
             if (!isset($data[$field])) {
                 $data[$field] = $value;

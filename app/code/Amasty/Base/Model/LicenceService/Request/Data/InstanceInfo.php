@@ -20,6 +20,8 @@ class InstanceInfo extends SimpleDataObject implements ExtensibleDataInterface
     public const MODULES = 'modules';
     public const DOMAINS = 'domains';
     public const PLATFORM = 'platform';
+    public const CUSTOMER_INSTANCE_KEY = 'customer_instance_key';
+    public const IS_PRODUCTION = 'is_production';
 
     /**
      * @param string|null $systemInstanceKey
@@ -87,5 +89,43 @@ class InstanceInfo extends SimpleDataObject implements ExtensibleDataInterface
     public function getPlatform(): Platform
     {
         return $this->getData(self::PLATFORM);
+    }
+
+    /**
+     * @param string[] $instanceKey
+     * @return $this
+     */
+    public function setCustomerInstanceKey(array $instanceKey): self
+    {
+        return $this->setData(self::CUSTOMER_INSTANCE_KEY, $instanceKey);
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getCustomerInstanceKey(): array
+    {
+        return $this->getData(self::CUSTOMER_INSTANCE_KEY);
+    }
+
+    /**
+     * @param bool|null $isProduction
+     * @return $this
+     */
+    public function setIsProduction(?bool $isProduction): self
+    {
+        return $this->setData(self::IS_PRODUCTION, $isProduction);
+    }
+
+    /**
+     * @return bool|null
+     */
+    public function getIsProduction(): ?bool
+    {
+        $isProduction = $this->getData(self::IS_PRODUCTION);
+
+        return $isProduction === null
+            ? $isProduction
+            : (bool)$isProduction;
     }
 }

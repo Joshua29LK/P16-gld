@@ -1,0 +1,60 @@
+<?php
+/** @noinspection PhpComposerExtensionStubsInspection */
+/** @noinspection PhpUnhandledExceptionInspection */
+/** @var  $item \Magedelight\Megamenu\Model\MenuItems|\Magedelight\Megamenu\Api\Data\MenuItemsInterface */
+/** @var  $menuBlock \Magedelight\Megamenu\Block\Topmenu */
+/** @var  $menuManagement \Magedelight\Megamenu\Model\MegamenuManagement */
+$menuBlock = $block->getData('menu_block');
+$item = $block->getData('menu_item');
+$menuManagement = $block->getData('menu_management');
+$liClass = 'menu-dropdown-icon dropdown category-item nav-'.$item->getItemId().' '. $menuBlock->getActiveClass($item).' '.$item->getItemClass();
+$megaMenuLink = $item->getItemLink() ? : '#';
+$megaMenuName = $menuManagement->generateMenuItemName($item);
+$open_in_newtab_text = '';
+if ((int) $item->getOpenInNewTab()) {
+    $open_in_newtab_text = 'target="_blank"';
+}
+
+?>
+<li class="<?= /* @noEscape */ $liClass ?>">
+    <a href="<?= /* @noEscape */ $megaMenuLink ?>" <?= $open_in_newtab_text ?>>
+        <span class="megaitemicons"><?= /* @noEscape */ $item->getItemFontIcon() ?></span>
+        <?= /* @noEscape */ __($megaMenuName) ?>
+    </a>
+    <?php if (!empty($item->getItemColumns())): ?>
+        <?php $menuItems = json_decode($item->getItemColumns()); ?>
+            <ul class="animated <?= /* @noEscape */ $item->getAnimationOption() ?> column<?= /* @noEscape */ count($menuItems) ?>">
+                <?php for ($i = 0; $i < count($menuItems); $i++) { ?>
+                    <?php if (isset($menuItems[$i]->item_rows)) { ?>
+                        <div class="row_item_list">
+                            <ul class="row_items">
+                            <?php
+                            $rowItems = $menuItems[$i]->item_rows;
+                            for ($j = 0; $j < count($rowItems); $j++) { ?>
+                                <?php if ($rowItems[$j]->type == 'menu'): ?>
+                                    <?= /* @noEscape */ $menuBlock->getChildColumnForMenuType($rowItems, $j) ?>
+                                <?php endif; ?>
+                                <?php if ($rowItems[$j]->type == 'block'): ?>
+                                    <?= /* @noEscape */ $menuBlock->getChildColumnForMenuTypeBlock($rowItems, $j) ?>
+                                <?php endif; ?>
+                                <?php if ($rowItems[$j]->type == 'category'): ?>
+                                    <?= /* @noEscape */ $menuBlock->getChildColumnForMenuTypeCategory($rowItems, $j) ?>
+                                <?php endif; ?>
+                            <?php } ?>
+                            </ul>
+                        </div>
+                    <?php } else { ?>
+                        <?php if ($menuItems[$i]->type == 'menu'): ?>
+                            <?= /* @noEscape */ $menuBlock->getChildColumnForMenuType($menuItems, $i) ?>
+                    <?php endif; ?>
+                        <?php if ($menuItems[$i]->type == 'block'): ?>
+                            <?= /* @noEscape */ $menuBlock->getChildColumnForMenuTypeBlock($menuItems, $i) ?>
+                    <?php endif; ?>
+                        <?php if ($menuItems[$i]->type == 'category'): ?>
+                            <?= /* @noEscape */ $menuBlock->getChildColumnForMenuTypeCategory($menuItems, $i) ?>
+                    <?php endif; ?>
+                    <?php } ?>
+                <?php } ?>
+            </ul>
+    <?php endif; ?>
+</li>

@@ -21,6 +21,9 @@
             <licence_service>
                 <api_url>https://irs.amasty.com</api_url>
             </licence_service>
+            <instance_registration>
+                <production_mode>1</production_mode>
+            </instance_registration>
         </amasty_base>
         <system>
             <media_storage_configuration>

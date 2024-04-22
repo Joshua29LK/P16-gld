@@ -1,12 +1,12 @@
 <?php
 
 /**
- * Magedelight
- * Copyright (C) 2017 Magedelight <info@magedelight.com>
+ * MageDelight
+ * Copyright (C) 2023 Magedelight <info@magedelight.com>
  *
- * @category Magedelight
+ * @category MageDelight
  * @package Magedelight_Megamenu
- * @copyright Copyright (c) 2017 Mage Delight (http://www.magedelight.com/)
+ * @copyright Copyright (c) 2023 Magedelight (http://www.magedelight.com/)
  * @license http://opensource.org/licenses/gpl-3.0.html GNU General Public License,version 3 (GPL-3.0)
  * @author Magedelight <info@magedelight.com>
  */
@@ -58,7 +58,7 @@ class Delete extends \Magento\Backend\App\Action
                 $model->load($id);
                 $title = $model->getMenuName();
                 $model->delete($id);
-                $this->messageManager->addSuccess(__('The menu has been deleted.'));
+                $this->messageManager->addSuccessMessage(__('The menu has been deleted.'));
                 $this->_eventManager->dispatch(
                     'adminhtml_megamenu_on_delete',
                     ['title' => $title, 'status' => 'success']
@@ -69,11 +69,11 @@ class Delete extends \Magento\Backend\App\Action
                     'adminhtml_megamenu_on_delete',
                     ['title' => $title, 'status' => 'fail']
                 );
-                $this->messageManager->addError($e->getMessage());
+                $this->messageManager->addErrorMessage($e->getMessage());
                 return $resultRedirect->setPath('*/*/edit', ['menu_id' => $id]);
             }
         }
-        $this->messageManager->addError(__('We can\'t find a menu to delete.'));
+        $this->messageManager->addErrorMessage(__('We can\'t find a menu to delete.'));
         return $resultRedirect->setPath('*/*/');
     }
 }

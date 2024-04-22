@@ -1,11 +1,11 @@
 <?php
 /**
- * Magedelight
- * Copyright (C) 2017 Magedelight <info@magedelight.com>
+ * MageDelight
+ * Copyright (C) 2023 Magedelight <info@magedelight.com>
  *
- * @category Magedelight
+ * @category MageDelight
  * @package Magedelight_Megamenu
- * @copyright Copyright (c) 2017 Mage Delight (http://www.magedelight.com/)
+ * @copyright Copyright (c) 2023 Magedelight (http://www.magedelight.com/)
  * @license http://opensource.org/licenses/gpl-3.0.html GNU General Public License,version 3 (GPL-3.0)
  * @author Magedelight <info@magedelight.com>
  */
@@ -57,7 +57,7 @@ class MenuItems extends AbstractModel
     {
         return [self::CACHE_TAG . '_' . $this->getId()];
     }
-    
+
     public function deleteItems($menuId)
     {
         $getMenuItems = $this->getCollection()
@@ -65,5 +65,14 @@ class MenuItems extends AbstractModel
         foreach ($getMenuItems as $menuItem) {
             $menuItem->delete();
         }
+    }
+
+    public function getAnimationOption()
+    {
+        $animation = $this->getData('animation_option');
+        if (!$animation || $animation == 'undefined') {
+            return '';
+        }
+        return $animation;
     }
 }

@@ -1,7 +1,7 @@
 <?php
 /**
  * @author Amasty Team
- * @copyright Copyright (c) 2023 Amasty (https://www.amasty.com)
+ * @copyright Copyright (c) Amasty (https://www.amasty.com)
  * @package Advanced Reports Base for Magento 2
  */
 
@@ -88,7 +88,7 @@ class Dashboard extends AbstractModel
         $this->_init(\Amasty\Reports\Model\ResourceModel\Report\Dashboard::class);
     }
 
-    public function getConversionFunnel(string $from, string $to): array
+    public function getConversionFunnel(?string $from = null, ?string $to = null): array
     {
         return $this->getResource()->getFunnel($from, $to);
     }

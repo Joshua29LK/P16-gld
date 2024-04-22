@@ -1,18 +1,22 @@
 <?php
 /**
  * @author Amasty Team
- * @copyright Copyright (c) 2023 Amasty (https://www.amasty.com)
+ * @copyright Copyright (c) Amasty (https://www.amasty.com)
  * @package Advanced Reports Base for Magento 2
  */
 
 namespace Amasty\Reports\Model\ResourceModel\Sales\OrderItems;
 
+use Amasty\Reports\Model\ResourceModel\Filters\AddFromFilter;
+use Amasty\Reports\Model\ResourceModel\Filters\AddStoreFilter;
+use Amasty\Reports\Model\ResourceModel\Filters\AddToFilter;
 use Amasty\Reports\Model\Utilities\Order\GlobalRateResolver;
 use Amasty\Reports\Traits\Filters;
 use Amasty\Reports\Traits\ImageTrait;
 use Magento\Eav\Model\ResourceModel\Entity\Attribute;
-use Magento\Framework\App\Request\DataPersistorInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\App\Request\DataPersistorInterface;
 use Magento\Framework\DB\Select;
 use Magento\Framework\DB\Sql\ColumnValueExpressionFactory;
 use Magento\Framework\EntityManager\MetadataPool;
@@ -68,6 +72,21 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Order\Collection
      */
     private $globalRateResolver;
 
+    /**
+     * @var AddFromFilter
+     */
+    private $addFromFilter;
+
+    /**
+     * @var AddToFilter
+     */
+    private $addToFilter;
+
+    /**
+     * @var AddStoreFilter|mixed
+     */
+    private $addStoreFilter;
+
     public function __construct(
         \Magento\Framework\Data\Collection\EntityFactory $entityFactory,
         \Psr\Log\LoggerInterface $logger,
@@ -85,7 +104,10 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Order\Collection
         GlobalRateResolver $globalRateResolver,
         ColumnValueExpressionFactory $columnValueExpressionFactory,
         \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
-        \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource = null
+        \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource = null,
+        AddFromFilter $addFromFilter = null, // TODO move it to not optional
+        AddToFilter $addToFilter = null,
+        AddStoreFilter $addStoreFilter = null
     ) {
         parent::__construct(
             $entityFactory,
@@ -106,6 +128,12 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Order\Collection
         $this->metadataPool = $metadataPool;
         $this->columnValueExpressionFactory = $columnValueExpressionFactory;
         $this->globalRateResolver = $globalRateResolver;
+        // OM for backward compatibility
+        $this->addFromFilter =
+            $addFromFilter ?? ObjectManager::getInstance()->get(AddFromFilter::class);
+        $this->addToFilter =
+            $addToFilter ?? ObjectManager::getInstance()->get(AddToFilter::class);
+        $this->addStoreFilter = $addStoreFilter ?? ObjectManager::getInstance()->get(AddStoreFilter::class);
     }
 
     /**
@@ -194,9 +222,9 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Order\Collection
      */
     public function applyToolbarFilters($collection)
     {
-        $this->addFromFilter($collection, 'sales_order');
-        $this->addToFilter($collection, 'sales_order');
-        $this->addCurrentStoreFilter($collection, 'sales_order');
+        $this->addFromFilter->execute($collection);
+        $this->addToFilter->execute($collection);
+        $this->addStoreFilter->execute($collection, 'sales_order');
     }
 
     /**

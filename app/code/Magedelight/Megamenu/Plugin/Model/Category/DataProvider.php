@@ -21,9 +21,10 @@ class DataProvider
             $category = $subject->getCurrentCategory();
             $result[$category->getId()]['visibleMegamenuTab'] = false;
             if (isset($result[$category->getId()]['level'])) {
-                if ($result[$category->getId()]['level'] == 2) {
+                /* Below lines are commented to show Megamenu category block in all Category */
+                /*if ($result[$category->getId()]['level'] == 2 || $result[$category->getId()]['level'] == 3) {*/
                     $result[$category->getId()]['visibleMegamenuTab'] = true;
-                }
+                /*}*/
             }
         } catch (\Exception $e) {
             return $this->messageManager->addErrorMessage($e->getMessage());

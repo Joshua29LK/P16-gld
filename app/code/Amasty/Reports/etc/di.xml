@@ -2,7 +2,7 @@
 <!--
 /**
  * @author Amasty Team
- * @copyright Copyright (c) 2023 Amasty (https://www.amasty.com)
+ * @copyright Copyright (c) Amasty (https://www.amasty.com)
  * @package Advanced Reports Base for Magento 2
  */-->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
@@ -160,5 +160,9 @@
                 <item name="default" xsi:type="object">Magento\Ui\Model\Export\MetadataProvider</item>
             </argument>
         </arguments>
+    </type>
+
+    <type name="Magento\Indexer\Model\Indexer">
+        <plugin name="Amasty_Reports::skipException" type="Amasty\Reports\Plugin\Indexer\Model\Indexer\SkipException"/>
     </type>
 </config>

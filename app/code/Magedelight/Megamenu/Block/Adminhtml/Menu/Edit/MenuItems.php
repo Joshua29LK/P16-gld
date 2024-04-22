@@ -1,32 +1,37 @@
 <?php
 
 /**
- * Magedelight
- * Copyright (C) 2017 Magedelight <info@magedelight.com>
+ * MageDelight
+ * Copyright (C) 2023 Magedelight <info@magedelight.com>
  *
- * @category Magedelight
+ * @category MageDelight
  * @package Magedelight_Megamenu
- * @copyright Copyright (c) 2017 Mage Delight (http://www.magedelight.com/)
+ * @copyright Copyright (c) 2023 Magedelight (http://www.magedelight.com/)
  * @license http://opensource.org/licenses/gpl-3.0.html GNU General Public License,version 3 (GPL-3.0)
  * @author Magedelight <info@magedelight.com>
  */
 
 namespace Magedelight\Megamenu\Block\Adminhtml\Menu\Edit;
 
-use Magento\Backend\Block\Widget\Context;
-use Magento\Framework\App\Request\Http;
-use Magento\Cms\Model\BlockFactory;
+use Magedelight\Megamenu\Helper\Data;
 use Magedelight\Megamenu\Model\MenuFactory;
 use Magedelight\Megamenu\Model\MenuItemsFactory;
-use Magedelight\Megamenu\Helper\Data;
 use Magedelight\Megamenu\Model\Source\AnimationType;
+use Magento\Backend\Block\Template;
+use Magento\Backend\Block\Widget\Context;
+use Magento\Catalog\Model\Category;
+use Magento\Cms\Model\BlockFactory;
+use Magento\Cms\Model\Page;
+use Magento\Framework\App\Request\Http;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\UrlInterface;
 
 /**
  * Class MenuItems
  *
  * @package Magedelight\Megamenu\Block\Adminhtml\Menu\Edit
  */
-class MenuItems extends \Magento\Backend\Block\Template
+class MenuItems extends Template
 {
     /**
      * @var string
@@ -34,32 +39,32 @@ class MenuItems extends \Magento\Backend\Block\Template
     protected $_template = 'Magedelight_Megamenu::menu/menuitems.phtml';
 
     /**
-     * @var \Magento\Framework\UrlInterface
+     * @var UrlInterface
      */
     private $urlBuilder;
 
     /**
-     * @var \Magento\Framework\App\Request\Http
+     * @var Http
      */
     protected $request;
 
     /**
-     * @var \Magento\Cms\Model\BlockFactory
+     * @var BlockFactory
      */
     protected $blockFactory;
 
     /**
-     * @var \Magedelight\Megamenu\Model\MenuFactory
+     * @var MenuFactory
      */
     private $menuFactory;
 
     /**
-     * @var \Magedelight\Megamenu\Model\MenuItemsFactory
+     * @var MenuItemsFactory
      */
     private $menuItemsFactory;
 
     /**
-     * @var \Magedelight\Megamenu\Helper\Data
+     * @var Data
      */
     public $helper;
 
@@ -74,22 +79,22 @@ class MenuItems extends \Magento\Backend\Block\Template
     public static $rootUl = false;
 
     /**
-     * @var \Magento\Backend\Block\Widget\Context
+     * @var Context
      */
     protected $_context;
 
     /**
-     * @var \Magedelight\Megamenu\Model\Source\AnimationType
+     * @var AnimationType
      */
     public $animationOptions;
 
     /**
-     * @var \Magento\Cms\Model\Page
+     * @var Page
      */
     public $pageModel;
 
     /**
-     * @var \Magento\Catalog\Model\Category
+     * @var Category
      */
     private $categoryModel;
 
@@ -102,19 +107,19 @@ class MenuItems extends \Magento\Backend\Block\Template
      * @param MenuItemsFactory $menuItemsFactory
      * @param Data $helper
      * @param AnimationType $animationOptions
-     * @param \Magento\Cms\Model\Page $pageModel
-     * @param \Magento\Catalog\Model\Category $categoryModel
+     * @param Page $pageModel
+     * @param Category $categoryModel
      */
     public function __construct(
-        Context $context,
-        Http $request,
-        BlockFactory $blockFactory,
-        MenuFactory $menuFactory,
-        MenuItemsFactory $menuItemsFactory,
-        Data $helper,
-        AnimationType $animationOptions,
-        \Magento\Cms\Model\Page $pageModel,
-        \Magento\Catalog\Model\Category $categoryModel
+        Context                         $context,
+        Http                            $request,
+        BlockFactory                    $blockFactory,
+        MenuFactory                     $menuFactory,
+        MenuItemsFactory                $menuItemsFactory,
+        Data                            $helper,
+        AnimationType                   $animationOptions,
+        Page         $pageModel,
+        Category $categoryModel
     ) {
         parent::__construct($context);
         $this->_context = $context;
@@ -138,7 +143,7 @@ class MenuItems extends \Magento\Backend\Block\Template
      * Retrieve category by category id
      *
      * @param string
-     * @return Magento\Catalog\Model\Category
+     * @return \Magento\Catalog\Model\Category
      */
     public function getCurrentMenuId()
     {
@@ -147,7 +152,7 @@ class MenuItems extends \Magento\Backend\Block\Template
 
     /**
      * Retrieve current menu object
-     * @return Magedelight\Megamenu\Model\Menu
+     * @return \Magedelight\Megamenu\Model\Menu
      */
     public function getCurrentMenu()
     {
@@ -156,7 +161,7 @@ class MenuItems extends \Magento\Backend\Block\Template
 
     /**
      * Retrieve current menu object
-     * @return Magedelight\Megamenu\Model\Menu
+     * @return \Magedelight\Megamenu\Model\Menu
      */
     public function getMenuFromMenuId()
     {
@@ -200,7 +205,7 @@ class MenuItems extends \Magento\Backend\Block\Template
         $storeId = $menu->getStoreId();
 
         $pagesModel = $this->pageModel->getCollection()
-                ->addFieldToFilter('is_active', 1);
+            ->addFieldToFilter('is_active', 1);
         foreach ($pagesModel as $singlePage) {
             $pageAvailable = true;
             foreach ($storeId as $singleStore) {
@@ -235,10 +240,10 @@ class MenuItems extends \Magento\Backend\Block\Template
     public function getBackendMenuTree($menuId)
     {
         $menuItems = $this->menuItemsFactory->create()
-                ->getCollection()
-                ->addFieldToFilter('menu_id', $menuId)
-                ->addFieldToFilter('item_parent_id', 0)
-                ->setOrder('sort_order', 'ASC');
+            ->getCollection()
+            ->addFieldToFilter('menu_id', $menuId)
+            ->addFieldToFilter('item_parent_id', 0)
+            ->setOrder('sort_order', 'ASC');
         return $this->genereateBackendTree($menuItems, $menuItemId = 0);
     }
 
@@ -262,17 +267,39 @@ class MenuItems extends \Magento\Backend\Block\Template
             $itemName = $this->getItemName($currentItem->getItemId(), $currentItem->getObjectId(), $currentItemType);
             $itemText = $this->getItemText($currentItem, $menuItemId);
             $categoryDisplay = $currentItem->getCategoryDisplay();
+            $productDisplay = $currentItem->getProductDisplay();
             $itemColumns = '';
             if ($currentItem->getItemColumns()) {
                 $itemColumns = $this->getSavedItemsColumns($currentItem);
             }
 
-            $itemOutput .= '<li class="dd-item col-m-12" data-id="' . $menuItemId . '" data-name="' . $itemName . '" data-type="' . $currentItem->getItemType() . '" data-objectid="' . $currentItem->getObjectId() . '" data-link="' . $currentItem->getItemLink() . '" data-verticalmenu="' . $currentItem->getCategoryVerticalMenu() . '" data-verticalmenubg="' . $currentItem->getCategoryVerticalMenuBg() . '" font-icon="' . $currentItem->getItemFontIcon() . '" animation-field="' . $currentItem->getAnimationOption() . '" item-class="' . $currentItem->getItemClass() . '" data-cat="' . $categoryDisplay . '"><button class="cf removebtn btn right" href="#" type="button">Remove </button><a class="right collapse linktoggle">Collapse</a><a class="right expand linktoggle">Expand</a><div class="dd-handle">' . $itemName . "<span class='right'>(" . $this->helper->getMenuName($currentItem->getItemType()) . ")</span>" . '</div><div class="item-information col-m-12">' . $itemText . $itemColumns . '<div class="cf"></div></div>';
+            $itemOutput .= '<li class="dd-item col-m-12" data-id="' . $menuItemId . '"
+                data-name="' . $itemName . '" data-type="' . $currentItem->getItemType() . '"
+                data-objectid="' . $currentItem->getObjectId() . '" data-link="' . $currentItem->getItemLink() . '"
+                data-verticalmenu="' . $currentItem->getCategoryVerticalMenu() . '"
+                data-verticalmenubg="' . $currentItem->getCategoryVerticalMenuBg() . '"
+                font-icon="' . $currentItem->getItemFontIcon() . '"
+                animation-field="' . $currentItem->getAnimationOption() . '"
+                item-class="' . $currentItem->getItemClass() . '"
+                vertical-cat-sortby="' . $currentItem->getVerticalCatSortby() . '"
+                vertical-cat-sortorder="' . $currentItem->getVerticalCatSortorder() . '"
+                vertical-cat-level="' . $currentItem->getVerticalCatLevel() . '"
+                data-cat="' . $categoryDisplay . '" data-product-display="' . $currentItem->getProductDisplay() . '"
+                data-open-in-new-tab="' . $currentItem->getOpenInNewTab() . '">
+                <button class="cf removebtn btn right" href="#" type="button">Remove</button>
+                <a class="right collapse linktoggle">Collapse</a>
+                <a class="right expand linktoggle">Expand</a>
+                <div class="dd-handle">' . $itemName . "
+                    <span class='right'>(" . $this->helper->getMenuName($currentItem->getItemType()) . ")</span>" . '
+                </div>
+                <div class="item-information col-m-12">' . $itemText . $itemColumns . '<div class="cf"></div>
+                </div>
+            </li>';
             if ($this->hasItemChildren($item->getItemId())) {
                 $childrenItems = $this->menuItemsFactory->create()
-                        ->getCollection()
-                        ->addFieldToFilter('item_parent_id', $item->getItemId())
-                        ->setOrder('sort_order', 'ASC');
+                    ->getCollection()
+                    ->addFieldToFilter('item_parent_id', $item->getItemId())
+                    ->setOrder('sort_order', 'ASC');
                 $itemOutput .= $this->genereateBackendTree($childrenItems, $menuItemId);
             }
             $itemOutput .= '</li>';
@@ -290,21 +317,174 @@ class MenuItems extends \Magento\Backend\Block\Template
         $selectOption = '';
         if (count($itemColumns)) {
             $itemColumnsCount = count($itemColumns);
-            $selectOption = '<div class="marginTop20 custColumnsBlock col-m-12"><div class="col-m-4"><h4>Menu Columns </h4>' . $this->columnsSelect($itemColumnsCount) . '</div><div class="col-m-4"><h4>Animation Fields </h4>' . $this->animationSelect($currentItem) . '</div><div class="col-m-12"><div class="menuColumnBlockWrapper">';
-            foreach ($itemColumns as $itemColumn) {
-                $selectOption .= '<div class="menuColumnBlock column' . $itemColumnsCount . '">';
-                $staticBlock = $this->getStaticBlocks($itemColumn->type, $itemColumn->value);
-                $selectOption .= trim(preg_replace('/\s\s+/', ' ', $staticBlock));
-                $selected = '';
-                if ($itemColumn->showtitle == '1') {
-                    $selected = 'checked';
-                }
-                $selectOption .= ' <p>Show Title <input ' . $selected . ' type="checkbox" class="showtitle"></p>';
-                $selectOption .= '</div>';
+            $selectOption = '<div class="marginTop20 custColumnsBlock col-m-12">
+                <div class="col-m-4">
+                    <h4>'.__("Menu Columns").'</h4>
+                    ' . $this->columnsSelect($itemColumnsCount) . '
+                </div>
+                <div class="col-m-4">
+                    <h4>'.__("Animation Fields").'</h4>
+                    ' . $this->animationSelect($currentItem) . '
+                </div>
+                <div class="col-m-12"><div class="menuColumnBlockWrapper">';
+
+            $colCount = 1;
+            foreach ($itemColumns as $rowItems) {
+                $selectOption = $this->getRowItems($selectOption, $rowItems, $itemColumnsCount, $colCount);
+                $colCount++;
             }
             $selectOption .= '</div></div></div>';
         }
         return $selectOption;
+    }
+
+    private function getRowItems($selectOption, $rowItems, $itemColumnsCount, $colCount)
+    {
+        $selectOption .= '<div id="menuColumn-' . $colCount . '" class="menuColumnBlock column' .
+            $itemColumnsCount . '">';
+        $selectOption .= '<div class="menuColumnBlock-inner">';
+        if (isset($rowItems->item_rows)) {
+            $rowItemsData = $rowItems->item_rows;
+            $rowCount = 1;
+            foreach ($rowItemsData as $itemColumn) {
+                $selectOption = $this->rowItemData($selectOption, $itemColumn, $rowCount);
+                $rowCount++;
+            }
+        } else {
+            $itemColumn = $rowItems;
+            $selectOption = $this->rowItemData($selectOption, $itemColumn);
+        }
+        $selectOption .= '</div>';
+        $selectOption .= '<a class="add-more-menu">' . __('Add More') . '</a>';
+        $selectOption .= '</div>';
+
+        return $selectOption;
+    }
+
+    /*private function rowItemData($selectOption, $itemColumn, $rowCount = null)
+    {
+        $selectOption .= '<div class="menuBlock-row">';
+        if($rowCount > 1) {
+            $selectOption .= '<span class="remove-row"></span>';
+        }
+        $staticBlock = $this->getStaticBlocks($itemColumn->type, $itemColumn->value);
+        $selectOption .= trim(preg_replace('/\s\s+/', ' ', $staticBlock));
+        $selected = '';
+        if ($itemColumn->showtitle == '1') {
+            $selected = 'checked';
+        }
+        $selectOption .= ' <p>Show Title <input ' . $selected . ' type="checkbox" class="showtitle"></p>';
+        $style = '';
+        if ($itemColumn->type != 'category') {
+            $style = 'style="display: none;"';
+        }
+        $selectOption .= '<p class="cat-sort-by-block" ' . $style . '>Sort By <select class="cat-sort-by admin__control-select">';
+        $sortBy = ['position' => 'Position', 'name' => 'Name'];
+        foreach ($sortBy as $k => $sb) {
+            $sel = '';
+            if (isset($itemColumn->catSortBy)) {
+                if ($itemColumn->catSortBy == $k) {
+                    $sel = 'selected';
+                }
+            }
+            $selectOption .= '<option value="' . $k . '" ' . $sel . '>' . $sb . '</option>';
+        }
+        $selectOption .= '</select></p>';
+        $selectOption .= '<p class="cat-sort-order-block" ' . $style . '>Sort Order <select class="cat-sort-order admin__control-select">';
+        $sortOrder = ['asc' => 'ASC', 'desc' => 'DESC'];
+        foreach ($sortOrder as $k => $sb) {
+            $sel = '';
+            if (isset($itemColumn->catSortOrder)) {
+                if ($itemColumn->catSortOrder == $k) {
+                    $sel = 'selected';
+                }
+            }
+            $selectOption .= '<option value="' . $k . '" ' . $sel . '>' . $sb . '</option>';
+        }
+        $selectOption .= '</select></p>';
+        $selectOption .= '<p class="cat-depth-block" ' . $style . '>Category Depth <select class="cat-depth admin__control-select">';
+        for ($i = 1; $i <= 3; $i++) {
+            $sel = '';
+            if (isset($itemColumn->categoryLevel)) {
+                if ($itemColumn->categoryLevel == $i) {
+                    $sel = 'selected';
+                }
+            }
+            $selectOption .= '<option value="' . $i . '" ' . $sel . '>' . $i . '</option>';
+        }
+        $selectOption .= '</select></p>';
+        $selectOption .= '</div>';
+        return $selectOption;
+    }*/
+
+    private function rowItemData($selectOption, $itemColumn, $rowCount = null)
+    {
+        $selectOption .= '<div class="menuBlock-row">';
+
+        if ($rowCount > 1) {
+            $selectOption .= '<span class="remove-row"></span>';
+        }
+
+        $staticBlock = trim(preg_replace(
+            '/\s\s+/',
+            ' ',
+            $this->getStaticBlocks($itemColumn->type, $itemColumn->value)
+        ));
+        $selected = $itemColumn->showtitle === '1' ? 'checked' : '';
+        $style = $itemColumn->type !== 'category' ? 'style="display: none;"' : '';
+
+        $selectOption .= "
+            $staticBlock
+            <p>".__('Show Title')." <input $selected type='checkbox' class='showtitle'></p>
+            <p class='cat-sort-by-block' $style>
+                ".__('Sort By')." <select class='cat-sort-by admin__control-select'>" .
+                $this->generateSelectOptions(['position' => 'Position', 'name' => 'Name'], $itemColumn->catSortBy ?? '') .
+                "</select>
+            </p>
+            <p class='cat-sort-order-block' $style>
+                ".__('Sort Order')." <select class='cat-sort-order admin__control-select'>" .
+                $this->generateSelectOptions(['asc' => 'ASC', 'desc' => 'DESC'], $itemColumn->catSortOrder ?? '') .
+                "</select>
+            </p>
+            <p class='cat-depth-block' " . $style . ">" .
+                __('Category depth')." <select class='cat-depth admin__control-select'>" .
+            $this->generateCatDepth($itemColumn) .
+            "</select>
+            </p>
+        </div>";
+
+        return $selectOption;
+    }
+
+    private function generateCatDepth($itemColumn)
+    {
+        $html = '';
+        for ($i = 1; $i <= 3; $i++) {
+            $sel = "";
+            if (isset($itemColumn->categoryLevel)) {
+                if ($itemColumn->categoryLevel == $i) {
+                    $sel = "selected";
+                }
+            }
+            $html .= "<option value='" . $i . "' " . $sel . ">" . $i . "</option>";
+        }
+
+        return $html;
+    }
+
+    /**
+     * @param $options
+     * @param $selectedValue
+     * @return string
+     */
+    private function generateSelectOptions($options, $selectedValue)
+    {
+        $html = '';
+        foreach ($options as $value => $label) {
+            $selected = $value === $selectedValue ? 'selected' : '';
+            $html .= "<option value='$value' $selected>$label</option>";
+        }
+        return $html;
     }
 
     /**
@@ -314,8 +494,8 @@ class MenuItems extends \Magento\Backend\Block\Template
     public function hasItemChildren($itemId)
     {
         $menuItems = $this->menuItemsFactory->create()->getCollection()
-                ->addFieldToFilter('item_parent_id', $itemId)
-                ->Count();
+            ->addFieldToFilter('item_parent_id', $itemId)
+            ->Count();
         if ($menuItems) {
             return true;
         }
@@ -326,7 +506,7 @@ class MenuItems extends \Magento\Backend\Block\Template
      * @param $currentItem
      * @param $menuItemId
      * @return string
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     public function getItemText($currentItem, $menuItemId)
     {
@@ -337,36 +517,96 @@ class MenuItems extends \Magento\Backend\Block\Template
         $fonticon = $currentItem->getItemFontIcon();
         $category_display = $currentItem->getCategoryDisplay();
         $category_vertical_menu = $currentItem->getCategoryVerticalMenu();
-        $category_checkbox = "";
-        $category_vertical_menu_checkbox = "";
-        $categoryColumns = [];
-        if ((int) $category_display === (int) 1) {
-            $category_checkbox = "checked";
-        }
-        if ((int) $category_vertical_menu === (int) 1) {
-            $category_vertical_menu_checkbox = "checked";
-        }
-        if ($currentItem->getCategoryColumns()) {
-            $categoryColumns = json_decode($currentItem->getCategoryColumns());
-        }
+        $product_display = $currentItem->getProductDisplay();
+        $open_in_new_tab = $currentItem->getOpenInNewTab();
 
-        if ($currentItem->getItemType() == 'link') {
-            return '<div class="col-m-3"><h4>Label</h4><input class="input-text admin__control-text required-entry linkclass linktypelabel" type="text" name="menu_data[' . $menuItemId . '][external_link]" value="' . $name . '"></div><div class="col-m-3"><h4>Url</h4><input class="input-text admin__control-text required-entry validate-url linkclass linktypeurl" type="text"  name="menu_data[' . $menuItemId . '][custom_link_url]" value="' . $url . '"></div><div class="col-m-3"><h4>Class</h4><input class="input-text admin__control-text linkclass linktypeclass" type="text" name="menu_data[' . $menuItemId . '][item_class]" value="' . $class . '"></div><div class="col-m-3"><h4>Preceding Label Content</h4><input class="input-text admin__control-text linktypefont linkclass" type="text" name="menu_data[' . $menuItemId . '][fonticon]" value="' . $fonticon . '" ><div class="admin__field-note"><span>This Content will be added before Menu Label.</span></div></div>';
-        } elseif ($currentItem->getItemType() == 'pages') {
-            return '<div class="col-m-3"><h4>Label</h4><input class="input-text admin__control-text required-entry linkclass linktypelabel" type="text" name="menu_data[' . $menuItemId . '][mcustom_link_text]" value="' . $name . '"></div><div class="col-m-3"><h4>Url</h4><input class="input-text admin__control-text linkclass linktypeurl" type="text" name="menu_data[' . $menuItemId . '][custom_link_url]" value="' . $url . '"><div class="admin__field-note"><span>Leave blank to link to home page URL.</span></div></div><div class="col-m-3"><h4>Class</h4><input class="input-text admin__control-text linkclass linktypeclass" type="text" name="menu_data[' . $menuItemId . '][item_class]" value="' . $class . '"></div><div class="col-m-3"><h4>Preceding Label Content</h4><input class="input-text admin__control-text linktypefont linkclass" type="text" name="menu_data[' . $menuItemId . '][fonticon]" value="' . $fonticon . '" ><div class="admin__field-note"><span>This Content will be added before Menu Label.</span></div></div>';
-        } elseif ($currentItem->getItemType() == 'megamenu') {
-            return '<div class="col-m-3"><h4>Label</h4><input class="input-text admin__control-text required-entry linkclass linktypelabel" type="text" name="menu_data[' . $menuItemId . '][mcustom_link_text]" value="' . $name . '"></div><div class="col-m-3"><h4>Url</h4><input class="input-text admin__control-text validate-url linkclass linktypeurl" type="text"  name="menu_data[' . $menuItemId . '][custom_link_url]" value="' . $url . '"></div><div class="col-m-3"><h4>Class</h4><input class="input-text admin__control-text linkclass linktypeclass" type="text" name="menu_data[' . $menuItemId . '][item_class]" value="' . $class . '"></div><div class="col-m-3"><h4>Preceding Label Content</h4><input class="input-text admin__control-text linktypefont linkclass" type="text" name="menu_data[' . $menuItemId . '][fonticon]" value="' . $fonticon . '" ><div class="admin__field-note"><span>This Content will be added before Menu Label.</span></div></div>';
+        $category_checkbox = (int)$category_display === 1 ? "checked" : "";
+        $category_vertical_menu_checkbox = (int)$category_vertical_menu === 1 ? "checked" : "";
+        $categoryColumns = $currentItem->getCategoryColumns() ? json_decode($currentItem->getCategoryColumns()) : [];
+        $product_display_checkbox = (int)$product_display === 1 ? "checked" : "";
+        $open_in_new_tab_checkbox = (int)$open_in_new_tab === 1 ? "checked" : "";
+
+
+        $type = $currentItem->getItemType();
+        $inputTextClass = 'input-text admin__control-text linkclass';
+
+        if ($type == 'link' || $type == 'pages' || $type == 'megamenu') {
+            return '
+                <div class="col-m-3">
+                    <h4>'.__("Label").'</h4>
+                    <input class="'.$inputTextClass.' required-entry linktypelabel" type="text"
+                    name="menu_data[' . $menuItemId . ']
+                    [' . ($type == 'pages' ? 'mcustom_link_text' : 'external_link') . ']"
+                    value="' . $name . '">
+                </div>
+                <div class="col-m-3">
+                    <h4>'.__("Url").'</h4>
+                    <input class="'.$inputTextClass.' linktypeurl" type="text"
+                    name="menu_data[' . $menuItemId . '][custom_link_url]"
+                    value="' . $url . '" ' . ($type == 'link' ? '' : '') . '>
+                    ' . ($type == 'pages' ? '<div class="admin__field-note">
+                    <span>'.__("Leave blank to link to the home page URL.").'</span></div>' : '') . '
+                </div>
+                <div class="col-m-3">
+                    <h4>'.__("Class").'</h4>
+                    <input class="'.$inputTextClass.' linktypeclass" type="text"
+                    name="menu_data[' . $menuItemId . '][item_class]" value="' . $class . '">
+                </div>
+                <div class="col-m-3">
+                    <h4>'.__("Preceding Label Content").'</h4>
+                    <input class="'.$inputTextClass.' linktypefont" type="text"
+                    name="menu_data[' . $menuItemId . '][fonticon]" value="' . $fonticon . '" >
+                    <div class="admin__field-note">
+                        <span>'.__("This Content will be added before Menu Label").'.</span>
+                    </div>
+                </div>
+                <div class="col-m-3">
+                    <input class="input-text admin__control-checkbox checkbox linkclass open_in_new_tab_checkbox"
+                    type="checkbox"
+                    name="menu_data[' . $menuItemId . '][open_in_new_tab]" ' . $open_in_new_tab_checkbox . '>
+                    <label for="menu_data_' . $menuItemId . '_open_in_new_tab" class="admin__field-label">
+                        '.__("Open In New Tab").'
+                    </label>
+                </div>';
         } else {
             $categoryHtml = '';
-            $categoryHtml .= '<div class="col-m-4"><h4>Class</h4><input class="input-text admin__control-text linkclass linktypeclass" type="text" name="menu_data[' . $menuItemId . '][item_class]" value="' . $class . '"></div><div class="col-m-4"><h4>Preceding Label Content</h4><input class="input-text admin__control-text linktypefont linkclass" type="text" name="menu_data[' . $menuItemId . '][fonticon]" value="' . $fonticon . '" ><div class="admin__field-note"><span>This Content will be added before Menu Label.</span></div></div>';
+            $categoryHtml .= '
+                <div class="col-m-4">
+                    <h4>'.__("Class").'</h4>
+                    <input class="input-text admin__control-text linkclass linktypeclass" type="text"
+                    name="menu_data[' . $menuItemId . '][item_class]" value="' . $class . '">
+                </div>
+                <div class="col-m-4">
+                    <h4>'.__("Preceding Label Content").'</h4>
+                    <input class="input-text admin__control-text linktypefont linkclass" type="text"
+                    name="menu_data[' . $menuItemId . '][fonticon]" value="' . $fonticon . '">
+                    <div class="admin__field-note">
+                        <span>'.__("This Content will be added before Menu Label.").'</span>
+                    </div>
+                </div>';
+
 
             if ($this->getData('currentMenu')->getMenuType() === '2') {
                 if ($currentItem->getItemType() === 'category') {
-                    $categoryHtml .= '<div class="col-m-4"><h4>Animation Fields </h4>' . $this->animationSelect($currentItem) . '</div><div class="cf"></div>';
+                    $categoryHtml .= '<div class="col-m-4">
+                        <h4>'.__("Animation Fields").'</h4>
+                        ' . $this->animationSelect($currentItem) . '</div>
+                        <div class="cf"></div>';
                 }
 
                 if ($currentItem->getItemType() == 'category') {
-                    $categoryHtml .= '<div class="menuColumnBlockWrapper" style="margin:10px 0;"><div class="col-m-4 category_checkbox_wrapper"><input class="admin__control-checkbox checkbox category_checkbox" id="menu_data_' . $menuItemId . '_subcat" type="checkbox" name="menu_data[' . $menuItemId . '][subcat]"' . $category_checkbox . '><label for="menu_data_' . $menuItemId . '_subcat" class="admin__field-label" style="line-height:16px;">Display all subcategories</label></div><div class="col-m-4 category_checkbox_wrapper"><input id="menu_data_' . $menuItemId . '_verticalsubcat" class="admin__control-checkbox checkbox vertical_category_checkbox" type="checkbox" name="menu_data[' . $menuItemId . '][verticalsubcat]"' . $category_vertical_menu_checkbox . '><label for="menu_data_' . $menuItemId . '_verticalsubcat" class="admin__field-label" style="line-height:16px;">Display Vertical Menu</label></div><div class="col-m-4 vertical_category_color_wrapper"><label for="menu_data_' . $menuItemId . '_verticalcatcolor" class="admin__field-label" style="line-height:16px;">Vertical Menu Background Color</label><input id="menu_data_' . $menuItemId . '_verticalcatcolor" class="jscolor admin__control-text vertical_category_color" type="text" name="menu_data[' . $menuItemId . '][verticalcatcolor]" value="' . $currentItem->getCategoryVerticalMenuBg() . '"></div></div><div class="cf"></div>';
+                    $selectedHtml = $this->getLayout()->createBlock('Magento\Framework\View\Element\Template');
+                    $selectedData = ['menu_item_id' => $menuItemId,
+                        'category_checkBox' => $category_checkbox,
+                        'category_vertical_menu_checkbox' => $category_vertical_menu_checkbox,
+                        'category_vertical_bg_color' => $currentItem->getCategoryVerticalMenuBg(),
+                        'current_item' => $currentItem,
+                        'current_menu_design_type' => $this->getData('currentMenu')->getMenuDesignType(),
+                        'product_display_checkbox' => $product_display_checkbox,
+                        'open_in_new_tab_checkbox' => $open_in_new_tab_checkbox];
+                    $selectedHtml->setData($selectedData);
+                    $selectedHtml->setTemplate('Magedelight_Megamenu::menu/items/menuColumnBlockWrapper.phtml');
+                    $categoryHtml .= trim(preg_replace('/\s\s+/', ' ', $selectedHtml->toHtml()));
                 }
                 $blockname = '';
                 if (!empty($categoryColumns)) {
@@ -380,7 +620,23 @@ class MenuItems extends \Magento\Backend\Block\Template
                             }
                             $blockname = $categoryColumn->value;
                         }
-                        $categoryHtml .= '<div class="col-m-3"><h4>' . ucfirst($categoryColumn->type) . ' Block</h4>' . $this->yesNoDropdown($categoryColumn->enable, 'menu_data[' . $menuItemId . '][' . $categoryColumn->type . ']', $randLabel, $categoryColumn->type) . '<div class="header_staticblock_select categorylink_category_select ' . $hiddenClass . '" style="margin-top:10px;"><h4 style="margin-top:0;">Select Static Block</h4>' . $this->getStaticBlocks('block', $blockname, true) . '<p>Show Title <input ' . $selected . ' type="checkbox" class="showtitle"></p></div></div>';
+                        $categoryHtml .= '<div class="col-m-3">
+                            <h4>' . __('%1 Block', ucfirst($categoryColumn->type)) . '</h4>' .
+                            $this->yesNoDropdown(
+                                'menu_data[' . $menuItemId . '][' . $categoryColumn->type . ']',
+                                $randLabel,
+                                $categoryColumn->type,
+                                $categoryColumn->enable
+                            ) .
+                            '<div class="header_staticblock_select categorylink_category_select ' . $hiddenClass . '"
+                            style="margin-top:10px;">
+                            <h4 style="margin-top:0;">'.__("Select Static Block").'</h4>' .
+                                $this->getStaticBlocks('block', $blockname, true) . '
+                                <p>'.__("Show Title").'
+                                    <input ' . $selected . ' type="checkbox" class="showtitle">
+                                </p>
+                            </div>
+                        </div>';
                     }
                 }
             }
@@ -467,16 +723,16 @@ class MenuItems extends \Magento\Backend\Block\Template
 
         if (in_array(0, $storeId)) {
             $blocks = $this->blockFactory->create()->getCollection()
-                    ->addFieldToFilter('is_active', 1)
-                    ->addStoreFilter(0);
+                ->addFieldToFilter('is_active', 1)
+                ->addStoreFilter(0);
 
             $menus = $this->menuFactory->create()->getCollection()
-                    ->addFieldToFilter('is_active', 1)
-                    ->addFieldToFilter('menu_type', 1)
-                    ->addStoreFilter(0);
+                ->addFieldToFilter('is_active', 1)
+                ->addFieldToFilter('menu_type', 1)
+                ->addStoreFilter(0);
         } else {
             $blocksTemp = $this->blockFactory->create()->getCollection()
-                    ->addFieldToFilter('is_active', 1);
+                ->addFieldToFilter('is_active', 1);
             foreach ($blocksTemp as $singleBlock) {
                 $blockAvailable = true;
                 foreach ($storeId as $singleStore) {
@@ -493,8 +749,8 @@ class MenuItems extends \Magento\Backend\Block\Template
             }
 
             $menusTemp = $this->menuFactory->create()->getCollection()
-                    ->addFieldToFilter('is_active', 1)
-                    ->addFieldToFilter('menu_type', 1);
+                ->addFieldToFilter('is_active', 1)
+                ->addFieldToFilter('menu_type', 1);
             foreach ($menusTemp as $singleMenu) {
                 $menuAvailable = true;
                 foreach ($storeId as $singleStore) {
@@ -522,7 +778,6 @@ class MenuItems extends \Magento\Backend\Block\Template
         $blockHtml->setCategoriesData($this->getCategoriesDropdown());
         $blockHtml->setTemplate('Magedelight_Megamenu::menu/staticBlocks.phtml');
         $contents = $blockHtml->toHtml();
-
         return $contents;
     }
 
@@ -530,12 +785,12 @@ class MenuItems extends \Magento\Backend\Block\Template
     {
         $categoryCollection = $this->categoryModel;
         $categoriesArray = $categoryCollection
-                ->getCollection()
-                ->addAttributeToSelect('name')
-                ->addAttributeToSort('path', 'asc')
-                ->addFieldToFilter('is_active', ['eq' => '1'])
-                ->load()
-                ->toArray();
+            ->getCollection()
+            ->addAttributeToSelect('name')
+            ->addAttributeToSort('path', 'asc')
+            ->addFieldToFilter('is_active', ['eq' => '1'])
+            ->load()
+            ->toArray();
 
         foreach ($categoriesArray as $categoryId => $category) {
             if (isset($category['name'])) {
@@ -555,7 +810,7 @@ class MenuItems extends \Magento\Backend\Block\Template
      * @param $randLabel
      * @param $position
      * @return string
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     public function yesNoDropdown($name, $randLabel, $position, $selected = '')
     {
@@ -568,7 +823,6 @@ class MenuItems extends \Magento\Backend\Block\Template
         $contents = $selectedHtml->toHtml();
         return trim(preg_replace('/\s\s+/', ' ', $contents));
     }
-   
 
     public function getMenuLabels()
     {
