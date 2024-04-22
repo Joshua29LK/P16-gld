@@ -1,12 +1,12 @@
 <?xml version="1.0"?>
 <!--
 /**
-* Magedelight
-* Copyright (C) 2017 Magedelight <info@magedelight.com>
+* MageDelight
+* Copyright (C) 2023 Magedelight <info@magedelight.com>
 *
 * @category Magedelight
 * @package Magedelight_Megamenu
-* @copyright Copyright (c) 2017 Mage Delight (http://www.magedelight.com/)
+* @copyright Copyright (c) 2023 Magedelight (http://www.magedelight.com/)
 * @license http://opensource.org/licenses/gpl-3.0.html GNU General Public License,version 3 (GPL-3.0)
 * @author Magedelight <info@magedelight.com>
 */
@@ -16,15 +16,35 @@
         <referenceContainer name='root'>
             <block class='Magedelight\Megamenu\Block\Init' name='md_megamenu_block_init' ifconfig='magedelight/general/megamenu_status'/>
         </referenceContainer>
-        <referenceBlock name="catalog.topnav">
+        <referenceBlock name="catalog.topnav" remove="true"/>
+        <referenceBlock name="store.menu">
+            <block class="Magento\Theme\Block\Html\Topmenu" name="catalog.topnav.without.ttl"
+                   template="Magento_Theme::html/topmenu.phtml" before="-"/>
+        </referenceBlock>
+        <referenceBlock name="catalog.topnav.without.ttl">
             <action method='setCustomTemplate'>
                 <argument name='template' xsi:type='string'>Magento_Theme::html/topmenu.phtml</argument>
             </action>
+            <arguments>
+                <argument name="viewModel" xsi:type="object">Magedelight\Megamenu\ViewModel\Topmenu</argument>
+            </arguments>
         </referenceBlock>
         <referenceBlock name="navigation.sections">
             <action method="setTemplate">
                 <argument name="template" xsi:type="string">Magedelight_Megamenu::html/sections.phtml</argument>
             </action>
         </referenceBlock>
+        <move element="catalog.topnav.horizontalmenu" destination="header.container" after="-"/>
+        <!-- Vertical menu customizaton start -->
+        <referenceContainer name="header-wrapper">
+            <container name="vertical-header-menu-container" htmlClass="verticalmenu-menu-container" htmlTag="div" after="logo">
+                <block class="Magedelight\Megamenu\Block\Topmenu" name="md-vertical-menu" template="Magedelight_Megamenu::menu/verticalmenu.phtml" ifconfig='magedelight/general/megamenu_status'>
+                    <arguments>
+                        <argument name="category_icon_image" xsi:type="object">Magedelight\Megamenu\ViewModel\Category\CategoryIconImage</argument>
+                    </arguments>
+                </block>
+            </container>
+        </referenceContainer>
+        <!-- Vertical menu customization end -->
     </body>
 </page>

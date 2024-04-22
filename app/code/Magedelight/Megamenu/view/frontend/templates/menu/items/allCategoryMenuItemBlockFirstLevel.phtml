@@ -1,0 +1,81 @@
+<?php
+/** @noinspection PhpComposerExtensionStubsInspection */
+/** @noinspection PhpUnhandledExceptionInspection */
+/** @var  $item \Magedelight\Megamenu\Model\MenuItems|\Magedelight\Megamenu\Api\Data\MenuItemsInterface */
+/** @var  $menuBlock \Magedelight\Megamenu\Block\Topmenu */
+/** @var  $menuManagement \Magedelight\Megamenu\Model\MegamenuManagement */
+$menuBlock = $block->getData('menu_block');
+$item = $block->getData('menu_item');
+$menuManagement = $block->getData('menu_management');
+$menuId = $block->getData('menu_id');
+$liClass = $menuBlock->getActiveClass($item).' '.$item->getItemClass();
+$catVerticalMenuBg = $item->getCategoryVerticalMenuBg();
+$megaMenuLink = $menuManagement->generateMenuUrl($item) ? : '#';
+$megaMenuName = $menuManagement->generateMenuItemName($item);
+$catDisplay = $verticalMenu = $menuAdd = false;
+$verticalMenuClass = $rightContentClass = '';
+$subcats = [];
+$_imgHtml = '';
+$countChild = '';
+$allCategoryMenuObj = $menuBlock->getAllCategoryMenuObj($menuId);
+$showCatCount = $allCategoryMenuObj->getShowCategoryCount();
+$catMenuLableHtml = '';
+$catMenuLabel = '';
+$openInNewTabText = '';
+if ($item->getOpenInNewTab()) {
+    $openInNewTabText = 'target="_blank"';
+}
+if ($item->getItemType() === 'category' && (int) $item->getCategoryDisplay() === (int) 1) {
+    $categoryLoad = $menuManagement->getCategoryById($item->getObjectId());
+    $subcats = $menuManagement->getChildrenCategories($categoryLoad);
+    if (!empty($subcats)) {
+        $catDisplay = true;
+        $menuAdd = true;
+        if ((int) $item->getCategoryVerticalMenu() === (int) 1) {
+            $verticalMenu = true;
+            $verticalMenuClass = 'menu-vertical-wrapper';
+            $rightContentClass = 'col-menu-3';
+        }
+    }
+    if ($categoryLoad->getCategoryIconImage()) {
+        if ($_imgUrl = $menuBlock->getCategoryIconImage()->getUrl($categoryLoad)) {
+            $_imgHtml = '<span class="category-icon-image"><img src="'
+                . $menuBlock->escapeUrl($_imgUrl)
+                . '" alt="'
+                . $menuBlock->escapeHtmlAttr($categoryLoad->getName())
+                . '" title="'
+                . $menuBlock->escapeHtmlAttr($categoryLoad->getName())
+                . '" /></span>';
+        }
+    }
+    $catMenuLabel = $menuBlock->getCategoryMenuLabelHtml($item->getObjectId());
+    if ($showCatCount) {
+        $countChild = '('.$categoryLoad->getChildrenCount().')';
+    }
+}
+if ($menuBlock->getCmsBlockConfig($item, 'left', 'enable') ||
+    $menuBlock->getCmsBlockConfig($item, 'right', 'enable') ||
+    $menuBlock->getCmsBlockConfig($item, 'header', 'enable') ||
+    $menuBlock->getCmsBlockConfig($item, 'bottom', 'enable')
+) {
+    $catDisplay = true;
+}
+if ($catDisplay) {
+    $liClass .= ' dropdown menu-dropdown-icon category-item nav-'.$item->getItemId();
+    ?>
+    <li class="category-item <?= /* @noEscape */ $liClass ?>" data-item-id="<?= $item->getItemId() ?>">
+        <a href="<?= /* @noEscape */ $menuManagement->generateMenuUrl($item) ? : '#' ?>" <?= $openInNewTabText; ?>>
+            <?= /* @noEscape */ $_imgHtml; ?>
+            <span class="megaitemicons"><?= /* @noEscape */ $item->getItemFontIcon() ?></span>
+            <?= /* @noEscape */ __($menuManagement->generateMenuItemName($item)) ?>
+            <span class="category-count"><?= /* @noEscape */$countChild ?></span>
+            <?=  /* @noEscape */ $catMenuLabel ?>
+        </a>
+    </li>
+<?php } else { ?>
+<li class="category-item <?= $liClass ?>" data-item-id="<?= $item->getItemId() ?>">
+    <a href="<?= $megaMenuLink ?>" <?= $openInNewTabText ?>><span class="megaitemicons"><?= $item->getItemFontIcon() ?></span>
+        <?= /* @noEscape */ $_imgHtml; ?>
+        <?= __($megaMenuName) ?> <?= $catMenuLableHtml ?></a>
+</li>
+<?php } ?>

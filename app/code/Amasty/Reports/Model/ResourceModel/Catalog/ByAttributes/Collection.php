@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 /**
  * @author Amasty Team
- * @copyright Copyright (c) 2023 Amasty (https://www.amasty.com)
+ * @copyright Copyright (c) Amasty (https://www.amasty.com)
  * @package Advanced Reports Base for Magento 2
  */
 
@@ -18,6 +18,7 @@ use Amasty\Reports\Model\ResourceModel\Filters\RequestFiltersProvider;
 use Amasty\Reports\Model\Utilities\CreateUniqueHash;
 use Amasty\Reports\Model\Utilities\JoinCustomAttribute;
 use Amasty\Reports\Model\Utilities\Order\GlobalRateResolver;
+use Magento\Catalog\Model\Product\Type;
 use Magento\Framework\Data\Collection\Db\FetchStrategyInterface;
 use Magento\Framework\Data\Collection\EntityFactoryInterface;
 use Magento\Framework\DB\Adapter\AdapterInterface;
@@ -106,17 +107,17 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Order\Item\Collectio
     }
 
     /**
-     * @param $collection
+     * @param AbstractCollection $collection
      */
     public function prepareCollection($collection)
     {
         $this->joinEavAttribute($collection);
-        $this->joinChilds($collection);
+        $this->joinParents($collection);
         $this->applyToolbarFilters($collection);
     }
 
     /**
-     * @param $collection
+     * @param AbstractCollection $collection
      */
     public function joinEavAttribute($collection)
     {
@@ -155,33 +156,35 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Order\Item\Collectio
             'qty' => 'FLOOR(SUM(main_table.qty_ordered))',
             'entity_id' => $entityId,
             'total' => sprintf(
-                'SUM(IF(soi.total IS NOT NULL AND soi.total != 0, soi.total, %s))',
-                $this->globalRateResolver->resolvePriceColumn('main_table.base_row_total')
+                'SUM(IF(main_table.base_row_total != 0, %s, %s))',
+                $this->globalRateResolver->resolvePriceColumn('main_table.base_row_total'),
+                $this->globalRateResolver->resolvePriceColumn('parent.base_row_total')
             ),
             'tax' => sprintf(
-                'SUM(%s)',
-                $this->globalRateResolver->resolvePriceColumn('main_table.base_tax_amount')
+                'SUM(IF(main_table.base_tax_amount != 0, %s, %s))',
+                $this->globalRateResolver->resolvePriceColumn('main_table.base_tax_amount'),
+                $this->globalRateResolver->resolvePriceColumn('parent.base_tax_amount')
             ),
             'discounts' => sprintf(
-                'SUM(IF(soi.base_discount_amount IS NOT NULL AND soi.base_discount_amount != 0, '
-                . 'soi.base_discount_amount, %s))',
-                $this->globalRateResolver->resolvePriceColumn('main_table.base_discount_amount')
+                'SUM(IF(main_table.base_discount_amount != 0, %s, %s))',
+                $this->globalRateResolver->resolvePriceColumn('main_table.base_discount_amount'),
+                $this->globalRateResolver->resolvePriceColumn('parent.base_discount_amount')
             ),
             'invoiced' => sprintf(
-                'SUM(IF(soi.invoiced IS NOT NULL AND soi.invoiced != 0, soi.invoiced, %s))',
-                $this->globalRateResolver->resolvePriceColumn('main_table.base_row_invoiced')
+                'SUM(IF(main_table.base_row_invoiced != 0, %s, %s))',
+                $this->globalRateResolver->resolvePriceColumn('main_table.base_row_invoiced'),
+                $this->globalRateResolver->resolvePriceColumn('parent.base_row_invoiced')
             ),
             'refunded' => sprintf(
-                'SUM(IF(soi.refunded IS NOT NULL AND soi.refunded != 0, soi.refunded, %s))',
-                $this->globalRateResolver->resolvePriceColumn('main_table.base_amount_refunded')
+                'SUM(IF(main_table.base_amount_refunded != 0, %s, %s))',
+                $this->globalRateResolver->resolvePriceColumn('main_table.base_amount_refunded'),
+                $this->globalRateResolver->resolvePriceColumn('parent.base_amount_refunded')
             )
-        ])->where(
-            'main_table.parent_item_id IS NULL'
-        );
+        ]);
     }
 
     /**
-     * @param $collection
+     * @param AbstractCollection $collection
      */
     private function joinAttributeSet($collection)
     {
@@ -198,7 +201,7 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Order\Item\Collectio
     }
 
     /**
-     * @param $collection
+     * @param AbstractCollection $collection
      */
     public function applyToolbarFilters($collection)
     {
@@ -208,57 +211,25 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Order\Item\Collectio
     }
 
     /**
-     * @param \Magento\Framework\DataObject $item
-     * @return $this|\Magento\Sales\Model\ResourceModel\Order\Item\Collection
+     * Join parents to get totals of complicated products
+     *
+     * The report build with grouping by a product attribute,
+     * but an attribute value is stored only in simple products
+     * while totals can be stored in parent items.
      */
-    public function addItem(\Magento\Framework\DataObject $item)
+    private function joinParents(AbstractCollection $collection): void
     {
-        parent::_addItem($item); // TODO: Change the autogenerated stub
-        return $this;
-    }
-
-    /**
-     * @param AbstractCollection $collection
-     */
-    private function joinChilds($collection)
-    {
-        $childsSelect = $this->getConnection()->select()->from(
-            ['soi' => $this->getTable('sales_order_item')],
-            ['parent_item_id']
-        )->group(
-            'parent_item_id'
+        /**
+         * Exclude Bundle because totals of ordered Bundle product are in options (main_table simple products)
+         */
+        $onPart = $this->getConnection()->quoteInto(
+            'parent.item_id = main_table.parent_item_id AND parent.product_type NOT IN (?)',
+            [Type::TYPE_BUNDLE]
         );
 
-        if ($this->globalRateResolver->isDefaultStore()) {
-            $childsSelect->join(
-                ['so' => $this->getTable('sales_order')],
-                'soi.order_id = so.entity_id',
-                []
-            );
-        }
-
-        $childsSelect->columns([
-            'total' => sprintf(
-                'SUM(%s)',
-                $this->globalRateResolver->resolvePriceColumn('soi.base_row_total')
-            ),
-            'invoiced' => sprintf(
-                'SUM(%s)',
-                $this->globalRateResolver->resolvePriceColumn('soi.base_row_invoiced')
-            ),
-            'refunded' => sprintf(
-                'SUM(%s)',
-                $this->globalRateResolver->resolvePriceColumn('soi.base_amount_refunded')
-            ),
-            'base_discount_amount' => sprintf(
-                'SUM(%s)',
-                $this->globalRateResolver->resolvePriceColumn('soi.base_discount_amount')
-            )
-        ]);
-
         $collection->getSelect()->joinLeft(
-            ['soi' => $childsSelect],
-            'soi.parent_item_id = main_table.item_id',
+            ['parent' => $this->getTable('sales_order_item')],
+            $onPart,
             ''
         );
     }

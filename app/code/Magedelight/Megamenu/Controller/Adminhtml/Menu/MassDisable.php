@@ -1,11 +1,11 @@
 <?php
 /**
- * Magedelight
- * Copyright (C) 2017 Magedelight <info@magedelight.com>
+ * MageDelight
+ * Copyright (C) 2023 Magedelight <info@magedelight.com>
  *
- * @category Magedelight
+ * @category MageDelight
  * @package Magedelight_Megamenu
- * @copyright Copyright (c) 2017 Mage Delight (http://www.magedelight.com/)
+ * @copyright Copyright (c) 2023 Magedelight (http://www.magedelight.com/)
  * @license http://opensource.org/licenses/gpl-3.0.html GNU General Public License,version 3 (GPL-3.0)
  * @author Magedelight <info@magedelight.com>
  */
@@ -61,7 +61,7 @@ class MassDisable extends \Magento\Backend\App\Action
             $item->save();
         }
 
-        $this->messageManager->addSuccess(__('A total of %1 record(s) have been disabled.', $collection->getSize()));
+        $this->messageManager->addSuccessMessage(__('A total of %1 record(s) have been disabled.', $collection->getSize()));
 
         /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
         $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);

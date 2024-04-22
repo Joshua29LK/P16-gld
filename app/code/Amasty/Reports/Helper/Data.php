@@ -1,14 +1,16 @@
 <?php
 /**
  * @author Amasty Team
- * @copyright Copyright (c) 2023 Amasty (https://www.amasty.com)
+ * @copyright Copyright (c) Amasty (https://www.amasty.com)
  * @package Advanced Reports Base for Magento 2
  */
 
 namespace Amasty\Reports\Helper;
 
+use Amasty\Reports\Model\Store;
 use Magento\Directory\Model\Currency;
 use Magento\Framework\App\Helper\AbstractHelper;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Store\Model\ScopeInterface;
@@ -74,63 +76,33 @@ class Data extends AbstractHelper
     }
 
     /**
+     * @deprecated
+     * @see \Amasty\Reports\Model\Utilities\GetDefaultFromDate::execute
      * @return int
      */
     public function getDefaultFromDate()
     {
-        try {
-            $date = $this->getFlag(self::DATE_FROM_FLAG)->loadSelf()->getFlagData() ?: strtotime('-7 day');
-        } catch (\Magento\Framework\Exception\LocalizedException $e) {
-            $date = 0;
-        }
-
-        return (int) $date;
+        return ObjectManager::getInstance()->get(\Amasty\Reports\Model\Utilities\GetDefaultFromDate::class)->execute();
     }
 
     /**
+     * @deprecated
+     * @see \Amasty\Reports\Model\Utilities\GetDefaultToDate::execute
      * @return int
      */
     public function getDefaultToDate()
     {
-        try {
-            $date = $this->getFlag(self::DATE_TO_FLAG)->loadSelf()->getFlagData() ?: time();
-        } catch (\Magento\Framework\Exception\LocalizedException $e) {
-            $date = 0;
-        }
-
-        return (int) $date;
-    }
-
-    /**
-     * @param string $code
-     * @return \Magento\Framework\Flag
-     */
-    private function getFlag($code)
-    {
-        return $this->flagFactory->create([
-            'data' => [
-                'flag_code' => $code
-            ]
-        ]);
+        return ObjectManager::getInstance()->get(\Amasty\Reports\Model\Utilities\GetDefaultToDate::class)->execute();
     }
 
     /**
      * @return int
      * @deprecated
-     * @see \Amasty\Reports\Helper\Data::getCurrentStoreId
+     * @see \Amasty\Reports\Model\Store::getCurrentStoreId
      */
     public function getCurrentStoreId()
     {
-        $params = $this->_getRequest()->getParam('amreports');
-        $storeId = $this->_getRequest()->getParam(
-            'store',
-            $params['store'] ?? null
-        );
-        if ($storeId === null) {
-            $storeId = $this->session->getAmreportsStore();
-        }
-
-        return (int)$storeId;
+        return ObjectManager::getInstance()->get(Store::class)->getCurrentStoreId();
     }
 
     /**

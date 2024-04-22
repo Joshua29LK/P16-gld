@@ -1,12 +1,12 @@
 <?php
 
 /**
- * Magedelight
- * Copyright (C) 2017 Magedelight <info@magedelight.com>
+ * MageDelight
+ * Copyright (C) 2023 Magedelight <info@magedelight.com>
  *
- * @category Magedelight
+ * @category MageDelight
  * @package Magedelight_Megamenu
- * @copyright Copyright (c) 2017 Mage Delight (http://www.magedelight.com/)
+ * @copyright Copyright (c) 2023 Magedelight (http://www.magedelight.com/)
  * @license http://opensource.org/licenses/gpl-3.0.html GNU General Public License,version 3 (GPL-3.0)
  * @author Magedelight <info@magedelight.com>
  */
@@ -24,6 +24,11 @@ use Magento\Store\Model\StoreRepository;
  */
 class MenuList implements \Magento\Framework\Option\ArrayInterface
 {
+    private $excludeArray = [
+        'all-category',
+        'amazon-menu',
+        'drillDown'
+    ];
 
     /**
      * @var \Magedelight\Megamenu\Model\Menu
@@ -40,28 +45,18 @@ class MenuList implements \Magento\Framework\Option\ArrayInterface
      */
     private $storeManager;
 
-    /**
-     * MenuList constructor.
-     * @param \Magedelight\Megamenu\Model\Menu $megamenuMenu
-     * @param Http $request
-     * @param StoreManagerInterface $storeManager
-     * @param StoreRepository $storeRepository
-     */
     public function __construct(
         \Magedelight\Megamenu\Model\Menu $megamenuMenu,
         Http $request,
-        StoreManagerInterface $storeManager,
-        StoreRepository $storeRepository
+        StoreManagerInterface $storeManager
     ) {
         $this->megamenuMenu = $megamenuMenu;
         $this->request = $request;
         $this->storeManager = $storeManager;
-        $this->storeRepository = $storeRepository;
     }
 
     /**
-     * @param \Magedelight\Megamenu\Model\Menu $megamenuMenu
-     * @return string
+     * @return array
      */
     public function getStores()
     {
@@ -69,9 +64,9 @@ class MenuList implements \Magento\Framework\Option\ArrayInterface
         $website = $this->request->getParam('website');
 
         $allStores = [];
-        if (isset($store) and ! empty($store)) {
+        if (isset($store) && ! empty($store)) {
             $allStores[] = $store;
-        } elseif (isset($website) and ! empty($website)) {
+        } elseif (isset($website) && ! empty($website)) {
             $website = $this->storeManager->getWebsite($website);
             foreach ($website->getGroups() as $group) {
                 $stores = $group->getStores();
@@ -83,6 +78,7 @@ class MenuList implements \Magento\Framework\Option\ArrayInterface
             $allStores[] = 0;
         }
         $allStores[] = 0;
+
         return $allStores;
     }
 
@@ -114,7 +110,7 @@ class MenuList implements \Magento\Framework\Option\ArrayInterface
                 }
             }
             $menus->getSelect()->group('main_table.menu_id')->having(new \Zend_Db_Expr($qry));
-           
+
         } else {
             $menus->getSelect()->join(
                 ['u' => $menus->getTable('megamenu_menus_store')],
@@ -132,13 +128,16 @@ class MenuList implements \Magento\Framework\Option\ArrayInterface
 
         $sourceArray = [];
         $count = 0;
-        if (isset($menus) and ! empty($menus)) {
+        if (isset($menus) && ! empty($menus)) {
             foreach ($menus as $menu) {
-                $sourceArray[$count]['value'] = $menu->getMenuId();
-                $sourceArray[$count]['label'] = $menu->getMenuName();
-                $count++;
+                if (!in_array($menu->getMenuDesignType(), $this->excludeArray)) {
+                    $sourceArray[$count]['value'] = $menu->getMenuId();
+                    $sourceArray[$count]['label'] = $menu->getMenuName();
+                    $count++;
+                }
             }
         }
+        array_unshift($sourceArray, ['value' => 0, 'label' => __('None')]);
         return $sourceArray;
     }
 

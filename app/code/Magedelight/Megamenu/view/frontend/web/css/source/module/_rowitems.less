@@ -1,0 +1,70 @@
+//
+// Common
+// _____________________________________________
+
+& when (@media-common = true) {
+
+    .section-item-content {
+        .menu-container {
+            .menu {
+                > ul {
+                    > li {
+                        ul {
+                            .row_item_list {
+                                .row_items {
+                                    h2 {
+                                        color: #333;
+                                        border-bottom: #e8e8e8 solid 1px;
+                                        font-size: 16px;
+                                        padding: 8px 0 16px;
+                                        margin: 0 0 12px 0;
+                                        font-weight: 700;
+                                    }
+                                    li{
+                                        color: #333;
+                                    }
+                                }
+                            }
+
+                            &.column2 {
+                                .row_item_list {
+                                    .row_items {
+                                        width: 50%;
+                                    }
+                                }
+                            }
+
+                            &.column3 {
+                                .row_item_list {
+                                    .row_items {
+                                        width: 33.33%;
+                                    }
+                                }
+                            }
+
+                            &.column4 {
+                                .row_item_list {
+                                    .row_items {
+                                        width: 25%;
+                                    }
+                                }
+                            }
+
+                            &.column5 {
+                                .row_item_list {
+                                    .row_items {
+                                        width: 20%;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+}
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
+
+}

@@ -59,6 +59,11 @@ class ExtensionTest extends TestCase
      */
     private $urlMock;
 
+    /**
+     * @var Extension
+     */
+    private $extensionProcessor;
+
     protected function setUp(): void
     {
         $this->extensionsProviderMock = $this->createMock(ExtensionsProvider::class);

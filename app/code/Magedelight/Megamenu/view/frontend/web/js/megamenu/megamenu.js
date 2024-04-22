@@ -19,9 +19,8 @@ require(['jquery'], function($) {
         $(".menu > ul > li").hover(function(e) {
             if ($(window).width() > 767) {
                 var duration = '0.3s';
-                var animation_time = 0;
-                if (animation_time) {
-                    duration = animation_time + 's';
+                 if (window.animation_time) {
+                    duration = window.animation_time + 's';
                 }
                 $(this).children("ul").stop(true, false).css({
                     'animation-duration': duration
@@ -38,6 +37,7 @@ require(['jquery'], function($) {
             $('.menu-vertical-items').removeClass('active');
             $('.vertical-subcate-content').removeClass('active');
             $(this).addClass('active');
+            console.log($(this).data('toggle'));
             $('#' + $(this).data('toggle')).addClass('active');
         });
         //If width is more than 943px dropdowns are displayed on hover
@@ -53,9 +53,9 @@ require(['jquery'], function($) {
         var menuToogle = function() {
 
             /* Restrict to call code when burger menu is enable */
-            if($("html").hasClass("md-burger-menu") == false) {
+            var menuLength = document.getElementsByClassName('menu-container').length;
+            if($("html").hasClass("md-burger-menu") == false && (menuLength !== 0)) {
                 if ($('html').hasClass('nav-open')) {
-                    console.log('w54fewr6f5d4');
                     $('html').removeClass('nav-open');
                     setTimeout(function() {
                         $('html').removeClass('nav-before-open');

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "604995d5bcb9e555df9f7f772473708b",
+    "content-hash": "7478b5ac1507a4805f05fe78c7939247",
     "packages": [
         {
             "name": "2tvenom/cborencode",
@@ -19901,17 +19901,17 @@
         },
         {
             "name": "redchamps/module-core",
-            "version": "1.2.0",
+            "version": "1.2.1",
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:redchampsTeam/core.git",
-                "reference": "d466b434e8af22e1c91aa5c9b134fea1b083eac3"
+                "reference": "c914cb95b42e9617240bfef02fadd6e586f82fd5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://repo.redchamps.com//dist/redchamps/module-core/redchamps-module-core-1.2.0-0c665e.zip",
-                "reference": "d466b434e8af22e1c91aa5c9b134fea1b083eac3",
-                "shasum": "ecfac6690452a7e108eb51f217f04fa42b4d587a"
+                "url": "https://repo.redchamps.com//dist/redchamps/module-core/redchamps-module-core-1.2.1-c34714.zip",
+                "reference": "c914cb95b42e9617240bfef02fadd6e586f82fd5",
+                "shasum": "20015ef3f17f83cad444fa16c38e4a36cb703a62"
             },
             "type": "magento2-module",
             "autoload": {
@@ -19926,7 +19926,7 @@
                 "RedChamps-Eula"
             ],
             "description": "RedChamps Core Module",
-            "time": "2024-03-21T08:26:20+00:00"
+            "time": "2024-04-11T15:40:43+00:00"
         },
         {
             "name": "redchamps/module-grid-status-color",
@@ -20017,21 +20017,21 @@
         },
         {
             "name": "redchamps/module-share-cart",
-            "version": "1.4.3",
+            "version": "1.4.4",
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:redchampsTeam/share-cart.git",
-                "reference": "fef04ee75d4f2a350b4f7baf7226f5b9382e8beb"
+                "reference": "8889838734f560bae79bb38770ef912b917e33cd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://repo.redchamps.com//dist/redchamps/module-share-cart/redchamps-module-share-cart-1.4.3-1a5146.zip",
-                "reference": "fef04ee75d4f2a350b4f7baf7226f5b9382e8beb",
-                "shasum": "f61e71431b1197996a00d9294092d6b1c6e1d615"
+                "url": "https://repo.redchamps.com//dist/redchamps/module-share-cart/redchamps-module-share-cart-1.4.4-d21fc0.zip",
+                "reference": "8889838734f560bae79bb38770ef912b917e33cd",
+                "shasum": "41bbddadf9a12da742a6c4dfc4c9fea8071bfdd9"
             },
             "require": {
                 "magento/module-sales": "*",
-                "redchamps/module-core": "^1.2",
+                "redchamps/module-core": ">1.2.0",
                 "redchamps/module-grid-status-color": "*",
                 "redchamps/module-modal-box": "*"
             },
@@ -20045,15 +20045,14 @@
                     "registration.php"
                 ],
                 "psr-4": {
-                    "RedChamps\\ShareCart\\": "",
-                    "Twilio\\": "twilio/sdk/Twilio"
+                    "RedChamps\\ShareCart\\": ""
                 }
             },
             "license": [
                 "RedChamps EULA"
             ],
             "description": "This extension will allow to share shopping cart via an email, link, WhatsApp.",
-            "time": "2024-04-01T14:07:56+00:00"
+            "time": "2024-04-11T15:39:53+00:00"
         },
         {
             "name": "redchamps/module-sitemap-url-exclude",

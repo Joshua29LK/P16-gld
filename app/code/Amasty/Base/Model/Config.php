@@ -10,6 +10,7 @@ namespace Amasty\Base\Model;
 use Magento\Framework\App\Config\ReinitableConfigInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Config\Storage\WriterInterface;
+use Magento\Framework\App\ObjectManager;
 
 class Config extends ConfigProviderAbstract
 {
@@ -17,6 +18,9 @@ class Config extends ConfigProviderAbstract
      * @var string
      */
     protected $pathPrefix = 'amasty_base/';
+
+    public const IS_PRODUCTION = 'instance_registration/production_mode';
+    public const LICENSE_KEYS = 'instance_registration/license_registration';
 
     public const NOTIFICATIONS_FREQUENCY = 'notifications/frequency';
     public const NOTIFICATIONS_TYPE = 'notifications/type';
@@ -38,14 +42,40 @@ class Config extends ConfigProviderAbstract
      */
     private $reinitableConfig;
 
+    /**
+     * @var Serializer
+     */
+    private $serializer;
+
     public function __construct(
         ScopeConfigInterface $scopeConfig,
         WriterInterface $configWriter,
-        ReinitableConfigInterface $reinitableConfig
+        ReinitableConfigInterface $reinitableConfig,
+        Serializer $serializer = null
     ) {
         parent::__construct($scopeConfig);
         $this->configWriter = $configWriter;
         $this->reinitableConfig = $reinitableConfig;
+        $this->serializer = $serializer ?? ObjectManager::getInstance()->get(Serializer::class);
+    }
+
+    public function isProduction(): ?bool
+    {
+        $result = $this->getValue(self::IS_PRODUCTION);
+
+        return $result === null ? $result : (bool)$result;
+    }
+
+    public function getLicenseKeys(): array
+    {
+        $value = (string)$this->getValue(self::LICENSE_KEYS);
+
+        $result = [];
+        foreach ((array)$this->serializer->unserialize($value) as $record) {
+            $result[] = $record['license_key'] ?? '';
+        }
+
+        return array_filter(array_map('trim', $result));
     }
 
     public function getEnabledNotificationTypes(): array

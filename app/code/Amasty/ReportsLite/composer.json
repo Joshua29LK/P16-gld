@@ -4,13 +4,13 @@
     "require": {
         "php": ">=7.3",
         "amasty/module-advanced-reports": "*",
-        "amasty/base": ">=1.14.5"
+        "amasty/base": ">=1.15.1"
     },
     "homepage": "https://amasty.com/",
     "type": "magento2-module",
-    "version": "1.9.2",
+    "version": "1.9.6",
     "license": [
-        "Commercial"
+        "proprietary"
     ],
     "autoload": {
         "files": [

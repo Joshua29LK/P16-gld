@@ -44,7 +44,7 @@ class ConverterTest extends TestCase
 
     public function testConvertToObject(): void
     {
-        $data = [InstanceInfo::DOMAINS => [], InstanceInfo::MODULES => []];
+        $data = [InstanceInfo::DOMAINS => [], InstanceInfo::MODULES => [], InstanceInfo::CUSTOMER_INSTANCE_KEY => []];
         $instanceInfoMock = $this->createMock(InstanceInfo::class);
 
         $this->instanceInfoFactoryMock

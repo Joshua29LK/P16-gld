@@ -1,6 +1,7 @@
 define([
     'jquery',
     'mage/translate',
+    'jquery-ui-modules/widget',
     'Amasty_Reports/vendor/amcharts4/core.min',
     'Amasty_Reports/vendor/amcharts4/charts.min',
     'Amasty_Reports/vendor/amcharts4/animated.min'

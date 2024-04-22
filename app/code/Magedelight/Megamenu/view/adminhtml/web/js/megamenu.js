@@ -1,4 +1,4 @@
-/*global $, menuType */
+/*global $, menuType, menuDesignType */
 require(['jquery',
     'jquery/ui',
     'mage/mage',
@@ -29,7 +29,7 @@ require(['jquery',
         var updateOutput = function (e)
         {
             var list = e.length ? e : jQuery(e.target),
-                    output = list.data('output');
+                output = list.data('output');
             if (output) {
                 if (window.JSON) {
                     output.val(window.JSON.stringify(list.nestable('serialize')));//, null, 2));
@@ -54,7 +54,7 @@ require(['jquery',
         jQuery('#nestable-menu').on('click', function (e)
         {
             var target = jQuery(e.target),
-                    action = target.data('action');
+                action = target.data('action');
             if (action === 'expand-all') {
                 jQuery('.dd').nestable('expandAll');
             }
@@ -71,21 +71,53 @@ require(['jquery',
     function addColumns(currentRow, fields) {
         if (jQuery(currentRow).find('.blockselect')) {
             var columnsCount = 0;
-            jQuery(currentRow).find('.blockselect').each(function () {
-                var opt = jQuery(this).find(':selected');
-                if (jQuery(this).parent().find('.showtitle').prop('checked')) {
-                    var showTitleValue = 1;
-                } else {
-                    var showTitleValue = 0;
-                }
-                var value = opt.val();
-                var og = opt.closest('optgroup').attr('data-column-type');
-                var typetext = 'type';
-                var valuetext = 'value';
-                var showtitle = 'showtitle';
-                fields += '<input type="hidden" class="hiddenItems" name="menu_data[' + menuId + '][item_columns][' + columnsCount + '][' + typetext + ']" value="' + og + '">';
-                fields += '<input type="hidden" class="hiddenItems" name="menu_data[' + menuId + '][item_columns][' + columnsCount + '][' + valuetext + ']" value="' + value + '">';
-                fields += '<input type="hidden" class="hiddenItems" name="menu_data[' + menuId + '][item_columns][' + columnsCount + '][' + showtitle + ']" value="' + showTitleValue + '">';
+            jQuery(currentRow).find('.menuColumnBlock').each(function () {
+
+                var parentColumnId = jQuery(this).closest('.menuColumnBlock').attr('id');
+                //jQuery("#"+ parentColumnId).euach(function () {
+                    var menuBlockRows = jQuery(this).find('.menuBlock-row');
+                    var rowCount = 0;
+                    menuBlockRows.each(function() {
+                        var opt = jQuery(this).find('.blockselect').find(':selected');
+
+                        if (jQuery(this).find('.showtitle').prop('checked')) {
+                            var showTitleValue = 1;
+                        } else {
+                            var showTitleValue = 0;
+                        }
+                        var value = opt.val();
+                        var og = opt.closest('optgroup').attr('data-column-type');
+                        var typetext = 'type';
+                        var valuetext = 'value';
+                        var showtitle = 'showtitle';
+                        var catDepth = 'categoryLevel';
+                        var catSortBy = 'catSortBy';
+                        var catSortOrder = 'catSortOrder';
+                        if (jQuery(this).find('.cat-depth').val()) {
+                            var catDepthValue = jQuery(this).find('.cat-depth').val();
+                        } else {
+                            var catDepthValue = '2';
+                        }
+                        if (jQuery(this).find('.cat-sort-by').val()) {
+                            var catSortByValue = jQuery(this).find('.cat-sort-by').val();
+                        } else {
+                            var catSortByValue = 'position';
+                        }
+                        if (jQuery(this).find('.cat-sort-order').val()) {
+                            var catSortOrderValue = jQuery(this).find('.cat-sort-order').val();
+                        } else {
+                            var catSortOrderValue = 'asc';
+                        }
+
+                        fields += '<input type="hidden" class="hiddenItems" name="menu_data[' + menuId + '][item_columns][' + columnsCount + '][item_rows][' + rowCount + '][' + typetext + ']" value="' + og + '">';
+                        fields += '<input type="hidden" class="hiddenItems" name="menu_data[' + menuId + '][item_columns][' + columnsCount + '][item_rows][' + rowCount + '][' + valuetext + ']" value="' + value + '">';
+                        fields += '<input type="hidden" class="hiddenItems" name="menu_data[' + menuId + '][item_columns][' + columnsCount + '][item_rows][' + rowCount + '][' + showtitle + ']" value="' + showTitleValue + '">';
+                        fields += '<input type="hidden" class="hiddenItems" name="menu_data[' + menuId + '][item_columns][' + columnsCount + '][item_rows][' + rowCount + '][' + catSortBy + ']" value="' + catSortByValue + '">';
+                        fields += '<input type="hidden" class="hiddenItems" name="menu_data[' + menuId + '][item_columns][' + columnsCount + '][item_rows][' + rowCount + '][' + catSortOrder + ']" value="' + catSortOrderValue + '">';
+                        fields += '<input type="hidden" class="hiddenItems" name="menu_data[' + menuId + '][item_columns][' + columnsCount + '][item_rows][' + rowCount + '][' + catDepth + ']" value="' + catDepthValue + '">';
+                        rowCount++;
+                    });
+                //});
                 columnsCount++;
             });
         }
@@ -138,11 +170,20 @@ require(['jquery',
             var itemClass = jQuery(this).attr('item-class');
             var animationField = jQuery(this).attr('animation-field');
             if (animationField === "") {
-                animationField = "bounceIn";
+                animationField = "none";
             }
             var cat = jQuery(this).attr('data-cat');
             if (cat === 'undefined') {
                 cat = 0;
+            }
+            var productDisplay = jQuery(this).attr('data-product-display');
+            if(productDisplay === 'undefined'){
+                productDisplay = 0;
+            }
+
+            var openInNewTab = jQuery(this).attr('data-open-in-new-tab');
+            if(openInNewTab === 'undefined'){
+                openInNewTab = 0;
             }
 
             var verticalMenu = jQuery(this).attr('data-verticalmenu');
@@ -154,13 +195,42 @@ require(['jquery',
             if (verticalMenuBgColor === 'undefined') {
                 verticalMenuBgColor = 0;
             }
+            var catSortBy = jQuery(this).attr('vertical-cat-sortby');
+            if (catSortBy === "" || typeof catSortBy === 'undefined') {
+                catSortBy = "position";
+            }
+            var catSortOrder = jQuery(this).attr('vertical-cat-sortorder');
+            if (catSortOrder === "" || typeof catSortOrder === 'undefined') {
+                catSortOrder = "asc";
+            }
+            var ChildCatLevel = jQuery(this).attr('vertical-cat-level');
+            if (ChildCatLevel === "" || typeof ChildCatLevel === 'undefined') {
+                ChildCatLevel = "2";
+            }
             //var cat = 'false';
             /*if(catValue === '1'){
              cat = "true";
              }else{
              cat = "false";
              }*/
-            var fields = '<input type="hidden" class="hiddenItems" name="menu_data[' + menuId + '][item_id]" value="' + menuId + '"><input class="hiddenItems" type="hidden" name="menu_data[' + menuId + '][sort_order]" value="' + count + '"><input class="hiddenItems" type="hidden" name="menu_data[' + menuId + '][item_parent_id]" value="' + parentId + '"><input type="hidden" class="hiddenItems" name="menu_data[' + menuId + '][item_name]" value="' + name + '"><input type="hidden" class="hiddenItems" name="menu_data[' + menuId + '][item_type]" value="' + type + '"><input type="hidden" class="hiddenItems" name="menu_data[' + menuId + '][object_id]" value="' + objectid + '"><input type="hidden" class="hiddenItems" name="menu_data[' + menuId + '][item_link]" value="' + link + '"><input type="hidden" class="hiddenItems" name="menu_data[' + menuId + '][item_font_icon]" value="' + fontIcon + '"><input type="hidden" class="hiddenItems" name="menu_data[' + menuId + '][item_class]" value="' + itemClass + '"><input type="hidden" class="hiddenItems" name="menu_data[' + menuId + '][animation_option]" value="' + animationField + '"><input type="hidden" class="hiddenItems" name="menu_data[' + menuId + '][item_all_cat]" value="' + cat + '"><input type="hidden" class="hiddenItems" name="menu_data[' + menuId + '][item_vertical_menu]" value="' + verticalMenu + '"><input type="hidden" class="hiddenItems" name="menu_data[' + menuId + '][vertical_menu_bgcolor]" value="' + verticalMenuBgColor + '">';
+            var fields = '<input type="hidden" class="hiddenItems" name="menu_data[' + menuId + '][item_id]" value="' + menuId + '">' +
+                '<input class="hiddenItems" type="hidden" name="menu_data[' + menuId + '][sort_order]" value="' + count + '">' +
+                '<input class="hiddenItems" type="hidden" name="menu_data[' + menuId + '][item_parent_id]" value="' + parentId + '">' +
+                '<input type="hidden" class="hiddenItems" name="menu_data[' + menuId + '][item_name]" value="' + name + '">' +
+                '<input type="hidden" class="hiddenItems" name="menu_data[' + menuId + '][item_type]" value="' + type + '">' +
+                '<input type="hidden" class="hiddenItems" name="menu_data[' + menuId + '][object_id]" value="' + objectid + '">' +
+                '<input type="hidden" class="hiddenItems" name="menu_data[' + menuId + '][item_link]" value="' + link + '">' +
+                '<input type="hidden" class="hiddenItems" name="menu_data[' + menuId + '][item_font_icon]" value="' + fontIcon + '">' +
+                '<input type="hidden" class="hiddenItems" name="menu_data[' + menuId + '][item_class]" value="' + itemClass + '">' +
+                '<input type="hidden" class="hiddenItems" name="menu_data[' + menuId + '][animation_option]" value="' + animationField + '">' +
+                '<input type="hidden" class="hiddenItems" name="menu_data[' + menuId + '][item_all_cat]" value="' + cat + '">' +
+                '<input type="hidden" class="hiddenItems" name="menu_data[' + menuId + '][product_display]" value="' + productDisplay + '">' +
+                '<input type="hidden" class="hiddenItems" name="menu_data[' + menuId + '][open_in_new_tab]" value="' + openInNewTab + '">' +
+                '<input type="hidden" class="hiddenItems" name="menu_data[' + menuId + '][item_vertical_menu]" value="' + verticalMenu + '">' +
+                '<input type="hidden" class="hiddenItems" name="menu_data[' + menuId + '][vertical_menu_bgcolor]" value="' + verticalMenuBgColor + '">'+
+                '<input type="hidden" class="hiddenItems" name="menu_data[' + menuId + '][vertical_cat_sortby]" value="' + catSortBy + '">' +
+                '<input type="hidden" class="hiddenItems" name="menu_data[' + menuId + '][vertical_cat_sortorder]" value="' + catSortOrder + '">'+
+                '<input type="hidden" class="hiddenItems" name="menu_data[' + menuId + '][vertical_cat_level]" value="' + ChildCatLevel + '">';
 
             fields = addColumns(this, fields);
             jQuery(this).append(fields);
@@ -187,7 +257,42 @@ require(['jquery',
     /*For megamenu static block*/
     function generateMegaLiTag(id, name, type, objectId, link) {
         menuId++;
-        var item = '<li class="dd-item col-m-12" data-objectid="' + objectId + '" data-link="' + link + '" data-id="' + id + '" data-name="' + name + '" data-type="' + type + '" font-icon="" item-class="" ><button class="cf removebtn btn right" href="#" type="button">Remove </button><a class="right collapse linktoggle">Collapse</a><a class="right expand linktoggle">Expand</a><div class="dd-handle">' + name + "<span class='right'>(" + menulabel(type) + ")</span>" + '</div><div class="item-information col-m-12"><div class="col-m-3"><h4  >Label</h4><input class="input-text admin__control-text required-entry linkclass linktypelabel" type="text" name="menu_data[' + menuId + '][mcustom_link_text]" value="' + name + '"></div><div class="col-m-3"><h4>Url</h4><input class="input-text admin__control-text validate-url linkclass linktypeurl" type="text" name="menu_data[' + menuId + '][custom_link_url]" value="' + link + '"></div><div class="col-m-3"><h4>Class</h4><input class="input-text admin__control-text linkclass linktypeclass" type="text" name="menu_data[' + menuId + '][item_class]" value=""></div><div class="col-m-3"><h4>Preceding Label Content</h4><input class="input-text admin__control-text linktypefont linkclass" type="text" name="menu_data[' + menuId + '][fonticon]" ><div class="admin__field-note"><span>This Content will be added before Menu Label.</span></div></div><div class="col-m-12 marginTop20 custColumnsBlock"><div class="col-m-4"><h4>Menu Columns </h4><select class="selectcolumns admin__control-select"><option value="1">One Column</option><option value="2">Two Columns</option><option value="3">Three Columns</option><option value="4">Four Columns</option><option value="5">Five Columns</option></select></div><div class="col-m-4"><h4>Animation Fields </h4>' + animationsFields + '</div><div class="col-m-12"><div class="menuColumnBlockWrapper"></div></div></div><div class="cf"></div></div></li>';
+        var item = '<li class="dd-item col-m-12" data-objectid="' + objectId + '" ' +
+            'data-link="' + link + '" data-id="' + id + '" data-name="' + name + '" ' +
+            'data-type="' + type + '" font-icon="" item-class="" >' +
+            '<button class="cf removebtn btn right" href="#" type="button">Remove </button>' +
+            '<a class="right collapse linktoggle">Collapse</a>' +
+            '<a class="right expand linktoggle">Expand</a>' +
+            '<div class="dd-handle">' + name + "<span class='right'>(" + menulabel(type) + ")</span>" + '</div>' +
+            '<div class="item-information col-m-12">' +
+            '<div class="col-m-3">' +
+            '<h4  >Label</h4><input class="input-text admin__control-text required-entry linkclass linktypelabel" ' +
+            'type="text" name="menu_data[' + menuId + '][mcustom_link_text]" ' +
+            'value="' + name + '"></div>' +
+            '<div class="col-m-3"><h4>Url</h4>' +
+            '<input class="input-text admin__control-text linkclass linktypeurl" type="text" ' +
+            'name="menu_data[' + menuId + '][custom_link_url]" value="' + link + '"></div>' +
+            '<div class="col-m-3"><h4>Class</h4>' +
+            '<input class="input-text admin__control-text linkclass linktypeclass" type="text" ' +
+            'name="menu_data[' + menuId + '][item_class]" value=""></div>' +
+            '<div class="col-m-3"><h4>Preceding Label Content</h4>' +
+            '<input class="input-text admin__control-text linktypefont linkclass" type="text" ' +
+            'name="menu_data[' + menuId + '][fonticon]" >' +
+            '<div class="admin__field-note"><span>This Content will be added before Menu Label.</span></div></div>' +
+            '<div class="col-m-3"> ' +
+            '<input class="input-text admin__control-checkbox checkbox open_in_new_tab_checkbox" ' +
+            'type="checkbox" name="menu_data[' + menuId + '][open_in_new_tab]" > ' +
+            '<label for="menu_data_' + menuId + '_open_in_new_tab" ' +
+            'class="admin__field-label">Open In New Tab</label> </div>' +
+            '<div class="col-m-12 marginTop20 custColumnsBlock">' +
+            '<div class="col-m-4"><h4>Menu Columns </h4>' +
+            '<select class="selectcolumns admin__control-select">' +
+            '<option value="1">One Column</option><option value="2">Two Columns</option>' +
+            '<option value="3">Three Columns</option><option value="4">Four Columns</option>' +
+            '<option value="5">Five Columns</option></select></div>' +
+            '<div class="col-m-4"><h4>Animation Fields </h4>' + animationsFields + '</div>' +
+            '<div class="col-m-12"><div class="menuColumnBlockWrapper"></div></div></div>' +
+            '<div class="cf"></div></div></li>';
         return item;
     }
     /*For category link*/
@@ -195,15 +300,64 @@ require(['jquery',
 
         menuId++;
         if (cat == '0') {
-            var item = '<li class="dd-item col-m-12" data-objectid="' + objectId + '" data-link="' + link + '" data-verticalmenu="' + verticalmenu + '"   data-verticalmenubg="' + verticalmenubg + '" data-cat="' + cat + '" data-id="' + id + '" data-name="' + name + '" data-type="' + type + '" font-icon="" item-class="" animation-field="bounceIn"><button class="cf removebtn btn right" href="#" type="button">Remove </button><a class="right collapse linktoggle">Collapse</a><a class="right expand linktoggle">Expand</a><div class="dd-handle">' + name + "<span class='right'>(" + menulabel(type) + ")</span>" + '</div><div class="item-information col-m-12"><div class="col-m-3"><h4  >Label</h4><input class="input-text admin__control-text required-entry linkclass linktypelabel" type="text" name="menu_data[' + menuId + '][item_name]" value="' + name + '"></div><div class="col-m-3"><h4>Url</h4><input class="input-text admin__control-text linkclass linktypeurl" type="text" name="menu_data[' + menuId + '][custom_link_url]" value="' + link + '"><div class="admin__field-note"><span>Leave blank to link to home page URL.</span></div></div><div class="col-m-3"><h4>Class</h4><input class="input-text admin__control-text linkclass linktypeclass" type="text" name="menu_data[' + menuId + '][item_class]" value=""></div><div class="col-m-3"><h4>Preceding Label Content</h4><input class="input-text admin__control-text linktypefont linkclass" type="text" name="menu_data[' + menuId + '][fonticon]" ><div class="admin__field-note"><span>This Content will be added before Menu Label.</span></div></div>';
+            var item = '<li class="dd-item col-m-12" data-objectid="' + objectId + '" data-link="' + link + '" ' +
+                'data-verticalmenu="' + verticalmenu + '"   data-verticalmenubg="' + verticalmenubg + '" ' +
+                'data-cat="' + cat + '" data-id="' + id + '" data-name="' + name + '" ' +
+                'data-type="' + type + '" font-icon="" item-class="" animation-field="none">' +
+                '<button class="cf removebtn btn right" href="#" type="button">Remove </button>' +
+                '<a class="right collapse linktoggle">Collapse</a>' +
+                '<a class="right expand linktoggle">Expand</a>' +
+                '<div class="dd-handle">' + name + "<span class='right'>(" + menulabel(type) + ")</span>" + '</div>' +
+                '<div class="item-information col-m-12"><div class="col-m-3"><h4  >Label</h4>' +
+                '<input class="input-text admin__control-text required-entry linkclass linktypelabel" type="text" ' +
+                'name="menu_data[' + menuId + '][item_name]" value="' + name + '"></div>' +
+                '<div class="col-m-3"><h4>Url</h4>' +
+                '<input class="input-text admin__control-text linkclass linktypeurl" type="text" ' +
+                'name="menu_data[' + menuId + '][custom_link_url]" ' +
+                'value="' + link + '"><div class="admin__field-note">' +
+                '<span>Leave blank to link to home page URL.</span></div></div>' +
+                '<div class="col-m-3"><h4>Class</h4>' +
+                '<input class="input-text admin__control-text linkclass linktypeclass" type="text" ' +
+                'name="menu_data[' + menuId + '][item_class]" value=""></div>' +
+                '<div class="col-m-3"><h4>Preceding Label Content</h4>' +
+                '<input class="input-text admin__control-text linktypefont linkclass" type="text" ' +
+                'name="menu_data[' + menuId + '][fonticon]" >' +
+                '<div class="admin__field-note"><span>This Content will be added before Menu Label.</span></div></div>' +
+                '<div class="col-m-3"> ' +
+                '<input class="input-text admin__control-checkbox checkbox open_in_new_tab_checkbox" ' +
+                'type="checkbox" name="menu_data[' + menuId + '][open_in_new_tab]" > ' +
+                '<label for="menu_data_' + menuId + '_open_in_new_tab" ' +
+                'class="admin__field-label">Open In New Tab</label> </div>';
         } else {
-            var item = '<li class="dd-item col-m-12" data-objectid="' + objectId + '" data-link="' + link + '" data-verticalmenu="' + verticalmenu + '" data-verticalmenubg="' + verticalmenubg + '" data-cat="' + cat + '" data-id="' + id + '" data-name="' + name + '" data-type="' + type + '" font-icon="" item-class="" animation-field="bounceIn"><button class="cf removebtn btn right" href="#" type="button">Remove </button><a class="right collapse linktoggle">Collapse</a><a class="right expand linktoggle">Expand</a><div class="dd-handle">' + name + "<span class='right'>(" + menulabel(type) + ")</span>" + '</div><div class="item-information col-m-12"><div class="col-m-4"><h4>Class</h4><input class="input-text admin__control-text linkclass linktypeclass" type="text" name="menu_data[' + menuId + '][item_class]" value=""></div><div class="col-m-4"><h4>Preceding Label Content</h4><input class="input-text admin__control-text linktypefont linkclass" type="text" name="menu_data[' + menuId + '][fonticon]" ><div class="admin__field-note"><span>This Content will be added before Menu Label.</span></div></div>';
+            var item = '<li class="dd-item col-m-12" data-objectid="' + objectId + '" data-link="' + link + '" data-verticalmenu="' + verticalmenu + '" data-verticalmenubg="' + verticalmenubg + '" data-cat="' + cat + '" data-id="' + id + '" data-name="' + name + '" data-type="' + type + '" font-icon="" item-class="" animation-field="none"><button class="cf removebtn btn right" href="#" type="button">Remove </button><a class="right collapse linktoggle">Collapse</a><a class="right expand linktoggle">Expand</a><div class="dd-handle">' + name + "<span class='right'>(" + menulabel(type) + ")</span>" + '</div><div class="item-information col-m-12"><div class="col-m-4"><h4>Class</h4><input class="input-text admin__control-text linkclass linktypeclass" type="text" name="menu_data[' + menuId + '][item_class]" value=""></div><div class="col-m-4"><h4>Preceding Label Content</h4><input class="input-text admin__control-text linktypefont linkclass" type="text" name="menu_data[' + menuId + '][fonticon]" ><div class="admin__field-note"><span>This Content will be added before Menu Label.</span></div></div>';
         }
 
 
         if (menuType === '2') {
             if (type === "category") {
-                item = item + '<div class="col-m-4"><h4>Animation Fields </h4>' + animationsFields + '</div><div class="cf"></div><div class="menuColumnBlockWrapper" style="margin:10px 0;"><div class="col-m-4 category_checkbox_wrapper"><input id="menu_data_' + menuId + '_subcat" class="admin__control-checkbox checkbox category_checkbox" type="checkbox" name="menu_data[' + menuId + '][subcat]" ><label for="menu_data_' + menuId + '_subcat" class="admin__field-label" style="line-height:16px;">Display all subcategories</label></div><div class="col-m-4 category_checkbox_wrapper"><input id="menu_data_' + menuId + '_verticalsubcat" class="admin__control-checkbox checkbox vertical_category_checkbox" type="checkbox" name="menu_data[' + menuId + '][verticalsubcat]" ><label for="menu_data_' + menuId + '_verticalsubcat" class="admin__field-label" style="line-height:16px;">Display Vertical Menu</label></div><div class="col-m-4 vertical_category_color_wrapper"><label for="menu_data_' + menuId + '_verticalcatcolor" class="admin__field-label" style="line-height:16px;">Vertical Menu Background Color</label><input id="menu_data_' + menuId + '_verticalcatcolor" class="jscolor admin__control-text vertical_category_color" type="text" name="menu_data[' + menuId + '][verticalcatcolor]" ></div></div><div class="cf"></div><div class="col-m-3"><h4>Header Block</h4><select data-position="header" class="enable_blocks admin__control-select" name="menu_data[' + menuId + '][header]" data-position="header"> <option value="0">No</option> <option value="1">Yes</option></select><div class="header_staticblock_select categorylink_category_select hidden" style="margin-top:10px;"><h4 style="margin:0;">Select Static Block</h4>' + menuCategorySelectStaticsBlock + '<p>Show Title <input type="checkbox" name="showtitle" class="showtitle"></p></div></div><div class="col-m-3"><h4>Left Block</h4><select class="enable_blocks admin__control-select" data-position="left" name="menu_data[' + menuId + '][left]"> <option value="0">No</option> <option value="1">Yes</option></select><div class="left_staticblock_select categorylink_category_select hidden" style="margin-top:10px;"><h4 style="margin:0;">Select Static Block</h4>' + menuCategorySelectStaticsBlock + '<p>Show Title <input type="checkbox" name="showtitle" class="showtitle"></p></div></div><div class="col-m-3"><h4>Right Block</h4><select class="enable_blocks admin__control-select" data-position="right" name="menu_data[' + menuId + '][right]"> <option value="0">No</option> <option value="1">Yes</option></select><div class="right_staticblock_select categorylink_category_select hidden" style="margin-top:10px;"><h4 style="margin:0;">Select Static Block</h4>' + menuCategorySelectStaticsBlock + '<p>Show Title <input type="checkbox" name="showtitle" class="showtitle"></p></div></div><div class="col-m-3"><h4>Bottom BLock</h4><select data-position="bottom" class="enable_blocks admin__control-select" name="menu_data[' + menuId + '][bottom]" data-position="bottom"> <option value="0">No</option> <option value="1">Yes</option></select><div class="bottom_staticblock_select categorylink_category_select hidden" style="margin-top:10px;"><h4 style="margin:0;">Select Static Block</h4>' + menuCategorySelectStaticsBlock + '<p>Show Title <input type="checkbox" name="showtitle" class="showtitle"></p></div></div>';
+                var product_display_checkbox = '';
+                if(menuDesignType == 'horizontal' || menuDesignType == 'horizontal-vertical'){
+                    product_display_checkbox = '<div class="col-m-4 product_checkbox_wrapper menu-item-option"><input id="menu_data_' + menuId + '_product_display" class="admin__control-checkbox checkbox product_display_checkbox" type="checkbox" name="menu_data[' + menuId + '][product_display]" ><label for="menu_data_' + menuId + '_product_display" class="admin__field-label" style="line-height:16px;">Display Product Item</label></div>';
+                }
+                var verticalSubCat = '';
+                if(menuDesignType == 'horizontal'){
+                    verticalSubCat = '<div class="col-m-4 category_checkbox_wrapper menu-item-option">' +
+                        '<input id="menu_data_' + menuId + '_verticalsubcat" class="admin__control-checkbox checkbox vertical_category_checkbox" type="checkbox" name="menu_data[' + menuId + '][verticalsubcat]" >' +
+                        '<label for="menu_data_' + menuId + '_verticalsubcat" class="admin__field-label" style="line-height:16px;">Display Vertical Menu</label>' +
+                        '</div>' +
+                        '<div class="col-m-4 vertical_category_color_wrapper menu-item-option hidden">' +
+                        '<label for="menu_data_' + menuId + '_verticalcatcolor" class="admin__field-label" style="line-height:16px;">Vertical Background Color</label>' +
+                        '<input id="menu_data_' + menuId + '_verticalcatcolor" class="jscolor admin__control-text vertical_category_color" type="text" name="menu_data[' + menuId + '][verticalcatcolor]" >' +
+                        '</div>';
+                }
+                item = item + '<div class="col-m-4"><h4>Animation Fields </h4>' + animationsFields + '</div><div class="cf"></div>'+
+                    '<div class="menuColumnBlockWrapper" style="margin:10px 0;">'+
+                    '<div class="col-m-4 category_checkbox_wrapper menu-item-option"><input id="menu_data_' + menuId + '_subcat" class="admin__control-checkbox checkbox category_checkbox" type="checkbox" name="menu_data[' + menuId + '][subcat]" ><label for="menu_data_' + menuId + '_subcat" class="admin__field-label" style="line-height:16px;">Display all subcategories</label></div>'+
+                    verticalSubCat +
+                    product_display_checkbox +
+                    '<div class="col-m-4 open_in_new_tab_checkbox_wrapper menu-item-option"><input id="menu_data_' + menuId + '_open_in_new_tab" class="admin__control-checkbox checkbox open_in_new_tab_checkbox" type="checkbox" name="menu_data[' + menuId + '][open_in_new_tab]" ><label for="menu_data_' + menuId + '_open_in_new_tab" class="admin__field-label" style="line-height:16px;">Open In New Tab</label></div>'+'</div>'+
+                    '<div class="cf"></div><div class="menuColumnBlockWrapper child-category-settings hidden" style="margin:10px 0;"><div class="col-m-3 category_checkbox_wrapper category_exclude"><label for="menu_data_'+menuId+'_verticalcatexclude" class="admin__field-label" style="line-height:16px;">Exclude child category</label><input id="menu_data_'+menuId+'_verticalcatexclude" class="admin__control-text vertical_category_exclude" type="text" name="menu_data['+menuId+'][verticalcatexclude]" value=""><p>Enter comma seperated category ids eg. 25,26,27</p></div><div class="col-m-3 category_checkbox_wrapper category_sort_by"><div class="verical_category_child"><label for="menu_data_'+menuId+'_verticalcatsortby" class="admin__field-label" style="line-height:16px;">Category Sort By</label><select id="menu_data_'+menuId+'_verticalcatsortby" class="admin__control-select vertical_category_sortby" name="menu_data['+menuId+'][verticalcatsortby]"><option value="position">Position</option><option value="name">Name</option></select></div></div><div class="col-m-3 category_checkbox_wrapper category_sort_order"><div class="verical_category_child"><label for="menu_data_'+menuId+'_verticalcatsortorder" class="admin__field-label" style="line-height:16px;">Category Sort Order</label><select id="menu_data_'+menuId+'_verticalcatsortorder" class="admin__control-select vertical_category_sortorder" name="menu_data['+menuId+'][verticalcatsortorder]"><option value="asc">ASC</option><option value="desc">DESC</option></select></div></div><div class="col-m-3 category_checkbox_wrapper category_depth"><div class="verical_category_child"><label for="menu_data_'+menuId+'_verticalcatlevel" class="admin__field-label" style="line-height:16px;">Child Category Depth</label><select id="menu_data_'+menuId+'_verticalcatlevel" class="admin__control-select vertical_category_level" name="menu_data['+menuId+'][verticalcatlevel]"><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option></select></div></div></div>'+
+                    '<div class="cf"></div><div class="col-m-3"><h4>Header Block</h4><select data-position="header" class="enable_blocks admin__control-select" name="menu_data[' + menuId + '][header]" data-position="header"> <option value="0">No</option> <option value="1">Yes</option></select><div class="header_staticblock_select categorylink_category_select hidden" style="margin-top:10px;"><h4 style="margin:0;">Select Static Block</h4>' + menuCategorySelectStaticsBlock + '<p>Show Title <input type="checkbox" name="showtitle" class="showtitle"></p></div></div><div class="col-m-3"><h4>Left Block</h4><select class="enable_blocks admin__control-select" data-position="left" name="menu_data[' + menuId + '][left]"> <option value="0">No</option> <option value="1">Yes</option></select><div class="left_staticblock_select categorylink_category_select hidden" style="margin-top:10px;"><h4 style="margin:0;">Select Static Block</h4>' + menuCategorySelectStaticsBlock + '<p>Show Title <input type="checkbox" name="showtitle" class="showtitle"></p></div></div><div class="col-m-3"><h4>Right Block</h4><select class="enable_blocks admin__control-select" data-position="right" name="menu_data[' + menuId + '][right]"> <option value="0">No</option> <option value="1">Yes</option></select><div class="right_staticblock_select categorylink_category_select hidden" style="margin-top:10px;"><h4 style="margin:0;">Select Static Block</h4>' + menuCategorySelectStaticsBlock + '<p>Show Title <input type="checkbox" name="showtitle" class="showtitle"></p></div></div><div class="col-m-3"><h4>Bottom BLock</h4><select data-position="bottom" class="enable_blocks admin__control-select" name="menu_data[' + menuId + '][bottom]" data-position="bottom"> <option value="0">No</option> <option value="1">Yes</option></select><div class="bottom_staticblock_select categorylink_category_select hidden" style="margin-top:10px;"><h4 style="margin:0;">Select Static Block</h4>' + menuCategorySelectStaticsBlock + '<p>Show Title <input type="checkbox" name="showtitle" class="showtitle"></p></div></div>';
             }
         }
         item = item + '</div></li>';
@@ -213,7 +367,29 @@ require(['jquery',
     function generateLiLinkTag(id, name, type, objectId, link) {
         menuId++;
 
-        var item = '<li class="dd-item col-m-12" data-objectid="' + objectId + '" data-link="' + link + '" data-id="' + id + '" data-name="' + name + '" data-type="' + type + '" font-icon="" item-class=""><button class="cf removebtn btn right" href="#" type="button">Remove </button><a class="right collapse linktoggle">Collapse</a><a class="right expand linktoggle">Expand</a><div class="dd-handle">' + name + "<span class='right'>(" + menulabel(type) + ")</span>" + '</div><div class="item-information col-m-12"><div class="col-m-3"><h4>Label</h4><input class="input-text admin__control-text required-entry linkclass linktypelabel" type="text" name="menu_data[' + menuId + '][mcustom_link_text]" value="' + name + '"></div><div class="col-m-3"><h4>Url</h4><input class="input-text admin__control-text required-entry validate-url linkclass linktypeurl" type="text" name="menu_data[' + menuId + '][custom_link_url]" value="' + link + '"></div><div class="col-m-3"><h4>Class</h4><input class="input-text admin__control-text linkclass linktypeclass" type="text" name="menu_data[' + menuId + '][item_class]" value=""></div><div class="col-m-3"><h4>Preceding Label Content</h4><input class="input-text admin__control-text linktypefont linkclass" type="text" name="menu_data[' + menuId + '][fonticon]" ><div class="admin__field-note"><span>This Content will be added before Menu Label.</span></div></div><div class="cf"></div></div></li>';
+        var item = '<li class="dd-item col-m-12" data-objectid="' + objectId + '" ' +
+            'data-link="' + link + '" data-id="' + id + '" data-name="' + name + '" data-type="' + type + '" ' +
+            'font-icon="" item-class="" data-open-in-new-tab="">' +
+            '<button class="cf removebtn btn right" href="#" type="button">Remove </button>' +
+            '<a class="right collapse linktoggle">Collapse</a>' +
+            '<a class="right expand linktoggle">Expand</a><div class="dd-handle">' + name +
+            "<span class='right'>(" + menulabel(type) + ")</span>" + '</div>' +
+            '<div class="item-information col-m-12"><div class="col-m-3"><h4>Label</h4>' +
+            '<input class="input-text admin__control-text required-entry linkclass linktypelabel" type="text" ' +
+            'name="menu_data[' + menuId + '][mcustom_link_text]" value="' + name + '"></div>' +
+            '<div class="col-m-3"><h4>Url</h4>' +
+            '<input class="input-text admin__control-text required-entry linkclass linktypeurl" type="url" ' +
+            'name="menu_data[' + menuId + '][custom_link_url]" value="' + link + '"></div><div class="col-m-3">' +
+            '<h4>Class</h4>' +
+            '<input class="input-text admin__control-text linkclass linktypeclass" type="text" ' +
+            'name="menu_data[' + menuId + '][item_class]" value=""></div><div class="col-m-3">' +
+            '<h4>Preceding Label Content</h4><input class="input-text admin__control-text linktypefont linkclass" ' +
+            'type="text" name="menu_data[' + menuId + '][fonticon]" >' +
+            '<div class="admin__field-note"><span>This Content will be added before Menu Label.1</span></div></div>' +
+            '<div class="col-m-3"> <input class="input-text admin__control-checkbox checkbox open_in_new_tab_checkbox" ' +
+            'type="checkbox" name="menu_data[' + menuId + '][open_in_new_tab]" > ' +
+            '<label for="menu_data_' + menuId + '_open_in_new_tab" class="admin__field-label">Open In New Tab</label> ' +
+            '</div><div class="cf"></div></div></li>';
         return item;
     }
 
@@ -240,9 +416,57 @@ require(['jquery',
         var perColumnWidth = (wrapperWidth / columnsCount) - (columnMargin);
         var blockHtml = '';
         for (var i = 1; i <= columnsCount; i++) {
-            blockHtml += '<div class="menuColumnBlock column' + columnsCount + '">' + menuStaticsBlock + ' <p>Show Title <input type="checkbox" name="showtitle" class="showtitle"></p></div>';
+            blockHtml += '<div id="menuColumn-' + i + '" class="menuColumnBlock column' + columnsCount + '">' +
+                '<div class="menuColumnBlock-inner"><div class="menuBlock-row">' +
+                menuStaticsBlock + ' <p>Show Title <input type="checkbox" name="showtitle" class="showtitle"></p>' +
+                '<p class="cat-sort-by-block">Sort By <select class="cat-sort-by admin__control-select">' +
+                '<option value="position">Position</option><option value="name">Name</option></select></p>' +
+                '<p class="cat-sort-order-block">Sort Order ' +
+                '<select class="cat-sort-order admin__control-select">' +
+                '<option value="asc">ASC</option>' +
+                '<option value="desc">DESC</option></select></p>' +
+                '<p class="cat-depth-block">Category Depth ' +
+                '<select class="cat-depth admin__control-select">' +
+                '<option value="1">1</option><option value="2">2</option>' +
+                '<option value="3">3</option></select></p>' +
+                '</div></div>' +
+                '<a class="add-more-menu">Add More</a></div>';
         }
         jQuery(blockHtml).hide().appendTo(wrapper).fadeIn(1000);
+        reIntialize();
+        addMoreMenu(jQuery);
+    }
+
+    function addMoreMenu(jQuery)
+    {
+        jQuery('.add-more-menu').on("click", function () {
+            var column = $(this).closest('.menuColumnBlock');
+            var rowsWrapper = column.find('.menuColumnBlock-inner');
+            blockHtml = '<div class="menuBlock-row"><span class="remove-row"></span>' +
+                menuStaticsBlock + ' <p>Show Title <input type="checkbox" name="showtitle" class="showtitle"></p>' +
+                '<p class="cat-sort-by-block">Sort By <select class="cat-sort-by admin__control-select">' +
+                '<option value="position">Position</option><option value="name">Name</option></select></p>' +
+                '<p class="cat-sort-order-block">Sort Order ' +
+                '<select class="cat-sort-order admin__control-select">' +
+                '<option value="asc">ASC</option>' +
+                '<option value="desc">DESC</option></select></p>' +
+                '<p class="cat-depth-block">Category Depth ' +
+                '<select class="cat-depth admin__control-select">' +
+                '<option value="1">1</option><option value="2">2</option>' +
+                '<option value="3">3</option></select></p>' +
+                '</div>';
+
+            rowsWrapper.append(blockHtml);
+            removeRow(jQuery);
+        });
+    }
+
+    function removeRow(jQuery){
+        jQuery('.remove-row').on("click", function () {
+            var column = $(this).closest('.menuBlock-row');
+            column.remove();
+            resetMenus();
+        });
     }
 
     jQuery(document).ready(function () {
@@ -377,31 +601,96 @@ require(['jquery',
             currentObj.parents('li.dd-item').attr('animation-field', currentObj.val());
             resetMenus();
         });
+        jQuery('.mainroot').on('change', '.vertical_category_sortby', function () {
+            var currentObj = jQuery(this);
+            currentObj.parents('li.dd-item').attr('vertical-cat-sortby', currentObj.val());
+            resetMenus();
+        });
+        jQuery('.mainroot').on('change', '.vertical_category_sortorder', function () {
+            var currentObj = jQuery(this);
+            currentObj.parents('li.dd-item').attr('vertical-cat-sortorder', currentObj.val());
+            resetMenus();
+        });
+        jQuery('.mainroot').on('change', '.vertical_category_level', function () {
+            var currentObj = jQuery(this);
+            currentObj.parents('li.dd-item').attr('vertical-cat-level', currentObj.val());
+            resetMenus();
+        });
         jQuery('.mainroot').on('change', '.category_checkbox', function () {
             var currentObj = jQuery(this);
+            console.log(currentObj);
             var catValue = 0;
             if (currentObj.prop('checked')) {
                 var catValue = 1;
             }
             currentObj.parents('li.dd-item').attr('data-cat', catValue);
+            if (catValue === 1) {
+                currentObj.parents('.menuColumnBlockWrapper').siblings(".child-category-settings").removeClass('hidden');
+                if(currentObj.parents('.menuColumnBlockWrapper').find('input.product_display_checkbox').is(":checked")){
+                    currentObj.parents('li.dd-item').attr('data-product-display', 0);
+                    currentObj.parents('.menuColumnBlockWrapper').find('input.product_display_checkbox').prop('checked', false);
+                }
+                currentObj.parents('.menuColumnBlockWrapper').siblings(".child-category-settings").find(".category_exclude label").html('Exclude child category');
+                currentObj.parents('.menuColumnBlockWrapper').siblings(".child-category-settings").find(".category_exclude p").html('Enter comma seperated category ids eg. 25,26,27');
+                currentObj.parents('.menuColumnBlockWrapper').siblings(".child-category-settings").find(".category_sort_by label").html('Category Sort By');
+                currentObj.parents('.menuColumnBlockWrapper').siblings(".child-category-settings").find(".category_sort_order label").html('Category Sort Order');
+                currentObj.parents('.menuColumnBlockWrapper').siblings(".child-category-settings").find(".category_depth").show();
+                currentObj.parents('.menuColumnBlockWrapper').siblings(".child-category-settings").find(".category_depth label").html('Child Category Depth');
+            } else {
+                currentObj.parents('.menuColumnBlockWrapper').siblings(".child-category-settings").addClass('hidden');
+            }
+            resetMenus();
+        });
+        jQuery('.mainroot').on('change', '.product_display_checkbox', function () {
+            var currentObj = jQuery(this);
+            var productDisplayValue = 0;
+            if (currentObj.prop('checked')) {
+                var productDisplayValue = 1;
+            }
+            currentObj.parents('li.dd-item').attr('data-product-display', productDisplayValue);
+            if (productDisplayValue === 1) {
+                currentObj.parents('.menuColumnBlockWrapper').siblings(".child-category-settings").removeClass('hidden');
+                if(currentObj.parents('.menuColumnBlockWrapper').find('input.category_checkbox').is(":checked")){
+                    currentObj.parents('li.dd-item').attr('data-cat', 0);
+                    currentObj.parents('.menuColumnBlockWrapper').find('input.category_checkbox').prop('checked', false);
+                }
+                currentObj.parents('.menuColumnBlockWrapper').siblings(".child-category-settings").find(".category_exclude label").html('Exclude Product Items');
+                currentObj.parents('.menuColumnBlockWrapper').siblings(".child-category-settings").find(".category_exclude p").html('Enter comma seperated product ids eg. 25,26,27');
+                currentObj.parents('.menuColumnBlockWrapper').siblings(".child-category-settings").find(".category_sort_by label").html('Product Sort By');
+                currentObj.parents('.menuColumnBlockWrapper').siblings(".child-category-settings").find(".category_sort_order label").html('Product Sort Order');
+                currentObj.parents('.menuColumnBlockWrapper').siblings(".child-category-settings").find(".category_depth").hide();
+            } else {
+                currentObj.parents('.menuColumnBlockWrapper').siblings(".child-category-settings").addClass('hidden');
+            }
+            resetMenus();
+        });
+        jQuery('.mainroot').on('change', '.open_in_new_tab_checkbox', function () {
+            var currentObj = jQuery(this);
+            var openInNewTabValue = 0;
+            if (currentObj.prop('checked')) {
+                openInNewTabValue = 1;
+            }
+            currentObj.parents('li.dd-item').attr('data-open-in-new-tab', openInNewTabValue);
             resetMenus();
         });
         jQuery('.mainroot').on('change', '.vertical_category_checkbox', function () {
             var currentObj = jQuery(this);
             var catVerticalMenu = 0;
+            currentObj.parent().siblings(".vertical_category_color_wrapper").addClass('hidden');
             if (currentObj.prop('checked')) {
-                var catVerticalMenu = 1;
+                catVerticalMenu = 1;
+                currentObj.parent().siblings(".vertical_category_color_wrapper").removeClass('hidden');
             }
             currentObj.parents('li.dd-item').attr('data-verticalmenu', catVerticalMenu);
             resetMenus();
         });
-        
+
         jQuery('.mainroot').on('change', '.vertical_category_color', function () {
             var currentObj = jQuery(this);
             currentObj.parents('li.dd-item').attr('data-verticalmenubg', currentObj.val());
             resetMenus();
         });
-        
+
         jQuery('.mainroot').on('change', '.enable_blocks', function () {
             var currentObj = jQuery(this);
             currentObj.parents('li.dd-item').attr('animation-field', currentObj.val());
@@ -434,6 +723,16 @@ require(['jquery',
         });
 
         jQuery('#nestable').on('change', '.blockselect', function () {
+            var type = jQuery(this.options[this.selectedIndex]).closest('optgroup').attr('data-column-type');
+            if(type !== 'category') {
+                jQuery(this.parentNode).find('.cat-depth-block').hide();
+                jQuery(this.parentNode).find('.cat-sort-order-block').hide();
+                jQuery(this.parentNode).find('.cat-sort-by-block').hide();
+            } else {
+                jQuery(this.parentNode).find('.cat-depth-block').show();
+                jQuery(this.parentNode).find('.cat-sort-order-block').show();
+                jQuery(this.parentNode).find('.cat-sort-by-block').show();
+            }
             //reIntialize();
             resetMenus();
         });
@@ -467,6 +766,9 @@ require(['jquery',
             jQuery('#menu_back').val('');
             saveForm(jQuery);
         });
+        addMoreMenu(jQuery);
+        removeRow(jQuery);
+
         function serializeControls(dataForm) {
             var data = {};
 

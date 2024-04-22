@@ -55,4 +55,7 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Config\Block\System\Config\Edit">
+        <plugin name="Amasty_Base::removeSaveButton" type="Amasty\Base\Plugin\Config\Block\System\Config\Edit\RemoveSaveButton"/>
+    </type>
 </config>

@@ -55,7 +55,15 @@ class Schedule implements SenderCheckerInterface
 
             return true;
         }
-        $timeIntervals = $scheduleConfig->getTimeIntervals();
+
+        if (null === ($timeIntervals = $scheduleConfig->getTimeIntervals())) {
+            $scheduleConfig->addData($this->getScheduleConfig());
+            $scheduleConfig->setLastSendDate($currentTime);
+            $this->scheduleConfigRepository->save($flag, $scheduleConfig);
+
+            return true;
+        }
+
         $firstTimeInterval = array_shift($timeIntervals);
         $isNeedToSend = $currentTime > $scheduleConfig->getLastSendDate() + $firstTimeInterval;
         if ($isNeedToSend) {

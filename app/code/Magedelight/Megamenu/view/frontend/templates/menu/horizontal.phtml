@@ -1,0 +1,63 @@
+<?php
+/**
+ * MageDelight
+ * Copyright (C) 2023 Magedelight <info@magedelight.com>
+ *
+ * @category MageDelight
+ * @package Magedelight_Megamenu
+ * @copyright Copyright (c) 2023 Magedelight (http://www.magedelight.com/)
+ * @license http://opensource.org/licenses/gpl-3.0.html GNU General Public License,version 3 (GPL-3.0)
+ * @author Magedelight <info@magedelight.com>
+ */
+$columnsLimit = $block->getColumnsLimit() ? : 0;
+$_menu = $block->getHorizontalMenuHtml('level-top', 'submenu', $columnsLimit);
+$isAmazonMenuCreated = $block->isAmazonMenuCreated();
+$_amazonMenu = $block->getAmazonMenuHtml();
+$mainClass = $block->getMenuClass();
+if ($block->isPrimaryMenuSelected()):
+    ?>
+
+<div class="section-item-content">
+    <div class="menu-container horizontal-menu">
+        <div data-action="navigation" class="menu horizontal center">
+            <?php if ($isAmazonMenuCreated) { ?>
+            <div class="amazon-menu-btn">
+                <a href="javascript: void(0)">Open Menu</a>
+                <!-- <span data-action="toggle-nav" class="action nav-toggle"><span>Toggle Nav</span></span> -->
+            </div>
+            <?php } ?>
+            <ul class="md-top-menu-items">
+                <?= /* @noEscape */ $_menu; ?>
+            </ul>
+        </div>
+    </div>
+    <?php if ($isAmazonMenuCreated) { ?>
+        <div class="md-amazon-menu">
+            <span class="md-menu-close-btn"></span>
+            <div class="md-amazon-menu-content">
+                <?= /* @noEscape */ $_amazonMenu; ?>
+            </div>
+        </div>
+    <?php } ?>
+</div>
+<script type="text/x-magento-init">
+{
+    "*": {
+        "Magedelight_Megamenu/js/megamenu/topmenu" : {
+            "animation_time": "<?= /* @noEscape */ $block->animationTime(); ?>",
+            "display_overlay": "<?= /* @noEscape */ $block->getPrimaryMenuDisplayOverlay(); ?>"
+        }
+    }
+}
+</script>
+<script type="text/x-magento-init">
+{
+    "*": {
+        "Magedelight_Megamenu/js/megamenu/amazonmenu" : {
+            "animation_time": "<?= /* @noEscape */ $block->animationTime(); ?>",
+            "display_overlay": "<?= /* @noEscape */ $block->getPrimaryMenuDisplayOverlay(); ?>"
+        }
+    }
+}
+</script>
+<?php endif; ?>

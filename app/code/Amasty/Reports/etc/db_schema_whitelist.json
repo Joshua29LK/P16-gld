@@ -117,6 +117,9 @@
             "coupon_code": true,
             "customer_id": true
         },
+        "index": {
+            "AMASTY_REPORTS_ABANDONED_CART_QUOTE_ID": true
+        },
         "constraint": {
             "PRIMARY": true
         }
