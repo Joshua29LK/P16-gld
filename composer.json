@@ -40,7 +40,8 @@
         "fooman/pdfcustomiser-m2": "8.10.0",
         "mageprince/module-product-attachment": "2.2.7",
         "addwish/awext": "^1.1",
-        "redchamps/module-core": "^1.2"
+        "redchamps/module-core": "^1.2",
+        "magefan/module-admin-notifications": "^2.2.2"
     },
     "require-dev": {
 		"allure-framework/allure-phpunit": "~1.5.0",
@@ -90,6 +91,10 @@
     },
     "minimum-stability": "stable",
     "repositories": {
+        "magefan-an-m2": {
+            "type": "composer",
+            "url": "https://kDCDli0ugxC6DtGCVmEsmY2CiPYAJzns:mfMEfOkPR3WlnviXG2JQAftztaXtLKLq@magefan.com/repo/kDCDli0ugxC6DtGCVmEsmY2CiPYAJzns/mfMEfOkPR3WlnviXG2JQAftztaXtLKLq/"
+        },
         "snmportal": {
             "type": "composer",
             "url": "https://snm-portal.com/repro"
