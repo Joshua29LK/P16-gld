@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "7478b5ac1507a4805f05fe78c7939247",
+    "content-hash": "85a23fa7510678b7c9273eabde55b31a",
     "packages": [
         {
             "name": "2tvenom/cborencode",
@@ -4987,6 +4987,30 @@
             "time": "2024-02-13T22:13:55+00:00"
         },
         {
+            "name": "magefan/module-admin-notifications",
+            "version": "2.2.2",
+            "dist": {
+                "type": "zip",
+                "url": "https://magefan.com/repo/packages/download/user/kDCDli0ugxC6DtGCVmEsmY2CiPYAJzns/pw/mfMEfOkPR3WlnviXG2JQAftztaXtLKLq/package/magefan-module-admin-notifications/version/2.2.2/"
+            },
+            "require": {
+                "magefan/module-community": ">=2.1.18"
+            },
+            "type": "magento2-module",
+            "autoload": {
+                "files": [
+                    "registration.php"
+                ],
+                "psr-4": {
+                    "Magefan\\AdminNotifications\\": ""
+                }
+            },
+            "license": [
+                "EULA"
+            ],
+            "description": "N/A"
+        },
+        {
             "name": "magefan/module-admin-user-guide",
             "version": "2.0.3",
             "source": {
@@ -5089,16 +5113,16 @@
         },
         {
             "name": "magefan/module-community",
-            "version": "2.1.18",
+            "version": "2.1.20",
             "source": {
                 "type": "git",
                 "url": "https://github.com/magefan/module-community.git",
-                "reference": "e11552cfec79f4f013b2c0b31cf5f05b7cc01344"
+                "reference": "f008892ba3924fd4da9328562868b7c2d6fa3051"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/magefan/module-community/zipball/e11552cfec79f4f013b2c0b31cf5f05b7cc01344",
-                "reference": "e11552cfec79f4f013b2c0b31cf5f05b7cc01344",
+                "url": "https://api.github.com/repos/magefan/module-community/zipball/f008892ba3924fd4da9328562868b7c2d6fa3051",
+                "reference": "f008892ba3924fd4da9328562868b7c2d6fa3051",
                 "shasum": ""
             },
             "require": {
@@ -5117,9 +5141,9 @@
             "description": "Magefan core module, required for other Magefan extensions",
             "support": {
                 "issues": "https://github.com/magefan/module-community/issues",
-                "source": "https://github.com/magefan/module-community/tree/2.1.18"
+                "source": "https://github.com/magefan/module-community/tree/2.1.20"
             },
-            "time": "2024-01-05T09:17:20+00:00"
+            "time": "2024-04-10T10:20:45+00:00"
         },
         {
             "name": "magefan/module-wysiwyg-advanced",
