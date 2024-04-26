@@ -24,12 +24,13 @@
 				$headers = "Content-type: text/html";
 				$to = $_POST['fieldemail'];
 				$mail_content = "<html><body>";
-				$mail_content .= "<br><img data-imagetype='External' src='https://m227.medeka-ontwikkeling.nl/media/wysiwyg/logo-glasdiscount-newsletter.png' style='margin-bottom:5px' border='0'/><br>";
-				$mail_content .= "<br>Uw aanmelding is ontvangen.<br>";
+				$mail_content .= "<br><img data-imagetype='External' src='https://www.glasdiscount.nl/media/wysiwyg/logo-glasdiscount-newsletter.png' style='margin-bottom:5px' border='0'/><br>";
+				$mail_content .= "<br>Bedankt voor het invullen van het formulier.<br>";
 				$mail_content .= "<br>Een medewerker van Glasdiscount neemt binnenkort contact met u op.";
-				$mail_content .= "<br><br>Dank u, Glasdiscount.nl!";
+				$mail_content .= "<br><br>Met vriendelijke groet,";
+				$mail_content .= "<br>Team Glasdiscount!";
 				$mail_content .= "</body></html>";
-				mail($to, 'Uw aanmelding is ontvangen', $mail_content, $headers);
+				mail($to, 'Uw aanmelding "glasbok leegmelden" is ontvangen', $mail_content, $headers);
 			}
 		} catch (Exception $e){
 			echo 'Caught exception: ',  $e->getMessage(), "\n";
@@ -97,7 +98,7 @@
                 <div class="field boknumber required" style="margin:0 10px 10px 0px; width:100%">
 					<div class="control">
 						<input placeholder="<?php echo __('Boknummer*') ?>" name="fieldboknumber" id="fieldboknumber" title="<?php /* @escapeNotVerified */
-						echo __('Boknummer') ?>" value="" class="input-text" type="number" data-validate="{required:true}"/>
+						echo __('Boknummer') ?>" value="" class="input-text" type="text" data-validate="{required:true}"/>
 					</div>
 				</div>
 				<div class="field ordernumber required" style="margin:0 10px 10px 0px; width:100%">
