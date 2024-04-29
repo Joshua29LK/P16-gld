@@ -1,0 +1,44 @@
+Hello retail M content config:
+
+####################
+CMS > Blokken > create new block 
+id: hello-retail-product
+content:
+<p>Product page - Products purchased together: Option B (upsell from same category):</p>
+<div id="hr-recom-k661cd9b94e14d861013f399a"></div>
+<p>Product page - Alternatives - PIE:</p>
+<div id="hr-recom-k661cd9b94e14d861013f39a2"></div>
+
+####################
+CMS > Pages (default scope) > 404 > Content:
+
+<div class="not-found-container">
+    <!--<img style="display: block; margin-left: auto; margin-right: auto;" src="{{media url=&quot;wysiwyg/404_achtergrond.jpg&quot;}}" alt="">-->
+    <img style="display: block; margin-left: auto; margin-right: auto;" src="{{media url="wysiwyg/404image/404_bg.png"}}" alt="Oeps!" />
+  	<div class="not-found-image-text">Deze pagina konden wij helaas niet vinden <br />(404)</div>
+</div>
+<ul>
+<li class="not-found-text" style="text-align: center;">Ga terug naar <br><a href="{{store url=&quot;&quot;}}">Homepagina</a> <span class="separator">|</span> <a href="{{store url=&quot;customer/account&quot;}}">Mijn account</a></li>
+  
+</ul>
+<p>404 page - Retargeted - Box 1 </p>
+<div id="hr-recom-k661cd9b94e14d861013f3994"></div>
+
+
+####################
+CMS > Pages (glasdiscount scope) > Content:
+
+<div class="home-style home-page-1">
+    <div class="row">
+      <div class="col-xl-9 offset-xl-3"> {{block class="Magento\\Cms\\Block\\Block" block_id="id-1-block-1"}}</div>
+    </div>
+  	<p>Front page - Retargeted: Option A (including recently bought) </p>
+ 	<div id="hr-recom-k661cd9b94e14d861013f39a8"></div>
+    <div class="productgroepen">{{block class="Magento\\Cms\\Block\\Block" block_id="productgroepen-home"}}</div>
+    <div class="row">
+      <div class="col-sm-12">
+        {{block class="Magento\\Cms\\Block\\Block" block_id="id-1-block-2"}}
+        {{widget type="Magento\Cms\Block\Widget\Block" template="widget/static_block/default.phtml" block_id="116"}}
+      </div>
+    </div>
+</div>
