@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "33fa4cb857eb26382fdae46c78e195d3",
+    "content-hash": "93fd2b531a7a51502bf47aa87223fe27",
     "packages": [
         {
             "name": "2tvenom/cborencode",
@@ -24062,11 +24062,11 @@
         },
         {
             "name": "woom/module-cmstree",
-            "version": "1.0.20",
+            "version": "1.0.23",
             "dist": {
                 "type": "zip",
-                "url": "https://repo.magento.com/archives/woom/module-cmstree/woom-module-cmstree-1.0.20.0.zip",
-                "shasum": "008f3893db5730745a19ac040bc81aff4b638c1c"
+                "url": "https://repo.magento.com/archives/woom/module-cmstree/woom-module-cmstree-1.0.23.0.zip",
+                "shasum": "e52f53424e9a2be82776cdb46c1c20a0c3389333"
             },
             "require": {
                 "magento/framework": "103.0.*",
