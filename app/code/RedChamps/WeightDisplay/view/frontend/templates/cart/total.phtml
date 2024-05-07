@@ -1,16 +1,17 @@
+<?php /** @var $block \RedChamps\WeightDisplay\Block\Cart\Total**/?>
 <?php if ($weight = $block->getTotalWeight()):?>
-<div class="cart-totals total-weight">
-    <table class="data table totals">
-        <tbody>
-        <tr class="grand totals excl">
-            <th class="mark" scope="row">
-                <strong><?= __("Total Weight")?></strong>
-            </th>
-            <td class="amount">
-                <strong><span class="price"><?= $weight?></span></strong>
-            </td>
-        </tr>
-        </tbody>
-    </table>
-</div>
+    <div class="border-2 rounded-md p-2 cart-totals total-weight my-6">
+        <table class="w-full data table totals">
+            <tbody>
+            <tr class="grand totals excl">
+                <th class="text-left mark" scope="row">
+                    <strong><?= $block->getTotalLabel();?></strong>
+                </th>
+                <td class="text-right amount">
+                    <strong><span class="price"><?= $weight?></span></strong>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
 <?php endif;?>

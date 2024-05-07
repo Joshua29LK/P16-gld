@@ -34,7 +34,7 @@ class OnePage extends Template
 
     public function getTotalWeight()
     {
-        return $this->totalWeightCalculator->execute($this->checkoutSession->getQuote());
+        return $this->isEnabled()?$this->totalWeightCalculator->execute($this->checkoutSession->getQuote()):0;
     }
 
     public function getTotalLabel()

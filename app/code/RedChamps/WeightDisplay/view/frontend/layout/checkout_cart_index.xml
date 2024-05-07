@@ -5,7 +5,7 @@
             <block class="RedChamps\WeightDisplay\Block\Cart\Item" name="product.weight" template="RedChamps_WeightDisplay::cart/item/weight.phtml"/>
         </referenceBlock>
         <referenceContainer name="checkout.cart.totals.container">
-            <block class="RedChamps\WeightDisplay\Block\Cart\Total" name="product.total.weight" template="RedChamps_WeightDisplay::cart/total.phtml"/>
+            <block class="RedChamps\WeightDisplay\Block\Cart\Total" name="product.total.weight" template="RedChamps_WeightDisplay::cart/total.phtml" after="-"/>
         </referenceContainer>
     </body>
 </page>
