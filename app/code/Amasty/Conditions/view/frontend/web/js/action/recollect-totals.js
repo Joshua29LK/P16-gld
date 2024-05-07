@@ -29,14 +29,14 @@ define([
         serviceUrl = resourceUrlManager.getUrlForTotalsEstimationForNewAddress(quote);
         address = _.pick(newAddress, requiredFields);
         paymentMethod = quote.paymentMethod() ? quote.paymentMethod().method : null;
-        
+
         city = '';
         if (quote.isVirtual() && quote.billingAddress()) {
             city = quote.billingAddress().city;
         } else if (quote.shippingAddress()) {
             city = quote.shippingAddress().city;
         }
-        
+
         address.extension_attributes = {
             advanced_conditions: {
                 custom_attributes: quote.shippingAddress() ? quote.shippingAddress().custom_attributes : [],
@@ -82,6 +82,7 @@ define([
                     // Stop loader for totals block
                     totalsService.isLoading(false);
                     subscriber.isLoading(false);
+                    $('body').trigger('am-condition-collect-done');
                 }).fail(function (response) {
                     if (response.responseText || response.status) {
                         errorProcessor.process(response);

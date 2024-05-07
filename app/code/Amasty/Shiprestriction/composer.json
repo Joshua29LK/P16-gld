@@ -3,7 +3,7 @@
     "description": "Shipping Restrictions By Amasty",
     "require": {
         "php": ">=7.3",
-        "amasty/base": ">=1.14.7",
+        "amasty/base": ">=1.15.1",
         "amasty/system-common-rules": ">=2.4.5",
         "amasty/module-shippingarea": "*"
     },
@@ -11,7 +11,7 @@
         "amasty/module-shiprestriction-mftf-3": "Install module-shiprestriction-mftf-3 module to be able to run Shipping Restriction MFTF tests for Magento 2.4.1 and higher."
     },
     "type": "magento2-module",
-    "version": "2.9.1",
+    "version": "2.10.0",
     "license": [
         "proprietary"
     ],
