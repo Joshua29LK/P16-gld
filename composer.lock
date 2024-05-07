@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "83d9405309197b01216dad36ed74b9c0",
+    "content-hash": "a024ce65f35cdb411fdcbdd5ce0124e6",
     "packages": [
         {
             "name": "2tvenom/cborencode",
@@ -1445,16 +1445,16 @@
         },
         {
             "name": "dhlparcel/magento2-plugin",
-            "version": "1.0.45",
+            "version": "1.0.46",
             "source": {
                 "type": "git",
                 "url": "https://github.com/dhlparcel/plugin-magento2-release.git",
-                "reference": "3abc89da7da0e35126f5805b8056ad986c297d55"
+                "reference": "70ce72c710e719d7cbaeda5a5160fff9bbf52714"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dhlparcel/plugin-magento2-release/zipball/3abc89da7da0e35126f5805b8056ad986c297d55",
-                "reference": "3abc89da7da0e35126f5805b8056ad986c297d55",
+                "url": "https://api.github.com/repos/dhlparcel/plugin-magento2-release/zipball/70ce72c710e719d7cbaeda5a5160fff9bbf52714",
+                "reference": "70ce72c710e719d7cbaeda5a5160fff9bbf52714",
                 "shasum": ""
             },
             "require": {
@@ -1483,9 +1483,9 @@
             "description": "DHL Parcel plugin for Magento 2",
             "support": {
                 "issues": "https://github.com/dhlparcel/plugin-magento2-release/issues",
-                "source": "https://github.com/dhlparcel/plugin-magento2-release/tree/v1.0.45"
+                "source": "https://github.com/dhlparcel/plugin-magento2-release/tree/v1.0.46"
             },
-            "time": "2024-02-19T11:34:42+00:00"
+            "time": "2024-02-26T11:48:05+00:00"
         },
         {
             "name": "dotsquares/module-advance-discount",
