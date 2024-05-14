@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a024ce65f35cdb411fdcbdd5ce0124e6",
+    "content-hash": "0d97b0ccbfbeef64671469465062c5ba",
     "packages": [
         {
             "name": "2tvenom/cborencode",
@@ -4947,16 +4947,16 @@
         },
         {
             "name": "litespeed/module-litemage",
-            "version": "2.2.4",
+            "version": "2.2.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/litespeedtech/magento2-LiteSpeed_LiteMage.git",
-                "reference": "be1df4b70310b7619bc2e8ee2b978789b7038328"
+                "reference": "3043f93b7d203089b463b46c145901271f5540d2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/litespeedtech/magento2-LiteSpeed_LiteMage/zipball/be1df4b70310b7619bc2e8ee2b978789b7038328",
-                "reference": "be1df4b70310b7619bc2e8ee2b978789b7038328",
+                "url": "https://api.github.com/repos/litespeedtech/magento2-LiteSpeed_LiteMage/zipball/3043f93b7d203089b463b46c145901271f5540d2",
+                "reference": "3043f93b7d203089b463b46c145901271f5540d2",
                 "shasum": ""
             },
             "require": {
@@ -4982,9 +4982,9 @@
             "description": "LiteMage Full Page Cache for LiteSpeed Web Server",
             "support": {
                 "issues": "https://github.com/litespeedtech/magento2-LiteSpeed_LiteMage/issues",
-                "source": "https://github.com/litespeedtech/magento2-LiteSpeed_LiteMage/tree/v2.2.4"
+                "source": "https://github.com/litespeedtech/magento2-LiteSpeed_LiteMage/tree/v2.2.3"
             },
-            "time": "2024-03-20T17:15:06+00:00"
+            "time": "2024-02-13T22:13:55+00:00"
         },
         {
             "name": "magefan/module-admin-notifications",
@@ -28503,5 +28503,5 @@
     "prefer-lowest": false,
     "platform": [],
     "platform-dev": [],
-    "plugin-api-version": "2.3.0"
+    "plugin-api-version": "2.6.0"
 }
