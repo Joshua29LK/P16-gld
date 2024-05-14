@@ -61,6 +61,10 @@ class UkPostCodes implements ValidatorInterface
      */
     public function convertPostCode(string $postCode): string
     {
+        if (empty($postCode)) {
+            return $postCode;
+        }
+
         $postCode = preg_replace('/\s+/', '', $postCode);
         $postSplit = str_split($postCode);
         if (!is_numeric(end($postSplit)) && strlen($postCode) > 2) {

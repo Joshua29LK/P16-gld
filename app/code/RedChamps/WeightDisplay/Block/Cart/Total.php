@@ -37,6 +37,11 @@ class Total extends Template
         }
     }
 
+    public function getTotalLabel()
+    {
+        return $this->configReader->getConfig("shopping_cart/label");
+    }
+
     /**
      * Get active quote
      *

@@ -3,6 +3,12 @@ namespace RedChamps\WeightDisplay\Model\Config\Source\Checkout;
 
 class Position
 {
+    const SUMMARY = 'summary';
+
+    const SHIPPING = 'shipping_step';
+
+    const BOTH = 'both';
+
     /**
      * Options getter
      *
@@ -12,15 +18,15 @@ class Position
     {
         return [
             [
-                'value' => 'summary',
+                'value' => self::SUMMARY,
                 'label'=> __('Summary Block')
             ],
             [
-                'value' => 'shipping_step',
+                'value' => self::SHIPPING,
                 'label'=> __('Shipping Step')
             ],
             [
-                'value' => 'both',
+                'value' => self::BOTH,
                 'label'=> __('Both')
             ]
         ];

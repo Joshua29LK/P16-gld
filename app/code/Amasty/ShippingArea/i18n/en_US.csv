@@ -30,8 +30,8 @@ Delete,Delete
 "Are you sure you want to delete the shipping area?","Are you sure you want to delete the shipping area?"
 Duplicate,Duplicate
 Edit,Edit
-"Delete ${ $.$data.name }","Delete ${ $.$data.name }"
-"Are you sure you want to delete a ${ $.$data.name } record?","Are you sure you want to delete a ${ $.$data.name } record?"
+"Delete shipping area","Delete shipping area"
+"Are you sure you want to delete shipping area?","Are you sure you want to delete shipping area?"
 "Previous Page","Previous Page"
 "Next Page","Next Page"
 "Enter comma separated or ranges. Example: AB1-AF1,AS1.","Enter comma separated or ranges. Example: AB1-AF1,AS1."

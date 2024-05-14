@@ -111,6 +111,7 @@ class RestrictRatesPerCarrier
         $error->setData('carrier', $rate->getData('carrier'));
         $error->setData('carrier_title', $rate->getData('carrier_title'));
         $error->setData('error_message', $errorMessage);
+        $error->setData('am_ship_restrict', true);
 
         $result->append($error);
     }
