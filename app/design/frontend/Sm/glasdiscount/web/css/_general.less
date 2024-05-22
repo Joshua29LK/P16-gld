@@ -3575,6 +3575,18 @@ display: inline-block;
         display: flex !important;
     }
 }
+body.bss-onestepcheckout {
+    #opc-sidebar {
+        .discount-code {
+            margin-bottom: 0;
+            #discount-form {
+                .payment-option-inner {
+                    width: 100%;
+                }
+            }
+        }
+    }
+}
 
 
 @media (max-width: 767px) {
@@ -3610,7 +3622,6 @@ div.checkout-agreements-block > div:nth-child(1) {display: table-footer-group;}
 }
 
 body .checkout-shipping-method .actions-toolbar>.primary {width: 100%; padding: 0 20px;margin-top:20px;}
-body .page-main .column:not(.sidebar-additional) form .actions-toolbar {width:100%}
 body .checkout-shipping-method .actions-toolbar .action.primary {width: 100%;}
 body .table-checkout-shipping-method {min-width:100%;}
 body .table-checkout-shipping-method tbody td {padding-top:10px; padding-bottom:10px;}

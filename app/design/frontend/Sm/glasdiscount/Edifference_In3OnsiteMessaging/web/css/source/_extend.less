@@ -1,8 +1,8 @@
-.checkout-index-index .in3 {
+.in3 {
     position: relative;
     display: inline-flex;
     align-items: center;
-    margin:0 0 20px 0;
+    margin:0;
     float:right;
 
     div {
@@ -25,7 +25,9 @@
         
         p {
             padding: 0;
-            margin: 2px 0 0 0;
+            margin: 0;
+            font-family:inherit;
+            font-size:1.2rem;
         }
         i.info {
             right:0;
@@ -33,4 +35,30 @@
 
         }
     }
+}
+body.checkout-index-index .in3 {
+    margin: 0;
+}
+body.checkout-cart-index {
+    .cart-summary {
+        .in3 {
+            width: auto;
+            margin-bottom:20px;
+            .in3-widget {
+                min-height: 0;
+                p {
+                    font-size: 13px;
+                }
+            }
+        }
+    }
+}
+body.checkout-index-index .in3-tooltip, body.checkout-cart-index .in3-tooltip {
+    margin:0;
+    width: 100%;
+}
+
+@media only screen and (max-width: 768px) {}
+.in3 .in3-widget {
+    margin-top: 0px;
 }

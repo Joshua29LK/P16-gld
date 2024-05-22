@@ -1,0 +1,31 @@
+<?php
+declare(strict_types = 1);
+
+use Edifference\In3OnsiteMessaging\Block\CartBanner;
+
+/**
+ * @var CartBanner $block
+ */
+?>
+<div id="in3" data-bind="scope: 'in3-cart-banner'">
+    <!-- ko template: getTemplate() --><!-- /ko -->
+</div>
+<script type="text/x-magento-init">
+    {
+        "#in3": {
+            "Magento_Ui/js/core/app": {
+                "components": {
+                    "in3-cart-banner": {
+                        "component": "Edifference_In3OnsiteMessaging/js/in3-banner/cart",
+                        "config": {
+                            "min":"<?= $block->escapeJs($this->getMin()); ?>",
+                            "max": "<?= $block->escapeJs($this->getMax()); ?>",
+                            "theme": "<?= $block->escapeJs($this->getTheme()); ?>",
+                            "url": "<?= $block->escapeJs($this->getPayIn3Url()); ?>"
+                        }
+                    }
+                }
+            }
+        }
+    }
+</script>
