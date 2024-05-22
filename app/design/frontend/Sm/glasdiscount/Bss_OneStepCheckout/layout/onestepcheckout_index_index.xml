@@ -90,6 +90,7 @@
                                                     </item>
                                                 </item>
                                                 <item name="summary-discount" xsi:type="array">
+                                                    <item name="sortOrder" xsi:type="string">500</item>
                                                     <item name="component" xsi:type="string">Bss_OneStepCheckout/js/view/payment/discount</item>
                                                     <item name="children" xsi:type="array">
                                                         <item name="errors" xsi:type="array">
