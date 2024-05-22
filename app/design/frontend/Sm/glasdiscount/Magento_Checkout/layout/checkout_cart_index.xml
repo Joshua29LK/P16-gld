@@ -14,6 +14,8 @@
 	<move element="cart-usp" destination="cart-sidebar" before="cart.summary" />
 	<move element="cart.summary" destination="cart-sidebar" after="cart-usp" />
 	<move element="checkout.cart.coupon" destination="cart-sidebar" after="cart.summary" />
+    <move element="in3.banner.cart" destination="checkout.cart.totals.container" before="product.total.weight" />
+  
 	
 	<move element="cart-content" destination="cart-row" before="-" />
 	<move element="checkout.cart.form" destination="cart-content" before="-" />
