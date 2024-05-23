@@ -9,3 +9,16 @@
 <?php $_product = $block->getProduct() ?>
 
 <?= $block->getChildHtml('bundle_prices') ?>
+
+<?php if ($_product->isAvailable()) :?>
+    <?php else :?>
+        <div class="uit-voorraad price-wrapper price-including-tax" title="<?= $block->escapeHtmlAttr(__('Availability')) ?>">
+            <span class="price-box"><span class="price"><?= $block->escapeHtml(__('Out of stock')) ?></span></span>
+            <p>Dit product is momenteel helaas niet leverbaar.</p>
+        </div>
+        <style>
+            body.catalog-product-view .product-info-stock-sku {float:left;margin-top:0}
+            .uit-voorraad p {font-size:13px;display:inline-block;}
+            .catalog-product-view .product-info-main .uit-voorraad .price-box{margin-top:0}
+        </style>
+<?php endif; ?>
