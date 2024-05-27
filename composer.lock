@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "0d97b0ccbfbeef64671469465062c5ba",
+    "content-hash": "df7c6ae132796123164c8a3605bac2b8",
     "packages": [
         {
             "name": "2tvenom/cborencode",
@@ -1508,6 +1508,39 @@
                 "GPL-3.0"
             ],
             "description": "Dotsquares Advance Discount For Admin"
+        },
+        {
+            "name": "edifference/in3-onsite-messaging",
+            "version": "1.0.4",
+            "dist": {
+                "type": "zip",
+                "url": "https://repo.magento.com/archives/edifference/in3-onsite-messaging/edifference-in3-onsite-messaging-1.0.4.0.zip",
+                "shasum": "aa1d258e9e501694e5366a068588324579805f71"
+            },
+            "require": {
+                "php": ">=7.4"
+            },
+            "type": "magento2-module",
+            "autoload": {
+                "files": [
+                    "registration.php"
+                ],
+                "psr-4": {
+                    "Edifference\\In3OnsiteMessaging\\": ""
+                }
+            },
+            "license": [
+                "OSL-3.0",
+                "AFL-3.0"
+            ],
+            "authors": [
+                {
+                    "name": "eDifference",
+                    "email": "info@edifference.nl",
+                    "homepage": "https://edifference.nl"
+                }
+            ],
+            "description": "In3 On-site Messaging plug-in for Magento 2"
         },
         {
             "name": "elasticsearch/elasticsearch",
