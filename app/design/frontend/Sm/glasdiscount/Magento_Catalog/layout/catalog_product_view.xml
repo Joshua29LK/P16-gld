@@ -85,6 +85,11 @@
                         <argument name="block_id" xsi:type="string">hello-retail-product</argument>
                     </arguments>
                 </block>
+                <block class="Magento\Cms\Block\Block" name="hello-retail-product-position-after-tabs" after="product.info.tabs">
+                    <arguments>
+                        <argument name="block_id" xsi:type="string">hello-retail-product-position-after-tabs</argument>
+                    </arguments>
+                </block>
             </container>
 			
         </referenceContainer>
