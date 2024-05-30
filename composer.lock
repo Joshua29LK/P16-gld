@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "fa3915e1f075d63e80075c70074cd13c",
+    "content-hash": "de67fb99b768008704bc783b45142a67",
     "packages": [
         {
             "name": "2tvenom/cborencode",
@@ -17667,17 +17667,17 @@
         },
         {
             "name": "magevision/module-update-order-email-address",
-            "version": "2.4.2",
+            "version": "2.4.5",
             "dist": {
                 "type": "zip",
-                "url": "https://repo.magento.com/archives/magevision/module-update-order-email-address/magevision-module-update-order-email-address-2.4.2.0.zip",
-                "shasum": "f884da3d705f20686ee490e92a843206a2a0a24f"
+                "url": "https://repo.magento.com/archives/magevision/module-update-order-email-address/magevision-module-update-order-email-address-2.4.5.0.zip",
+                "shasum": "9b0cd88e51f069d8f0edd8594a95beee8e88158f"
             },
             "require": {
                 "magento/framework": "103.0.*",
                 "magento/module-backend": "102.0.*",
                 "magento/module-sales": "103.0.*",
-                "php": "~7.3.0||~7.4.0||~8.1.0||~8.2.0"
+                "php": "~7.3.0||~7.4.0||~8.1.0||~8.2.0||~8.3.0"
             },
             "type": "magento2-module",
             "autoload": {
