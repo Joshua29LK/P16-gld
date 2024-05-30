@@ -49,9 +49,20 @@ class Content extends \Magento\Backend\Block\Widget
      */
     protected function _prepareLayout()
     {
-        $this->addChild('uploader', 'Magento\Backend\Block\Media\Uploader', ['template' => 'MagicToolbox_Magic360::media/uploader.phtml']);
-
         $mageVersion = $this->getDataHelper()->getMagentoVersion();
+
+        if (version_compare($mageVersion, '2.4.7', '<')) {
+            $template = 'MagicToolbox_Magic360::media/uploader.phtml';
+        } else {
+            $template = 'MagicToolbox_Magic360::media/uploader247.phtml';
+        }
+
+        $this->addChild(
+            'uploader',
+            'Magento\Backend\Block\Media\Uploader',
+            ['template' => $template]
+        );
+
         if (version_compare($mageVersion, '2.3.5', '<')) {
             $url = $this->_urlBuilder->addSessionParam()->getUrl('magic360/gallery/upload');
         } else {
