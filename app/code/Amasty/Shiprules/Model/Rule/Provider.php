@@ -134,7 +134,8 @@ class Provider
             }
             $newRequest = clone $request;
             $newRequest->setAllItems(array_values($newItems));
-            $total = $this->totalRegistry->getCalculatedTotal($newRequest, $hash);
+            $newHash = $this->hashProvider->getHash($newRequest);
+            $total = $this->totalRegistry->getCalculatedTotal($newRequest, $newHash);
 
             if ($this->validator->validateRule($rule, $request, $total)) {
                 $this->storage[$hash][] = $rule;
