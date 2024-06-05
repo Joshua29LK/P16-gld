@@ -122,7 +122,7 @@ class ProviderTest extends TestCase
         $requestMock = $this->createConfiguredMock(RateRequest::class, ['__call' => [$itemMock]]);
         $totalMock = $this->createMock(Total::class);
 
-        $this->hashProviderMock->expects($this->once())
+        $this->hashProviderMock->expects($this->any())
             ->method('getHash')
             ->with($requestMock)
             ->willReturn(self::HASH);

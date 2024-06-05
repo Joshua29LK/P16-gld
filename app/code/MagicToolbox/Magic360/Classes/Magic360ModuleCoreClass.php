@@ -64,7 +64,7 @@ class Magic360ModuleCoreClass
         }
         $headers = [];
         // add module version
-        $headers[] = '<!-- Magic 360 Magento 2 module version v1.7.6 [v1.6.96:v4.6.13] -->';
+        $headers[] = '<!-- Magic 360 Magento 2 module version v1.7.8 [v1.6.96:v4.6.13] -->';
         $headers[] = '<script type="text/javascript">window["mgctlbx$Pltm"] = "Magento 2";</script>';
         // add tool style link
         $headers[] = '<link type="text/css" href="' . $cssPath . '/magic360.css" rel="stylesheet" media="screen" />';

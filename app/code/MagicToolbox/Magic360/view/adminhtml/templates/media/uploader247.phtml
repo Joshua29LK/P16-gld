@@ -1,0 +1,47 @@
+<?php
+
+// @codingStandardsIgnoreFile
+
+/** @var $block \Magento\Backend\Block\Media\Uploader */
+?>
+<style>
+.image.image-placeholder #magic360fileupload {
+    border: 500px solid transparent;
+    bottom: 0;
+    cursor: pointer;
+    font-size: 10em;
+    height: 100%;
+    left: 0;
+    opacity: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 100%;
+    z-index: 3;
+}
+</style>
+<div id="<?= $block->getHtmlId() ?>" class="uploader"
+    data-mage-init='{
+        "MagicToolbox_Magic360/js/media-uploader-247" : {
+            "maxFileSize": <?= /* @escapeNotVerified */ $block->getFileSizeService()->getMaxFileSize() ?>,
+            "maxWidth":<?= /* @escapeNotVerified */ \Magento\Framework\File\Uploader::MAX_IMAGE_WIDTH ?> ,
+            "maxHeight": <?= /* @escapeNotVerified */ \Magento\Framework\File\Uploader::MAX_IMAGE_HEIGHT ?>,
+            "isResizeEnabled": 0
+        }
+    }'
+>
+    <div class="fileinput-button form-buttons button">
+        <span><?= $escaper->escapeHtml(__('Browse Files...')) ?></span>
+        <div id="magic360fileupload" data-url="<?= $escaper->escapeHtmlAttr($block->getConfig()->getUrl()) ?>"></div>
+    </div>
+    <div class="clear"></div>
+    <script id="<?= $block->getHtmlId() ?>-template" type="text/x-magento-template" data-template="magic360-uploader">
+        <div id="<%- data.id %>" class="file-row">
+            <span class="file-info"><%- data.name %> (<%- data.size %>)</span>
+            <div class="progressbar-container">
+                <div class="progressbar upload-progress" style="width: 0%;"></div>
+            </div>
+            <div class="clear"></div>
+        </div>
+    </script>
+</div>

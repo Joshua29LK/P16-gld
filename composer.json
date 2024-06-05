@@ -23,13 +23,12 @@
         "swissup/easytabs": "1.12.8",
         "rosell-dk/webp-convert": "^2.9",
         "dotsquares/module-advance-discount": "^1.0",
-        "magmodules/magento2-channable": "1.17.0",
+        "magmodules/magento2-channable": "1.18.2",
         "magefan/module-blog": "2.11.2",
         "geissweb/module-euvat": "1.21.1",
-        "magevision/module-update-order-email-address": "2.4.2",
-        "weltpixel/m2-weltpixel-google-cards": "1.11.19",
+        "magevision/module-update-order-email-address": "2.4.5",
         "snmportal/module-syntaxhighlighter": "2.4.6",
-        "magenizr/magento2-resetuibookmarks": "1.3.1",
+        "magenizr/magento2-resetuibookmarks": "1.3.2",
         "woom/module-cmstree": "1.0.23",
         "redchamps/module-sitemap-url-exclude": "1.0.4",
         "litespeed/module-litemage": "2.2.3",
@@ -43,7 +42,8 @@
         "magefan/module-admin-notifications": "^2.2.2",
         "multisafepay/magento2": "3.5.1",
         "mirasvit/module-core": "^1.4",
-        "edifference/in3-onsite-messaging": "^1.0"
+        "edifference/in3-onsite-messaging": "^1.0",
+        "weltpixel/m2-weltpixel-google-cards": "1.14.1"
     },
     "require-dev": {
 		"allure-framework/allure-phpunit": "~1.5.0",
