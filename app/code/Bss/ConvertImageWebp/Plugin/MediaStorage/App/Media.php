@@ -12,7 +12,7 @@
  * @category   BSS
  * @package    Bss_ConvertImageWebp
  * @author     Extension Team
- * @copyright  Copyright (c) 2021-2022 BSS Commerce Co. ( http://bsscommerce.com )
+ * @copyright  Copyright (c) 2021-2023 BSS Commerce Co. ( http://bsscommerce.com )
  * @license    http://bsscommerce.com/Bss-Commerce-License.txt
  */
 declare(strict_types=1);
@@ -20,15 +20,17 @@ declare(strict_types=1);
 namespace Bss\ConvertImageWebp\Plugin\MediaStorage\App;
 
 use Bss\ConvertImageWebp\Model\Convert;
-use Magento\Catalog\Model\Config\CatalogMediaConfig;
 use Magento\Catalog\Model\View\Asset\PlaceholderFactory;
 use Magento\Framework\App\Area;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\State;
+use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Exception\NotFoundException;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
 use Magento\Framework\Filesystem\Driver\File;
+use Magento\Framework\Serialize\Serializer\Json;
 use Magento\MediaStorage\Model\File\Storage\Config;
 use Magento\MediaStorage\Model\File\Storage\ConfigFactory;
 use Magento\MediaStorage\Model\File\Storage\Response;
@@ -37,6 +39,8 @@ use Magento\MediaStorage\Service\ImageResize;
 
 class Media
 {
+    public const HASH = 'hash';
+
     /**
      * @var \Bss\ConvertImageWebp\Model\Convert
      */
@@ -135,15 +139,19 @@ class Media
      * @var string|null
      */
     protected $imgFolderWebp;
+    /**
+     * @var \Bss\ConvertImageWebp\Model\Plugin\Config\CatalogMediaConfig
+     */
+    private $catalogMediaConfig;
 
     /**
      * Construct.
      *
-     * @param \Bss\ConvertImageWebp\Model\Convert $convert
-     * @param \Magento\Framework\App\RequestInterface $request
+     * @param Convert $convert
+     * @param RequestInterface $request
      * @param \Bss\ConvertImageWebp\Model\Config $config
      * @param Filesystem\DirectoryList $dir
-     * @param \Magento\Framework\Serialize\Serializer\Json $jsonSerializer
+     * @param Json $jsonSerializer
      * @param ConfigFactory $configFactory
      * @param SynchronizationFactory $syncFactory
      * @param Response $response
@@ -152,8 +160,8 @@ class Media
      * @param State $state
      * @param ImageResize $imageResize
      * @param File $file
-     * @param CatalogMediaConfig|null $catalogMediaConfig
-     * @throws \Magento\Framework\Exception\FileSystemException
+     * @param \Bss\ConvertImageWebp\Model\Plugin\Config\CatalogMediaConfig $catalogMediaConfig
+     * @throws FileSystemException
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -170,7 +178,7 @@ class Media
         State $state,
         ImageResize $imageResize,
         File $file,
-        CatalogMediaConfig $catalogMediaConfig = null
+        \Bss\ConvertImageWebp\Model\Plugin\Config\CatalogMediaConfig $catalogMediaConfig
     ) {
         $this->convert = $convert;
         $this->config = $config;
@@ -193,9 +201,7 @@ class Media
         $this->placeholderFactory = $placeholderFactory;
         $this->appState = $state;
         $this->imageResize = $imageResize;
-
-        $catalogMediaConfig = $catalogMediaConfig ?: \Magento\Framework\App\ObjectManager::getInstance()->get(CatalogMediaConfig::class);
-        $this->mediaUrlFormat = $catalogMediaConfig->getMediaUrlFormat();
+        $this->catalogMediaConfig = $catalogMediaConfig;
     }
 
     /**
@@ -278,12 +284,18 @@ class Media
         if ($this->directoryPub->isReadable($this->relativeFileName)) {
             return;
         }
-
-        if ($this->mediaUrlFormat === CatalogMediaConfig::HASH) {
-            $this->imageResize->resizeFromImageName($this->getOriginalImage($this->relativeFileName));
-            if (!$this->directoryPub->isReadable($this->relativeFileName)) {
-                $synchronizer->synchronize($this->relativeFileName);
+        if ($this->catalogMediaConfig->isMoreThanM242()) {
+            $catalogMediaConfig = $this->catalogMediaConfig->getCatalogMediaConfig();
+            if ($catalogMediaConfig->getMediaUrlFormat() === self::HASH) {
+                $this->imageResize->resizeFromImageName($this->getOriginalImage($this->relativeFileName));
+                if (!$this->directoryPub->isReadable($this->relativeFileName)) {
+                    $synchronizer->synchronize($this->relativeFileName);
+                }
             }
+        } else {
+            $sync = $this->syncFactory->create(['directory' => $this->directoryPub]);
+            $sync->synchronize($this->relativeFileName);
+            $this->imageResize->resizeFromImageName($this->getOriginalImage($this->relativeFileName));
         }
     }
 
@@ -319,7 +331,7 @@ class Media
      */
     private function getOriginalImage(string $resizedImagePath)
     {
-        return preg_replace('|^.*?((?:/([^/])/([^/])/\2\3)?/?[^/]+$)|', '$1', $resizedImagePath);
+        return preg_replace('|^.*((?:/[^/]+){3})$|', '$1', $resizedImagePath);
     }
 
     /**
