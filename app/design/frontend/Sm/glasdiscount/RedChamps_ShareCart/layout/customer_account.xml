@@ -8,6 +8,7 @@
                 <argument name="sortOrder" xsi:type="number">201</argument>
             </arguments>
         </block>
+        <block class="Magento\Framework\View\Element\Template" name="customer-account-navigation-account-share-cart" template="RedChamps_ShareCart::account-share-cart.phtml" after="customer-account-navigation-shared-carts-link"/>
     </referenceBlock>
     <!-- Downloadable product link -->
    <referenceBlock name="customer-account-navigation-downloadable-products-link" remove="true"/>
