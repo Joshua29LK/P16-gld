@@ -93,7 +93,7 @@ define([
                     $widget.updateGalleryImage($widget, optionValueId);
                     // end add swatch image
                     if (typeof url[$(this).val()] == 'string') {
-                        var element = $widget.element.find('#image_preview_' + $(this).val());
+                        var element = $widget.element.find('img#image_preview_' + $(this).val());
                         $widget.element.find('.Bss_image_preview img').css('border','solid 2px #ddd');
                         element.css('border','solid 2px #d33');
                     } else {

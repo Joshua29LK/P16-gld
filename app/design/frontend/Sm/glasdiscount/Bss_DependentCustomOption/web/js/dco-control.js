@@ -307,7 +307,7 @@ define([
                     } else {
                         element.fadeIn();
                         element.removeClass('dco-hide');
-                        $('#image_preview_' + element.val()).show();
+                        $('img#image_preview_' + element.val()).show();
                         // fix for safari
                         if( (element.parent().is('span')) ) {
                             element.unwrap();
@@ -351,7 +351,7 @@ define([
                             }
                         }
                     }
-                    $('#image_preview_' + element.val()).hide();
+                    $('img#image_preview_' + element.val()).hide();
                     element.fadeOut();
                     element.addClass('dco-hide');
                     // fix for safari
