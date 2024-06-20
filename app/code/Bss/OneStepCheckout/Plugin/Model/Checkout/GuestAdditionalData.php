@@ -47,7 +47,7 @@ class GuestAdditionalData
     private $quoteIdMaskFactory;
 
     /**
-     * @var Magento\Checkout\Model\SessionFactory
+     * @var \Magento\Checkout\Model\SessionFactory
      */
     private $checkoutSession;
 

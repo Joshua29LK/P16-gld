@@ -18,8 +18,6 @@
 namespace Bss\OneStepCheckout\Api\Data\Config;
 
 /**
- * Interface AutoCompleteInterface
- *
  * @package Bss\OneStepCheckout\Api\Data\Config
  */
 interface AutoCompleteInterface
@@ -33,6 +31,7 @@ interface AutoCompleteInterface
      * Get enable config
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getEnable();
 
@@ -77,7 +76,7 @@ interface AutoCompleteInterface
     /**
      * Get specific countries
      *
-     * @return array
+     * @return mixed
      */
     public function getSpecificCountries();
 

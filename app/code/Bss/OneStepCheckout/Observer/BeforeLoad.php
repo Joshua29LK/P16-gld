@@ -63,6 +63,8 @@ class BeforeLoad implements ObserverInterface
     }
 
     /**
+     * Execute
+     *
      * @param Observer $observer
      * @return $this|void
      * @throws \Magento\Framework\Exception\LocalizedException

@@ -32,6 +32,9 @@ define([
 
     return function (proceedSelectShippingAddressFunction) {
         return wrapper.wrap(proceedSelectShippingAddressFunction, function (originalProceedSelectShippingAddressFunction, shippingAddress) {
+            if (!window.checkoutConfig.isEnabledOsc) {
+                return originalProceedSelectShippingAddressFunction(shippingAddress);
+            }
             if (!(customer.isLoggedIn() &&
                 addressList().length > 0 &&
                 addressList().indexOf(shippingAddress) === -1) || $('.check-store-pickup.bss-onestepcheckout').length) {

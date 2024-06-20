@@ -21,6 +21,8 @@ namespace Bss\OneStepCheckout\Block\Adminhtml\Widget\Instance\Edit\Chooser;
 class Layout extends \Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Chooser\Layout
 {
     /**
+     * Add Page type options
+     *
      * @param array $pageTypes
      */
     protected function _addPageTypeOptions(array $pageTypes)

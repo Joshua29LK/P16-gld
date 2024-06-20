@@ -28,7 +28,9 @@ define([
 ], function ($, Component, $t, ko, _, customerData, updateItemAction, quote, url) {
     'use strict';
 
-    return Component.extend({
+        let messageError = null;
+
+        return Component.extend({
         defaults: {
             template: 'Bss_OneStepCheckout/summary/item/details'
         },
@@ -42,6 +44,12 @@ define([
          */
         updateQty: function (item, data) {
             var elementDecrease = this.getDecreaseInput(item.item_id);
+            if (messageError) {
+                $(".error-message[itemId = '" + item.item_id + "']").text(messageError);
+                elementDecrease.addClass('disabled-decrease');
+                messageError = null;
+                return;
+            }
             if (item.qty <= 0 && !window.checkRemoveItemOsc) {
                 var magentoVersion = window.checkoutConfig.magento_version,
                     message = $t('Please enter the number greater than 0!');
@@ -66,7 +74,26 @@ define([
                         quoteItemData = window.checkoutConfig.quoteItemData;
                     if (!response.status && undefined !== response.qty_before && response.qty_before) {
                         var qtyInput = $('[itemId = ' + itemId + ']').parent().parent().find('input');
-                        qtyInput.val(response.qty_before);
+                        var qty,
+                            saleableQtyArr = window.checkoutConfig.saleableQty;
+
+                        if (saleableQtyArr
+                            && saleableQtyArr[itemId] !== undefined && saleableQtyArr[itemId] !== null
+                            && saleableQtyArr[itemId] < qtyInput.val() // Replace qty input, if qtyInput > salable qty
+                        ) {
+                            qty = saleableQtyArr[itemId];
+                        } else {
+                            qty = response.qty_before;
+                        }
+
+                        if (response.message)
+                        {
+                            qty = response.qty_before;
+                            messageError = response.message;
+                        }
+                        
+                        qtyInput.val(qty);
+
                         this.number = setTimeout(function () {
                             qtyInput.trigger('change');
                         }, 500);

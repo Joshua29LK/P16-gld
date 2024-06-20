@@ -85,7 +85,7 @@ class EmailTemplateVars implements \Magento\Framework\Event\ObserverInterface
         /** Add order comment */
         $comment = $this->checkoutSession->getQuote()->getBssOrderComment();
         if (!$comment) {
-            $quoteId = $this->checkoutSession->getQuote()->getId();
+            $quoteId = $this->checkoutSession->getQuote()->getId() ?? $order->getQuoteId();
             $quote = $this->quoteFactory->create()->load($quoteId);
             $comment = $quote->getData('bss_order_comment');
         }

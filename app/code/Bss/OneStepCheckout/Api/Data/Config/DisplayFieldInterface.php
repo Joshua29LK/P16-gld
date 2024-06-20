@@ -18,8 +18,6 @@
 namespace Bss\OneStepCheckout\Api\Data\Config;
 
 /**
- * Interface DisplayFieldInterface
- *
  * @package Bss\OneStepCheckout\Api\Data\Config
  */
 interface DisplayFieldInterface

@@ -19,10 +19,12 @@
 namespace Bss\OneStepCheckout\Block\Adminhtml\Module;
 
 /**
- * Class StoreCredit
  * @package Bss\OneStepCheckout\Block\Adminhtml\Module
  */
 class StoreCredit extends \Bss\OneStepCheckout\Block\Adminhtml\Module\Base
 {
+    /**
+     * @var string
+     */
     protected $module = 'Bss_StoreCredit';
 }

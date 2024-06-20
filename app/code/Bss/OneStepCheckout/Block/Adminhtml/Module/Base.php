@@ -19,11 +19,13 @@
 namespace Bss\OneStepCheckout\Block\Adminhtml\Module;
 
 /**
- * Class Base
  * @package Bss\OneStepCheckout\Block\Adminhtml\Module
  */
 class Base extends \Magento\Config\Block\System\Config\Form\Field
 {
+    /**
+     * @var string
+     */
     protected $module;
 
     /**
@@ -47,6 +49,8 @@ class Base extends \Magento\Config\Block\System\Config\Form\Field
     }
 
     /**
+     * Render value
+     *
      * @param \Magento\Framework\Data\Form\Element\AbstractElement $element
      * @return string
      */

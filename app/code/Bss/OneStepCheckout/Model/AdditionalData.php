@@ -86,6 +86,8 @@ class AdditionalData
     }
 
     /**
+     * Save delivery
+     *
      * @param \Magento\Quote\Model\Quote $quote
      * @param array $additionalData
      * @return void
@@ -102,6 +104,8 @@ class AdditionalData
     }
 
     /**
+     * Save comment
+     *
      * @param int $orderId
      * @param array $additionalData
      * @return void
@@ -133,6 +137,8 @@ class AdditionalData
     }
 
     /**
+     * Subscriber
+     *
      * @param int $orderId
      * @param array $additionalData
      * @return void

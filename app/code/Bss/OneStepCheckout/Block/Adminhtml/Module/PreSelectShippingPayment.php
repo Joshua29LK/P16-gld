@@ -24,5 +24,8 @@ namespace Bss\OneStepCheckout\Block\Adminhtml\Module;
  */
 class PreSelectShippingPayment extends \Bss\OneStepCheckout\Block\Adminhtml\Module\Base
 {
+    /**
+     * @var string
+     */
     protected $module = 'Bss_PreSelectShippingPayment';
 }

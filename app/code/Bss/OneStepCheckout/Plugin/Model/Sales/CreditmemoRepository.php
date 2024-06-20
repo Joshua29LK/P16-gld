@@ -18,8 +18,6 @@
 namespace Bss\OneStepCheckout\Plugin\Model\Sales;
 
 /**
- * Class CreditmemoRepository
- *
  * @package Bss\OneStepCheckout\Plugin\Model\Sales
  */
 class CreditmemoRepository

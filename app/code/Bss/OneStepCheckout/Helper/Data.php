@@ -24,8 +24,6 @@ use Magento\Framework\App\Helper\Context;
 use Magento\Store\Model\ScopeInterface;
 
 /**
- * Class Data
- *
  * @package Bss\OneStepCheckout\Helper
  */
 class Data extends AbstractHelper
@@ -79,7 +77,7 @@ class Data extends AbstractHelper
     }
 
     /**
-     * @param /Magento/Sales/Model/Order $order
+     * @param \Magento\Sales\Model\Order $order
      * @return string
      */
     public function formatDateTime($order)
@@ -99,7 +97,9 @@ class Data extends AbstractHelper
     }
 
     /**
-     * @param null $storeId
+     * Check PayPal context
+     *
+     * @param null|int|string $storeId
      * @return bool
      */
     public function isPayPalContext($storeId = null)
@@ -112,7 +112,9 @@ class Data extends AbstractHelper
     }
 
     /**
-     * @param $moduleName
+     * Check if module is installed
+     *
+     * @param string $moduleName
      * @return bool
      */
     public function isModuleInstall($moduleName)
@@ -125,8 +127,10 @@ class Data extends AbstractHelper
     }
 
     /**
-     * @param $giftWrapFee
-     * @param $giftWrapType
+     * Get gift wrap label
+     *
+     * @param float $giftWrapFee
+     * @param float $giftWrapType
      * @return \Magento\Framework\Phrase
      */
     public function getGiftWrapLabel($giftWrapFee, $giftWrapType)
@@ -139,10 +143,12 @@ class Data extends AbstractHelper
     }
 
     /**
-     * @param $quote
-     * @param $giftWrapFee
-     * @param $giftWrapType
-     * @return float|int
+     * Get total gift wrap fee
+     *
+     * @param \Magento\Quote\Model\Quote $quote
+     * @param float $giftWrapFee
+     * @param float $giftWrapType
+     * @return float
      */
     public function getTotalGiftWrapFee($quote, $giftWrapFee, $giftWrapType)
     {
@@ -159,7 +165,9 @@ class Data extends AbstractHelper
     }
 
     /**
-     * @param null $storeId
+     * Get min length of password
+     *
+     * @param null|int|string $storeId
      * @return mixed
      */
     public function getPassPasswordMinLeng($storeId = null)
@@ -172,7 +180,8 @@ class Data extends AbstractHelper
     }
 
     /**
-     * @param null $storeId
+     * Get pas password min character sets
+     * @param null|int|string $storeId
      * @return mixed
      */
     public function getPassPasswordMinCharacterSets($storeId = null)

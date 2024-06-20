@@ -85,7 +85,7 @@ define([
                     var deferred = $.Deferred();
                     getTotalsAction([], deferred);
 
-                    $('.items-in-cart').find('[data-bind="text: getCartSummaryItemsCount()"]')
+                    $('.items-in-cart').find('[data-bind*="text: getCartSummaryItemsCount()"]')
                         .text(response['totals']['items_qty']);
 
                     if (!response.gift_wrap_display) {

@@ -36,8 +36,6 @@ use Magento\Framework\Api\AbstractSimpleObject;
 use Bss\OneStepCheckout\Api\Data\Config\DisplayFieldInterface;
 
 /**
- * Class ConfigData
- *
  * @package Bss\OneStepCheckout\Model\Api
  */
 class ConfigData extends AbstractSimpleObject implements \Bss\OneStepCheckout\Api\Data\ConfigDataInterface

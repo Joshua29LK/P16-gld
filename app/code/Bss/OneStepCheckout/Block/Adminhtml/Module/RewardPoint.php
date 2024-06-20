@@ -19,10 +19,12 @@
 namespace Bss\OneStepCheckout\Block\Adminhtml\Module;
 
 /**
- * Class RewardPoint
  * @package Bss\OneStepCheckout\Block\Adminhtml\Module
  */
 class RewardPoint extends \Bss\OneStepCheckout\Block\Adminhtml\Module\Base
 {
+    /**
+     * @var string
+     */
     protected $module = 'Bss_RewardPoint';
 }

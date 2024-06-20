@@ -27,6 +27,7 @@ define([
     'Bss_OneStepCheckout/js/action/validate-shipping-information',
     'Bss_OneStepCheckout/js/action/validate-gift-wrap-before-order',
     'Bss_OneStepCheckout/js/model/adyen-pay-btn-active',
+    'Bss_OneStepCheckout/js/model/checkoutcom-payment',
     'Magento_Checkout/js/model/full-screen-loader',
     'Magento_Checkout/js/action/select-billing-address',
     'Magento_Checkout/js/model/payment/additional-validators',
@@ -49,6 +50,7 @@ define([
     validateShippingInformationAction,
     validateGiftWrapAction,
     adyenPayBtnActive,
+    checkoutComPayActive,
     fullScreenLoader,
     selectBillingAddress,
     additionalValidators,
@@ -94,7 +96,9 @@ define([
                             && (quote.shippingAddress().extensionAttributes && quote.shippingAddress().extensionAttributes.pickup_location_code)
                         );
                     } else {
-                        self.isPlaceOrderActionAllowed(address !== null && quote.paymentMethod() != null && quote.shippingMethod() != null);
+                        if (quote.paymentMethod() != null && quote.paymentMethod().method !== 'checkoutcom_card_payment') {
+                            self.isPlaceOrderActionAllowed(address !== null && quote.shippingMethod() != null);
+                        }
                     }
                 }
             }, this);
@@ -113,14 +117,14 @@ define([
                     }
                 }
 
-                if (window.checkoutConfig.paypal_in_context &&
+                if ((window.checkoutConfig.paypal_in_context || window.checkoutConfig.payment.paypalExpress.redirectUrl == undefined) &&
                     newMethod &&
                     newMethod.method === "braintree_paypal"
                 ) {
                     self.isVisible(false);
                 }
 
-                if (newMethod.method === "adyen_cc") {;
+                if (newMethod.method === "adyen_cc") {
                     if (!adyenPayBtnActive()) {
                         self.isPlaceOrderActionAllowed(false);
                     } else {
@@ -145,7 +149,9 @@ define([
                             && (quote.shippingAddress().extensionAttributes && quote.shippingAddress().extensionAttributes.pickup_location_code)
                         );
                     } else {
-                        self.isPlaceOrderActionAllowed(availableRate && quote.paymentMethod() != null && quote.billingAddress() != null);
+                        if (quote.paymentMethod() != null && quote.paymentMethod().method !== 'checkoutcom_card_payment') {
+                            self.isPlaceOrderActionAllowed(availableRate && quote.billingAddress() != null);
+                        }
                     }
                 }, this);
                 quote.shippingAddress.subscribe(function (address) {
@@ -160,8 +166,8 @@ define([
             }
 
             if (window.checkoutConfig.magento_version >= "2.3.1" &&
-                (window.checkoutConfig.paypal_in_context == true)
-            ) {
+                window.checkoutConfig.paypal_in_context
+                ) {
                 var selectedPaymentMethod = checkoutData.getSelectedPaymentMethod();
 
                 if ((selectedPaymentMethod == "paypal_express" && window.checkoutConfig.paypal_in_context) ||
@@ -179,11 +185,26 @@ define([
                     }
                 });
             } else {
+                if (selectedPaymentMethod === 'checkoutcom_card_payment') {
+                    self.isPlaceOrderActionAllowed(false);
+                } else {
+                    self.isPlaceOrderActionAllowed(true);
+                }
+
                 $(document).on('change', '.payment-method .radio', function () {
                     if ($('.bss-onestepcheckout #adyen_applepay').is(':checked')) {
                         self.isVisible(false);
                     } else {
-                        self.isVisible(true);
+                        if (checkoutData.getSelectedPaymentMethod() == "braintree_paypal") {
+                            self.isVisible(false);
+                        } else {
+                            self.isVisible(true);
+                        }
+                    }
+                    if ($('#checkoutcom_card_payment').is(':checked')) {
+                        self.isPlaceOrderActionAllowed(false);
+                    } else {
+                        self.isPlaceOrderActionAllowed(true);
                     }
                 });
             };
@@ -196,12 +217,21 @@ define([
                     }
                 }
             });
+
+            checkoutComPayActive.subscribe(function (status) {
+                if (!status) {
+                    self.isPlaceOrderActionAllowed(false);
+                } else {
+                    self.isPlaceOrderActionAllowed(true);
+                }
+            });
         },
 
         placeOrder: function (data, event) {
             var self = this,
                 createNewAccountCheckBoxId = 'create-new-customer',
                 loginFormSelector = 'form[data-role=email-with-possible-login]';
+
             if (event) {
                 event.preventDefault();
             }
@@ -272,7 +302,8 @@ define([
                             fullScreenLoader.stopLoader();
                         }
                     );
-                    if(checkoutData.getSelectedPaymentMethod() == "braintree") {
+
+                    if ($.inArray(checkoutData.getSelectedPaymentMethod(), ['checkoutcom_card_payment']) !== -1 ) {
                         fullScreenLoader.stopLoader();
                     }
                 }

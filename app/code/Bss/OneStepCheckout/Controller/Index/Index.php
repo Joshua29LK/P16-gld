@@ -18,24 +18,25 @@
 
 namespace Bss\OneStepCheckout\Controller\Index;
 
-use Magento\Customer\Api\AccountManagementInterface;
-use Magento\Customer\Api\CustomerRepositoryInterface;
+use Bss\OneStepCheckout\Helper\Config;
 use Magento\Checkout\Controller\Onepage;
-use Magento\Framework\App\Action\Context;
-use Magento\Customer\Model\Session;
-use Magento\Framework\Registry;
-use Magento\Framework\Translate\InlineInterface;
-use Magento\Framework\Data\Form\FormKey\Validator;
-use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Framework\View\LayoutFactory;
-use Magento\Quote\Api\CartRepositoryInterface;
-use Magento\Framework\View\Result\PageFactory;
-use Magento\Framework\View\Result\LayoutFactory as ResultLayout;
-use Magento\Framework\Controller\Result\RawFactory;
-use Magento\Framework\Controller\Result\JsonFactory;
 use Magento\Checkout\Helper\Data;
 use Magento\Checkout\Model\Session as SessionModel;
-use Bss\OneStepCheckout\Helper\Config;
+use Magento\Customer\Api\AccountManagementInterface;
+use Magento\Customer\Api\CustomerRepositoryInterface;
+use Magento\Customer\Model\Session;
+use Magento\Framework\App\Action\Context;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\Controller\Result\JsonFactory;
+use Magento\Framework\Controller\Result\RawFactory;
+use Magento\Framework\Data\Form\FormKey\Validator;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Registry;
+use Magento\Framework\Translate\InlineInterface;
+use Magento\Framework\View\LayoutFactory;
+use Magento\Framework\View\Result\LayoutFactory as ResultLayout;
+use Magento\Framework\View\Result\PageFactory;
+use Magento\Quote\Api\CartRepositoryInterface;
 
 /**
  * Class Index
@@ -132,10 +133,12 @@ class Index extends Onepage
      * Checkout page
      *
      * @return \Magento\Framework\Controller\ResultInterface
+     * @throws NoSuchEntityException
      */
     public function execute()
     {
-        if (!$this->configHelper->isEnabled()) {
+        $storeId = $this->configHelper->getStoreId();
+        if (!$this->configHelper->isEnabled() || !$this->configHelper->isCanCheckout($storeId)) {
             return $this->resultRedirectFactory->create()->setPath('checkout');
         }
 
@@ -143,20 +146,13 @@ class Index extends Onepage
             $this->messageManager->addErrorMessage(__('One-page checkout is turned off.'));
             return $this->resultRedirectFactory->create()->setPath('checkout/cart');
         }
-
-        $quote = $this->getOnepage()->getQuote();
-        if (!$quote->hasItems() || $quote->getHasError() || !$quote->validateMinimumAmount()) {
-            return $this->resultRedirectFactory->create()->setPath('checkout/cart');
+        if (!$this->isQuoteCanOrder()) {
+            $this->messageManager->addErrorMessage(__('Cannot checkout with this quote'));
+            return $this->resultRedirectFactory->create()->setPath('quoteextension/quote/history');
         }
-        if (!$this->_customerSession->isLoggedIn() && !$this->checkoutHelper->isAllowedGuestCheckout($quote) &&
-            !$this->configHelper->isShowBssCheckoutPage()
-        ) {
-            $this->messageManager->addErrorMessage(__('Guest checkout is disabled.'));
-            return $this->resultRedirectFactory->create()->setPath('checkout/cart');
-        }
-
-        $currentUrl = $this->_url->getUrl('*/*/*', ['_secure' => true]);
-        $this->_customerSession->setBeforeAuthUrl($currentUrl);
+        $this->getActiveQuote();
+        //$currentUrl = $this->_url->getUrl('*/*/*', ['_secure' => true]);
+        //$this->_customerSession->setBeforeAuthUrl($currentUrl);
         $this->_customerSession->regenerateId();
         $this->checkoutSession->setCartWasUpdated(false);
         $this->getOnepage()->initCheckout();
@@ -167,5 +163,33 @@ class Index extends Onepage
         }
         $resultPage->getConfig()->getTitle()->set($title);
         return $resultPage;
+    }
+
+    /**
+     * Get Active Quote
+     *
+     * @return \Magento\Framework\Controller\Result\Redirect|void
+     */
+    public function getActiveQuote()
+    {
+        $quote = $this->getOnepage()->getQuote();
+        if (!$quote->hasItems() || $quote->getHasError() || !$quote->validateMinimumAmount()) {
+            return $this->resultRedirectFactory->create()->setPath('checkout/cart');
+        }
+        if (!$this->_customerSession->isLoggedIn() && !$this->checkoutHelper->isAllowedGuestCheckout($quote) &&
+            !$this->configHelper->isShowBssCheckoutPage()
+        ) {
+            $this->messageManager->addErrorMessage(__('Guest checkout is disabled.'));
+            return $this->resultRedirectFactory->create()->setPath('checkout/cart');
+        }
+    }
+
+    /**
+     * Compatible QuoteExtension
+     *
+     * @return bool
+     */
+    public function isQuoteCanOrder(){
+        return true;
     }
 }

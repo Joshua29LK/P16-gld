@@ -21,6 +21,8 @@ namespace Bss\OneStepCheckout\Block\Adminhtml\Widget\Instance\Edit\Chooser;
 class Container extends \Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Chooser\Container
 {
     /**
+     * Before html
+     *
      * @return \Magento\Framework\View\Element\AbstractBlock|\Magento\Framework\View\Element\Html\Select
      * @throws \Magento\Framework\Exception\LocalizedException
      */
@@ -68,6 +70,8 @@ class Container extends \Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Cho
     }
 
     /**
+     * Get position list
+     *
      * @return array
      */
     public function getPositionList()

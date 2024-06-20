@@ -19,13 +19,12 @@ define([
     'jquery'
 ], function ($) {
     "use strict";
+    $('.page-header').addClass('page-header navbar-fixed-top');
     if( $(window).width() >= 768 ) {
         $(window).scroll(function() {
             if ($(window).scrollTop() > $('.page-header').offset().top && !($('.page-header').hasClass('sticky'))) {
                 $('.page-header').append($('#checkout > [data-role="checkout-messages"]'));
-                $('.page-header').addClass('sticky');
             } else if ($(window).scrollTop() === 0) {
-                $('.page-header').removeClass('sticky');
                 $('.page-header .messages').remove();
             }
         });
@@ -33,11 +32,19 @@ define([
         $(window).scroll(function() {
             if ($(window).scrollTop() > $('.page-header').offset().top && !($('.page-header').hasClass('sticky'))) {
                 $('.page-header').append($('#checkout > [data-role="checkout-messages"]'));
-                $('.page-header').addClass('sticky');
             } else if ($(window).scrollTop() === 0) {
-                $('.page-header').removeClass('sticky');
                 $('.page-header .messages').remove();
             }
         });
     }
+
+    //add class bss-store-pickup to body after element bss-store-pickup-selector rendered
+    $(document).ready(function() {
+        var existCondition = setInterval(function() {
+            if ($('#bss-store-pickup-selector').length) {
+                clearInterval(existCondition);
+                $('#html-body').addClass('bss-store-pickup');
+            }
+        }, 100);
+    });
 });

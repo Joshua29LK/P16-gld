@@ -20,7 +20,6 @@ namespace Bss\OneStepCheckout\Model\Total\Creditmemo;
 use Magento\Sales\Model\Order\Creditmemo;
 
 /**
- * Class GiftWrap
  * @package Bss\OneStepCheckout\Model\Total\Creditmemo
  */
 class GiftWrap extends \Magento\Sales\Model\Order\Creditmemo\Total\AbstractTotal
@@ -38,7 +37,7 @@ class GiftWrap extends \Magento\Sales\Model\Order\Creditmemo\Total\AbstractTotal
         }
         $giftWrapFeeConfig = $order->getBaseOscGiftWrapFeeConfig();
         $giftWrapType = $order->getOscGiftWrapType();
-		$creditmemo->setOscGiftWrapType($giftWrapType);
+        $creditmemo->setOscGiftWrapType($giftWrapType);
         if ($giftWrapType == \Bss\OneStepCheckout\Model\Config\Source\GiftWrapType::PER_ITEMS) {
             $giftWrapBalance = $this->calculatorGiftWrapFeePerItems($creditmemo, $giftWrapFeeConfig);
             $creditmemo->setBaseGrandTotal($creditmemo->getBaseGrandTotal() + $giftWrapBalance);
@@ -59,7 +58,7 @@ class GiftWrap extends \Magento\Sales\Model\Order\Creditmemo\Total\AbstractTotal
 
     /**
      * @param Creditmemo $creditmemo
-     * @param $giftWrapFeeConfig
+     * @param float $giftWrapFeeConfig
      * @return float|int
      */
     protected function calculatorGiftWrapFeePerItems($creditmemo, $giftWrapFeeConfig)
@@ -77,8 +76,8 @@ class GiftWrap extends \Magento\Sales\Model\Order\Creditmemo\Total\AbstractTotal
     }
 
     /**
-     * @param $order
-     * @param $creditmemo
+     * @param \Magento\Sales\Model\Order $order
+     * @param Creditmemo $creditmemo
      * @return bool
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */

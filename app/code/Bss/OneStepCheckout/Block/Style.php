@@ -21,7 +21,6 @@ use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\Template\Context;
 
 /**
- * Class Style
  * @package Bss\OneStepCheckout\Block
  */
 class Style extends Template
@@ -47,6 +46,8 @@ class Style extends Template
     }
 
     /**
+     * Get custom css
+     *
      * @param string $field
      * @return mixed
      */

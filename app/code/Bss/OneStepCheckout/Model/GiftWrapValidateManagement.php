@@ -12,10 +12,9 @@
  * @category   BSS
  * @package    Bss_OneStepCheckout
  * @author     Extension Team
- * @copyright  Copyright (c) 2017-2018 BSS Commerce Co. ( http://bsscommerce.com )
+ * @copyright  Copyright (c) 2017-2023 BSS Commerce Co. ( http://bsscommerce.com )
  * @license    http://bsscommerce.com/Bss-Commerce-License.txt
  */
-
 namespace Bss\OneStepCheckout\Model;
 
 /**
@@ -64,6 +63,8 @@ class GiftWrapValidateManagement implements \Bss\OneStepCheckout\Api\GiftWrapVal
     }
 
     /**
+     * Validate
+     *
      * @param float $fee
      * @param int $use
      * @return string
@@ -103,9 +104,12 @@ class GiftWrapValidateManagement implements \Bss\OneStepCheckout\Api\GiftWrapVal
                     $quote->setBaseOscGiftWrap($giftWrapFee);
                     $quote->setOscGiftWrap($giftWrapFeeCurrency);
                 }
+
+                $giftWrapFeeCurrency = $giftWrapFeeCurrency ?? 0; // Fix: variable might not be defined.
                 if (round($fee, 2) != round($giftWrapFeeCurrency, 2)) {
                     $response['gift_wrap_update'] = true;
-                    $response['gift_wrap_label'] = $this->dataHelper->getGiftWrapLabel($giftWrapFeeConfig, $giftWrapType);
+                    $response['gift_wrap_label'] = $this->dataHelper
+                        ->getGiftWrapLabel($giftWrapFeeConfig, $giftWrapType);
                 }
             }
             $response['status'] = true;

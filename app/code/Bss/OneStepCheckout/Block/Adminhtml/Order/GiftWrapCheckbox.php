@@ -27,6 +27,9 @@ use Magento\Framework\View\Element\Template\Context;
  */
 class GiftWrapCheckbox extends Template
 {
+    /**
+     * @var \Magento\Quote\Model\Quote $currentQuote
+     */
     protected $currentQuote;
 
     /**
@@ -66,6 +69,8 @@ class GiftWrapCheckbox extends Template
     }
 
     /**
+     * Check is quote disabled
+     *
      * @return bool
      */
     public function isDisable()
@@ -81,6 +86,8 @@ class GiftWrapCheckbox extends Template
     }
 
     /**
+     * Get label
+     *
      * @return \Magento\Framework\Phrase
      */
     public function getLabel()
@@ -91,6 +98,8 @@ class GiftWrapCheckbox extends Template
     }
 
     /**
+     * Is checked
+     *
      * @return bool
      */
     public function isChecked()

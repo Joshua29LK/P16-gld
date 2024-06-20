@@ -26,6 +26,9 @@ define([
     'use strict';
     return function (selectPaymentMethod) {
         return wrapper.wrap(selectPaymentMethod, function (originalAction, paymentMethod) {
+            if (!window.checkoutConfig.isEnabledOsc) {
+                return originalAction(paymentMethod);
+            }
             var serviceUrl = urlBuilder.build('onestepcheckout/checkout/applyPaymentMethod');
             originalAction(paymentMethod);
             fullScreenLoader.startLoader();

@@ -26,8 +26,10 @@ define([
     'use strict';
 
     return function (placeOrderAction) {
-
         return wrapper.wrap(placeOrderAction, function (originalAction, paymentData, messageContainer) {
+            if (!window.checkoutConfig.isEnabledOsc) {
+                return originalAction(paymentData, messageContainer);
+            }
             if (!_.isUndefined(window.checkoutConfig.bssOsc)) {
                 additionalData(paymentData);
                 fullScreenLoader.stopLoader();

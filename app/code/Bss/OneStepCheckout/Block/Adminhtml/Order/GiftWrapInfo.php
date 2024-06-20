@@ -41,6 +41,8 @@ class GiftWrapInfo extends \Magento\Backend\Block\Template
     }
 
     /**
+     * Prepare layout
+     *
      * @return $this|\Magento\Backend\Block\Template
      */
     protected function _prepareLayout()

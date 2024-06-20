@@ -22,8 +22,6 @@ use Bss\OneStepCheckout\Helper\Config;
 use Bss\OneStepCheckout\Helper\Data;
 
 /**
- * Class LayoutProcessor
- *
  * @package Bss\OneStepCheckout\Plugin\Block\Checkout\Checkout
  */
 class LayoutProcessor
@@ -116,7 +114,7 @@ class LayoutProcessor
     }
 
     /**
-     * @param $jsLayout
+     * @param mixed $jsLayout
      * @return mixed
      */
     protected function orderDeliveryDate($jsLayout)
@@ -144,7 +142,7 @@ class LayoutProcessor
     }
 
     /**
-     * @param $jsLayout
+     * @param mixed $jsLayout
      * @return mixed
      */
     protected function removeComponent($jsLayout)
@@ -169,7 +167,7 @@ class LayoutProcessor
     }
 
     /**
-     * @param $jsLayout
+     * @param mixed $jsLayout
      * @return mixed
      */
     protected function newsletter($jsLayout)
@@ -188,7 +186,7 @@ class LayoutProcessor
     }
 
     /**
-     * @param $jsLayout
+     * @param mixed $jsLayout
      * @return mixed
      */
     protected function discountCode($jsLayout)

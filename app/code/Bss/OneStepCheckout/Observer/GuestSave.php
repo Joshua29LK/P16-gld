@@ -12,17 +12,15 @@
  * @category  BSS
  * @package   Bss_OneStepCheckout
  * @author    Extension Team
- * @copyright Copyright (c) 2017-2018 BSS Commerce Co. ( http://bsscommerce.com )
+ * @copyright Copyright (c) 2017-2023 BSS Commerce Co. ( http://bsscommerce.com )
  * @license   http://bsscommerce.com/Bss-Commerce-License.txt
  */
-
 namespace Bss\OneStepCheckout\Observer;
 
 use Magento\Framework\Event\Observer as EventObserver;
 use Magento\Framework\Event\ObserverInterface;
 
 /**
- * Class GuestSave
  * @package Bss\OneStepCheckout\Observer
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -32,7 +30,7 @@ class GuestSave implements ObserverInterface
     /**
      * BSS_CUSTOMER_IS_GUEST
      */
-    const BSS_CUSTOMER_IS_GUEST = 0;
+    private const BSS_CUSTOMER_IS_GUEST = 0;
 
     /**
      * @var GuestToCustomer\Helper\Observer\Helper
@@ -80,6 +78,16 @@ class GuestSave implements ObserverInterface
     protected $logger;
 
     /**
+     * @var \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory
+     */
+    private $cookieMetadataFactory;
+
+    /**
+     * @var \Magento\Framework\Stdlib\Cookie\PhpCookieManager
+     */
+    private $cookieMetadataManager;
+
+    /**
      * GuestSave constructor.
      * @param \Magento\Customer\Model\CustomerFactory $customerFactory
      * @param \Magento\Customer\Model\AddressFactory $addressFactory
@@ -90,6 +98,8 @@ class GuestSave implements ObserverInterface
      * @param \Magento\Sales\Model\Order\Status\HistoryFactory $historyFactory
      * @param \Magento\Newsletter\Model\Subscriber $subscriber
      * @param \Psr\Log\LoggerInterface $logger
+     * @param \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory $cookieMetadataFactory
+     * @param \Magento\Framework\Stdlib\Cookie\PhpCookieManager $cookieMetadataManager
      */
     public function __construct(
         \Magento\Customer\Model\CustomerFactory $customerFactory,
@@ -100,7 +110,9 @@ class GuestSave implements ObserverInterface
         \Bss\OneStepCheckout\Helper\Config $helper,
         \Magento\Sales\Model\Order\Status\HistoryFactory $historyFactory,
         \Magento\Newsletter\Model\Subscriber $subscriber,
-        \Psr\Log\LoggerInterface $logger
+        \Psr\Log\LoggerInterface $logger,
+        \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory $cookieMetadataFactory,
+        \Magento\Framework\Stdlib\Cookie\PhpCookieManager $cookieMetadataManager
     ) {
         $this->customerFactory = $customerFactory;
         $this->addressFactory = $addressFactory;
@@ -111,6 +123,38 @@ class GuestSave implements ObserverInterface
         $this->historyFactory = $historyFactory;
         $this->subscriber = $subscriber;
         $this->logger = $logger;
+        $this->cookieMetadataManager = $cookieMetadataManager;
+        $this->cookieMetadataFactory = $cookieMetadataFactory;
+    }
+
+    /**
+     * Retrieve cookie manager
+     *
+     * @return \Magento\Framework\Stdlib\Cookie\PhpCookieManager|mixed
+     */
+    private function getCookieManager()
+    {
+        if (!$this->cookieMetadataManager) {
+            $this->cookieMetadataManager = \Magento\Framework\App\ObjectManager::getInstance()->get(
+                \Magento\Framework\Stdlib\Cookie\PhpCookieManager::class
+            );
+        }
+        return $this->cookieMetadataManager;
+    }
+
+    /**
+     * Retrieve cookie metadata factory
+     *
+     * @return \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory|mixed
+     */
+    private function getCookieMetadataFactory()
+    {
+        if (!$this->cookieMetadataFactory) {
+            $this->cookieMetadataFactory = \Magento\Framework\App\ObjectManager::getInstance()->get(
+                \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory::class
+            );
+        }
+        return $this->cookieMetadataFactory;
     }
 
     /**
@@ -154,7 +198,7 @@ class GuestSave implements ObserverInterface
                 $customer->getName()
             );
             $customerAttr = $this->checkoutSession->getCustomerAttributes();
-            if ($customerAttr && !empty($customerAttr)) {
+            if ($customerAttr) {
                 $this->checkoutSession->unsCustomerAttributes();
                 $customerData = $customer->getDataModel();
                 foreach ($customerAttr as $attr => $value) {
@@ -173,7 +217,6 @@ class GuestSave implements ObserverInterface
             $this->subscriber($order, $additionalData, $customer->getId());
             return $this;
         }
-        $data = $this->checkoutSession->getNewAccountInformaton();
         $pass = $this->isCreateNewAccount($emailGuest);
         if (!$pass) {
             if ($order->getCustomerIsGuest() == 0) {
@@ -194,8 +237,7 @@ class GuestSave implements ObserverInterface
                     $websiteId,
                     $storeId,
                     $defaultCustomerGroupId,
-                    $pass,
-                    $data
+                    $pass
                 );
                 if (!$customer) {
                     $this->subscriber($order, $additionalData, 0);
@@ -222,6 +264,12 @@ class GuestSave implements ObserverInterface
                 //Set order address
                 $this->setOrderAddress($customerId, $customerAddress, $observer);
                 $this->customerSession->setCustomerAsLoggedIn($customer);
+                $this->customerSession->regenerateId();
+                if ($this->getCookieManager()->getCookie('mage-cache-sessid')) {
+                    $metadata = $this->getCookieMetadataFactory()->createCookieMetadata();
+                    $metadata->setPath('/');
+                    $this->getCookieManager()->deleteCookie('mage-cache-sessid', $metadata);
+                }
             } catch (\Exception $e) {
                 $this->logger->critical($e);
             }
@@ -293,10 +341,9 @@ class GuestSave implements ObserverInterface
      * @param int $storeId
      * @param int $defaultCustomerGroupId
      * @param string $pass
-     * @param array $dataCustomer
      * @return bool|\Magento\Customer\Model\Customer
      */
-    protected function createNewAccount($billingAddress, $websiteId, $storeId, $defaultCustomerGroupId, $pass, $dataCustomer)
+    protected function createNewAccount($billingAddress, $websiteId, $storeId, $defaultCustomerGroupId, $pass)
     {
         $customer = $this->customerFactory->create();
         $customer->setWebsiteId($websiteId);
@@ -312,7 +359,7 @@ class GuestSave implements ObserverInterface
         }
         $customer->setPassword($pass);
         $customerAttr = $this->checkoutSession->getCustomerAttributes();
-        if ($customerAttr && !empty($customerAttr)) {
+        if ($customerAttr) {
             $this->checkoutSession->unsCustomerAttributes();
             $customerData = $customer->getDataModel();
             foreach ($customerAttr as $attr => $value) {
@@ -324,7 +371,7 @@ class GuestSave implements ObserverInterface
             $customer->updateData($customerData);
         }
 
-        $this->processOtherRequiredFields($customer, $dataCustomer);
+        $this->processOtherRequiredFields($customer);
         try {
             $customer->save();
         } catch (\Exception $e) {
@@ -342,10 +389,11 @@ class GuestSave implements ObserverInterface
     }
 
     /**
+     * Process other required fields
+     *
      * @param \Magento\Customer\Model\Customer $customer
-     * @param array $dataCustomer
      */
-    protected function processOtherRequiredFields(&$customer, $dataCustomer)
+    protected function processOtherRequiredFields(&$customer)
     {
         if ($this->helper->isCustomerDobFieldRequired()) {
             $customer->setDob('1/1/1970');
@@ -353,8 +401,8 @@ class GuestSave implements ObserverInterface
         if ($this->helper->isCustomerGenderFieldRequired()) {
             $customer->setGender('3'); // Gender as 'Not Specified'
         }
-        if (isset($dataCustomer['taxvat'])) {
-            $customer->setTaxvat($dataCustomer['taxvat']);
+        if ($this->helper->isCustomerTaxVatFieldRequired()) {
+            $customer->setTaxvat('000000');
         }
     }
 
@@ -393,15 +441,13 @@ class GuestSave implements ObserverInterface
             }
         } else {
             if (isset($shippingAddress['address_type'])) {
-                if (!empty($shippingAddress)) {
-                    $both = $this->saveAddressCustomer(
-                        $shippingAddress,
-                        $customerId,
-                        'both'
-                    );
-                    if ($both) {
-                        $result['billing_shipping'] = $both;
-                    }
+                $both = $this->saveAddressCustomer(
+                    $shippingAddress,
+                    $customerId,
+                    'both'
+                );
+                if ($both) {
+                    $result['billing_shipping'] = $both;
                 }
             }
         }

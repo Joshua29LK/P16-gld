@@ -28,14 +28,14 @@ use Magento\Store\Model\ScopeInterface;
  */
 class GetConfig implements \Bss\OneStepCheckout\Api\ConfigInterface
 {
-    const XML_BSS_OSC_GENERAL_CONFIG = 'onestepcheckout/general';
-    const XML_BSS_OSC_DISPLAY_FIELD_CONFIG = 'onestepcheckout/display_field';
-    const XML_BSS_OSC_AUTO_COMPLETE_CONFIG = 'onestepcheckout/auto_complete';
-    const XML_BSS_OSC_NEWSLETTER_CONFIG = 'onestepcheckout/newsletter';
-    const XML_BSS_OSC_ORDER_DELIVERY_DATE_CONFIG = 'onestepcheckout/order_delivery_date';
-    const XML_BSS_OSC_GIFT_WRAP_CONFIG = 'onestepcheckout/gift_wrap';
-    const XML_BSS_OSC_CUSTOM_CSS_CONFIG = 'onestepcheckout/custom_css';
-    const XML_BSS_OSC_GIFT_MESSAGE_CONFIG = 'onestepcheckout/gift_message';
+    private const XML_BSS_OSC_GENERAL_CONFIG = 'onestepcheckout/general';
+    private const XML_BSS_OSC_DISPLAY_FIELD_CONFIG = 'onestepcheckout/display_field';
+    private const XML_BSS_OSC_AUTO_COMPLETE_CONFIG = 'onestepcheckout/auto_complete';
+    private const XML_BSS_OSC_NEWSLETTER_CONFIG = 'onestepcheckout/newsletter';
+    private const XML_BSS_OSC_ORDER_DELIVERY_DATE_CONFIG = 'onestepcheckout/order_delivery_date';
+    private const XML_BSS_OSC_GIFT_WRAP_CONFIG = 'onestepcheckout/gift_wrap';
+    private const XML_BSS_OSC_CUSTOM_CSS_CONFIG = 'onestepcheckout/custom_css';
+    private const XML_BSS_OSC_GIFT_MESSAGE_CONFIG = 'onestepcheckout/gift_message';
 
     /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface

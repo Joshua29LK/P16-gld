@@ -20,12 +20,11 @@ namespace Bss\OneStepCheckout\Helper;
 
 use Magento\Customer\Model\Session;
 use Magento\Framework\App\Helper\AbstractHelper;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\GiftMessage\Helper\Message;
 use Magento\Store\Model\ScopeInterface;
 
 /**
- * Class Config
- *
  * @package Bss\OneStepCheckout\Helper
  */
 class Config extends AbstractHelper
@@ -41,6 +40,7 @@ class Config extends AbstractHelper
     const CUSTOM_CSS           = 'onestepcheckout/custom_css/';
     const OSC_CONTROLLER_NAME  = 'onestepcheckout';
     const GIFT_WRAP_FIELD      = 'onestepcheckout/gift_wrap/';
+    const ALLOW_GUESS_FOLLOW = 'checkout/options/guest_checkout';
 
     /**
      * @var \Magento\Framework\Pricing\Helper\Data
@@ -58,14 +58,21 @@ class Config extends AbstractHelper
     protected $productMetadata;
 
     /**
+     * @var \Magento\Store\Model\StoreManagerInterface
+     */
+    protected $storeManager;
+
+    /**
      * Data constructor.
      *
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\Pricing\Helper\Data $priceHelper
      * @param \Magento\Framework\App\Helper\Context $context
      * @param Session $customerSession
      * @param \Magento\Framework\App\ProductMetadataInterface $productMetadata
      */
     public function __construct(
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\Pricing\Helper\Data $priceHelper,
         \Magento\Framework\App\Helper\Context $context,
         Session $customerSession,
@@ -74,14 +81,16 @@ class Config extends AbstractHelper
         parent::__construct(
             $context
         );
+        $this->storeManager = $storeManager;
         $this->priceHelper = $priceHelper;
         $this->customerSession = $customerSession;
         $this->productMetadata = $productMetadata;
     }
 
     /**
-     * @param null $storeId
+     * Is enabled
      *
+     * @param null|int|string $storeId
      * @return bool
      */
     public function isEnabled($storeId = null)
@@ -94,9 +103,10 @@ class Config extends AbstractHelper
     }
 
     /**
-     * @param string $field
-     * @param null|int $storeId
+     * Get general
      *
+     * @param string $field
+     * @param null|int|string $storeId
      * @return mixed
      */
     public function getGeneral($field, $storeId = null)
@@ -113,9 +123,10 @@ class Config extends AbstractHelper
     }
 
     /**
-     * @param string $field
-     * @param null|int $storeId
+     * Is display field
      *
+     * @param string $field
+     * @param null|int|string $storeId
      * @return mixed
      */
     public function isDisplayField($field, $storeId = null)
@@ -132,9 +143,10 @@ class Config extends AbstractHelper
     }
 
     /**
-     * @param $field
-     * @param null $storeId
+     * Is new letter field
      *
+     * @param $field
+     * @param null|int|string $storeId
      * @return bool
      */
     public function isNewletterField($field, $storeId = null)
@@ -151,9 +163,10 @@ class Config extends AbstractHelper
     }
 
     /**
-     * @param $field
-     * @param null $storeId
+     * Is order delivery field
      *
+     * @param $field
+     * @param null|int|string $storeId
      * @return bool
      */
     public function isOrderDeliveryField($field, $storeId = null)
@@ -170,9 +183,10 @@ class Config extends AbstractHelper
     }
 
     /**
-     * @param $field
-     * @param null $storeId
+     * Is gift message field
      *
+     * @param $field
+     * @param null|int|string $storeId
      * @return bool
      */
     public function isGiftMessageField($field, $storeId = null)
@@ -189,8 +203,9 @@ class Config extends AbstractHelper
     }
 
     /**
-     * @param null|int $storeId
+     * Is autocomplete
      *
+     * @param null|int|string $storeId
      * @return bool
      */
     public function isAutoComplete($storeId = null)
@@ -212,9 +227,9 @@ class Config extends AbstractHelper
     }
 
     /**
+     * Get autocomplete group
      * @param string $field
-     * @param null|int $storeId
-     *
+     * @param null|int|string $storeId
      * @return mixed
      */
     public function getAutoCompleteGroup($field, $storeId = null)
@@ -231,9 +246,10 @@ class Config extends AbstractHelper
     }
 
     /**
-     * @param string $field
-     * @param null|int $storeId
+     * Get custom css
      *
+     * @param string $field
+     * @param null|int|string $storeId
      * @return mixed
      */
     public function getCustomCss($field, $storeId = null)
@@ -250,8 +266,9 @@ class Config extends AbstractHelper
     }
 
     /**
-     * @param null|int $storeId
+     * Is messages allowed
      *
+     * @param null|int|string $store
      * @return bool
      */
     public function isMessagesAllowed($store = null)
@@ -268,8 +285,9 @@ class Config extends AbstractHelper
     }
 
     /**
-     * @param null $storeId
+     * Get default customer group id
      *
+     * @param null|int|string $storeId
      * @return mixed
      */
     public function getDefaultCustomerGroupId($storeId = null)
@@ -282,8 +300,9 @@ class Config extends AbstractHelper
     }
 
     /**
-     * @param null $storeId
+     * Is Auto create new account
      *
+     * @param null|int|string $storeId
      * @return bool
      */
     public function isAutoCreateNewAccount($storeId = null)
@@ -296,8 +315,9 @@ class Config extends AbstractHelper
     }
 
     /**
-     * @param null $storeId
+     * Is gift wrap enable
      *
+     * @param null|int|string $storeId
      * @return bool
      */
     public function isGiftWrapEnable($storeId = null)
@@ -314,9 +334,10 @@ class Config extends AbstractHelper
     }
 
     /**
-     * @param $field
-     * @param null $storeId
+     * Get gift wrap
      *
+     * @param $field
+     * @param null|int|string $storeId
      * @return mixed
      */
     public function getGiftWrap($field, $storeId = null)
@@ -339,6 +360,7 @@ class Config extends AbstractHelper
     }
 
     /**
+     * Get gift wrap fee
      * @return bool|float|mixed
      */
     public function getGiftWrapFee()
@@ -362,67 +384,49 @@ class Config extends AbstractHelper
     }
 
     /**
-     * @param null|int $storeId
+     * @param null|int|string $storeId
      *
      * @return mixed
      */
     public function isCustomerDobFieldRequired($storeId = null)
     {
-        $value = $this->scopeConfig->getValue(
+        return $this->scopeConfig->isSetFlag(
             'customer/address/dob_show',
             ScopeInterface::SCOPE_STORE,
             $storeId
         );
-        return $this->isRequireCustomerInformation($value);
     }
 
     /**
-     * Check field customer address information is required?
-     *
-     * @param int|string|null $value
-     * @return bool
-     */
-    public function isRequireCustomerInformation($value = null)
-    {
-        if ($value && $value == "req") {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    /**
-     * @param null|int $storeId
+     * @param null|int|string $storeId
      *
      * @return mixed
      */
     public function isCustomerTaxVatFieldRequired($storeId = null)
     {
-        $value = $this->scopeConfig->getValue(
+        return $this->scopeConfig->isSetFlag(
             'customer/address/taxvat_show',
             ScopeInterface::SCOPE_STORE,
             $storeId
         );
-        return $this->isRequireCustomerInformation($value);
     }
 
     /**
-     * @param null|int $storeId
+     * @param null|int|string $storeId
      *
      * @return mixed
      */
     public function isCustomerGenderFieldRequired($storeId = null)
     {
-        $value =  $this->scopeConfig->getValue(
+        return $this->scopeConfig->isSetFlag(
             'customer/address/gender_show',
             ScopeInterface::SCOPE_STORE,
             $storeId
         );
-        return $this->isRequireCustomerInformation($value);
     }
 
     /**
-     * @param null $storeId
+     * @param null|int|string $storeId
      *
      * @return mixed
      */
@@ -436,7 +440,7 @@ class Config extends AbstractHelper
     }
 
     /**
-     * @param null $storeId
+     * @param null|int|string $storeId
      *
      * @return mixed
      */
@@ -524,5 +528,56 @@ class Config extends AbstractHelper
             return true;
         }
         return false;
+    }
+
+    /**
+     * Get config allow guess checkout
+     *
+     * @param ?string|?int $storeId
+     * @return mixed
+     */
+    public function getConfigAllowGuestCheckout($storeId = null)
+    {
+        return $this->scopeConfig->getValue(
+            self::ALLOW_GUESS_FOLLOW,
+            ScopeInterface::SCOPE_STORE,
+            $storeId
+        );
+    }
+
+    /**
+     * Check is logged
+     *
+     * @return bool
+     */
+    public function isLoggedIn()
+    {
+        return $this->customerSession->isLoggedIn();
+    }
+
+    /**
+     * Get storeId
+     *
+     * @return int|string
+     * @throws NoSuchEntityException
+     */
+    public function getStoreId()
+    {
+        return $this->storeManager->getStore()->getId();
+    }
+
+    /**
+     * Check config allow guess checkout and customer|guest
+     *
+     * @param ?string|?int $storeId
+     * @return bool
+     */
+    public function isCanCheckout($storeId = null)
+    {
+        if (!$this->getConfigAllowGuestCheckout($storeId) && !$this->isLoggedIn()) {
+            return false;
+        } else {
+            return true;
+        }
     }
 }

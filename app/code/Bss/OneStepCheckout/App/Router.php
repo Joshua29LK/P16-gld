@@ -23,8 +23,6 @@ use Bss\OneStepCheckout\Helper\Config;
 use Magento\Framework\App\RequestInterface;
 
 /**
- * Class Router
- *
  * @package Bss\OneStepCheckout\App
  */
 class Router implements RouterInterface
@@ -46,6 +44,8 @@ class Router implements RouterInterface
     }
 
     /**
+     * Match
+     *
      * @param RequestInterface $request
      * @return void
      */

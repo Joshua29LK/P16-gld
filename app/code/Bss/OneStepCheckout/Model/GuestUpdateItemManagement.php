@@ -23,8 +23,6 @@ use Magento\Quote\Model\QuoteIdMaskFactory;
 use Bss\OneStepCheckout\Api\UpdateItemManagementInterface;
 
 /**
- * Class GuestUpdateItemManagement
- *
  * @package Bss\OneStepCheckout\Model
  */
 class GuestUpdateItemManagement implements GuestUpdateItemManagementInterface
@@ -52,7 +50,7 @@ class GuestUpdateItemManagement implements GuestUpdateItemManagementInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function update($cartId, \Magento\Quote\Api\Data\EstimateAddressInterface $address, $itemId, $qty)
     {

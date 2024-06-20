@@ -26,9 +26,10 @@ define(
         'Bss_OneStepCheckout/js/model/payment-service',
         'Magento_Checkout/js/model/totals',
         'Magento_Checkout/js/model/full-screen-loader',
-        'Magento_Checkout/js/action/get-totals'
+        'Magento_Checkout/js/action/get-totals',
+        'Magento_Checkout/js/model/payment/additional-validators'
     ],
-    function ($, ko, Component, quote, setCouponCodeAction, cancelCouponAction, paymentServiceOsc, totalsModel, fullScreenLoader, getTotalsAction) {
+    function ($, ko, Component, quote, setCouponCodeAction, cancelCouponAction, paymentServiceOsc, totalsModel, fullScreenLoader, getTotalsAction, additionalValidators) {
         'use strict';
 
         var totals = quote.getTotals(),
@@ -80,8 +81,7 @@ define(
              */
             validate: function () {
                 var form = '#discount-form';
-
-                return $(form).validation() && $(form).validation('isValid');
+                return additionalValidators.validate() && $(form).validation() && $(form).validation('isValid');
             }
         });
     }

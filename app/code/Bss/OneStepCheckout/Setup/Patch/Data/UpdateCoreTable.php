@@ -12,7 +12,7 @@
  * @category   BSS
  * @package    Bss_OneStepCheckout
  * @author     Extension Team
- * @copyright  Copyright (c) 2017-2022 BSS Commerce Co. ( http://bsscommerce.com )
+ * @copyright  Copyright (c) 2017-2023 BSS Commerce Co. ( http://bsscommerce.com )
  * @license    http://bsscommerce.com/Bss-Commerce-License.txt
  */
 declare(strict_types=1);
@@ -33,6 +33,11 @@ class UpdateCoreTable implements DataPatchInterface
      * @var \Magento\Framework\Module\ModuleResource
      */
     private $moduleResource;
+
+    /**
+     * @var ModuleDataSetupInterface
+     */
+    protected $moduleDataSetup;
 
     /**
      * @param ModuleDataSetupInterface $moduleDataSetup

@@ -72,6 +72,9 @@ define([
             var self = this;
             $(self.storePickupElem).find(self.btnNormalShip).click();
             storePickup.isStoreShipping(false);
+            if ($("#opc-shipping_method").css("display") === 'none') {
+                $("#opc-shipping_method").show();
+            }
         },
         /**
          * @returns void

@@ -44,7 +44,7 @@ class Address
     }
 
     /**
-     * @param /Magento\Quote\Model\Quote\Address $subject
+     * @param \Magento\Quote\Model\Quote\Address $subject
      * @param mixed $result
      * @return mixed
      */

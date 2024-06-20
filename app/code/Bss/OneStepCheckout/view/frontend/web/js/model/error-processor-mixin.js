@@ -36,13 +36,16 @@ define([
      * @param {Object} messageContainer
      */
     return function (errorProcessor) {
+        if (!window.checkoutConfig.isEnabledOsc) {
+            return errorProcessor;
+        }
         errorProcessor.process = wrapper.wrapSuper(errorProcessor.process, function (response, messageContainer) {
             var isNewCustomerRegister = checkoutData.getShippingAddressFromData();
             var emailValidationResult = true,
                 loginFormSelector = 'form[data-role=email-with-possible-login]';
             if (!customer.isLoggedIn()) {
                 var emailGuest = $(loginFormSelector + ' input[name=username]').val();
-                emailValidationResult = $.mage.isEmptyNoTrim(emailGuest) && /^([a-z0-9,!\#\$%&'\*\+\/=\?\^_`\{\|\}~-]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+(\.([a-z0-9,!\#\$%&'\*\+\/=\?\^_`\{\|\}~-]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+)*@([a-z0-9-]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+(\.([a-z0-9-]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+)*\.(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]){2,})$/i.test(emailGuest);//eslint-disable-line max-len
+                emailValidationResult = !$.mage.isEmptyNoTrim(emailGuest) && /^([a-z0-9,!\#\$%&'\*\+\/=\?\^_`\{\|\}~-]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+(\.([a-z0-9,!\#\$%&'\*\+\/=\?\^_`\{\|\}~-]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+)*@([a-z0-9-]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+(\.([a-z0-9-]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+)*\.(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]){2,})$/i.test(emailGuest);//eslint-disable-line max-len
             } else {
                 emailValidationResult = isNewCustomerRegister ? true : false;
             }
