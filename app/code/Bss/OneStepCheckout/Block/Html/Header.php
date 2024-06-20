@@ -58,7 +58,7 @@ class Header extends \Magento\Theme\Block\Html\Header
     ) {
         $this->session = $session;
         $this->escaper = $escaper;
-        parent::__construct($context, $data, $escaper);
+        parent::__construct($context, $data);
     }
 
     /**
