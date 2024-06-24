@@ -19,10 +19,12 @@
 namespace Bss\OneStepCheckout\Block\Adminhtml\Module;
 
 /**
- * Class CustomerAttributes
  * @package Bss\OneStepCheckout\Block\Adminhtml\Module
  */
 class CustomerAttributes extends Base
 {
+    /**
+     * @var string
+     */
     protected $module = 'Bss_CustomerAttributes';
 }

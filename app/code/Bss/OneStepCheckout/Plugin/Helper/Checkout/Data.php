@@ -21,8 +21,6 @@ namespace Bss\OneStepCheckout\Plugin\Helper\Checkout;
 use Bss\OneStepCheckout\Helper\Config;
 
 /**
- * Class Data
- *
  * @package Bss\OneStepCheckout\Plugin\Helper\Checkout
  */
 class Data
@@ -45,7 +43,7 @@ class Data
 
     /**
      * @param \Magento\Checkout\Helper\Data $subject
-     * @param callable $proceed
+     * @param callable $result
      * @return bool
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)

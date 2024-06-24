@@ -20,7 +20,6 @@ namespace Bss\OneStepCheckout\Model\Total\Invoice;
 use Magento\Sales\Model\Order\Invoice;
 
 /**
- * Class GiftWrap
  * @package Bss\OneStepCheckout\Model\Total\Invoice
  */
 class GiftWrap extends \Magento\Sales\Model\Order\Invoice\Total\AbstractTotal

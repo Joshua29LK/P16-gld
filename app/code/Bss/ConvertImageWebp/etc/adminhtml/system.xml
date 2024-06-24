@@ -32,12 +32,16 @@
                 <field id="enabled" translate="label" type="select" sortOrder="0" showInDefault="1" showInWebsite="1">
                     <label>Enabled</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                    <comment><![CDATA[Version 1.0.4]]></comment>
+                    <comment><![CDATA[Version 1.0.7]]></comment>
                 </field>
                 <field id="quality" translate="label" type="text" sortOrder="10" showInDefault="1">
                     <label>Quality</label>
                     <validate>required validate-number integer validate-digits-range digits-range-1-100</validate>
                     <comment><![CDATA[Between 1 and 100]]></comment>
+                </field>
+                <field id="cdn" translate="label" type="text" sortOrder="15" showInDefault="1">
+                    <label>Image CDN</label>
+                    <comment><![CDATA[Enter CDN url (if available). Example: "https://cdn.nxedge.io/cdn/"]]></comment>
                 </field>
 
                 <field id="enable_webp_page_builder" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="1">

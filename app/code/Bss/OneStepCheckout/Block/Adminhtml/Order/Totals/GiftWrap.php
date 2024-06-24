@@ -41,6 +41,7 @@ class GiftWrap extends Template
      * GiftWrap constructor.
      * @param Context $context
      * @param DataObjectFactory $dataObjectFactory
+     * @param \Bss\OneStepCheckout\Helper\Config $config
      * @param array $data
      */
     public function __construct(
@@ -55,6 +56,8 @@ class GiftWrap extends Template
     }
 
     /**
+     * Get order
+     *
      * @return mixed
      * @throws \Magento\Framework\Exception\LocalizedException
      */
@@ -64,6 +67,8 @@ class GiftWrap extends Template
     }
 
     /**
+     * Init totals
+     *
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
      */

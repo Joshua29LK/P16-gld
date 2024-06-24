@@ -24,9 +24,7 @@ var config = {
             'Magento_Checkout/js/action/get-payment-information':
                 'Bss_OneStepCheckout/js/action/get-payment-information',
             'Magento_SalesRule/js/action/cancel-coupon':
-                'Bss_OneStepCheckout/js/action/cancel-coupon',
-            'Magento_Checkout/js/action/set-payment-information-extended':
-                'Bss_OneStepCheckout/js/action/set-payment-information-extended'
+                'Bss_OneStepCheckout/js/action/cancel-coupon'
         }
     },
     config: {
@@ -39,8 +37,8 @@ var config = {
                 'Bss_OneStepCheckout/js/model/step-navigator-mixin': true
             },
             'Magento_Checkout/js/action/set-payment-information': {
-                'Bss_OneStepCheckout/js/model/set-payment-information-mixin': true,
-                'Magento_CheckoutAgreements/js/model/set-payment-information-mixin': false
+                'Magento_CheckoutAgreements/js/model/set-payment-information-mixin': false,
+                'Bss_OneStepCheckout/js/model/set-payment-information-mixin': true
             },
             'Magento_Checkout/js/model/shipping-rates-validation-rules': {
                 'Bss_OneStepCheckout/js/model/shipping-rates-validation-rules-mixin': true
@@ -75,8 +73,24 @@ var config = {
             'Magento_Checkout/js/action/select-billing-address': {
                 'Bss_OneStepCheckout/js/action/select-billing-address-mixin': true
             },
+
+            'Magento_InventoryInStorePickupFrontend/js/view/store-pickup': {
+                'Bss_OneStepCheckout/js/view/store-pickup-mixin': true
+            },
+            'Magento_InventoryInStorePickupFrontend/js/view/store-selector': {
+                'Bss_OneStepCheckout/js/view/store-selector-mixin': true
+            },
+            'Magento_Checkout/js/model/shipping-service': {
+                'Bss_OneStepCheckout/js/model/shipping-service-mixin': true
+            },
             'Magento_Checkout/js/view/shipping-address/address-renderer/default': {
                 'Bss_OneStepCheckout/js/view/shipping-address/address-renderer/default-mixin': true
+            },
+            'CheckoutCom_Magento2/js/view/payment/method-renderer/checkoutcom_card_payment': {
+                'Bss_OneStepCheckout/js/view/checkoutcom-pay/checkoutcom_card_payment': true
+            },
+            'Magento_Checkout/js/action/set-payment-information-extended': {
+                'Bss_OneStepCheckout/js/action/set-payment-information-extended': true
             }
         }
     }

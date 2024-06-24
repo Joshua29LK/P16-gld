@@ -297,15 +297,6 @@ define([
                 this.source.set('params.invalid', false);
                 this.triggerShippingDataValidateEvent();
 
-                if ($('#co-shipping-form [name="shippingAddress.vat_id"] :input')[0]) {
-                    let inputVAT = $('#co-shipping-form [name="shippingAddress.vat_id"] :input');
-                    let parentVATNode = inputVAT[0].parentNode;
-                    let childMessage = parentVATNode.querySelector('.mage-error');
-                    if (childMessage) {
-                        return false;
-                    }
-                }
-
                 if (emailValidationResult &&
                     this.source.get('params.invalid') ||
                     !quote.shippingMethod()['method_code'] ||
@@ -356,24 +347,6 @@ define([
          * Trigger Shipping data Validate Event.
          */
         triggerShippingDataValidateEvent: function () {
-            if ($('input[name="order_type"]')) {
-                let inputVAT = $('#co-shipping-form [name="shippingAddress.vat_id"] :input');
-                //Remove old message VAT
-                if ($('#co-shipping-form [name="shippingAddress.vat_id"] :input')[0]) {
-                    let parentVATNode = inputVAT[0].parentNode;
-                    let childMessage = parentVATNode.querySelector('.mage-error');
-                    if (childMessage) {
-                        parentVATNode.removeChild(childMessage);
-                    }
-                }
-                //Validate VAT, add message
-                if($('input[name="order_type"]:checked').val() === "company") {
-                    if (this.source.get('shippingAddress.vat_id') === "" || this.source.get('shippingAddress.vat_id').trim() === ""){
-                        let parentVAT = inputVAT.parent();
-                        parentVAT.append('<div id="shipping-postcodenl-house-error" class="mage-error">Dit is een verplicht veld.</div>')
-                    }
-                }
-            }
             this.source.trigger('shippingAddress.data.validate');
 
             if (this.source.get('shippingAddress.custom_attributes')) {

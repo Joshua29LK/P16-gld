@@ -21,7 +21,7 @@ define([
     'use strict';
 
     return function (stepNavigator) {
-        if (!_.isUndefined(window.checkoutConfig.bssOsc)) {
+        if (window.checkoutConfig.isEnabledOsc && !_.isUndefined(window.checkoutConfig.bssOsc)) {
             stepNavigator.isProcessed = function () {
                 return true;
             };

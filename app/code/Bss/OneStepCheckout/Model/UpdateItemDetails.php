@@ -29,7 +29,7 @@ use Magento\Framework\Model\AbstractExtensibleModel;
 class UpdateItemDetails extends AbstractExtensibleModel implements UpdateItemDetailsInterface
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getPaymentMethods()
     {
@@ -37,7 +37,7 @@ class UpdateItemDetails extends AbstractExtensibleModel implements UpdateItemDet
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setPaymentMethods($paymentMethods)
     {
@@ -45,7 +45,7 @@ class UpdateItemDetails extends AbstractExtensibleModel implements UpdateItemDet
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getTotals()
     {
@@ -53,7 +53,7 @@ class UpdateItemDetails extends AbstractExtensibleModel implements UpdateItemDet
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setTotals($totals)
     {
@@ -61,7 +61,7 @@ class UpdateItemDetails extends AbstractExtensibleModel implements UpdateItemDet
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getShippingMethods()
     {
@@ -69,7 +69,7 @@ class UpdateItemDetails extends AbstractExtensibleModel implements UpdateItemDet
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setShippingMethods($shippingMethods)
     {
@@ -77,7 +77,7 @@ class UpdateItemDetails extends AbstractExtensibleModel implements UpdateItemDet
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getMessage()
     {
@@ -85,7 +85,7 @@ class UpdateItemDetails extends AbstractExtensibleModel implements UpdateItemDet
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setMessage($message)
     {
@@ -93,7 +93,7 @@ class UpdateItemDetails extends AbstractExtensibleModel implements UpdateItemDet
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getStatus()
     {
@@ -101,7 +101,7 @@ class UpdateItemDetails extends AbstractExtensibleModel implements UpdateItemDet
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setStatus($status)
     {
@@ -109,7 +109,7 @@ class UpdateItemDetails extends AbstractExtensibleModel implements UpdateItemDet
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getHasError()
     {
@@ -117,7 +117,7 @@ class UpdateItemDetails extends AbstractExtensibleModel implements UpdateItemDet
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setHasError($error)
     {
@@ -125,7 +125,7 @@ class UpdateItemDetails extends AbstractExtensibleModel implements UpdateItemDet
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getGiftWrapDisplay()
     {
@@ -133,7 +133,7 @@ class UpdateItemDetails extends AbstractExtensibleModel implements UpdateItemDet
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setGiftWrapDisplay($display)
     {
@@ -141,7 +141,7 @@ class UpdateItemDetails extends AbstractExtensibleModel implements UpdateItemDet
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getGiftWrapLabel()
     {
@@ -149,7 +149,7 @@ class UpdateItemDetails extends AbstractExtensibleModel implements UpdateItemDet
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setGiftWrapLabel($label)
     {
@@ -157,7 +157,7 @@ class UpdateItemDetails extends AbstractExtensibleModel implements UpdateItemDet
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getQtyBefore()
     {
@@ -165,7 +165,7 @@ class UpdateItemDetails extends AbstractExtensibleModel implements UpdateItemDet
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setQtyBefore($qtyBefore)
     {

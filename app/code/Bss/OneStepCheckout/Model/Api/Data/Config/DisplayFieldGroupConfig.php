@@ -22,8 +22,6 @@ use Magento\Framework\Api\AbstractSimpleObject;
 use Bss\OneStepCheckout\Api\Data\Config\DisplayFieldInterface;
 
 /**
- * Class DisplayFieldGroupConfig
- *
  * @package Bss\OneStepCheckout\Model\Api\Data\Config
  */
 class DisplayFieldGroupConfig extends AbstractSimpleObject implements DisplayFieldInterface

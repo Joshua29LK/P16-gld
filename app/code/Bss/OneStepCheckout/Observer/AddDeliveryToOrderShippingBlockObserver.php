@@ -25,8 +25,6 @@ use Bss\OneStepCheckout\Helper\Data;
 use Bss\OneStepCheckout\Helper\Config;
 
 /**
- * Class AddDeliveryToOrderShippingBlockObserver
- *
  * @package Bss\OneStepCheckout\Observer
  */
 class AddDeliveryToOrderShippingBlockObserver implements ObserverInterface
@@ -65,6 +63,8 @@ class AddDeliveryToOrderShippingBlockObserver implements ObserverInterface
     }
 
     /**
+     * Execute
+     *
      * @param EventObserver $observer
      */
     public function execute(EventObserver $observer)

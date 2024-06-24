@@ -19,7 +19,6 @@
 namespace Bss\OneStepCheckout\Model;
 
 /**
- * Class GiftWrapManagement
  * @package Bss\OneStepCheckout\Model
  */
 class GiftWrapManagement implements \Bss\OneStepCheckout\Api\GiftWrapManagementInterface
@@ -97,7 +96,8 @@ class GiftWrapManagement implements \Bss\OneStepCheckout\Api\GiftWrapManagementI
             if ($quote->isVirtual() || $giftWrapFeeConfig === false) {
                 $response['status'] = 'virtual';
             } else {
-                $response['gift_wrap_label'] = $this->dataHelper->getGiftWrapLabel($this->configHelper->getGiftWrap('fee'), $giftWrapType);
+                $response['gift_wrap_label'] = $this->dataHelper
+                    ->getGiftWrapLabel($this->configHelper->getGiftWrap('fee'), $giftWrapType);
                 $response['status'] = 'success';
             }
         } catch (\Exception $e) {

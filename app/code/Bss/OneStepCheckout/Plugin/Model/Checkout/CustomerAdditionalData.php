@@ -41,7 +41,7 @@ class CustomerAdditionalData
     private $cartRepository;
 
     /**
-     * @var Magento\Checkout\Model\SessionFactory
+     * @var \Magento\Checkout\Model\SessionFactory
      */
     private $checkoutSession;
 
@@ -124,7 +124,7 @@ class CustomerAdditionalData
 
     /**
      * @param \Magento\Checkout\Api\PaymentInformationManagementInterface $subject
-     * @param $cartId
+     * @param int $cartId
      * @param \Magento\Quote\Api\Data\PaymentInterface $paymentMethod
      * @param \Magento\Quote\Api\Data\AddressInterface|null $billingAddress
      * @throws \Magento\Framework\Exception\NoSuchEntityException

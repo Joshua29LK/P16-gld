@@ -18,6 +18,9 @@
 define(['jquery'], function ($) {
     'use strict';
     return function (target) {
+        if (!window.checkoutConfig.isEnabledOsc) {
+            return target;
+        }
         target.getObservableFields = function () {
             var self = this,
                 observableFields = [];

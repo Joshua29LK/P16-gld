@@ -109,6 +109,8 @@ class UpdateItemManagement implements UpdateItemManagementInterface
     }
 
     /**
+     * Update
+     *
      * @param int $cartId
      * @param \Magento\Quote\Api\Data\EstimateAddressInterface $address
      * @param int $itemId
@@ -131,10 +133,10 @@ class UpdateItemManagement implements UpdateItemManagementInterface
             throw new NoSuchEntityException(__('This quote does not exist.'));
         }
         $quoteItem = $quote->getItemById($itemId);
-        $qtyBefore = $quoteItem->getQty();
         if (!$quoteItem) {
             throw new NoSuchEntityException(__('We can\'t find the quote item.'));
         }
+        $qtyBefore = $quoteItem->getQty();
         $storeId = $quote->getStoreId();
         $giftWrapType = $this->configHelper->getGiftWrap('type', $storeId);
         $giftWrapFeeConfig = 0;
@@ -199,6 +201,8 @@ class UpdateItemManagement implements UpdateItemManagementInterface
     }
 
     /**
+     * Get update cart detail
+     *
      * @param \Magento\Quote\Model\Quote $quote
      * @param int|float $qtyBefore
      * @param \Magento\Quote\Api\Data\EstimateAddressInterface $address
@@ -227,7 +231,7 @@ class UpdateItemManagement implements UpdateItemManagementInterface
         if ($shippingAddress && $shippingAddress->getCustomerAddressId()) {
             $shippingMethods = $this->shippingMethodManagement->estimateByAddressId(
                 $quoteId,
-                $shippingAddress->getCustomerAddressId()
+                (int)$shippingAddress->getCustomerAddressId()
             );
         } else {
             $shippingMethods = $this->shippingMethodManagement->estimateByAddress($quoteId, $address);

@@ -19,7 +19,6 @@
 namespace Bss\OneStepCheckout\Plugin\Model\Sales;
 
 /**
- * Class InvoiceRepository
  * @package Bss\OneStepCheckout\Plugin\Model\Sales
  */
 class InvoiceRepository

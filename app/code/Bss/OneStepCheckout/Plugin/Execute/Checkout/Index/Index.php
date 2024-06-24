@@ -18,9 +18,10 @@
 
 namespace Bss\OneStepCheckout\Plugin\Execute\Checkout\Index;
 
-use Magento\Framework\Controller\Result\RedirectFactory;
-use Magento\Checkout\Controller\Index\Index as CheckoutIndex;
 use Bss\OneStepCheckout\Helper\Config;
+use Magento\Checkout\Controller\Index\Index as CheckoutIndex;
+use Magento\Framework\Controller\Result\RedirectFactory;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\UrlInterface;
 
 /**
@@ -68,12 +69,14 @@ class Index
      * @return mixed
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @throws NoSuchEntityException
      */
-    public function aroundExecute(
-        CheckoutIndex $subject,
-        $proceed
-    ) {
-        if ($this->configHelper->isEnabled() && $this->configHelper->isShowBssCheckoutPage()) {
+    public function aroundExecute(CheckoutIndex $subject, $proceed)
+    {
+        $storeId = $this->configHelper->getStoreId();
+        if ($this->configHelper->isEnabled() && $this->configHelper->isShowBssCheckoutPage()
+            && $this->configHelper->isCanCheckout($storeId)
+        ) {
             $path = Config::OSC_CONTROLLER_NAME;
             $router = $this->configHelper->getGeneral('router_name');
             if ($router) {

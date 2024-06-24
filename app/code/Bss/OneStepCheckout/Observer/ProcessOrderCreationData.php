@@ -21,7 +21,6 @@ namespace Bss\OneStepCheckout\Observer;
 use Magento\Framework\Event\ObserverInterface;
 
 /**
- * Class ProcessOrderCreationData
  * @package Bss\OneStepCheckout\Observer
  */
 class ProcessOrderCreationData implements ObserverInterface

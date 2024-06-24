@@ -30,6 +30,6 @@ define([
 
     return {
         isLoading: ko.observable(false),
-        isAppliedCoupon: ko.observable(couponCode() != null)
+        isAppliedCoupon: ko.observable(couponCode() != "" && couponCode() != null)
     }
 });

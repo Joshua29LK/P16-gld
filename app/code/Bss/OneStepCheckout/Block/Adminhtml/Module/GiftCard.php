@@ -19,10 +19,12 @@
 namespace Bss\OneStepCheckout\Block\Adminhtml\Module;
 
 /**
- * Class GiftCard
  * @package Bss\OneStepCheckout\Block\Adminhtml\Module
  */
 class GiftCard extends \Bss\OneStepCheckout\Block\Adminhtml\Module\Base
 {
+    /**
+     * @var string
+     */
     protected $module = 'Bss_GiftCard';
 }

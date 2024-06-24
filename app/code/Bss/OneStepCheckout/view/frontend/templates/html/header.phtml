@@ -1,0 +1,67 @@
+<?php
+/**
+ * BSS Commerce Co.
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the EULA
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://bsscommerce.com/Bss-Commerce-License.txt
+ *
+ * @category  BSS
+ * @package   Bss_OneStepCheckout
+ * @author    Extension Team
+ * @copyright Copyright (c) 2023 BSS Commerce Co. ( http://bsscommerce.com )
+ * @license   http://bsscommerce.com/Bss-Commerce-License.txt
+ */
+/**
+ * @var \Bss\OneStepCheckout\Block\Html\Header $block
+ * @var \Magento\Framework\Escaper $escaper
+ */
+$escaper = $block->escaper();
+$welcomeMessage = $block->getWelcome();
+?>
+<?php if ($block->isLoggedIn()):?>
+    <script>
+        require([
+            'Magento_Customer/js/customer-data'
+        ], function (customerData) {
+            'use strict';
+            if (!customerData.get('customer')().fullname) {
+                customerData.reload(['customer']);
+            }
+        })
+    </script>
+<?php endif;?>
+<?php if ($block->getShowPart() == 'welcome'): ?>
+    <li class="greet welcome" data-bind="scope: 'customer'">
+        <!-- ko if: customer().fullname  -->
+        <span class="logged-in"
+              data-bind="text: new String('<?= $escaper->escapeHtml(__('Welcome, %1!', '%1')) ?>').
+              replace('%1', customer().fullname)">
+        </span>
+        <!-- /ko -->
+        <!-- ko ifnot: customer().fullname  -->
+        <span class="not-logged-in"
+              data-bind="text: '<?= $escaper->escapeHtml($welcomeMessage) ?>'"></span>
+        <?= $block->getBlockHtml('header.additional') ?>
+        <!-- /ko -->
+    </li>
+    <?php // phpcs:ignore Magento2.Legacy.PhtmlTemplate ?>
+    <script type="text/x-magento-init">
+        {
+            "*": {
+                "Magento_Ui/js/core/app": {
+                    "components": {
+                        "customer": {
+                            "component": "Magento_Customer/js/view/customer"
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+<?php elseif ($block->getShowPart() == 'other'): ?>
+    <?= $block->getChildHtml() ?>
+<?php endif ?>

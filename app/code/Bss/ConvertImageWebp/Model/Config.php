@@ -24,6 +24,7 @@ class Config
 {
     public const XML_PATH_ENABLE_MODULE = "c_i_w/general/enabled";
     public const XML_PATH_QUALITY = 'c_i_w/general/quality';
+    public const XML_PATH_CDN = 'c_i_w/general/cdn';
     public const XML_PATH_ENABLE_WEBP_PAGE_BUILDER = 'c_i_w/general/enable_webp_page_builder';
     public const XML_PATH_IGNORE_FOLDERS = "c_i_w/general/ignore_folders";
     public const XML_PATH_AUTO_GENERATE_WEBP_IMAGE = 'c_i_w/general/auto_generate_webp_image';
@@ -364,4 +365,13 @@ class Config
         return (int)$this->scopeConfig->getValue(self::XML_PATH_QUALITY);
     }
 
+    /**
+     * Get CDN url.
+     *
+     * @return string
+     */
+    public function getUrlCDN()
+    {
+        return (string)$this->scopeConfig->getValue(self::XML_PATH_CDN);
+    }
 }

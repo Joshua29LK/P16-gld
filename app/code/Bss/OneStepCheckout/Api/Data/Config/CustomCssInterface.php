@@ -18,8 +18,6 @@
 namespace Bss\OneStepCheckout\Api\Data\Config;
 
 /**
- * Interface CustomCssInterface
- *
  * @package Bss\OneStepCheckout\Api\Data\Config
  */
 interface CustomCssInterface

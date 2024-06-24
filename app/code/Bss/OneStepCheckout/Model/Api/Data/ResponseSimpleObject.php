@@ -21,8 +21,6 @@ use Bss\OneStepCheckout\Api\Data\ResponseSimpleObjectInterface;
 use Magento\Framework\Api\AbstractSimpleObject;
 
 /**
- * Class ResponseSimpleObject
- *
  * @package Bss\OneStepCheckout\Model
  */
 class ResponseSimpleObject extends AbstractSimpleObject implements ResponseSimpleObjectInterface

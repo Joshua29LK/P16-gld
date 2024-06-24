@@ -22,8 +22,6 @@ use Magento\Framework\Api\AbstractSimpleObject;
 use Bss\OneStepCheckout\Api\Data\Config\GiftMessageInterface;
 
 /**
- * Class GiftMessageGroupConfig
- *
  * @package Bss\OneStepCheckout\Model\Api\Data\Config
  */
 class GiftMessageGroupConfig extends AbstractSimpleObject implements GiftMessageInterface

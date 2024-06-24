@@ -20,13 +20,16 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <type name="Magento\Checkout\Controller\Index\Index">
         <plugin name="bss_osc_checkout_index_index"
-            type="Bss\OneStepCheckout\Plugin\Execute\Checkout\Index\Index" />
+                type="Bss\OneStepCheckout\Plugin\Execute\Checkout\Index\Index" />
     </type>
     <type name="\Magento\Checkout\Block\Checkout\LayoutProcessor">
         <plugin name="bss_osc_checkout_layout_processor" type="Bss\OneStepCheckout\Plugin\Block\Checkout\Checkout\LayoutProcessor" />
     </type>
     <type name="\Magento\Checkout\Helper\Data">
         <plugin name="bss_osc_checkout_helper_data" type="Bss\OneStepCheckout\Plugin\Helper\Checkout\Data" />
+    </type>
+    <type name="Magento\Checkout\Model\DefaultConfigProvider">
+        <plugin name="bss_osc_checkout_checkout_config" type="Bss\OneStepCheckout\Plugin\Model\Checkout\DefaultConfigProvider" />
     </type>
     <type name="Magento\Checkout\Model\CompositeConfigProvider">
         <arguments>

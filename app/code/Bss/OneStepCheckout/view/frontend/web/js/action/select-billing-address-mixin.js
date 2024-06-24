@@ -17,20 +17,24 @@
 define([
     'jquery',
     'mage/utils/wrapper',
-    'Magento_Checkout/js/model/quote'
-], function ($, wrapper, quote) {
+    'Magento_Checkout/js/model/quote',
+    'Magento_Customer/js/model/customer'
+], function ($, wrapper, quote, customer) {
     'use strict';
 
     return function (selectBillingAddressAction) {
         return wrapper.wrap(selectBillingAddressAction, function (selectBillingAddress, billingAddress) {
+            if (!window.checkoutConfig.isEnabledOsc || (quote.isVirtual() && !customer.isLoggedIn()) ) {
+                return selectBillingAddress(billingAddress);
+            }
             if (window.isAddressSameAsShipping == undefined) {
-                window.isAddressSameAsShipping = true;
+                window.isAddressSameAsShipping = !quote.isVirtual();
             }
             if (quote.shippingAddress() && !billingAddress && quote.billingAddress) {
                 quote.billingAddress(quote.shippingAddress());
                 billingAddress = quote.shippingAddress();
             }
-            if (billingAddress && billingAddress.getCacheKey() != quote.shippingAddress().getCacheKey() && window.isAddressSameAsShipping) {
+            if (quote.shippingAddress() && billingAddress && billingAddress.getCacheKey() != quote.shippingAddress().getCacheKey() && window.isAddressSameAsShipping) {
                 billingAddress = quote.shippingAddress();
             }
             return selectBillingAddress(billingAddress);

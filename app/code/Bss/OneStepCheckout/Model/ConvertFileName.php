@@ -17,6 +17,13 @@
  */
 namespace Bss\OneStepCheckout\Model;
 
+use Magento\Framework\App\ProductMetadataInterface;
+use Magento\Framework\Filesystem\Driver\File;
+use Magento\Framework\Module\Dir;
+use Magento\Framework\Module\Manager;
+use Magento\Framework\Module\ModuleListInterface;
+use Magento\Store\Model\ScopeInterface;
+
 class ConvertFileName
 {
     /**
@@ -35,26 +42,34 @@ class ConvertFileName
     private $directory;
 
     /**
-     * @var \Bss\OneStepCheckout\Helper\Config
+     * @var \Magento\Framework\App\ProductMetadataInterface
      */
-    protected $config;
+    protected $productMetadata;
 
     /**
-     * @param \Magento\Framework\Filesystem\Driver\File $file
-     * @param \Magento\Framework\Module\Manager $manager
-     * @param \Magento\Framework\Module\Dir $directory
-     * @param \Bss\OneStepCheckout\Helper\Config $config
+     * @var ModuleListInterface
+     */
+    protected $moduleList;
+
+    /**
+     * @param File $file
+     * @param Manager $manager
+     * @param Dir $directory
+     * @param ProductMetadataInterface $productMetadata
+     * @param ModuleListInterface $moduleList
      */
     public function __construct(
         \Magento\Framework\Filesystem\Driver\File $file,
         \Magento\Framework\Module\Manager $manager,
         \Magento\Framework\Module\Dir $directory,
-        \Bss\OneStepCheckout\Helper\Config $config
+        \Magento\Framework\App\ProductMetadataInterface $productMetadata,
+        \Magento\Framework\Module\ModuleListInterface $moduleList
     ) {
         $this->file = $file;
         $this->manager = $manager;
         $this->directory = $directory;
-        $this->config = $config;
+        $this->productMetadata = $productMetadata;
+        $this->moduleList=$moduleList;
     }
 
     /**
@@ -72,36 +87,21 @@ class ConvertFileName
         $directoryPath = $this->directory->getDir(
             'Bss_OneStepCheckout'
         );
-        if ($this->config->isLessThanM244()) {
-            if ($this->manager->isEnabled('Klarna_Core')) {
-                if ($this->file->isExists($directoryPath . $fileTxt)) {
-                    try {
-                        $this->file->rename($directoryPath . $fileTxt, $directoryPath . $filePhp);
-                        $message = __("Convert file successful.");
-                    } catch (\Exception $e) {
-                        $message = __("Permission denied.");
-                    }
-                } elseif ($this->file->isExists($directoryPath . $filePhp)) {
+        if ($this->isLessThanM244()) {
+            if ($this->file->isExists($directoryPath . $fileTxt)) {
+                try {
+                    $this->file->rename($directoryPath . $fileTxt, $directoryPath . $filePhp);
                     $message = __("Convert file successful.");
-                } else {
-                    $message = __("Can not find the file.");
+                } catch (\Exception $e) {
+                    $message = __("Permission denied.");
                 }
+            } elseif ($this->file->isExists($directoryPath . $filePhp)) {
+                $message = __("Convert file successful.");
             } else {
-                if ($this->file->isExists($directoryPath . $filePhp)) {
-                    try {
-                        $this->file->rename($directoryPath . $filePhp, $directoryPath . $fileTxt);
-                        $message = __("Convert file successful.");
-                    } catch (\Exception $e) {
-                        $message = __("Permission denied.");
-                    }
-                } elseif ($this->file->isExists($directoryPath . $fileTxt)) {
-                    $message = __("Convert file successful.");
-                } else {
-                    $message = __("Can not find the file.");
-                }
+                $message = __("Can not find the file.");
             }
         } else {
-            if ($this->config->isGiftWrapEnable()) {
+            if ($this->moduleList->has('Klarna_Core')) {
                 if ($this->file->isExists($directoryPath . $fileTxtV244)) {
                     try {
                         $this->file->rename($directoryPath . $fileTxtV244, $directoryPath . $filePhpV244);
@@ -130,5 +130,18 @@ class ConvertFileName
             }
         }
         return $message;
+    }
+
+    /**
+     * Check version M2.4.4
+     *
+     * @return bool
+     */
+    public function isLessThanM244()
+    {
+        if ($this->productMetadata->getVersion() <= "2.4.3") {
+            return true;
+        }
+        return false;
     }
 }

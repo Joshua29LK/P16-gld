@@ -8,3 +8,5 @@ Clear All Webp Images,Clear All Webp Images
 Please enter an integer in quality, greater than 1 and less than 100!, Please enter an integer in quality, greater than 1 and less than 100!
 Convert Images inserted via Page Builder,Convert Images inserted via Page Builder
 Choose Yes to convert images in banners and sliders which are inserted via Magento Page Builder to .webp format.,Choose Yes to convert images in banners and sliders which are inserted via Magento Page Builder to .webp format.
+Image CDN,Image CDN
+Enter CDN url (if available). Example: "https://cdn.nxedge.io/cdn/",Enter CDN url (if available). Example: "https://cdn.nxedge.io/cdn/"

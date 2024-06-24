@@ -33,7 +33,7 @@ class RenameGiftWrapper extends Command
      */
     public function __construct(
         \Bss\OneStepCheckout\Model\ConvertFileName $convertGiftWrapper
-    ){
+    ) {
         parent::__construct();
         $this->convertGiftWrapper = $convertGiftWrapper;
     }

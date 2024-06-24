@@ -161,12 +161,11 @@ class ReplaceUrl
      *
      * @param string $urlImage
      * @return bool
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function checkIgnoreFolders($urlImage)
     {
-        $urlBaseWeb = $this->convert->getUrlBaseWeb();
-        $folderWeb = substr($urlImage, strlen($urlBaseWeb));
+        $lenBase = strlen($this->convert->getBaseDomain($urlImage));
+        $folderWeb = substr($urlImage, $lenBase);
         $ignoreFolders = $this->config->getIgnoreFolders();
         if ($ignoreFolders && $folderWeb) {
             foreach ($ignoreFolders as $folder) {

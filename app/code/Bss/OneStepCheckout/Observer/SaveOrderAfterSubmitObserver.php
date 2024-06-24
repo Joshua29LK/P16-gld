@@ -21,7 +21,6 @@ use Magento\Framework\Event\ObserverInterface;
 use Magento\Sales\Model\Order;
 
 /**
- * Class SaveOrderAfterSubmitObserver
  * @package Bss\OneStepCheckout\Observer
  */
 class SaveOrderAfterSubmitObserver implements ObserverInterface

@@ -67,7 +67,6 @@ define([
                     'method_code': this.rate['method_code']
                 });
             }, this);
-
             return this;
         },
 
@@ -81,7 +80,10 @@ define([
             // Work with OSC,when pick shipping button then show shipping address form and shipping method
             $(self.elmOSC).removeClass(self.elmCheckStorePickup);
             $(self.elmOSC).removeClass(self.elemHiddenStep);
-            $(self.elmShippingMethodStep).css('display', 'list-item');
+            if ($(".bss-margin")[0]) {
+                $(self.elmShippingMethodStep).removeClass('bss-margin');
+            }
+            $(self.elmShippingMethodStep).addClass('list-item');
             $('.opc-wrapper').removeProp('min-height');
 
             // Auto click on selected item
@@ -114,6 +116,11 @@ define([
             if (customer.isLoggedIn()) {
                 $(self.elmOSC).addClass(self.elemHiddenStep);
             }
+            if ($(".list-item")[0]) {
+                $(self.elmShippingMethodStep).removeClass('list-item');
+            }
+            $(self.elmShippingMethodStep).addClass('bss-margin');
+
             if ($(self.elmShippingMethod + ' > div').length < 4) {
                 $(self.elmShippingMethodStep).css('display', 'none');
             }
@@ -125,6 +132,13 @@ define([
             if ($payment.length) {
                 $('.opc-wrapper').css('min-height', $payment.height());
             }
+
+            $('#store-pickup').css("top", $('#bss-store-pickup-selector').height() + $('#shipping').height() + 30 + 'px');
+            function outputsize() {
+                $('#store-pickup').css("top", $('#bss-store-pickup-selector').height() + $('#shipping').height() + 30 + 'px');
+            }
+            outputsize();
+            new ResizeObserver(outputsize).observe(shipping);
         },
 
         /**

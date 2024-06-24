@@ -19,7 +19,6 @@
 namespace Bss\OneStepCheckout\Model\ResourceModel;
 
 /**
- * Class compositeConfig
  * @package Bss\OneStepCheckout\Model\ResourceModel
  */
 class CompositeConfig
@@ -105,7 +104,7 @@ class CompositeConfig
     /**
      * Get Table Name
      *
-     * @param String $entity
+     * @param string $entity
      * @return bool|mixed
      */
     public function getTableName($entity)

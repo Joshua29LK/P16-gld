@@ -37,7 +37,7 @@ class DefaultTotal
     }
 
     /**
-     * @param SalesDefaultTotal $total
+     * @param SalesDefaultTotal $defaultTotal
      * @return bool
      */
     public function afterCanDisplay(SalesDefaultTotal $defaultTotal, $result)

@@ -154,13 +154,12 @@ class Block
             $strEnd = (int)strpos($imgTag, $srcEnd, $strStart) - $strStart;
             $imgNotConvert = substr($imgTag, $strStart, $strEnd);
 
-            if ($imgNotConvert === $imageUrl) {
+            if (strpos($imageUrl, $imgNotConvert) !== false) {
                 $strTypeImg = explode(".", $imageUrlSource);
 
                 $sourceTag = str_replace('<img', '<source', $imgTag);
                 $sourceTag = str_replace($srcStart . $imgNotConvert . $srcEnd, 'srcset="' . $imageUrlSource . '"', $sourceTag);
                 $sourceTag = str_replace('>', ' type="image/' . end($strTypeImg) . '">', $sourceTag);
-                $sourceTag = preg_replace('/\s*id="[^"]*"/i', '', $sourceTag);
 
                 $imgTagConvert = str_replace('>', ' bss-converted>', $imgTag);
 
@@ -199,7 +198,11 @@ class Block
     public function addFullUrl($url)
     {
         $webBaseUrl = $this->convert->getUrlBaseWeb();
-        if (strpos($url, $webBaseUrl) === 0) {
+        $cdnUrl = $this->config->getUrlCDN();
+
+        if (strpos($url, $webBaseUrl) === 0
+            || ($cdnUrl && strpos($url, $cdnUrl) === 0)
+        ) {
             return $url;
         }
 

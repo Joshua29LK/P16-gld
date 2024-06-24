@@ -102,13 +102,14 @@ define([
                     selectedAddress: null,
                     isAddressDetailsVisible: quote.billingAddress() != null,
                     isAddressFormVisible: !customer.isLoggedIn() || addressOptions.length === 1,
-                    isAddressSameAsShipping: true,
+                    isAddressSameAsShipping: !quote.isVirtual(),
                     saveInAddressBook: 1
                 });
 
             quote.billingAddress.subscribe(function (newAddress) {
                 if (quote.isVirtual() || !quote.shippingAddress()) {
                     this.isAddressSameAsShipping(false);
+                    window.isAddressSameAsShipping = false;
                 } else {
                     if (!this.isAddressSameAsShipping() && (newAddress !== null && typeof newAddress === 'object' && !newAddress.regionId && (!newAddress.street || !newAddress['street'][0]))) {
                         this.isAddressSameAsShipping(true);

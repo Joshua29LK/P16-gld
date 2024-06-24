@@ -14,7 +14,7 @@
 *  @category  BSS
 *  @package   Bss_ConvertImageWebp
 *  @author    Extension Team
-*  @copyright Copyright (c) 2022 BSS Commerce Co. ( http://bsscommerce.com )
+*  @copyright Copyright (c) 2022-2023 BSS Commerce Co. ( http://bsscommerce.com )
 *  @license   http://bsscommerce.com/Bss-Commerce-License.txt
 */
 -->
@@ -37,5 +37,11 @@
 
     <type name="Magento\ConfigurableProduct\Block\Product\View\Type\Configurable">
         <plugin name="bss_c_i_w_generate_image_configurable_product_cache" type="Bss\ConvertImageWebp\Block\Product\Renderer\Configurable" />
+    </type>
+
+    <type name="Bss\ConvertImageWebp\Model\Plugin\Config\CatalogMediaConfig">
+        <arguments>
+            <argument name="catalogMediaConfig" xsi:type="string">\Magento\Catalog\Model\Config\CatalogMediaConfig</argument>
+        </arguments>
     </type>
 </config>

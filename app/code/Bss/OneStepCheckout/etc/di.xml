@@ -13,12 +13,14 @@
  * @category   BSS
  * @package    Bss_OneStepCheckout
  * @author     Extension Team
- * @copyright  Copyright (c) 2017-2018 BSS Commerce Co. ( http://bsscommerce.com )
+ * @copyright  Copyright (c) 2017-2013 BSS Commerce Co. ( http://bsscommerce.com )
  * @license    http://bsscommerce.com/Bss-Commerce-License.txt
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="Magento\Theme\Block\Html\Header" type="Bss\OneStepCheckout\Block\Html\Header" />
+<!--    <preference for="Magento\Quote\Model\QuoteRepository" type="Bss\OneStepCheckout\Override\QuoteRepository"/>-->
     <type name="Magento\Quote\Model\Quote\Address">
         <plugin name="bss_osc_quote_address"
                 type="Bss\OneStepCheckout\Plugin\Model\Quote\Address"/>
@@ -30,6 +32,23 @@
         <plugin name="bss_osc_guest_additional_data"
                 type="Bss\OneStepCheckout\Plugin\Model\Checkout\GuestAdditionalData"/>
     </type>
+
+    <!-- Compatible with Company Account -->
+    <type name="Bss\CompanyAccount\Block\Order\Tabs\Approve">
+        <plugin name="get_url_checkout_approve" type="Bss\OneStepCheckout\Plugin\Block\Order\Tabs\Checkout" sortOrder="10" disabled="false"  />
+    </type>
+
+    <type name="Bss\CompanyAccount\Block\Order\Tabs\Waiting">
+        <plugin name="get_url_checkout_waiting" type="Bss\OneStepCheckout\Plugin\Block\Order\Tabs\Checkout" sortOrder="10" disabled="false"  />
+    </type>
+    <!-- End -->
+
+    <!-- Compatible with QuoteExtension-->
+    <type name="Bss\QuoteExtension\Block\QuoteExtension\View\Action">
+        <plugin name="bss_osc_compatible_r4q_action"
+                type="Bss\OneStepCheckout\Plugin\Block\QuoteExtension\View\Action"/>
+    </type>
+    <!--End-->
 
     <!-- Bss add extension attribute to rest api -->
     <type name="Magento\Sales\Api\OrderRepositoryInterface">

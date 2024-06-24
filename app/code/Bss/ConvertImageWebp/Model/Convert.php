@@ -251,9 +251,10 @@ class Convert
      */
     public function convertUrlFolder($urlImage)
     {
-        $urlBaseWeb = $this->getUrlBaseWeb();
-        if (substr($urlImage, strlen($urlBaseWeb))) {
-            $webpFolder = $this->getMediaFolder() . self::FOLDER_IMAGE . substr($urlImage, strlen($urlBaseWeb));
+        $baseDomain = $this->getBaseDomain($urlImage);
+
+        if ($pathImgMedia = substr($urlImage, strlen($baseDomain))) {
+            $webpFolder = $this->getMediaFolder() . self::FOLDER_IMAGE . $pathImgMedia;
             $webpFolder = $this->replaceTypeImage($webpFolder);
             $webpFolder = preg_replace('/\/static\/version([0-9]+\/)/', '/static/', $webpFolder);
             $webpFolder = str_replace("/webp/pub/media/", "/webp/media/", $webpFolder);
@@ -265,7 +266,7 @@ class Convert
                     $imageFolder = preg_replace('/\/static\/version([0-9]+\/)/', '/static/', $imageFolder);
                     $imageFolder = str_replace("/webp/pub/media/", "/webp/media/", $imageFolder);
 
-                    if (!$this->checkExistsFile($imageFolder) && strpos($urlImage, $this->getUrlBaseWeb()) !== false) {
+                    if (!$this->checkExistsFile($imageFolder) && strpos($urlImage, $baseDomain) !== false) {
                         return $this->replaceWebpConvertAutoFe($imageFolder);
                     }
                     $rendered = $this->convertFrontend($imageFolder);
@@ -295,7 +296,27 @@ class Convert
     }
 
     /**
-     * Get url media webp
+     * Get base domain. Compatible with CDN
+     *
+     * @param string $urlImage
+     * @return string
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     */
+    public function getBaseDomain($urlImage)
+    {
+        $cdnUrl = $this->config->getUrlCDN();
+        if ($cdnUrl && strpos($urlImage, $cdnUrl) === 0) {
+            return $cdnUrl;
+        }
+
+        return $this->getUrlBaseWeb();
+    }
+
+    /**
+     * Get url media webp. (This function is already compatible with CDN)
+     *
+     * @return string
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function getUrlMediaWeb()
     {
@@ -442,8 +463,8 @@ class Convert
      */
     public function getSourceImageUri($urlImage)
     {
-        $urlBaseWeb = $this->getUrlBaseWeb();
-        $webpFolder = $this->getMediaFolder() . substr($urlImage, strlen($urlBaseWeb));
+        $baseDomain = $this->getBaseDomain($urlImage);
+        $webpFolder = $this->getMediaFolder() . substr($urlImage, strlen($baseDomain));
 
         return str_replace("media/media/", "media/", $webpFolder);
     }

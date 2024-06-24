@@ -22,7 +22,6 @@ use Magento\Framework\View\Element\Template\Context;
 use Magento\Framework\DataObjectFactory;
 
 /**
- * Class GiftWrap
  * @package Bss\OneStepCheckout\Block\Sales\Order
  */
 class GiftWrap extends Template
@@ -41,6 +40,7 @@ class GiftWrap extends Template
      * GiftWrap constructor.
      * @param Context $context
      * @param DataObjectFactory $dataObjectFactory
+     * @param \Bss\OneStepCheckout\Helper\Config $config
      * @param array $data
      */
     public function __construct(
@@ -55,6 +55,8 @@ class GiftWrap extends Template
     }
 
     /**
+     * Add to grand total
+     *
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
      */

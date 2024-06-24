@@ -20,13 +20,14 @@ define([
     'use strict';
     window.paypalElement = false;
     return function(target){
+        if (!window.checkoutConfig.isEnabledOsc) {
+            return target;
+        }
         target.renderPayPalButtons = function (element) {
             if (window.paypalElement == false) {
                 window.paypalElement = element;
             }
-            if (typeof window.checkoutConfig === "undefined") {
-                checkoutSmartButtons(this.prepareClientConfig(), element);
-            }
+            checkoutSmartButtons(this.prepareClientConfig(), element);
         }
         return target;
     };

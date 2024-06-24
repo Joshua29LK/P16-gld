@@ -18,8 +18,6 @@
 namespace Bss\OneStepCheckout\Api;
 
 /**
- * Interface OrderDeliveryDateCommentInterface
- *
  * @api
  * @package Bss\OneStepCheckout\Api
  */

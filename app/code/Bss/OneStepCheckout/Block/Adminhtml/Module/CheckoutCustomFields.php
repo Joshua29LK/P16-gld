@@ -19,10 +19,12 @@
 namespace Bss\OneStepCheckout\Block\Adminhtml\Module;
 
 /**
- * Class CheckoutCustomFields
  * @package Bss\OneStepCheckout\Block\Adminhtml\Module
  */
 class CheckoutCustomFields extends Base
 {
+    /**
+     * @var string
+     */
     protected $module = 'Bss_CheckoutCustomField';
 }

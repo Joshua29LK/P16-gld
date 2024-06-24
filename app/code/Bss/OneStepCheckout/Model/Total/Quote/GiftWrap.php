@@ -63,6 +63,7 @@ class GiftWrap extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
     }
 
     /**
+     * Fetch gift wrap
      * @param \Magento\Quote\Model\Quote $quote
      * @param \Magento\Quote\Model\Quote\Address\Total $total
      * @return array|null
