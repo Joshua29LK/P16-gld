@@ -193,7 +193,7 @@ define([
                 }
             } else if (viewType == 1) {
                 if (typeof url[$(dropdownCartOptions).val()] == 'string') {
-                    var element = $widget.element.find('#image_preview_' + $(dropdownCartOptions).val());
+                    var element = $widget.element.find('img#image_preview_' + $(dropdownCartOptions).val());
                     $widget.element.find('.Bss_image_preview img').css('border','solid 2px #ddd');
                     element.css('border','solid 2px #d33');
                 } else {
