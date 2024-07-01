@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "261ec4e6acd21f16e30948dff6606a8c",
+    "content-hash": "0e127d58a50cd287c44d2f0d05928630",
     "packages": [
         {
             "name": "2tvenom/cborencode",
@@ -2252,11 +2252,11 @@
         },
         {
             "name": "geissweb/module-euvat",
-            "version": "1.21.1",
+            "version": "1.21.2",
             "dist": {
                 "type": "zip",
-                "url": "https://packages.geissweb.de/composer/download/file/m/geissweb_module-euvat/h/dc41dc7564b15c8bcf65a54db522f4c99e01d4a8/v/1.21.1.0",
-                "reference": "dc41dc7564b15c8bcf65a54db522f4c99e01d4a8"
+                "url": "https://packages.geissweb.de/composer/download/file/m/geissweb_module-euvat/h/070b88a56bd550a4edb4483f33b5bfa9899d0bea/v/1.21.2.0",
+                "reference": "070b88a56bd550a4edb4483f33b5bfa9899d0bea"
             },
             "require": {
                 "ext-curl": "*",
@@ -2304,7 +2304,7 @@
                 }
             ],
             "description": "Improved VAT handling for merchants dealing with or in the EU.",
-            "time": "2024-02-21T10:57:36+00:00"
+            "time": "2024-03-29T14:09:55+00:00"
         },
         {
             "name": "gmostafa/php-graphql-client",
