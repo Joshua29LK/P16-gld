@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ffcb028213a41f3140fe23e106942339",
+    "content-hash": "e48ac399d9be153551ad5db0d186287e",
     "packages": [
         {
             "name": "2tvenom/cborencode",
@@ -5076,21 +5076,21 @@
         },
         {
             "name": "magefan/module-blog",
-            "version": "2.11.2",
+            "version": "2.11.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/magefan/module-blog.git",
-                "reference": "ed0985c8000e9269d60c231ec2c768f5b90b4bfa"
+                "reference": "57c0778696a5ef688873ba4c5dcde5d990675e2a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/magefan/module-blog/zipball/ed0985c8000e9269d60c231ec2c768f5b90b4bfa",
-                "reference": "ed0985c8000e9269d60c231ec2c768f5b90b4bfa",
+                "url": "https://api.github.com/repos/magefan/module-blog/zipball/57c0778696a5ef688873ba4c5dcde5d990675e2a",
+                "reference": "57c0778696a5ef688873ba4c5dcde5d990675e2a",
                 "shasum": ""
             },
             "require": {
                 "magefan/module-blog-graph-ql": ">=2.1.9",
-                "magefan/module-community": ">=2.1.18",
+                "magefan/module-community": ">=2.1.23",
                 "magefan/module-wysiwyg-advanced": ">=2.0.15"
             },
             "suggest": {
@@ -5109,9 +5109,9 @@
             "description": "Implements Blog functionality on Magento 2 store",
             "support": {
                 "issues": "https://github.com/magefan/module-blog/issues",
-                "source": "https://github.com/magefan/module-blog/tree/2.11.2"
+                "source": "https://github.com/magefan/module-blog/tree/2.11.4"
             },
-            "time": "2024-02-26T11:24:07+00:00"
+            "time": "2024-05-21T06:58:58+00:00"
         },
         {
             "name": "magefan/module-blog-graph-ql",
@@ -5146,16 +5146,16 @@
         },
         {
             "name": "magefan/module-community",
-            "version": "2.1.20",
+            "version": "2.1.28",
             "source": {
                 "type": "git",
                 "url": "https://github.com/magefan/module-community.git",
-                "reference": "f008892ba3924fd4da9328562868b7c2d6fa3051"
+                "reference": "33f73bd6c3726697b228424e24e38ba3245812d7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/magefan/module-community/zipball/f008892ba3924fd4da9328562868b7c2d6fa3051",
-                "reference": "f008892ba3924fd4da9328562868b7c2d6fa3051",
+                "url": "https://api.github.com/repos/magefan/module-community/zipball/33f73bd6c3726697b228424e24e38ba3245812d7",
+                "reference": "33f73bd6c3726697b228424e24e38ba3245812d7",
                 "shasum": ""
             },
             "require": {
@@ -5174,9 +5174,9 @@
             "description": "Magefan core module, required for other Magefan extensions",
             "support": {
                 "issues": "https://github.com/magefan/module-community/issues",
-                "source": "https://github.com/magefan/module-community/tree/2.1.20"
+                "source": "https://github.com/magefan/module-community/tree/2.1.28"
             },
-            "time": "2024-04-10T10:20:45+00:00"
+            "time": "2024-06-14T13:22:52+00:00"
         },
         {
             "name": "magefan/module-wysiwyg-advanced",
