@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "623264cab694cffc66bfb65bf8d985c8",
+    "content-hash": "261ec4e6acd21f16e30948dff6606a8c",
     "packages": [
         {
             "name": "2tvenom/cborencode",
@@ -17645,11 +17645,11 @@
         },
         {
             "name": "mageprince/module-product-attachment",
-            "version": "2.2.7",
+            "version": "2.2.10",
             "dist": {
                 "type": "zip",
-                "url": "https://repo.magento.com/archives/mageprince/module-product-attachment/mageprince-module-product-attachment-2.2.7.0.zip",
-                "shasum": "b4e5e49dcde8e5c21b9884bfc3e4d7cad2e70e75"
+                "url": "https://repo.magento.com/archives/mageprince/module-product-attachment/mageprince-module-product-attachment-2.2.10.0.zip",
+                "shasum": "040667bc7c47c08e0ddd3758b28ff61b027af2ff"
             },
             "type": "magento2-module",
             "autoload": {
@@ -28536,5 +28536,5 @@
     "prefer-lowest": false,
     "platform": [],
     "platform-dev": [],
-    "plugin-api-version": "2.2.0"
+    "plugin-api-version": "2.3.0"
 }
