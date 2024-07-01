@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e48ac399d9be153551ad5db0d186287e",
+    "content-hash": "623264cab694cffc66bfb65bf8d985c8",
     "packages": [
         {
             "name": "2tvenom/cborencode",
@@ -21172,15 +21172,15 @@
         },
         {
             "name": "swissup/easytabs",
-            "version": "1.12.8",
+            "version": "1.12.9",
             "dist": {
                 "type": "zip",
-                "url": "https://ci.swissuplabs.com/api/swissup/easytabs/download/1.12.8",
-                "reference": "e84d77d93a753894c67f4b6aea9ab12bd1fce4ef",
+                "url": "https://ci.swissuplabs.com/api/swissup/easytabs/download/1.12.9",
+                "reference": "2c5d35641278f388cfacbcc3de5392ab782c34aa",
                 "shasum": ""
             },
             "require": {
-                "swissup/module-easytabs": "^1.12.7"
+                "swissup/module-easytabs": "^1.12.8"
             },
             "type": "metapackage",
             "license": [
@@ -21188,18 +21188,18 @@
             ],
             "description": "Custom tabs for product and CMS pages",
             "support": {
-                "source": "https://github.com/swissup/easytabs/tree/1.12.8",
+                "source": "https://github.com/swissup/easytabs/tree/1.12.9",
                 "issues": "https://github.com/swissup/easytabs/issues"
             },
-            "time": "2024-02-02T12:53:11+00:00"
+            "time": "2024-04-01T08:59:56+00:00"
         },
         {
             "name": "swissup/module-core",
-            "version": "1.12.18",
+            "version": "1.12.19",
             "dist": {
                 "type": "zip",
-                "url": "https://ci.swissuplabs.com/api/swissup/module-core/download/1.12.18",
-                "reference": "2a8e322fad7d6248a812a3bbabfd6d4fade36b83",
+                "url": "https://ci.swissuplabs.com/api/swissup/module-core/download/1.12.19",
+                "reference": "92dcf82a463e87866f0cb0ceaa903b12aca912b3",
                 "shasum": ""
             },
             "type": "magento2-module",
@@ -21216,22 +21216,22 @@
             ],
             "description": "Swissup core module. It's purpose is to add Swissup menu and config entries",
             "support": {
-                "source": "https://github.com/swissup/module-core/tree/1.12.18",
+                "source": "https://github.com/swissup/module-core/tree/1.12.19",
                 "issues": "https://github.com/swissup/module-core/issues"
             },
-            "time": "2023-07-27T11:53:04+00:00"
+            "time": "2024-03-28T09:08:07+00:00"
         },
         {
             "name": "swissup/module-easytabs",
-            "version": "1.12.8",
+            "version": "1.12.10",
             "dist": {
                 "type": "zip",
-                "url": "https://ci.swissuplabs.com/api/swissup/module-easytabs/download/1.12.8",
-                "reference": "d0bb0ba5ef6a6624dc301d9c3c66c7073c10f222",
+                "url": "https://ci.swissuplabs.com/api/swissup/module-easytabs/download/1.12.10",
+                "reference": "5c9bc066251c2334cc62178ef68adb505e44ac64",
                 "shasum": ""
             },
             "require": {
-                "swissup/module-core": "^1.12.18"
+                "swissup/module-core": "^1.12.19"
             },
             "type": "magento2-module",
             "extra": {
@@ -21272,10 +21272,10 @@
                 "tabs"
             ],
             "support": {
-                "source": "https://github.com/swissup/module-easytabs/tree/1.12.8",
+                "source": "https://github.com/swissup/module-easytabs/tree/1.12.10",
                 "issues": "https://github.com/swissup/module-easytabs/issues"
             },
-            "time": "2024-02-02T12:48:32+00:00"
+            "time": "2024-04-23T12:00:05+00:00"
         },
         {
             "name": "swissup/module-marketplace",
@@ -28536,5 +28536,5 @@
     "prefer-lowest": false,
     "platform": [],
     "platform-dev": [],
-    "plugin-api-version": "2.3.0"
+    "plugin-api-version": "2.2.0"
 }
