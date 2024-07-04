@@ -1,0 +1,244 @@
+<?php
+/** @var $block \Bss\CustomTheme\Block\Footer */
+$newsletterUrl = $block->getUrl('newsletter/subscriber/new', ['_secure' => true]);
+$reviewsLogo = $block->getViewFileUrl('images/other_images/keurmerk-20160926102324.png');
+$reviewSummary = $block->getSummaryData();
+?>
+<div class="footer-container">
+    <footer id="footer" class="container">
+        <div class="row">
+            <div id="lofadvafooterfooter" class="lofadvafooter">
+                <div id="lofadva-pos-2" class="lof-position" style="width:100%">
+                    <div class="lof-position-wrap">
+                        <div class="lofadva-block-1 lof-block" style="width:25.00%; float:left;">
+                            <div class="lof-block-wrap">
+                                <h2><?= $block->escapeHtml(__('Producten')) ?></h2>
+                                <?php
+                                echo $this->getLayout()
+                                    ->createBlock('Magento\Cms\Block\Block')
+                                    ->setBlockId('footer_product_columns')
+                                    ->toHtml();
+                                ?>
+                            </div>
+                        </div>
+                        <div class="lofadva-block-2 lof-block" style="width:25.00%; float:left;">
+                            <div class="lof-block-wrap">
+                                <h2><?= $block->escapeHtml(__('Klantenservice')) ?></h2>
+                                <ul class="lof-items">
+                                    <li class="link">
+                                        <a href="/contact-met-ons-opnemen" title="Neem contact op" target="_blank">
+                                            <?= $block->escapeHtml(__('Neem contact op')); ?>
+                                        </a>
+                                    </li>
+                                    <li class="link">
+                                        <a href="/veelgestelde-vragen" title="Veelgestelde vragen" target="_self">
+                                            <?= $block->escapeHtml(__('Veelgestelde vragen')); ?>
+                                        </a>
+                                    </li>
+                                    <li class="link">
+                                        <a href="/content/levertijden.html" title="Actuele levertijden" target="_blank">
+                                            <?= $block->escapeHtml(__('Actuele levertijden')); ?>
+                                        </a>
+                                    </li>
+                                    <li class="link">
+                                        <a href="/veelgestelde-vragen/categorie/retourneren-ruilen" title="Retour & Serviceverzoek" target="_self">
+                                            <?= $block->escapeHtml(__('Retour & Serviceverzoek')); ?>
+                                        </a>
+                                    </li>
+                                    <li class="link">
+                                        <a href="https://www.glasgigant.nl/content/klachten.html" title="Klachten" target="_self">
+                                            <?= $block->escapeHtml(__('Klachten')); ?>
+                                        </a>
+                                    </li>
+                                    <li class="link">
+                                        <a href="/customer/account/" title="Mijn account" target="_self">
+                                            <?= $block->escapeHtml(__('Mijn account')); ?>
+                                        </a>
+                                    </li>
+                                    <li class="link">
+                                        <a href="https://www.glasgigant.nl/content/privacy-cookies.html" title="Veiligheid en Privacy" target="_self">
+                                            <?= $block->escapeHtml(__('Veiligheid en Privacy')); ?>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="lofadva-block-3 lof-block" style="width:25.00%; float:left;">
+                            <div class="lof-block-wrap">
+                                <h2><?= $block->escapeHtml(__('Over Glasgigant.nl')) ?></h2>
+                                <ul class="lof-items">
+                                    <li class="link">
+                                        <a href="https://www.glasgigant.nl/content/7-zekerheden.html" title="7 zekerheden">
+                                            <?= $block->escapeHtml(__('7 zekerheden')) ?>
+                                        </a>
+                                    </li>
+                                    <li class="link">
+                                        <a href="https://www.glasgigant.nl/content/blinkers-spaarpunten.html" title="Blinkers spaarprogramma" target="_self">
+                                            <?= $block->escapeHtml(__('Blinkers spaarprogramma')) ?>
+                                        </a>
+                                    </li>
+                                    <li class="link">
+                                        <a href="https://www.webwinkelkeur.nl/leden/GlasGigantnl_11932.html" title="Klantbeoordelingen" target="_blank">
+                                            <?= $block->escapeHtml(__('Klantbeoordelingen')) ?>
+                                        </a>
+                                    </li>
+                                    <li class="link">
+                                        <a href="https://www.glasgigant.nl/content/over-ons.html" title="Over ons" target="_self">
+                                            <?= $block->escapeHtml(__('Over ons')) ?>
+                                        </a>
+                                    </li>
+                                    <li class="link">
+                                        <a href="https://www.glasgigant.nl/content/werkenbij.html" title="Werken bij" target="_self">
+                                            <?= $block->escapeHtml(__('Werken bij')) ?>
+                                        </a>
+                                    </li>
+                                    <li class="lof-module">
+                                        <div id="newsletter_footer" style="margin-top: 20px;">
+                                            <p>
+                                                <strong>
+                                                    <?= $block->escapeHtml(__('Meld je aan voor de nieuwsbrief')) ?>
+                                                </strong>
+                                            </p>
+                                            <form class="form subscribe"
+                                                  novalidate
+                                                  action="<?= $block->escapeUrl($newsletterUrl) ?>"
+                                                  method="post"
+                                                  data-mage-init='{"validation": {"errorClass": "mage-error"}}'
+                                                  id="newsletter-validate-detail">
+                                                <div class="field newsletter">
+                                                    <div class="control">
+                                                        <label for="newsletter">
+                                                            <input name="email" type="email" id="newsletter"
+                                                                   placeholder="<?= $block->escapeHtml(__('Voer je e-mailadres in')) ?>"
+                                                                   data-mage-init='{"mage/trim-input":{}}'
+                                                                   data-validate="{required:true, 'validate-email':true}"
+                                                            />
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <div class="actions">
+                                                    <button class="action subscribe primary btn btn-primary btn-block"
+                                                            title="<?= $block->escapeHtmlAttr(__('Aanmelden')) ?>"
+                                                            type="submit"
+                                                            aria-label="Subscribe">
+                                                        <span><?= $block->escapeHtml(__('Aanmelden')) ?></span>
+                                                    </button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <script !src=""></script>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="lofadva-block-4 lof-block" style="width:25.00%; float:left;">
+                            <div class="lof-block-wrap">
+                                <h2><?= $block->escapeHtml(__('Contact Glasgigant.nl')) ?></h2>
+                                <ul class="lof-items">
+                                    <li class="lof-text">
+                                        <p>
+                                            <i class="fa fa-envelope"></i>
+                                            <a href="mailto:%6b%6c%61%6e%74%65%6e%73%65%72%76%69%63%65@%67%6c%61%73%67%69%67%61%6e%74.%6e%6c">
+                                                <?= 'klantenservice@glasgigant.nl' ?>
+                                            </a>
+                                        </p>
+                                        <p>
+                                            <i class="fa fa-phone"></i>
+                                            <a href="tel:0850511000">
+                                                <?= '085 05 11000' ?>
+                                            </a>
+                                        </p>
+                                        <p>
+                                            <i class="fa fa-comment"></i>
+                                            <a href="javascript:$zopim.livechat.window.show();$('.zopim').addClass('visible');">
+                                                <?= $block->escapeHtml(__('Livechat')) ?>
+                                            </a>
+                                        </p>
+                                        <p>&nbsp;</p>
+                                        <p>
+                                            <?= $block->escapeHtml(__('Glasgigant BV')) ?>
+                                        </p>
+                                        <p>
+                                            <b>
+                                                <?= $block->escapeHtml(__('Correspondentieadres')) ?>
+                                            </b>
+                                        </p>
+                                        <p>
+                                            <?= $block->escapeHtml(__('Papendorpseweg 100')) ?>
+                                        </p>
+                                        <p>
+                                            <?= $block->escapeHtml(__('3528 BJ Utrecht')) ?>
+                                        </p>
+                                        <p>&nbsp;</p>
+                                        <p>
+                                            <?= $block->escapeHtml(__('KvK: 66562759')) ?>
+                                        </p>
+                                        <p>
+                                            <?= $block->escapeHtml(__('BTW: NL856609389B01')) ?>
+                                        </p>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div style="clear:both;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="clearfix footer-payment text-center">
+            <p>
+                <?= $block->escapeHtml(__('Veilig en gemakkelijk betalen via')) ?>
+                <br> &nbsp;
+                <img src="<?= $block->escapeUrl($block->getViewFileUrl('images/payment/ideal-footer.png')) ?>" height="24" alt="iDeal">
+                <img src="<?= $block->escapeUrl($block->getViewFileUrl('images/payment/mastercard.png')) ?>" height="28" alt="Mastercard">
+                <img src="<?= $block->escapeUrl($block->getViewFileUrl('images/payment/visa-white.png')) ?>" height="21" alt="Visa">
+                <img src="<?= $block->escapeUrl($block->getViewFileUrl('images/payment/overboeking.png')) ?>" height="22" alt="Overboeking" style="padding: 0 3px;">
+                <img src="<?= $block->escapeUrl($block->getViewFileUrl('images/payment/billink.png')) ?>" height="22" alt="Billink achteraf betalen" style="padding: 0 3px;">
+                <img src="<?= $block->escapeUrl($block->getViewFileUrl('images/payment/in3-white.png')) ?>" height="21" alt="In3 – betalen in 3 keer">
+            </p>
+        </div>
+        <div class="clearfix footer-payment">
+            <div class="row hidden-lg hidden-md">
+                <a href="https://www.webwinkelkeur.nl/webshop/GlasGigant-nl_11932/reviews" class="reviews_link color_white webwinkelkeurReviews">
+                    <div class="col-lg-12">
+                        <div style="line-height: 20px; color: #fff; margin-bottom: 15px;">
+                            <?= $block->escapeHtml(__('De waardering van GlasGigant.nl bij')); ?><br> <?= $block->escapeHtml(__('Webwinkel Keurmerk')); ?>
+                        </div>
+                        <div style="font-size: 20px; color: #ccc; display: block; margin: 0; line-height: 20px;">
+                            <span style="color: #F15A29;" class="nr_rating">
+                                <?= $block->escapeHtml($reviewSummary['score']) ?></span> / <?= $block->escapeHtml($reviewSummary['score_max']) ?>
+                        </div>
+                        <?= $block->escapeHtml(__('Gebaseerd op')); ?>
+                        <span class="nr_votes"><?= $block->escapeHtml($reviewSummary['total_reviews']) ?></span>
+                        <?= $block->escapeHtml(__('reviews')); ?>
+                        <br>
+                        <img src="<?= $block->escapeUrl($reviewsLogo); ?>" alt="KEUR">
+                    </div>
+                </a>
+            </div>
+        </div>
+        <div class="row customerservice-blocks">
+            <div class="col-xs-4 text-right">
+                <a href="tel:0850511000">
+                    <i class="ico ico-16 ico-phone-white"></i> <?= $block->escapeHtml(__('Bel ons')) ?> </a>
+            </div>
+            <div class="col-xs-4 text-center">
+                <a href="mailto:%6b%6c%61%6e%74%65%6e%73%65%72%76%69%63%65@%67%6c%61%73%67%69%67%61%6e%74.%6e%6c">
+                    <i class="ico ico-20 ico-envelope"></i> <?= $block->escapeHtml(__('E-mail')) ?> </a>
+            </div>
+            <div class="col-xs-4 text-left">
+                <a href="javascript:$zopim.livechat.window.show();$('.zopim').addClass('visible');">
+                    <i class="ico ico-20 ico-chat"></i> <?= $block->escapeHtml(__('Livechat')) ?> </a>
+            </div>
+        </div>
+    </footer>
+</div>
+<script type="text/x-magento-init">
+    {
+        "*": {
+            "Magento_Customer/js/block-submit-on-send": {
+                "formId": "newsletter-validate-detail"
+            }
+        }
+    }
+</script>

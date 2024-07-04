@@ -1,0 +1,27 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+/**
+ * @var \Magento\Theme\Block\Html\Header\Logo $block
+ */
+$storeName = $block->getThemeName() ? $block->getThemeName() : $block->getLogoAlt();
+$logoUrl = $block->getViewFileUrl('images/logo/GlasGigant-Logo.svg');
+?>
+<span data-action="toggle-nav" class="action nav-toggle"><span><?= $block->escapeHtml(__('Toggle Nav')) ?></span></span>
+<div id="header_logo" class="col-lg-3 col-md-4 col-sm-1 col-xs-2">
+    <a
+        class="logo"
+        href="<?= $block->escapeUrl($block->getUrl('')) ?>"
+        title="<?= $block->escapeHtmlAttr($storeName) ?>"
+        aria-label="store logo">
+        <img src="<?= $block->escapeUrl($logoUrl) ?>"
+             title="<?= 'GlasGigant.nl' ?>"
+             alt="<?= 'GlasGigant.nl' ?>"
+             width="257"
+             height="43"
+        />
+    </a>
+</div>

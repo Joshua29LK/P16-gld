@@ -1,0 +1,46 @@
+<?php
+$url  = $block->getUrl('*/*/*', ['_current' => true, '_use_rewrite' => true]);
+$loginUrl = $block->getUrl('customer/account/login', ['referer' => base64_encode($url)]);
+$reviewsLogo = $block->getViewFileUrl('images/other_images/logo-webwinkelkeur.png');
+$reviewSummary = $block->getSummaryData();
+?>
+<div class="nav_custom_header">
+    <div class="container">
+        <div class="row">
+            <nav>
+                <div class="header_user_info">
+                    <a href="/contact" rel="nofollow" title="Klantenservice">
+                        <?= $block->escapeHtml(__('Klantenservice')) ?>
+                    </a>
+                    <a class="login" href="<?= $block->escapeUrl($loginUrl) ?>" rel="nofollow" title="Aanloggen bij Uw klantenrekening">
+                        <i class="ico ico-20 ico-lock"></i>
+                        <?= $block->escapeHtml(__(' Inloggen')) ?>
+                    </a>
+                </div>
+                <div class="col-lg-4 col-md-4 hidden-sm hidden-xs ">
+                    <span class="shop-phone">
+                        <i class="ico ico-16 ico-phone"></i>
+                        <?= $block->escapeHtml(__('Heb je hulp nodig?')) ?>
+                        <strong><?= $block->escapeHtml(__('Bel')) ?> <a href="tel:085 05 11000"><?= '085 05 11000' ?></a></strong>
+                    </span>
+                </div>
+                <div class="col-lg-4 col-md-4 hidden-sm hidden-xs text-center">
+                    <div class="row hidden-xs hidden-sm text-center webwinkelkeur-top">
+                        <a href="<?= $block->escapeUrl($reviewSummary['review_url'] . "/reviews") ?>" class="reviews_link webwinkelkeurReviews">
+                            <div class="col-lg-3 text-right">
+                                <img src="<?= $block->escapeUrl($reviewsLogo); ?>" class="img-responsive pull-right" alt="KEUR">
+                            </div>
+                            <div class="col-lg-9 text-left font-11">
+                                <div class="reviews wwk-widget--has-tooltip--show">
+                                    <span class="nr_rating"><?= $block->escapeHtml($reviewSummary['score']) ?></span> / <?= $block->escapeHtml($reviewSummary['score_max']) ?>
+                                </div>
+                                <?= $block->escapeHtml(__('Gebaseerd op')) ?> <span class="nr_votes"><?= $block->escapeHtml($reviewSummary['total_reviews']) ?></span> <?= $block->escapeHtml(__('reviews')) ?><br>
+                                <?= $block->escapeHtml(__('GlasGigant.nl bij Webwinkel Keurmerk')) ?>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,31 @@
+<?php
+/**
+ * @var \Bss\CustomTheme\Block\MegaMenu $block
+ */
+?>
+<?php
+$childsLv1Cat = $block->getLevel1ChildCategories();
+?>
+<div class="">
+<?php if (!empty($childsLv1Cat)): ?>
+<?php foreach ($childsLv1Cat as $childsLv1CatItem): ?>
+<div class="ph-type-4 ph-col ph-col-3">
+    <div class="col-md-12">
+        <h3 class="ph-mega-categories-cat-title cat_<?= $childsLv1CatItem->getId(); ?>">
+            <a href="<?= $childsLv1CatItem->getUrl() ?>" title="<?= $childsLv1CatItem->getName() ?>"><?= $childsLv1CatItem->getName() ?></a>
+        </h3>
+        <ul class="ph-mega-categories-list-lvl-1">
+            <?php $childsLv2 = $childsLv1CatItem->getChildrenCategories(); ?>
+            <?php if (!empty($childsLv2)) : ?>
+            <?php foreach ($childsLv2 as $item) : ?>
+                <li class="cat_<?= $item->getId(); ?> ">
+                    <a href="<?= $item->getUrl() ?>" title="<?= $item->getName() ?>"><?= $item->getName() ?></a>
+                </li>
+            <?php endforeach; ?>
+            <?php endif; ?>
+        </ul>
+    </div>
+</div>
+<?php endforeach; ?>
+<?php endif; ?>
+</div>
