@@ -29,10 +29,13 @@ abstract class AbstractEndpointTest extends TestCase
         $this->objectManager = Bootstrap::getObjectManager();
     }
 
-    protected function mockResponse(string $response, int $code = 200): void
+    protected function mockResponse($response, int $code = 200): void
     {
+        if (is_string($response)) {
+            $response = [$response];
+        }
         $mockedCurl = $this->createMock(Curl::class);
-        $mockedCurl->method('read')->willReturn($response);
+        $mockedCurl->method('read')->willReturn(...$response);
         $mockedCurl->method('getInfo')->willReturn($code);
 
         $mockedCurlFactory = $this->createMock(CurlFactory::class);

@@ -18,6 +18,7 @@ Conditions,Conditions
 "General Configuration","General Configuration"
 "Store View","Store View"
 "Default Value","Default Value"
+"Supported HTML tags: <b>, <a>, <s>, <i>, <u>, <strong>, <span>.","Supported HTML tags: <b>, <a>, <s>, <i>, <u>, <strong>, <span>."
 "Attribute Type Settings","Attribute Type Settings"
 "Frontend Input Type","Frontend Input Type"
 "Minimal value","Minimal value"

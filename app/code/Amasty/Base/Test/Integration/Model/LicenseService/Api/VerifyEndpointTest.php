@@ -15,6 +15,7 @@ use Magento\Framework\Event\ManagerInterface;
 
 /**
  * @magentoAppIsolation enabled
+ * @magentoDbIsolation enabled
  * @magentoAppArea adminhtml
  */
 class VerifyEndpointTest extends AbstractEndpointTest
@@ -117,5 +118,20 @@ class VerifyEndpointTest extends AbstractEndpointTest
 
         $licenseValidation = $this->getCurrentLicense->get();
         $this->assertFalse($licenseValidation->isNeedCheckLicense());
+    }
+
+    /**
+     * @magentoDataFixture Amasty_Base::Test/Integration/_files/system_instance_key_domain_changed.php
+     */
+    public function testPingDomainChanged(): void
+    {
+        $response = json_encode([]);
+        $this->mockResponse($response);
+
+        $eventManager = $this->objectManager->get(ManagerInterface::class);
+        $eventManager->dispatch('admin_system_config_changed_section_amasty_products');
+
+        $licenseValidation = $this->getCurrentLicense->get();
+        $this->assertEmpty($licenseValidation->getData());
     }
 }

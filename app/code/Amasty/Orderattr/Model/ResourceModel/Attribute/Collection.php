@@ -99,8 +99,14 @@ class Collection extends \Magento\Eav\Model\ResourceModel\Entity\Attribute\Colle
         );
 
         $this->addFieldToFilter(AttributeResource::STORE_TABLE_NAME . '.store_id', ['in' => $storeId]);
+        $this->distinct(true);
 
         return $this;
+    }
+
+    public function addStoresFilter(array $storeIds): self
+    {
+        return $this->addStoreFilter($storeIds);
     }
 
     /**

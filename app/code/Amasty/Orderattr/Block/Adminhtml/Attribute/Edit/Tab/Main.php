@@ -154,7 +154,10 @@ class Main extends AbstractMain
                 'name' => 'default_value_html',
                 'label' => __('Default Value'),
                 'title' => __('Default Value'),
-                'value' => $attributeObject->getDefaultValue()
+                'value' => $attributeObject->getDefaultValue(),
+                'note' => $this->_escaper->escapeHtml(
+                    __('Supported HTML tags: <b>, <a>, <s>, <i>, <u>, <strong>, <span>.')
+                ),
             ],
             'default_value_textarea'
         );

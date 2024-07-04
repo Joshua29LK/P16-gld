@@ -117,14 +117,18 @@ define([
          * @returns {Object|null}
          */
         getActionLink: function (module) {
-            if (!module.upgrade_url && !this.isNeedCheckSubscription(module)) {
-                return null;
+            const actionLinkData = {
+                text: null,
+                url: null
+            };
+
+            const isNeedCheckSubscription = this.isNeedCheckSubscription(module);
+            if (module.upgrade_url || isNeedCheckSubscription) {
+                actionLinkData.text = isNeedCheckSubscription ? $t('Check Your Subscriptions') : $t('Upgrade Your Plan');
+                actionLinkData.url = isNeedCheckSubscription ? this.subscription.url : module.upgrade_url;
             }
 
-            return {
-                text: this.isNeedCheckSubscription(module) ? $t('Check Your Subscriptions') : $t('Upgrade Your Plan'),
-                url: this.isNeedCheckSubscription(module) ? this.subscription.url : module.upgrade_url
-            }
+            return actionLinkData;
         },
 
         /**

@@ -10,13 +10,15 @@ declare(strict_types=1);
 
 namespace Amasty\Base\Test\Integration\Model\LicenseService\Api;
 
+use Amasty\Base\Model\InstanceData\ResourceModel\InstanceData;
 use Amasty\Base\Model\SysInfo\Command\LicenceService\SendSysInfo;
 use Amasty\Base\Model\SysInfo\Command\LicenceService\SendSysInfo\ChangedData\Persistor;
 use Magento\Framework\Exception\LocalizedException;
 
 /**
  * @magentoAppIsolation enabled
- * @magentoAppArea adminhtml
+ * @magentoAppArea crontab
+ * @magentoDbIsolation enabled
  */
 class CollectEndpointTest extends AbstractEndpointTest
 {
@@ -61,6 +63,21 @@ class CollectEndpointTest extends AbstractEndpointTest
     }
 
     public function testCollectNoRegistration(): void
+    {
+        $response = json_encode([]);
+        $this->mockResponse($response);
+        $instanceDataResource = $this->objectManager->get(InstanceData::class);
+        $instanceDataResource->getConnection()->delete($instanceDataResource->getMainTable());
+
+        $sendSysInfo = $this->objectManager->get(SendSysInfo::class);
+        $sendSysInfo->execute();
+        $this->assertNotEmpty($this->dataPersistor->get()); //data wasn't saved
+    }
+
+    /**
+     * @magentoDataFixture Amasty_Base::Test/Integration/_files/system_instance_key_domain_changed.php
+     */
+    public function testCollectDomainChanged(): void
     {
         $response = json_encode([]);
         $this->mockResponse($response);

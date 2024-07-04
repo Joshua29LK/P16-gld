@@ -11,18 +11,17 @@ declare(strict_types=1);
 namespace Amasty\Base\Model\SysInfo;
 
 use Amasty\Base\Model\FlagRepository;
+use Amasty\Base\Model\InstanceData\InstanceDataFactory;
+use Amasty\Base\Model\InstanceData\Repository;
 use Amasty\Base\Model\Serializer;
 use Amasty\Base\Model\SysInfo\Command\LicenceService\ProcessLicenseRegistrationResponse\Converter;
 use Amasty\Base\Model\SysInfo\Data\LicenseValidation;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Exception\NoSuchEntityException;
 
 class LicenseValidationRepository
 {
     public const FLAG_KEY = 'amasty_base_license_validation_response';
-
-    /**
-     * @var FlagRepository
-     */
-    private $flagRepository;
 
     /**
      * @var Serializer
@@ -39,20 +38,40 @@ class LicenseValidationRepository
      */
     private $loadedEntity;
 
+    /**
+     * @var Repository
+     */
+    private $instanceDataRepository;
+
+    /**
+     * @var InstanceDataFactory
+     */
+    private $instanceDataFactory;
+
     public function __construct(
-        FlagRepository $flagRepository,
+        FlagRepository $flagRepository = null, //@deprecated
         Serializer $serializer,
-        Converter $converter
+        Converter $converter,
+        Repository $instanceDataRepository = null,
+        InstanceDataFactory $instanceDataFactory = null
     ) {
-        $this->flagRepository = $flagRepository;
         $this->serializer = $serializer;
         $this->converter = $converter;
+        $this->instanceDataRepository = $instanceDataRepository
+            ?? ObjectManager::getInstance()->get(Repository::class);
+        $this->instanceDataFactory = $instanceDataFactory
+            ?? ObjectManager::getInstance()->get(InstanceDataFactory::class);
     }
 
     public function save(LicenseValidation $licenseValidation): void
     {
+        $instanceData = $this->instanceDataFactory->create();
         $licenseResponseSerialized = $this->serializer->serialize($licenseValidation->toArray());
-        $this->flagRepository->save(self::FLAG_KEY, $licenseResponseSerialized);
+
+        $instanceData->setCode(self::FLAG_KEY);
+        $instanceData->setValue($licenseResponseSerialized);
+        $this->instanceDataRepository->save($instanceData);
+
         $this->loadedEntity = $licenseValidation;
     }
 
@@ -63,7 +82,12 @@ class LicenseValidationRepository
         }
 
         if (!$this->loadedEntity) {
-            $licenseResponseSerialized = $this->flagRepository->get(self::FLAG_KEY);
+            try {
+                $instanceData = $this->instanceDataRepository->get(self::FLAG_KEY);
+                $licenseResponseSerialized = $instanceData->getValue();
+            } catch (NoSuchEntityException $e) {
+                $licenseResponseSerialized = null;
+            }
             $licenseResponseArray = $licenseResponseSerialized
                 ? $this->serializer->unserialize($licenseResponseSerialized)
                 : [];

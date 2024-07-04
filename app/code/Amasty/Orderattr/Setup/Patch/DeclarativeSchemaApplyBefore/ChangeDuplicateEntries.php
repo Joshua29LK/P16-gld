@@ -46,13 +46,11 @@ class ChangeDuplicateEntries implements DataPatchInterface
     public function apply(): self
     {
         $this->entityTable = $this->resourceConnection->getTableName(EntityResource::TABLE_NAME);
-
         if (!$this->resourceConnection->getConnection()->isTableExists($this->entityTable)) {
             return $this;
         }
         $this->deleteDuplicatesForQuote();
-        $newEntityIds = $this->generateNewEntityIds();
-        $this->changeIdsInTables($newEntityIds);
+        $this->changeIdsInTables();
 
         return $this;
     }
@@ -76,7 +74,7 @@ class ChangeDuplicateEntries implements DataPatchInterface
         $this->resourceConnection->getConnection()->delete(
             $this->entityTable,
             [
-                CheckoutEntityInterface::ENTITY_ID . ' IN(?)' => $duplicateIds,
+                CheckoutEntityInterface::ENTITY_ID . ' IN(?)' => array_keys($duplicateIds),
                 CheckoutEntityInterface::PARENT_ENTITY_TYPE . ' =?' => CheckoutEntityInterface::ENTITY_TYPE_QUOTE
             ]
         );
@@ -89,28 +87,26 @@ class ChangeDuplicateEntries implements DataPatchInterface
     private function generateNewEntityIds(): array
     {
         $duplicateIds = $this->getDuplicateIdsByType(CheckoutEntityInterface::ENTITY_TYPE_ORDER);
-        $increment = 1;
         $newEntityIds = [];
         $lastEntityId = $this->getLastEntityId();
-        foreach ($duplicateIds as $count => $duplicateId) {
+        foreach ($duplicateIds as $duplicateId => $count) {
             for ($i = 0; $i < $count; $i++) {
-                $newEntityIds[$duplicateId][] = $lastEntityId + $increment;
-                $increment++;
+                $newEntityIds[$duplicateId][] = ++$lastEntityId;
             }
         }
 
         return $newEntityIds;
     }
 
-    /**
-     * @param array $newEntityIds
-     */
-    private function changeIdsInTables(array $newEntityIds): void
+    private function changeIdsInTables(): void
     {
+        $newEntityIds = $this->generateNewEntityIds();
+        $this->resourceConnection->getConnection()->query('SET FOREIGN_KEY_CHECKS = 0;');
         foreach ($newEntityIds as $oldId => $newIds) {
             $this->changeIdsInEntityTable((int)$oldId, $newIds);
             $this->changeIdsInValueTables((int)$oldId, $newIds);
         }
+        $this->resourceConnection->getConnection()->query('SET FOREIGN_KEY_CHECKS = 1;');
     }
 
     /**
@@ -252,7 +248,7 @@ class ChangeDuplicateEntries implements DataPatchInterface
             ->from($this->entityTable, [CheckoutEntityInterface::ENTITY_ID])
             ->order(CheckoutEntityInterface::ENTITY_ID . ' DESC')->limitPage(1, 1);
 
-        return (int) $connection->fetchOne($select);
+        return (int)$connection->fetchOne($select);
     }
 
     /**
@@ -264,7 +260,7 @@ class ChangeDuplicateEntries implements DataPatchInterface
         $connection = $this->resourceConnection->getConnection();
 
         $select = $connection->select()
-            ->from($this->entityTable, ['COUNT(*)', CheckoutEntityInterface::ENTITY_ID])
+            ->from($this->entityTable, [CheckoutEntityInterface::ENTITY_ID, 'COUNT(*)'])
             ->where(CheckoutEntityInterface::PARENT_ENTITY_TYPE . ' =?', $type)
             ->group([CheckoutEntityInterface::ENTITY_ID])
             ->having('COUNT(*) > 1');

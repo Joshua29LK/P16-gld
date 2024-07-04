@@ -24,6 +24,11 @@
             <instance_registration>
                 <production_mode>1</production_mode>
             </instance_registration>
+            <cron>
+                <feeds_refresh>0 * * * *</feeds_refresh>
+                <daily_send_system_info>0 * * * *</daily_send_system_info>
+                <instance_registration>0 * * * *</instance_registration>
+            </cron>
         </amasty_base>
         <system>
             <media_storage_configuration>

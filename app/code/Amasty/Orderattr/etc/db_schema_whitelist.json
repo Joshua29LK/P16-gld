@@ -23,6 +23,7 @@
     },
     "amasty_order_attribute_eav_attribute": {
         "column": {
+            "id": true,
             "attribute_id": true,
             "is_visible_on_front": true,
             "is_visible_on_back": true,
@@ -44,6 +45,7 @@
             "AMASTY_ORDER_ATTRIBUTE_EAV_ATTRIBUTE_ATTRIBUTE_ID": true
         },
         "constraint": {
+            "PRIMARY": true,
             "AMASTY_ORDER_ATTR_EAV_ATTR_ATTR_ID_EAV_ATTR_ATTR_ID": true
         }
     },
@@ -70,10 +72,12 @@
     },
     "amasty_order_attribute_eav_attribute_customer_group": {
         "column": {
+            "id": true,
             "attribute_id": true,
             "customer_group_id": true
         },
         "constraint": {
+            "PRIMARY": true,
             "AMASTY_ORDER_ATTR_EAV_ATTR_CSTR_GROUP_ATTR_ID_CSTR_GROUP_ID": true,
             "AMASTY_ORDER_ATTR_EAV_ATTR_CSTR_GROUP_ATTR_ID_EAV_ATTR_ATTR_ID": true,
             "FK_04223CB6C4DD98333CEE67098AE81BE4": true
@@ -81,10 +85,12 @@
     },
     "amasty_order_attribute_eav_attribute_store": {
         "column": {
+            "id": true,
             "attribute_id": true,
             "store_id": true
         },
         "constraint": {
+            "PRIMARY": true,
             "AMASTY_ORDER_ATTRIBUTE_EAV_ATTRIBUTE_STORE_ATTRIBUTE_ID_STORE_ID": true,
             "AMASTY_ORDER_ATTR_EAV_ATTR_STORE_ATTR_ID_EAV_ATTR_ATTR_ID": true,
             "AMASTY_ORDER_ATTR_EAV_ATTR_STORE_STORE_ID_STORE_STORE_ID": true
@@ -162,10 +168,12 @@
     },
     "amasty_order_attribute_shipping_methods": {
         "column": {
+            "id": true,
             "attribute_id": true,
             "shipping_method": true
         },
         "constraint": {
+            "PRIMARY": true,
             "AMASTY_ORDER_ATTR_SHPP_METHODS_ATTR_ID_SHPP_METHOD": true,
             "AMASTY_ORDER_ATTR_SHPP_METHODS_ATTR_ID_EAV_ATTR_ATTR_ID": true
         }
