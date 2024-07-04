@@ -1,0 +1,58 @@
+<?php
+/**
+ * BSS Commerce Co.
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the EULA
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://bsscommerce.com/Bss-Commerce-License.txt
+ *
+ * @category   BSS
+ * @package    Bss_Faqs
+ * @author     Extension Team
+ * @copyright  Copyright (c) 2017-2018 BSS Commerce Co. ( http://bsscommerce.com )
+ * @license    http://bsscommerce.com/Bss-Commerce-License.txt
+ */
+
+// @codingStandardsIgnoreFile
+?>
+<?php
+/**
+ * Tag page main block
+ *
+ * @var $block Bss\Faqs\Block\QuestionWithTag
+ */
+$moduleConfig = $block->getModuleConfig();
+?>
+<div class="faq_message_block">
+    <p></p>
+</div>
+<div class="faq_sort_order">
+    <select id="faq_sortby" class="sorter-options">
+        <?php
+        foreach ($block->getSortByConfig() as $option) :
+            ?>
+            <option value="<?php echo $option['value']; ?>"><?php echo $option['label']; ?></option>
+        <?php
+        endforeach;
+            ?>
+    </select>
+</div>
+<div class="faq_main_block bss_faqs faq_tag_list">
+<div class="main_block_loading"><i class="fa fa-spinner fa-pulse" aria-hidden="true"></i>
+</div>
+</div>
+<script type="text/x-magento-init">
+    {
+        ".faq_main_block": {
+            "bss_faqs_search_result": {
+                "baseUrl": "<?php echo $moduleConfig->getBaseUrl(); ?>",
+                "controller": "faqs/json/tag",
+                "block": ".faq_main_block",
+                "keyword": "<?php echo $block->getRequest()->getParam('tag-name'); ?>"
+            }
+        }
+    }
+</script>

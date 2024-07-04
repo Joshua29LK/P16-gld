@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * BSS Commerce Co.
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the EULA
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://bsscommerce.com/Bss-Commerce-License.txt
+ *
+ * @category   BSS
+ * @package    Bss_Faqs
+ * @author     Extension Team
+ * @copyright  Copyright (c) 2017-2018 BSS Commerce Co. ( http://bsscommerce.com )
+ * @license    http://bsscommerce.com/Bss-Commerce-License.txt
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd" layout="2columns-left">
+    <body>
+        <referenceContainer name="main">
+            <block class="Bss\Faqs\Block\Searchbar" name="searchbar" template="Bss_Faqs::main/searchbar.phtml" />
+            <block class="Bss\Faqs\Block\QuestionWithTag" name="mainpageblock" template="Bss_Faqs::main/question_with_tag.phtml" />
+        </referenceContainer>
+        <referenceContainer name="sidebar.main">
+            <block class="Bss\Faqs\Block\ModuleBlock" name="sidebar.mostfaq.list" template="Bss_Faqs::sidebar/most_faq.phtml" />
+            <block class="Bss\Faqs\Block\ModuleBlock" name="sidebar.category.list" template="Bss_Faqs::sidebar/category_list.phtml" />
+            <block class="Bss\Faqs\Block\ModuleBlock" name="sidebar.tag.list" template="Bss_Faqs::sidebar/tag_list.phtml" />
+        </referenceContainer>
+        <referenceContainer name="sidebar.main">
+            <referenceBlock name="wishlist_sidebar" remove="true" />
+            <referenceBlock name="catalog.compare.sidebar" remove="true" />
+            <referenceBlock name="sale.reorder.sidebar" remove="true"/>
+        </referenceContainer>
+    </body>
+</page>

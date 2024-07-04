@@ -1,0 +1,46 @@
+<?php
+/**
+ * BSS Commerce Co.
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the EULA
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://bsscommerce.com/Bss-Commerce-License.txt
+ *
+ * @category   BSS
+ * @package    Bss_Faqs
+ * @author     Extension Team
+ * @copyright  Copyright (c) 2017-2018 BSS Commerce Co. ( http://bsscommerce.com )
+ * @license    http://bsscommerce.com/Bss-Commerce-License.txt
+ */
+
+// @codingStandardsIgnoreFile
+?>
+<?php
+/**
+ * Category image preview
+ *
+ * @var $block Bss\Faqs\Block\Adminhtml\FaqCategory\Edit\CategoryImageBlock
+ */
+?>
+<div class="category-preview-block">
+    <div>
+        <span><img id="del_image" src="<?php echo $block->getViewFileUrl('Bss_Faqs::image/delete.png'); ?>" /></span>
+        <span><img id="reset_upload" src="<?php echo $block->getViewFileUrl('Bss_Faqs::image/undo.png'); ?>" /></span>
+    </div>
+    <div class='category_label'>
+    <img id="faq_category_image" src="<?php echo $block->getImageUrl(); ?>" alt="" />
+    </div>
+</div>
+<script type="text/x-magento-init">
+    {
+        ".main-col": {
+            "Bss_Faqs/js/image_preview_control": {
+                "srcImage": "<?php echo $block->getImageUrl(); ?>",
+                "emptyImg": "<?php echo $block->getViewFileUrl('Bss_Faqs::image/noimage.png'); ?>"
+            }
+        }
+    }
+</script>

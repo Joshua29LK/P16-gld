@@ -1,0 +1,114 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * BSS Commerce Co.
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the EULA
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://bsscommerce.com/Bss-Commerce-License.txt
+ *
+ * @category   BSS
+ * @package    Bss_Faqs
+ * @author     Extension Team
+ * @copyright  Copyright (c) 2017-2018 BSS Commerce Co. ( http://bsscommerce.com )
+ * @license    http://bsscommerce.com/Bss-Commerce-License.txt
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <tab id="bss" translate="label" sortOrder="300">
+            <label><![CDATA[Bss Commerce]]></label>
+        </tab>
+        <section id="faqs_config" translate="label" type="text" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="1">
+            <label>FAQs</label>
+            <tab>bss</tab>
+            <resource>Bss_Faqs::config</resource>
+            <group id="Bss_Faqs" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>General</label>
+                <field id="Enable" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Enable</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment><![CDATA[Version 1.0.6]]></comment>
+                </field>
+                <field id="add_roboto" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Add Roboto Font</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>If your site has installed Roboto font, you can choose No in this configuration</comment>
+                </field>
+                <field id="add_awesome" translate="label" type="select" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Add Font Awesome</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>If your site has installed Font Awesome, you can choose No in this configuration</comment>
+                </field>
+            </group>
+            <group id="display" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>FAQs Display</label>
+                <field id="most_faq_show" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Show Most FAQs Box</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>Show most FAQs box in FAQs main page</comment>
+                </field>
+                <field id="most_faq_number" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>A Number of Questions in Most FAQs Box</label>
+                    <validate>validate-digits validate-greater-than-zero</validate>
+                </field>
+                <field id="related_faq_show" translate="label" type="select" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Show Related Questions</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>Show related question in question detail page</comment>
+                </field>
+                <field id="question_per_category" translate="label" type="text" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>A Number of Questions Per Category</label>
+                    <comment>Limit number of questions each category in FAQs main page</comment>
+                    <validate>validate-digits validate-greater-than-zero</validate>
+                </field>
+                <field id="faq_sort_by" translate="label" type="select" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Sort By</label>
+                    <source_model>Bss\Faqs\Model\Config\Source\FaqSortBy</source_model>
+                    <comment>Sort config for FAQs in main page</comment>
+                </field>
+                <field id="question_display" translate="label" type="select" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Question Block Display</label>
+                    <source_model>Bss\Faqs\Model\Config\Source\QuestionDisplay</source_model>
+                </field>
+                <field id="full_question_product_page" translate="label" type="select" sortOrder="70" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Product Page Full Question</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>Show full question at product page</comment>
+                </field>
+                <field id="require_login_vote" translate="label" type="select" sortOrder="80" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Require Login to Vote</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="social_button" translate="label" type="select" sortOrder="80" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Show Social Button</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="background_color" translate="label" type="text" sortOrder="90" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Background Color of Sidebar Header</label>
+                    <validate>jscolor {hash:true,refine:false}</validate>
+                </field>
+            </group>
+            <group id="message" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Notify Message</label>
+                <field id="search" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Message in Search Result Page</label>
+                    <comment>Insert $counter$ to show number of result and $key$ for keyword</comment>
+                </field>
+                <field id="tag" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Message in Question with Tag Page</label>
+                    <comment>Insert $counter$ to show number of result and $tag$ for tag list</comment>
+                </field>
+                <field id="helpful" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Like Button Message</label>
+                </field>
+                <field id="unhelpful" translate="label" type="text" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Unlike Button Message</label>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>

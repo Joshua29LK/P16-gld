@@ -1,0 +1,63 @@
+<?php
+/**
+ * BSS Commerce Co.
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the EULA
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://bsscommerce.com/Bss-Commerce-License.txt
+ *
+ * @category   BSS
+ * @package    Bss_Faqs
+ * @author     Extension Team
+ * @copyright  Copyright (c) 2017-2018 BSS Commerce Co. ( http://bsscommerce.com )
+ * @license    http://bsscommerce.com/Bss-Commerce-License.txt
+ */
+
+// @codingStandardsIgnoreFile
+?>
+<?php
+/**
+ * Question page voting block
+ *
+ * @var $block Bss\Faqs\Block\VotingBlock
+ */
+?>
+<div class="faq_vote_block" data-role="faq_vote" data-bind="scope: 'faqVote'" >
+    <div class="vote_block_label">
+        <div><?php echo __('Was this article helpful?'); ?></div>
+    </div>
+    <div class="" id="bss_faq_vote">
+        <div class="vote_button like" data-bind="click: faqLikeSubmit">
+            <div tooltip="<?php echo __("Helpful"); ?>">
+                <i class="fa fa-thumbs-o-up" aria-hidden="true"></i>
+                <span class="counter" id="faq-like"></span>
+            </div>
+        </div>
+        <div class="vote_button unlike" data-bind="click: faqUnlikeSubmit">
+            <div tooltip="<?php echo __("Unhelpful"); ?>">
+                <i class="fa fa-thumbs-o-down" aria-hidden="true"></i>
+                <span class="counter" id="faq-unlike"></span>
+            </div>
+        </div>
+        <span class="hidden-faq-vote-faq_id" style="display: none"><?php echo $block->getFaqId()?></span>
+        <span class="hidden-faq-vote-reload-url" style="display: none"><?php echo $block->getUrl('faqs/json/load')?></span>
+    </div>
+</div>
+<script type="text/x-magento-init">
+    {
+        "[data-role=faq_vote]": {
+            "Magento_Ui/js/core/app": {
+                "components": {
+                    "faqVote": {
+                        "component":"Bss_Faqs/js/vote/vote-data",
+                        "ajaxSubmit": "<?php echo $block->getUrl('faqs/json/vote') ?>",
+                        "faqId": "<?php echo $block->getFaqId() ?>"
+                    }
+                }
+            }
+        }
+    }
+</script>

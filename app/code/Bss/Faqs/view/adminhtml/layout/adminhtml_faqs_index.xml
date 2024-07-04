@@ -1,0 +1,133 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * BSS Commerce Co.
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the EULA
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://bsscommerce.com/Bss-Commerce-License.txt
+ *
+ * @category   BSS
+ * @package    Bss_Faqs
+ * @author     Extension Team
+ * @copyright  Copyright (c) 2017-2018 BSS Commerce Co. ( http://bsscommerce.com )
+ * @license    http://bsscommerce.com/Bss-Commerce-License.txt
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceContainer name="content">
+            <block class="Bss\Faqs\Block\Adminhtml\Faqs\GridContainer" name="adminhtml.block.faqs.grid.container">
+                <arguments>
+                    <argument translate="true" name="controller" xsi:type="string">faqs</argument>
+                </arguments>
+                <block class="Magento\Backend\Block\Widget\Grid" name="adminhtml.block.faqs.grid" as="grid">
+                    <arguments>
+                        <argument name="id" xsi:type="string">faqGrid</argument>
+                        <argument name="dataSource" xsi:type="object">Bss\Faqs\Model\ResourceModel\Faqs\Collection</argument>
+                        <argument name="default_sort" xsi:type="string">faq_id</argument>
+                    </arguments>
+                    <block class="Magento\Backend\Block\Widget\Grid\ColumnSet" as="grid.columnSet" name="adminhtml.faqs.grid.columnSet">
+                        <arguments>
+                            <argument name="rowUrl" xsi:type="array">
+                                <item name="path" xsi:type="string">adminhtml/*/edit</item>
+                                <item name="extraParamsTemplate" xsi:type="array">
+                                    <item name="faq_id" xsi:type="string">getId</item>
+                                </item>
+                            </argument>
+                        </arguments>
+                        <block class="Magento\Backend\Block\Widget\Grid\Column" as="faq_id">
+                            <arguments>
+                                <argument name="header" xsi:type="string" translate="true">ID</argument>
+                                <argument name="type" xsi:type="string">text</argument>
+                                <argument name="id" xsi:type="string">faq_id</argument>
+                                <argument name="index" xsi:type="string">faq_id</argument>
+                                <argument name="column_css_class" xsi:type="string">col-id</argument>
+                                <argument name="header_css_class" xsi:type="string">col-id</argument>
+                            </arguments>
+                        </block>
+                        <block class="Magento\Backend\Block\Widget\Grid\Column" as="title">
+                            <arguments>
+                                <argument name="header" xsi:type="string" translate="true">Title</argument>
+                                <argument name="type" xsi:type="string">text</argument>
+                                <argument name="id" xsi:type="string">title</argument>
+                                <argument name="index" xsi:type="string">title</argument>
+                            </arguments>
+                        </block>
+                        <block class="Magento\Backend\Block\Widget\Grid\Column" as="url_key">
+                            <arguments>
+                                <argument name="header" xsi:type="string" translate="true">URL Key</argument>
+                                <argument name="type" xsi:type="string">text</argument>
+                                <argument name="id" xsi:type="string">url_key</argument>
+                                <argument name="index" xsi:type="string">url_key</argument>
+                            </arguments>
+                        </block>
+                        <block class="Bss\Faqs\Block\Widget\Grid\Multistore" as="store_id">
+                            <arguments>
+                                <argument name="header" xsi:type="string" translate="true">Store View</argument>
+                                <argument name="type" xsi:type="string">store</argument>
+                                <argument name="id" xsi:type="string">store_id</argument>
+                                <argument name="index" xsi:type="string">store_id</argument>
+                                <argument name="store_view" xsi:type="string">true</argument>
+                            </arguments>
+                        </block>
+                        <block class="Magento\Backend\Block\Widget\Grid\Column" as="customer">
+                            <arguments>
+                                <argument name="header" xsi:type="string" translate="true">Customer</argument>
+                                <argument name="type" xsi:type="string">text</argument>
+                                <argument name="id" xsi:type="string">customer</argument>
+                                <argument name="index" xsi:type="string">customer</argument>
+                            </arguments>
+                        </block>
+                        <block class="Magento\Backend\Block\Widget\Grid\Column" as="category_id">
+                            <arguments>
+                                <argument name="header" xsi:type="string" translate="true">Category</argument>
+                                <argument name="type" xsi:type="string">text</argument>
+                                <argument name="id" xsi:type="string">category_id</argument>
+                                <argument name="index" xsi:type="string">category_id</argument>
+                            </arguments>
+                        </block>
+                        <block class="Magento\Backend\Block\Widget\Grid\Column" as="tag">
+                            <arguments>
+                                <argument name="header" xsi:type="string" translate="true">Tag keyword</argument>
+                                <argument name="type" xsi:type="string">text</argument>
+                                <argument name="id" xsi:type="string">tag</argument>
+                                <argument name="index" xsi:type="string">tag</argument>
+                            </arguments>
+                        </block>
+                        <block class="Magento\Backend\Block\Widget\Grid\Column" as="time">
+                            <arguments>
+                                <argument name="header" xsi:type="string" translate="true">Time Created</argument>
+                                <argument name="type" xsi:type="string">text</argument>
+                                <argument name="id" xsi:type="string">time</argument>
+                                <argument name="index" xsi:type="string">time</argument>
+                            </arguments>
+                        </block>
+                        <block class="Magento\Backend\Block\Widget\Grid\Column" as="actions">
+                            <arguments>
+                                <argument name="header" xsi:type="string" translate="true">Action</argument>
+                                <argument name="sortable" xsi:type="string">0</argument>
+                                <argument name="filter" xsi:type="string">0</argument>
+                                <argument name="type" xsi:type="string">action</argument>
+                                <argument name="id" xsi:type="string">actions</argument>
+                                <argument name="index" xsi:type="string">faq_id</argument>
+                                <argument name="actions" xsi:type="array">
+                                    <item name="view_action" xsi:type="array">
+                                        <item name="caption" xsi:type="string" translate="true">Edit</item>
+                                        <item name="url" xsi:type="array">
+                                            <item name="base" xsi:type="string">adminhtml/*/edit</item>
+                                        </item>
+                                        <item name="field" xsi:type="string">faq_id</item>
+                                    </item>
+                                </argument>
+                            </arguments>
+                        </block>
+                    </block>
+                </block>
+            </block>
+        </referenceContainer>
+    </body>
+</page>

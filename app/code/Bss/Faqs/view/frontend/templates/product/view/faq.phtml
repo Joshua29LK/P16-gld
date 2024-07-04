@@ -1,0 +1,64 @@
+<?php
+/**
+ * BSS Commerce Co.
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the EULA
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://bsscommerce.com/Bss-Commerce-License.txt
+ *
+ * @category   BSS
+ * @package    Bss_Faqs
+ * @author     Extension Team
+ * @copyright  Copyright (c) 2017-2018 BSS Commerce Co. ( http://bsscommerce.com )
+ * @license    http://bsscommerce.com/Bss-Commerce-License.txt
+ */
+
+// @codingStandardsIgnoreFile
+?>
+<?php
+/**
+ * Product page faq block
+ *
+ * @var $block Bss\Faqs\Block\Product\View\ProductFaq
+ */
+$moduleConfig = $block->getModuleConfig();
+?>
+<?php if ($moduleConfig->isModuleEnable()) : ?>
+    <div class="product_faq_tab">
+        <div class="faq_ask_button">
+            <div><?php echo __('Ask a question');?></div>
+        </div><br />
+        <div class="faq_ask_field">
+            <div class="faq_product_textfield">
+                <label class="faq_ask_label" for="faq_ask_user"><span><?php echo __('Name');?></span></label>
+                <input id="faq_ask_user" type="text" name="username" />
+                <label class="faq_ask_label" for="faq_ask_question"><span><?php echo __('Question');?></span></label>
+                <textarea id="faq_ask_question" name="keyword" rows="5"></textarea>
+            </div>
+            <div class="faq_product_submit">
+                <div><?php echo __('Submit');?></div>
+            </div>
+            <div class="faq_ask_field_notify"><div></div></div>
+        </div>
+        <div class="product_faq_list">
+            <i class="fa fa-spinner fa-pulse" aria-hidden="true"></i>
+        </div>
+    </div>
+    <script type="text/x-magento-init">
+        {
+            ".product_faq_tab": {
+                "bss_product_faq": {
+                    "baseUrl": "<?php echo $moduleConfig->getBaseUrl(); ?>",
+                    "productId": "<?php echo $block->getProductId(); ?>",
+                    "showFullAnswer": "<?php echo $moduleConfig->fullQuestionProductPage(); ?>",
+                    "keywordValidation":
+                    "<?php echo __('The question length must be greater than 10 and less than 255'); ?>",
+                    "usernameValidation": "<?php echo __('Username cannot be empty'); ?>"
+                }
+            }
+        }
+    </script>
+<?php endif ?>
