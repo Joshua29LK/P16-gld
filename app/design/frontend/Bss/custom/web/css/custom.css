@@ -327,6 +327,10 @@ ul, ol {
     background: #091E5F;
 }
 
+.stuck .section-item-content .menu-container .menu > ul > li > ul {
+    top: 60px;
+}
+
 .section-item-content .menu-container .menu > ul > li > ul {
     position: absolute;
     background: #ffffff;
@@ -564,7 +568,7 @@ ul, ol {
     line-height: 50px;
     color: #f15a29;
     font-size: 24px;
-    font-family: "Museo Sans W01";
+    font-family: "Net-Museo-500";
     font-weight: 500;
 }
 
