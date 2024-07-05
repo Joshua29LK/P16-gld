@@ -109,29 +109,24 @@ $loginUrl = $block->getUrl('customer/account/login', ['referer' => base64_encode
         }
     }
     </script>
-<!--        <script type="text/javascript">-->
-<!--            require(['jquery'], function ($) {-->
-<!--                var nav = jQuery('.nav-sections');-->
-<!--                var navMenu = jQuery('.centerstickymenu');-->
-<!--                if (nav.length) {-->
-<!--                    var stickyHeaderTop = nav.offset().top;-->
-<!--                    var menuWidth = jQuery('.nav-sections').width();-->
-<!--                    jQuery(window).scroll(function () {-->
-<!--                        if (jQuery(window).width() >= 767) {-->
-<!--                            if (jQuery(window).scrollTop() > stickyHeaderTop) {-->
-<!--                                nav.css("height", '60px');-->
-<!--                                nav.css("height", '60px');-->
-<!--                            } else {-->
-<!--                                nav.css("height", '80px');-->
-<!--                                nav.css("height", '80px');-->
-<!---->
-<!--                            }-->
-<!--                        }-->
-<!--                    });-->
-<!--                }-->
-<!--                -->
-<!--            });-->
-<!--        </script>-->
+        <script type="text/javascript">
+            require(['jquery'], function ($) {
+                var nav = jQuery('.nav-sections');
+                if (nav.length) {
+                    var stickyHeaderTop = nav.offset().top;
+                    jQuery(window).scroll(function () {
+                        if (jQuery(window).width() >= 767) {
+                            if (jQuery(window).scrollTop() > stickyHeaderTop) {
+                                nav.addClass('stuck');
+                            } else {
+                                nav.removeClass('stuck');
+                            }
+                        }
+                    });
+                }
+
+            });
+        </script>
 <?php endif; ?>
     <?php if ($burgerStatus): ?>
         <?php
