@@ -5,28 +5,30 @@
  */
 namespace Mageside\CustomShippingPrice\Plugin\Sales\Model\AdminOrder;
 
+use Magento\Backend\Model\Auth\Session;
+use Magento\Framework\Locale\FormatInterface;
 use Magento\Sales\Model\AdminOrder\Create as OrderCreate;
 
 class Create
 {
     /**
-     * @var \Magento\Backend\Model\Auth\Session
+     * @var Session
      */
     protected $_session;
 
     /**
-     * @var \Magento\Framework\Locale\FormatInterface
+     * @var FormatInterface
      */
     protected $_localeFormat;
     
     /**
      * Add constructor.
-     * @param \Magento\Backend\Model\Auth\Session $authSession
-     * @param \Magento\Framework\Locale\FormatInterface $localeFormat
+     * @param Session $authSession
+     * @param FormatInterface $localeFormat
      */
     public function __construct(
-        \Magento\Backend\Model\Auth\Session $authSession,
-        \Magento\Framework\Locale\FormatInterface $localeFormat
+        Session $authSession,
+        FormatInterface $localeFormat
     ) {
         $this->_session = $authSession;
         $this->_localeFormat = $localeFormat;
@@ -59,7 +61,6 @@ class Create
     protected function _parseShippingPrice($price)
     {
         $price = $this->_localeFormat->getNumber($price);
-        $price = $price>0 ? $price : 0;
-        return $price;
+        return $price>0 ? $price : 0;
     }
 }

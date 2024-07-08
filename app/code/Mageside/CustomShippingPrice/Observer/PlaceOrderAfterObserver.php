@@ -12,7 +12,7 @@ use Magento\Backend\Model\Auth\Session;
 class PlaceOrderAfterObserver implements ObserverInterface
 {
     /**
-     * @var \Magento\Backend\Model\Auth\Session
+     * @var Session
      */
     protected $_session;
 
@@ -22,7 +22,7 @@ class PlaceOrderAfterObserver implements ObserverInterface
     }
 
     /**
-     * @param \Magento\Framework\Event\Observer $observer
+     * @param Observer $observer
      * @return void
      */
     public function execute(Observer $observer)

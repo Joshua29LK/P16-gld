@@ -5,7 +5,8 @@
  */
 namespace Mageside\CustomShippingPrice\Helper;
 
-class Config extends \Magento\Framework\App\Helper\AbstractHelper
+use Magento\Framework\App\Helper\AbstractHelper;
+class Config extends AbstractHelper
 {
     /**
      * Get carrier settings
