@@ -304,4 +304,12 @@ class Attribute extends \Magento\Eav\Model\ResourceModel\Entity\Attribute
             }
         }
     }
+
+    /**
+     * Magento 2.4.7 compatibility
+     */
+    public function getUsedInForms(): array
+    {
+        return [];
+    }
 }

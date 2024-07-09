@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ffcb028213a41f3140fe23e106942339",
+    "content-hash": "9942611b1505b640a2fbd71d0a06ce80",
     "packages": [
         {
             "name": "2tvenom/cborencode",
@@ -1929,10 +1929,10 @@
         },
         {
             "name": "fooman/emailattachments-implementation-m2",
-            "version": "107.3.0",
+            "version": "107.4.0",
             "dist": {
                 "type": "zip",
-                "url": "https://customer-repos.fooman.co.nz/glasdiscount.nl-946dcd10154054a475815dc5862bee90abe3eea1/dist/fooman/emailattachments-implementation-m2/fooman-emailattachments-implementation-m2-107.3.0.zip"
+                "url": "https://customer-repos.fooman.co.nz/glasdiscount.nl-946dcd10154054a475815dc5862bee90abe3eea1/dist/fooman/emailattachments-implementation-m2/fooman-emailattachments-implementation-m2-107.4.0.zip"
             },
             "require": {
                 "laminas/laminas-mime": "^2.5",
@@ -1941,7 +1941,7 @@
                 "magento/module-checkout-agreements": "^100.0.2",
                 "magento/module-email": "^101.0.3",
                 "magento/module-sales": "^102.0.0 || ^103.0.0",
-                "php": "~7.1.0||~7.2.0||~7.3.0||~7.4.0||~8.0.0||~8.1.0||~8.2.0"
+                "php": "~7.1.0||~7.2.0||~7.3.0||~7.4.0||~8.0.0||~8.1.0||~8.2.0||~8.3.0"
             },
             "require-dev": {
                 "fooman/testing-and-quality-tools": "^1.0"
@@ -1967,15 +1967,15 @@
         },
         {
             "name": "fooman/pdfcore-m2",
-            "version": "20.6.0",
+            "version": "22.0.0",
             "dist": {
                 "type": "zip",
-                "url": "https://customer-repos.fooman.co.nz/glasdiscount.nl-946dcd10154054a475815dc5862bee90abe3eea1/dist/fooman/pdfcore-m2/fooman-pdfcore-m2-20.6.0.zip"
+                "url": "https://customer-repos.fooman.co.nz/glasdiscount.nl-946dcd10154054a475815dc5862bee90abe3eea1/dist/fooman/pdfcore-m2/fooman-pdfcore-m2-22.0.0.zip"
             },
             "require": {
                 "ext-intl": "*",
                 "ext-json": "*",
-                "fooman/tcpdf": "^6.6.2-p1",
+                "fooman/tcpdf": "^6.7.2-p1",
                 "magento/framework": "^102.0.0 || ^103.0.0",
                 "magento/module-backend": "^101.0.0 || ^102.0.0",
                 "magento/module-catalog": "^103.0.0 || ^104.0.0",
@@ -1989,7 +1989,7 @@
                 "magento/module-swatches": "^100.3.0",
                 "magento/module-tax": "^100.3.0",
                 "magento/module-weee": "^100.3.0",
-                "php": "~7.1.3 || ~7.2.0 || ~7.3.0 || ~7.4.0 || ~8.0.0 || ~8.1.0 || ~8.2.0"
+                "php": "~7.1.3 || ~7.2.0 || ~7.3.0 || ~7.4.0 || ~8.0.0 || ~8.1.0 || ~8.2.0 || ~8.3.0"
             },
             "require-dev": {
                 "fooman/testing-and-quality-tools": "^1.0",
@@ -2024,18 +2024,18 @@
         },
         {
             "name": "fooman/pdfcustomiser-implementation-m2",
-            "version": "117.4.3",
+            "version": "117.5.1",
             "dist": {
                 "type": "zip",
-                "url": "https://customer-repos.fooman.co.nz/glasdiscount.nl-946dcd10154054a475815dc5862bee90abe3eea1/dist/fooman/pdfcustomiser-implementation-m2/fooman-pdfcustomiser-implementation-m2-117.4.3.zip"
+                "url": "https://customer-repos.fooman.co.nz/glasdiscount.nl-946dcd10154054a475815dc5862bee90abe3eea1/dist/fooman/pdfcustomiser-implementation-m2/fooman-pdfcustomiser-implementation-m2-117.5.1.zip"
             },
             "require": {
                 "ext-intl": "*",
                 "ext-json": "*",
-                "fooman/emailattachments-implementation-m2": "^104.0.2 || ^105.0.0 || ^106.0.0 || ^107.0.0",
-                "fooman/pdfcore-m2": "^20.1.0",
+                "fooman/emailattachments-implementation-m2": "^105.0.0 || ^106.0.0 || ^107.0.0",
+                "fooman/pdfcore-m2": "^22.0.0",
                 "fooman/pdfdesign-m2": "^2.1.0",
-                "fooman/printorderpdf-implementation-m2": "^103.0.3 || ^104.0.0 || ^105.0.0",
+                "fooman/printorderpdf-implementation-m2": "^104.0.0 || ^105.0.0",
                 "magento/framework": "^102.0.0 || ^103.0.0",
                 "magento/module-backend": "^101.0.0 || ^102.0.0",
                 "magento/module-bundle": "^100.3.0 || ^101.0.0",
@@ -2050,7 +2050,7 @@
                 "magento/module-tax": "^100.3.0",
                 "magento/module-ui": "^101.1.0",
                 "magento/module-weee": "^100.3.0",
-                "php": "~7.1.3||~7.2.0||~7.3.0||~7.4.0||~8.0.0||~8.1.0||~8.2.0"
+                "php": "~7.1.3||~7.2.0||~7.3.0||~7.4.0||~8.0.0||~8.1.0||~8.2.0||~8.3.0"
             },
             "require-dev": {
                 "fooman/testing-and-quality-tools": "^1.0"
@@ -2078,16 +2078,16 @@
         },
         {
             "name": "fooman/pdfcustomiser-m2",
-            "version": "8.10.0",
+            "version": "8.11.0",
             "dist": {
                 "type": "zip",
-                "url": "/var/lib/jenkins/workspace/Repogen/Production - regenerate all repositories/store_data/artifacts/Fooman_PdfCustomiser-8.10.0.zip",
-                "shasum": "20229875f71f02cef1084aad0e53703cc75f6b76"
+                "url": "/var/lib/jenkins/workspace/Repogen/Production - regenerate all repositories/store_data/artifacts/Fooman_PdfCustomiser-8.11.0.zip",
+                "shasum": "2691d546c6fcf3cd829b09a9903be95615f20539"
             },
             "require": {
-                "fooman/pdfcustomiser-implementation-m2": "117.4.3",
-                "magento/framework": ">=102.0.0 < 102.0.8 || >=103.0.0 < 103.0.7",
-                "php": "~7.1.3||~7.2.0||~7.3.0||~7.4.0||~8.0.0||~8.1.0||~8.2.0"
+                "fooman/pdfcustomiser-implementation-m2": "117.5.1",
+                "magento/framework": ">=102.0.0 < 102.0.8 || >=103.0.0 < 103.0.8",
+                "php": "~7.1.3||~7.2.0||~7.3.0||~7.4.0||~8.0.0||~8.1.0||~8.2.0||~8.3.0"
             },
             "require-dev": {
                 "fooman/pdfcustomisergraphql-m2": "^1.0.0"
@@ -2101,16 +2101,16 @@
         },
         {
             "name": "fooman/pdfdesign-m2",
-            "version": "2.2.0",
+            "version": "2.3.1",
             "dist": {
                 "type": "zip",
-                "url": "https://customer-repos.fooman.co.nz/glasdiscount.nl-946dcd10154054a475815dc5862bee90abe3eea1/dist/fooman/pdfdesign-m2/fooman-pdfdesign-m2-2.2.0.zip"
+                "url": "https://customer-repos.fooman.co.nz/glasdiscount.nl-946dcd10154054a475815dc5862bee90abe3eea1/dist/fooman/pdfdesign-m2/fooman-pdfdesign-m2-2.3.1.zip"
             },
             "require": {
-                "fooman/pdfcore-m2": "^19.12.0 || ^20.0.0",
+                "fooman/pdfcore-m2": "^20.0.0 || ^21.0.0 || ^22.0.0",
                 "magento/framework": "^102.0.0 || ^103.0.0",
                 "magento/module-backend": "^101.0.0 || ^102.0.0",
-                "php": "~7.1.3 || ~7.2.0 || ~7.3.0 || ~7.4.0 || ~8.0.0 || ~8.1.0 || ~8.2.0"
+                "php": "~7.1.3 || ~7.2.0 || ~7.3.0 || ~7.4.0 || ~8.0.0 || ~8.1.0 || ~8.2.0 || ~8.3.0"
             },
             "conflict": {
                 "fooman/pdfcustomiser-implementation-m2": "<115.0.0"
@@ -2141,16 +2141,16 @@
         },
         {
             "name": "fooman/printorderpdf-implementation-m2",
-            "version": "105.2.0",
+            "version": "105.3.0",
             "dist": {
                 "type": "zip",
-                "url": "https://customer-repos.fooman.co.nz/glasdiscount.nl-946dcd10154054a475815dc5862bee90abe3eea1/dist/fooman/printorderpdf-implementation-m2/fooman-printorderpdf-implementation-m2-105.2.0.zip"
+                "url": "https://customer-repos.fooman.co.nz/glasdiscount.nl-946dcd10154054a475815dc5862bee90abe3eea1/dist/fooman/printorderpdf-implementation-m2/fooman-printorderpdf-implementation-m2-105.3.0.zip"
             },
             "require": {
                 "magento/framework": "^102.0.6 || ^103.0.1",
                 "magento/module-backend": "^101.0.6 || ^102.0.1",
                 "magento/module-sales": "^102.0.6 || ^103.0.1",
-                "php": "~7.1.3 || ~7.2.0 || ~7.3.0 || ~7.4.0 || ~8.0.0 || ~8.1.0 || ~8.2.0"
+                "php": "~7.1.3 || ~7.2.0 || ~7.3.0 || ~7.4.0 || ~8.0.0 || ~8.1.0 || ~8.2.0 || ~8.3.0"
             },
             "require-dev": {
                 "fooman/testing-and-quality-tools": "^1.0"
@@ -2178,21 +2178,24 @@
         },
         {
             "name": "fooman/tcpdf",
-            "version": "6.6.5-p2",
+            "version": "6.7.5-p1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/fooman/TCPDF.git",
-                "reference": "3c8c735982f6d9bf74085cca63a196b6fcc583d7"
+                "reference": "242b5a79dd13d7239990817fc1bc5aecbafcf5f1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/fooman/TCPDF/zipball/3c8c735982f6d9bf74085cca63a196b6fcc583d7",
-                "reference": "3c8c735982f6d9bf74085cca63a196b6fcc583d7",
+                "url": "https://api.github.com/repos/fooman/TCPDF/zipball/242b5a79dd13d7239990817fc1bc5aecbafcf5f1",
+                "reference": "242b5a79dd13d7239990817fc1bc5aecbafcf5f1",
                 "shasum": ""
             },
             "require": {
                 "ext-bcmath": "*",
                 "php": ">=7.0.0"
+            },
+            "conflict": {
+                "fooman/pdfcore-m2": "<22.0.0"
             },
             "require-dev": {
                 "phpunit/phpunit": "^6.0||^7.0||^8.0||^9.0"
@@ -2240,7 +2243,7 @@
                 "qrcode"
             ],
             "support": {
-                "source": "https://github.com/fooman/TCPDF/tree/6.6.5-p2"
+                "source": "https://github.com/fooman/TCPDF/tree/6.7.5-p1"
             },
             "funding": [
                 {
@@ -2248,15 +2251,15 @@
                     "type": "custom"
                 }
             ],
-            "time": "2024-03-06T23:31:13+00:00"
+            "time": "2024-04-22T22:40:24+00:00"
         },
         {
             "name": "geissweb/module-euvat",
-            "version": "1.21.1",
+            "version": "1.21.2",
             "dist": {
                 "type": "zip",
-                "url": "https://packages.geissweb.de/composer/download/file/m/geissweb_module-euvat/h/dc41dc7564b15c8bcf65a54db522f4c99e01d4a8/v/1.21.1.0",
-                "reference": "dc41dc7564b15c8bcf65a54db522f4c99e01d4a8"
+                "url": "https://packages.geissweb.de/composer/download/file/m/geissweb_module-euvat/h/070b88a56bd550a4edb4483f33b5bfa9899d0bea/v/1.21.2.0",
+                "reference": "070b88a56bd550a4edb4483f33b5bfa9899d0bea"
             },
             "require": {
                 "ext-curl": "*",
@@ -2304,7 +2307,7 @@
                 }
             ],
             "description": "Improved VAT handling for merchants dealing with or in the EU.",
-            "time": "2024-02-21T10:57:36+00:00"
+            "time": "2024-03-29T14:09:55+00:00"
         },
         {
             "name": "gmostafa/php-graphql-client",
@@ -5076,21 +5079,21 @@
         },
         {
             "name": "magefan/module-blog",
-            "version": "2.11.2",
+            "version": "2.11.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/magefan/module-blog.git",
-                "reference": "ed0985c8000e9269d60c231ec2c768f5b90b4bfa"
+                "reference": "57c0778696a5ef688873ba4c5dcde5d990675e2a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/magefan/module-blog/zipball/ed0985c8000e9269d60c231ec2c768f5b90b4bfa",
-                "reference": "ed0985c8000e9269d60c231ec2c768f5b90b4bfa",
+                "url": "https://api.github.com/repos/magefan/module-blog/zipball/57c0778696a5ef688873ba4c5dcde5d990675e2a",
+                "reference": "57c0778696a5ef688873ba4c5dcde5d990675e2a",
                 "shasum": ""
             },
             "require": {
                 "magefan/module-blog-graph-ql": ">=2.1.9",
-                "magefan/module-community": ">=2.1.18",
+                "magefan/module-community": ">=2.1.23",
                 "magefan/module-wysiwyg-advanced": ">=2.0.15"
             },
             "suggest": {
@@ -5109,9 +5112,9 @@
             "description": "Implements Blog functionality on Magento 2 store",
             "support": {
                 "issues": "https://github.com/magefan/module-blog/issues",
-                "source": "https://github.com/magefan/module-blog/tree/2.11.2"
+                "source": "https://github.com/magefan/module-blog/tree/2.11.4"
             },
-            "time": "2024-02-26T11:24:07+00:00"
+            "time": "2024-05-21T06:58:58+00:00"
         },
         {
             "name": "magefan/module-blog-graph-ql",
@@ -5146,16 +5149,16 @@
         },
         {
             "name": "magefan/module-community",
-            "version": "2.1.20",
+            "version": "2.1.28",
             "source": {
                 "type": "git",
                 "url": "https://github.com/magefan/module-community.git",
-                "reference": "f008892ba3924fd4da9328562868b7c2d6fa3051"
+                "reference": "33f73bd6c3726697b228424e24e38ba3245812d7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/magefan/module-community/zipball/f008892ba3924fd4da9328562868b7c2d6fa3051",
-                "reference": "f008892ba3924fd4da9328562868b7c2d6fa3051",
+                "url": "https://api.github.com/repos/magefan/module-community/zipball/33f73bd6c3726697b228424e24e38ba3245812d7",
+                "reference": "33f73bd6c3726697b228424e24e38ba3245812d7",
                 "shasum": ""
             },
             "require": {
@@ -5174,9 +5177,9 @@
             "description": "Magefan core module, required for other Magefan extensions",
             "support": {
                 "issues": "https://github.com/magefan/module-community/issues",
-                "source": "https://github.com/magefan/module-community/tree/2.1.20"
+                "source": "https://github.com/magefan/module-community/tree/2.1.28"
             },
-            "time": "2024-04-10T10:20:45+00:00"
+            "time": "2024-06-14T13:22:52+00:00"
         },
         {
             "name": "magefan/module-wysiwyg-advanced",
@@ -17645,11 +17648,11 @@
         },
         {
             "name": "mageprince/module-product-attachment",
-            "version": "2.2.7",
+            "version": "2.2.10",
             "dist": {
                 "type": "zip",
-                "url": "https://repo.magento.com/archives/mageprince/module-product-attachment/mageprince-module-product-attachment-2.2.7.0.zip",
-                "shasum": "b4e5e49dcde8e5c21b9884bfc3e4d7cad2e70e75"
+                "url": "https://repo.magento.com/archives/mageprince/module-product-attachment/mageprince-module-product-attachment-2.2.10.0.zip",
+                "shasum": "040667bc7c47c08e0ddd3758b28ff61b027af2ff"
             },
             "type": "magento2-module",
             "autoload": {
@@ -21172,15 +21175,15 @@
         },
         {
             "name": "swissup/easytabs",
-            "version": "1.12.8",
+            "version": "1.12.9",
             "dist": {
                 "type": "zip",
-                "url": "https://ci.swissuplabs.com/api/swissup/easytabs/download/1.12.8",
-                "reference": "e84d77d93a753894c67f4b6aea9ab12bd1fce4ef",
+                "url": "https://ci.swissuplabs.com/api/swissup/easytabs/download/1.12.9",
+                "reference": "2c5d35641278f388cfacbcc3de5392ab782c34aa",
                 "shasum": ""
             },
             "require": {
-                "swissup/module-easytabs": "^1.12.7"
+                "swissup/module-easytabs": "^1.12.8"
             },
             "type": "metapackage",
             "license": [
@@ -21188,18 +21191,18 @@
             ],
             "description": "Custom tabs for product and CMS pages",
             "support": {
-                "source": "https://github.com/swissup/easytabs/tree/1.12.8",
+                "source": "https://github.com/swissup/easytabs/tree/1.12.9",
                 "issues": "https://github.com/swissup/easytabs/issues"
             },
-            "time": "2024-02-02T12:53:11+00:00"
+            "time": "2024-04-01T08:59:56+00:00"
         },
         {
             "name": "swissup/module-core",
-            "version": "1.12.18",
+            "version": "1.12.19",
             "dist": {
                 "type": "zip",
-                "url": "https://ci.swissuplabs.com/api/swissup/module-core/download/1.12.18",
-                "reference": "2a8e322fad7d6248a812a3bbabfd6d4fade36b83",
+                "url": "https://ci.swissuplabs.com/api/swissup/module-core/download/1.12.19",
+                "reference": "92dcf82a463e87866f0cb0ceaa903b12aca912b3",
                 "shasum": ""
             },
             "type": "magento2-module",
@@ -21216,22 +21219,22 @@
             ],
             "description": "Swissup core module. It's purpose is to add Swissup menu and config entries",
             "support": {
-                "source": "https://github.com/swissup/module-core/tree/1.12.18",
+                "source": "https://github.com/swissup/module-core/tree/1.12.19",
                 "issues": "https://github.com/swissup/module-core/issues"
             },
-            "time": "2023-07-27T11:53:04+00:00"
+            "time": "2024-03-28T09:08:07+00:00"
         },
         {
             "name": "swissup/module-easytabs",
-            "version": "1.12.8",
+            "version": "1.12.10",
             "dist": {
                 "type": "zip",
-                "url": "https://ci.swissuplabs.com/api/swissup/module-easytabs/download/1.12.8",
-                "reference": "d0bb0ba5ef6a6624dc301d9c3c66c7073c10f222",
+                "url": "https://ci.swissuplabs.com/api/swissup/module-easytabs/download/1.12.10",
+                "reference": "5c9bc066251c2334cc62178ef68adb505e44ac64",
                 "shasum": ""
             },
             "require": {
-                "swissup/module-core": "^1.12.18"
+                "swissup/module-core": "^1.12.19"
             },
             "type": "magento2-module",
             "extra": {
@@ -21272,10 +21275,10 @@
                 "tabs"
             ],
             "support": {
-                "source": "https://github.com/swissup/module-easytabs/tree/1.12.8",
+                "source": "https://github.com/swissup/module-easytabs/tree/1.12.10",
                 "issues": "https://github.com/swissup/module-easytabs/issues"
             },
-            "time": "2024-02-02T12:48:32+00:00"
+            "time": "2024-04-23T12:00:05+00:00"
         },
         {
             "name": "swissup/module-marketplace",

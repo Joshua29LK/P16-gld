@@ -5,6 +5,7 @@
  */
 namespace Mageside\CustomShippingPrice\Model\Carrier;
 
+use Magento\Shipping\Model\Rate\Result;
 use Magento\Shipping\Model\Carrier\AbstractCarrier ;
 use Magento\Shipping\Model\Carrier\CarrierInterface;
 use Magento\Quote\Model\Quote\Address\RateRequest;
@@ -28,17 +29,17 @@ class CustomShipping extends AbstractCarrier implements CarrierInterface
     protected $_isFixed = true;
 
     /**
-     * @var \Magento\Shipping\Model\Rate\ResultFactory
+     * @var ResultFactory
      */
     protected $_rateResultFactory;
 
     /**
-     * @var \Magento\Quote\Model\Quote\Address\RateResult\MethodFactory
+     * @var MethodFactory
      */
     protected $_rateMethodFactory;
 
     /**
-     * @var \Magento\Backend\Model\Auth\Session
+     * @var Session
      */
     protected $_session;
 
@@ -70,7 +71,7 @@ class CustomShipping extends AbstractCarrier implements CarrierInterface
      * FreeShipping Rates Collector
      *
      * @param RateRequest $request
-     * @return \Magento\Shipping\Model\Rate\Result|bool
+     * @return Result|bool
      */
     public function collectRates(RateRequest $request)
     {
@@ -82,7 +83,7 @@ class CustomShipping extends AbstractCarrier implements CarrierInterface
             return false;
         }
 
-        /** @var \Magento\Shipping\Model\Rate\Result $result */
+        /** @var Result $result */
         $result = $this->_rateResultFactory->create();
 
         $shippingPrice = $this->_session->getCustomshippriceAmount() ?

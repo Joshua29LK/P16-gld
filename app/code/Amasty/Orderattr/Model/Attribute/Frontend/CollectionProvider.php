@@ -9,6 +9,7 @@ namespace Amasty\Orderattr\Model\Attribute\Frontend;
 
 use Amasty\Orderattr\Api\Data\CheckoutAttributeInterface;
 use Amasty\Orderattr\Model\Config\Source\CheckoutStep;
+use Amasty\Orderattr\Model\ResourceModel\Attribute\Relation\RelationDetails\Collection as RelationDetailsCollection;
 use Amasty\Orderattr\Model\QuoteProducts;
 use Amasty\Orderattr\Model\ResourceModel\Attribute\CollectionFactory;
 use Magento\Framework\App\ObjectManager;
@@ -42,31 +43,39 @@ class CollectionProvider
      */
     private $quoteProducts;
 
+    /**
+     * @var RelationDetailsCollection
+     */
+    private $relationDetailsCollection;
+
     public function __construct(
         StoreManagerInterface $storeManager,
         CollectionFactory $collectionFactory,
-        QuoteProducts $quoteProducts = null //todo: move to not optional
+        QuoteProducts $quoteProducts = null, //todo: move to not optional
+        RelationDetailsCollection $relationDetailsCollection = null //todo: move to not optional
     ) {
         $this->storeManager = $storeManager;
         $this->collection = $collectionFactory->create();
         $this->quoteProducts = $quoteProducts ?? ObjectManager::getInstance()->create(QuoteProducts::class);
         $this->collection->setOrder(CheckoutAttributeInterface::SORTING_ORDER, 'ASC');
         $this->collection->addFieldToFilter(CheckoutAttributeInterface::IS_VISIBLE_ON_FRONT, 1);
+        $this->relationDetailsCollection = $relationDetailsCollection
+            ?? ObjectManager::getInstance()->create(RelationDetailsCollection::class);
     }
 
     /**
-     * @return \Amasty\Orderattr\Api\Data\CheckoutAttributeInterface[]
+     * @return CheckoutAttributeInterface[]
      */
     public function getAttributes(?Quote $quote = null)
     {
         $this->collection->addStoreFilter($this->storeManager->getStore()->getId());
         $this->collection->addConditionsFilter($this->quoteProducts->getProductIds($quote));
 
-        return $this->collection->getItems();
+        return $this->checkParentScope($this->collection->getItems());
     }
 
     /**
-     * @return \Amasty\Orderattr\Api\Data\CheckoutAttributeInterface[]
+     * @return CheckoutAttributeInterface[]
      */
     public function getShippingAttributes()
     {
@@ -78,7 +87,7 @@ class CollectionProvider
     }
 
     /**
-     * @return \Amasty\Orderattr\Api\Data\CheckoutAttributeInterface[]
+     * @return CheckoutAttributeInterface[]
      */
     public function getPaymentAttributes()
     {
@@ -92,7 +101,7 @@ class CollectionProvider
     /**
      * @param $checkoutStep
      *
-     * @return \Amasty\Orderattr\Api\Data\CheckoutAttributeInterface[]
+     * @return CheckoutAttributeInterface[]
      */
     public function getAttributesForStep($checkoutStep)
     {
@@ -113,5 +122,23 @@ class CollectionProvider
     public function getAttributeCodes()
     {
         return $this->collection->getColumnValues('attribute_code');
+    }
+
+    /**
+     * @param CheckoutAttributeInterface[] $attributes
+     * @return CheckoutAttributeInterface[]
+     */
+    private function checkParentScope(array $attributes): array
+    {
+        $items = $this->relationDetailsCollection->getItems();
+
+        foreach ($items as $item) {
+            if (in_array($item->getDependentAttributeId(), array_keys($attributes))
+                && !in_array($item->getAttributeId(), array_keys($attributes))) {
+                unset($attributes[$item->getDependentAttributeId()]);
+            }
+        }
+
+        return $attributes;
     }
 }

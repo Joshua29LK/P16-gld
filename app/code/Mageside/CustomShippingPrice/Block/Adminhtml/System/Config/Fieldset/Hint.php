@@ -5,6 +5,7 @@
  */
 namespace Mageside\CustomShippingPrice\Block\Adminhtml\System\Config\Fieldset;
 
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Backend\Block\Template;
 use Magento\Framework\Data\Form\Element\Renderer\RendererInterface;
 use Magento\Framework\Data\Form\Element\AbstractElement;
@@ -21,12 +22,12 @@ class Hint extends Template implements RendererInterface
     protected $_template = 'Mageside_CustomShippingPrice::system/config/fieldset/hint.phtml';
     
     /**
-     * @var \Magento\Framework\App\ProductMetadataInterface
+     * @var ProductMetadataInterface
      */
     protected $_metaData;
     
     /**
-     * @var \Magento\Framework\Module\ModuleList\Loader
+     * @var Loader
      */
     protected $_loader;
 
@@ -56,7 +57,7 @@ class Hint extends Template implements RendererInterface
     }
 
     /**
-     * @param \Magento\Framework\Data\Form\Element\AbstractElement $element
+     * @param AbstractElement $element
      * @return mixed
      */
     public function render(AbstractElement $element)
@@ -74,7 +75,7 @@ class Hint extends Template implements RendererInterface
 
     /**
      * @return string
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     public function getVersion()
     {

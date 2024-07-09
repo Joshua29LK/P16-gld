@@ -17,6 +17,7 @@ use Magento\Framework\Api\ExtensibleDataInterface;
 class InstanceInfo extends SimpleDataObject implements ExtensibleDataInterface
 {
     public const SYSTEM_INSTANCE_KEY = 'system_instance_key';
+    public const DOMAIN = 'domain';
     public const MODULES = 'modules';
     public const DOMAINS = 'domains';
     public const PLATFORM = 'platform';
@@ -38,6 +39,23 @@ class InstanceInfo extends SimpleDataObject implements ExtensibleDataInterface
     public function getSystemInstanceKey(): ?string
     {
         return $this->getData(self::SYSTEM_INSTANCE_KEY);
+    }
+
+    /**
+     * @param string|null $domain
+     * @return $this
+     */
+    public function setDomain(?string $domain): self
+    {
+        return $this->setData(self::DOMAIN, $domain);
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getDomain(): ?string
+    {
+        return $this->getData(self::DOMAIN);
     }
 
     /**

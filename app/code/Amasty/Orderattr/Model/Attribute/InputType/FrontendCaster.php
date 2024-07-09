@@ -11,6 +11,8 @@ use Amasty\Orderattr\Api\Data\CheckoutAttributeInterface;
 use Amasty\Orderattr\Model\Attribute\InputType\FrontendCaster\SpecificationProcessorInterface;
 use Amasty\Orderattr\Model\ResourceModel\Attribute\Relation\RelationDetails\CollectionFactory;
 use Amasty\Orderattr\Model\Value\LastCheckoutValue;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Escaper;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Store\Model\StoreManagerInterface;
 
@@ -58,18 +60,25 @@ class FrontendCaster
      */
     private $specificationProcessorClasses;
 
+    /**
+     * @var Escaper
+     */
+    private $escaper;
+
     public function __construct(
         CollectionFactory $relationCollectionFactory,
         StoreManagerInterface $storeManager,
         LastCheckoutValue $lastCheckoutValue,
         ObjectManagerInterface $objectManager,
-        array $specificationProcessorClasses = []
+        array $specificationProcessorClasses = [],
+        Escaper $escaper = null // TODO move to not optional
     ) {
         $this->relationCollectionFactory = $relationCollectionFactory;
         $this->storeManager = $storeManager;
         $this->lastCheckoutValue = $lastCheckoutValue;
         $this->objectManager = $objectManager;
         $this->specificationProcessorClasses = $specificationProcessorClasses;
+        $this->escaper = $escaper ?? ObjectManager::getInstance()->get(Escaper::class);
     }
 
     /**
@@ -134,7 +143,9 @@ class FrontendCaster
         ) {
             $element['value'] = $value;
         } elseif ($element['default'] !== null) {
-            $element['value'] = $element['default'];
+            $element['value'] = $attribute->getFrontendInput() === 'html'
+                ? $this->escaper->escapeHtml($element['default'], ['b', 'a', 's', 'i', 'u', 'strong', 'span'])
+                : $element['default'];
         }
         unset($element['default']);
 

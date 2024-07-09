@@ -3,16 +3,17 @@
     "description": "Order Attributes Subscription Package by Amasty",
     "require": {
         "php": ">=7.3",
-        "amasty/base": ">=1.14.7",
-        "amasty/orderattr": ">=3.11.0"
+        "amasty/base": ">=1.15.1",
+        "amasty/orderattr": ">=3.12.1"
     },
     "suggest": {
-        "amasty/module-orderattr-hyva-compatibility": "Install this package to insure Amasty Order Attributes extension works with Hyv\u00e4 Theme.",
-        "amasty/module-orderattr-graphql": "Install this package to insure Amasty Order Attributes extension works with GraphQl."
+        "amasty/module-orderattr-hyva-compatibility": "Install this package to ensure Amasty Order Attributes extension works with Hyv\u00e4 Theme.",
+        "amasty/module-orderattr-hyva-checkout-compatibility": "Install this package to ensure Amasty Order Attributes extension works with Hyv\u00e4 Checkout.",
+        "amasty/module-orderattr-graphql": "Install this package to ensure Amasty Order Attributes extension works with GraphQl."
     },
     "homepage": "https://amasty.com/",
     "type": "magento2-module",
-    "version": "3.11.0",
+    "version": "3.12.2",
     "license": [
         "proprietary"
     ],

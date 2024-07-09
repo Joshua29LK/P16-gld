@@ -2,9 +2,11 @@ Magento 2 CustomShippingPrice by Mageside
 =========================================
 
 ####Magento Support
-    v1.0.12 - Magento 2.3.* - 2.4.*
+    v1.0.14 - Magento 2.3.* - 2.4.*
 
 ####Change list
+    v1.0.14 - Magento 2.4.7 compatibility checking
+    v1.0.13 - Refactoring Code
     v1.0.12 - Magento 2.4.6 compatibility checking. Added compatibility PHP 8.2
     v1.0.11 - Added compatibility PHP 8.0 - 8.1 compatibility
     v1.0.10 - Magento 2.4.3 compatibility checking (updated composer.json)

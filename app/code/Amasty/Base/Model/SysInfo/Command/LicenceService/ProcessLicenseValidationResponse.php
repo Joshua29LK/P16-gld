@@ -16,6 +16,7 @@ use Amasty\Base\Model\SimpleDataObject;
 use Amasty\Base\Model\SysInfo\Command\LicenceService\ProcessLicenseRegistrationResponse\Converter;
 use Amasty\Base\Model\SysInfo\Command\LicenceService\ProcessLicenseRegistrationResponse\DefaultResponseProvider;
 use Amasty\Base\Model\SysInfo\LicenseValidationRepository;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Stdlib\DateTime\DateTime;
 
 class ProcessLicenseValidationResponse
@@ -52,13 +53,19 @@ class ProcessLicenseValidationResponse
      */
     private $defaultResponseProvider;
 
+    /**
+     * @var RegisterLicenceKey
+     */
+    private $registerLicenceKeyCommand;
+
     public function __construct(
         DateTime $dateTime,
         ScheduleConfigFactory $scheduleConfigFactory,
         ScheduleConfigRepository $scheduleConfigRepository,
         LicenseValidationRepository $licenseValidationRepository,
         Converter $converter,
-        DefaultResponseProvider  $defaultResponseProvider
+        DefaultResponseProvider $defaultResponseProvider,
+        RegisterLicenceKey $registerLicenceKeyCommand = null
     ) {
         $this->dateTime = $dateTime;
         $this->scheduleConfigFactory = $scheduleConfigFactory;
@@ -66,6 +73,8 @@ class ProcessLicenseValidationResponse
         $this->licenseValidationRepository = $licenseValidationRepository;
         $this->converter = $converter;
         $this->defaultResponseProvider = $defaultResponseProvider;
+        $this->registerLicenceKeyCommand = $registerLicenceKeyCommand
+            ?? ObjectManager::getInstance()->get(RegisterLicenceKey::class);
     }
 
     public function process(SimpleDataObject $response, bool $updateTime = true): void
@@ -83,6 +92,11 @@ class ProcessLicenseValidationResponse
         $responseArray = $response->toArray();
         unset($responseArray['code']);
         if (count($responseArray) < 1) {
+            return;
+        }
+
+        if ($responseArray['is_need_to_re_registration'] ?? false) {
+            $this->registerLicenceKeyCommand->execute(true);
             return;
         }
 

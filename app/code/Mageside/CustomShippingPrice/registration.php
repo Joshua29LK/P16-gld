@@ -1,10 +1,12 @@
 <?php
+
+use Magento\Framework\Component\ComponentRegistrar;
 /**
  * Copyright © Mageside. All rights reserved.
  * See MS-LICENSE.txt for license details.
  */
-\Magento\Framework\Component\ComponentRegistrar::register(
-    \Magento\Framework\Component\ComponentRegistrar::MODULE,
+ComponentRegistrar::register(
+    ComponentRegistrar::MODULE,
     'Mageside_CustomShippingPrice',
     __DIR__
 );

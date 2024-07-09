@@ -68,6 +68,13 @@
            resource="default"
            engine="innodb"
            comment="Amasty Order Attribute EAV extension table">
+        <column xsi:type="int"
+                name="id"
+                padding="10"
+                unsigned="true"
+                nullable="false"
+                identity="true"
+                comment="ID" />
         <column xsi:type="smallint"
                 name="attribute_id"
                 nullable="false"
@@ -138,11 +145,12 @@
         <column xsi:type="text" name="validate_rules" comment="Validate Rules" />
         <column xsi:type="varchar" name="input_filter" length="255" comment="Input Filter" />
         <column name="conditions_serialized" xsi:type="text" nullable="true" comment="Conditions"/>
-
         <index referenceId="AMASTY_ORDER_ATTRIBUTE_EAV_ATTRIBUTE_ATTRIBUTE_ID" indexType="btree">
             <column name="attribute_id" />
         </index>
-
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="id"/>
+        </constraint>
         <constraint xsi:type="foreign"
                     referenceId="AMASTY_ORDER_ATTR_EAV_ATTR_ATTR_ID_EAV_ATTR_ATTR_ID"
                     table="amasty_order_attribute_eav_attribute"
@@ -215,6 +223,13 @@
            resource="default"
            engine="innodb"
            comment="Amasty Order Attribute Customer Group Relation table">
+        <column xsi:type="int"
+                name="id"
+                padding="10"
+                unsigned="true"
+                nullable="false"
+                identity="true"
+                comment="ID" />
         <column xsi:type="smallint"
                 name="attribute_id"
                 nullable="false"
@@ -232,7 +247,9 @@
             <column name="attribute_id" />
             <column name="customer_group_id" />
         </constraint>
-
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="id"/>
+        </constraint>
         <constraint xsi:type="foreign"
                     referenceId="AMASTY_ORDER_ATTR_EAV_ATTR_CSTR_GROUP_ATTR_ID_EAV_ATTR_ATTR_ID"
                     table="amasty_order_attribute_eav_attribute_customer_group"
@@ -254,6 +271,13 @@
            resource="default"
            engine="innodb"
            comment="Amasty Order Attribute Store Relation table">
+        <column xsi:type="int"
+                name="id"
+                padding="10"
+                unsigned="true"
+                nullable="false"
+                identity="true"
+                comment="ID" />
         <column xsi:type="smallint"
                 name="attribute_id"
                 nullable="false"
@@ -261,7 +285,9 @@
                 unsigned="true"
                 comment="Order Attribute Entity ID" />
         <column xsi:type="smallint" name="store_id" unsigned="true" nullable="false" comment="Store Id" />
-
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="id"/>
+        </constraint>
         <constraint xsi:type="unique"
                     referenceId="AMASTY_ORDER_ATTRIBUTE_EAV_ATTRIBUTE_STORE_ATTRIBUTE_ID_STORE_ID">
             <column name="attribute_id" />
@@ -494,6 +520,13 @@
            resource="default"
            engine="innodb"
            comment="Amasty Order Attribute Shipping Methods">
+        <column xsi:type="int"
+                name="id"
+                padding="10"
+                unsigned="true"
+                nullable="false"
+                identity="true"
+                comment="ID" />
         <column xsi:type="smallint"
                 name="attribute_id"
                 nullable="false"
@@ -510,7 +543,9 @@
             <column name="attribute_id" />
             <column name="shipping_method" />
         </constraint>
-
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="id"/>
+        </constraint>
         <constraint xsi:type="foreign"
                     referenceId="AMASTY_ORDER_ATTR_SHPP_METHODS_ATTR_ID_EAV_ATTR_ATTR_ID"
                     table="amasty_order_attribute_shipping_methods"

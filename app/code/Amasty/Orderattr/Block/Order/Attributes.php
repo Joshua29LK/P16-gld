@@ -37,7 +37,7 @@ class Attributes extends Template
     /**
      * @var string[]
      */
-    private $escapedInputTypes = ['file', 'html'];
+    private $escapedInputTypes = ['file'];
 
     /**
      * @var RelationValidator
@@ -99,7 +99,10 @@ class Attributes extends Template
                             'label' => $attribute->getStoreLabel(),
                             'value' => (in_array($attribute->getFrontendInput(), $this->escapedInputTypes, true))
                                 ? $data
-                                : nl2br($this->escapeHtml($data))
+                                : nl2br($this->_escaper->escapeHtml(
+                                    $data,
+                                    ['b', 'a', 's', 'i', 'u', 'strong', 'span']
+                                ))
                         ];
                     }
                 }

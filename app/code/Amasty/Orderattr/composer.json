@@ -3,14 +3,13 @@
     "description": "Order Attributes by Amasty",
     "require": {
         "php": ">=7.3",
-        "amasty/base": ">=1.14.7"
+        "amasty/base": ">=1.15.1"
     },
     "suggest": {
-        "amasty/module-orderattr-mftf-2": "Install module-orderattr-mftf-2 module to be able to run Order Attribute MFTF tests for Magento 2.3.5+ version.",
         "amasty/module-orderattr-mftf-3": "Install module-orderattr-mftf-3 module to be able to run Order Attribute MFTF tests for Magento 2.4.0+ version."
     },
     "type": "magento2-module",
-    "version": "3.11.0",
+    "version": "3.12.2",
     "license": [
         "proprietary"
     ],

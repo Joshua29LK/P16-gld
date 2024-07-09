@@ -11,6 +11,12 @@
     <preference for="Magento\Framework\Filesystem\DriverInterface" type="Magento\Framework\Filesystem\Driver\File" />
     <preference for="Amasty\Base\Model\SysInfo\Provider\Collector\CacheService\Info\CacheInfoInterface"
                 type="Amasty\Base\Model\SysInfo\Provider\Collector\CacheService\Info\CacheInfo" />
+    <preference for="Amasty\Base\Api\Data\InstanceDataInterface" type="Amasty\Base\Model\InstanceData\InstanceData"/>
+    <preference for="Amasty\Base\Api\InstanceDataRepositoryInterface" type="Amasty\Base\Model\InstanceData\Repository"/>
+    <preference for="Amasty\Base\Api\Data\ScheduleInterface" type="Amasty\Base\Model\Schedule\Schedule"/>
+    <preference for="Amasty\Base\Api\ScheduleRepositoryInterface" type="Amasty\Base\Model\Schedule\Repository"/>
+    <preference for="Amasty\Base\Api\Data\InstanceHashInterface" type="Amasty\Base\Model\InstanceHash\InstanceHash"/>
+    <preference for="Amasty\Base\Api\InstanceHashRepositoryInterface" type="Amasty\Base\Model\InstanceHash\Repository"/>
 
     <type name="Amasty\Base\Model\Response\OctetResponseInterfaceFactory">
         <arguments>
@@ -157,4 +163,15 @@
         <plugin name="Amasty_Base::skipException" sortOrder="10"
                 type="Amasty\Base\Plugin\Indexer\Model\Indexer\SkipException"/>
     </type>
+    <virtualType name="Amasty\Base\Model\Source\ActiveWithEmptyOptionCategory" type="Amasty\Base\Model\Source\Category">
+        <arguments>
+            <argument name="caption" xsi:type="string" translatable="true">All Categories</argument>
+            <argument name="filters" xsi:type="array">
+                <item name="is_active" xsi:type="string">1</item>
+                <item name="level" xsi:type="array">
+                    <item name="gt" xsi:type="string">0</item>
+                </item>
+            </argument>
+        </arguments>
+    </virtualType>
 </config>

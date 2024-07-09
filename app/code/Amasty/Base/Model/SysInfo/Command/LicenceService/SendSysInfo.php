@@ -93,6 +93,7 @@ class SendSysInfo
                 $this->collector->collect(CollectorPool::LICENCE_SERVICE_GROUP)
             );
             $instanceInfo->setSystemInstanceKey($systemInstanceKey);
+            $instanceInfo->setDomain($registeredInstance->getCurrentInstance()->getDomain());
             try {
                 $this->requestManager->updateInstanceInfo($instanceInfo);
                 $this->changedDataPersistor->save($changedData);

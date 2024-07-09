@@ -50,11 +50,16 @@ class RequestManager
      * @return RegisteredInstance|SimpleDataObject
      * @throws LocalizedException
      */
-    public function registerInstance(string $domain): RegisteredInstance
+    public function registerInstance(string $domain, ?string $oldKey = null): RegisteredInstance
     {
         $curl = $this->curlFactory->create();
         $url = $this->urlBuilder->build('/api/v1/instance/registration');
-        $postParams = json_encode(['domain' => $domain]);
+
+        $params = ['domain' => $domain];
+        if ($oldKey) {
+            $params['oldSystemInstanceKey'] = $oldKey;
+        }
+        $postParams = json_encode($params);
 
         $response = $curl->request($url, $postParams);
         if (!in_array($response->getData('code'), [200, 204])) {
