@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "9942611b1505b640a2fbd71d0a06ce80",
+    "content-hash": "36845925fb1cc4e5415c60c530edb95c",
     "packages": [
         {
             "name": "2tvenom/cborencode",
@@ -17887,55 +17887,6 @@
             "time": "2023-12-04T10:16:41+00:00"
         },
         {
-            "name": "mirasvit/module-search-ultimate",
-            "version": "2.2.49",
-            "dist": {
-                "type": "tar",
-                "url": "https://packages.mirasvit.com/37782:CDEW07982F/downloads/mirasvit-module-search-ultimate-2.2.49-bf70f4.tar",
-                "reference": "4f741e31f6875470373881831c4bbf7fee3e098e"
-            },
-            "require": {
-                "magento/framework": "103.0.*",
-                "mirasvit/module-core": "dev-master|^1.3.0",
-                "mirasvit/module-report": "dev-master|*"
-            },
-            "conflict": {
-                "mirasvit/module-blog-mx": "<2.0.0"
-            },
-            "type": "magento2-module",
-            "autoload": {
-                "files": [
-                    "src/SearchUltimate/registration.php",
-                    "src/Misspell/registration.php",
-                    "src/Search/registration.php",
-                    "src/SearchAutocomplete/registration.php",
-                    "src/SearchElastic/registration.php",
-                    "src/SearchLanding/registration.php",
-                    "src/SearchMysql/registration.php",
-                    "src/SearchReport/registration.php",
-                    "src/SearchSphinx/registration.php",
-                    "src/SearchGraphQl/registration.php"
-                ],
-                "psr-4": {
-                    "Mirasvit\\SearchUltimate\\": "src/SearchUltimate",
-                    "Mirasvit\\Misspell\\": "src/Misspell",
-                    "Mirasvit\\Search\\": "src/Search",
-                    "Mirasvit\\SearchAutocomplete\\": "src/SearchAutocomplete",
-                    "Mirasvit\\SearchElastic\\": "src/SearchElastic",
-                    "Mirasvit\\SearchLanding\\": "src/SearchLanding",
-                    "Mirasvit\\SearchMysql\\": "src/SearchMysql",
-                    "Mirasvit\\SearchReport\\": "src/SearchReport",
-                    "Mirasvit\\SearchSphinx\\": "src/SearchSphinx",
-                    "Mirasvit\\SearchGraphQl\\": "src/SearchGraphQl"
-                }
-            },
-            "license": [
-                "proprietary"
-            ],
-            "description": "Search Ultimate",
-            "time": "2024-03-07T13:41:06+00:00"
-        },
-        {
             "name": "monolog/monolog",
             "version": "2.9.2",
             "source": {
@@ -28539,5 +28490,5 @@
     "prefer-lowest": false,
     "platform": [],
     "platform-dev": [],
-    "plugin-api-version": "2.3.0"
+    "plugin-api-version": "2.6.0"
 }
