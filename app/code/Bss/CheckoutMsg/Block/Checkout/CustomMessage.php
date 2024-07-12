@@ -34,7 +34,7 @@ class CustomMessage extends Template
 
     private const SHIPPING_GROUP_ATT = "verzendgroep";
 
-    private const SHIPPING_GROUP_VALUE = 4179;
+    private const SHIPPING_GROUP_VALUE = 4180;
 
     private const SHIPPING_GROUP_MESSAGE = "Een of meerdere producten in uw winkelwagentje komen niet in aanmerking voor spoedlevering.";
 
