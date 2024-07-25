@@ -187,6 +187,8 @@ ul, ol {
     background-image: -webkit-linear-gradient(#14388C, #12337F);
     background-image: linear-gradient(#14388C, #12337F);
     box-shadow: 0 3px 5px 0 rgba(0, 0, 0, 0.1);
+    transition: height 0.3s ease;
+    -webkit-transition: height 0.3s ease;
 }
 
 .nav-sections .section-items .section-item-content {
@@ -211,6 +213,15 @@ ul, ol {
     line-height: 30px;
     border-top: 1px solid #E2E2E2;
 }
+.section-item-content .menu-container {
+    transition: height 0.3s ease;
+    -webkit-transition: height 0.3s ease;
+}
+
+.section-item-content .menu-container .menu {
+    transition: height 0.3s ease;
+    -webkit-transition: height 0.3s ease;
+}
 
 .section-item-content .menu-container .menu > ul {
     position: sticky;
@@ -222,6 +233,8 @@ ul, ol {
     background-image: -webkit-linear-gradient(#14388C, #12337F);
     background-image: linear-gradient(#14388C, #12337F);
     box-shadow: 0 3px 5px 0 rgba(0, 0, 0, 0.1);
+    transition: height 0.3s ease;
+    -webkit-transition: height 0.3s ease;
 }
 
 .md-top-menu-items {
@@ -256,6 +269,11 @@ ul, ol {
     line-height: 64px;
     float: right;
     margin: 0;
+}
+
+.nav-sections .section-items {
+    transition: height 0.3s ease;
+    -webkit-transition: height 0.3s ease;
 }
 
 .nav-sections .section-items .section-item-content {
@@ -1460,6 +1478,9 @@ h2 .hint:after {
         flex-flow: row;
         max-width: 1220px;
     }
+    .header_novi #novi-usp .novi-usp .container {
+        padding-left: 0;
+    }
     #novi-usp .novi-usp .container .usp_item {
         width: unset !important;
         flex: 1 1 0px;
@@ -1544,6 +1565,7 @@ h2 .hint:after {
         margin-left: 24px;
     }
     .home_slider {
+        position: absolute;
         max-width: 1220px;
         margin-left: -20px;
     }
@@ -1811,6 +1833,10 @@ h2 .hint:after {
 
     .block-search .actions span {
         display: none;
+    }
+
+    .block-search .label.active + .control input {
+        position: absolute !important;
     }
 
     .ico-search {
