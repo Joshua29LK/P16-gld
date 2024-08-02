@@ -1835,8 +1835,15 @@ h2 .hint:after {
         display: none;
     }
 
+    .block-search .control input {
+        font-size: 16px !important;
+    }
+
     .block-search .label.active + .control input {
         position: absolute !important;
+        -webkit-user-select: text;
+        user-select:text;
+        font-size: 16px !important;
     }
 
     .ico-search {
