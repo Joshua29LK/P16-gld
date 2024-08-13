@@ -13,7 +13,7 @@
         "composer/composer": "@alpha",
         "magento/data-migration-tool": "2.4.5",
         "mirasvit/module-feed": "1.4.4",
-        "mirasvit/module-cache-warmer": "1.9.7",
+        "mirasvit/module-cache-warmer": "1.9.10",
         "gmostafa/php-graphql-client": "^1.13",
         "dealer4dealer/xcore-magento2": "2.9.0",
         "dhlparcel/magento2-plugin": "1.0.46",
