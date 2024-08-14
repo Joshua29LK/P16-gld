@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "3bbae8f8ce34fa19e03154223b8b196a",
+    "content-hash": "2c3b3e5dcbfc4196fda292cdc0baf1b4",
     "packages": [
         {
             "name": "2tvenom/cborencode",
@@ -18056,23 +18056,23 @@
         },
         {
             "name": "multisafepay/magento2",
-            "version": "3.5.1",
+            "version": "3.7.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/MultiSafepay/magento2.git",
-                "reference": "a7094485dbfb89635cf79cb362b3472aa2f560ef"
+                "reference": "cce501a5c715b2a2206da8c3597126d69db41580"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/MultiSafepay/magento2/zipball/a7094485dbfb89635cf79cb362b3472aa2f560ef",
-                "reference": "a7094485dbfb89635cf79cb362b3472aa2f560ef",
+                "url": "https://api.github.com/repos/MultiSafepay/magento2/zipball/cce501a5c715b2a2206da8c3597126d69db41580",
+                "reference": "cce501a5c715b2a2206da8c3597126d69db41580",
                 "shasum": ""
             },
             "require": {
-                "multisafepay/magento2-adminhtml": "1.27.1",
+                "multisafepay/magento2-adminhtml": "1.29.0",
                 "multisafepay/magento2-catalog-inventory": "1.0.3",
-                "multisafepay/magento2-core": "3.5.1",
-                "multisafepay/magento2-frontend": "2.5.1",
+                "multisafepay/magento2-core": "3.7.1",
+                "multisafepay/magento2-frontend": "2.6.2",
                 "multisafepay/magento2-msi": "1.0.2"
             },
             "type": "metapackage",
@@ -18083,22 +18083,22 @@
             "description": "MultiSafepay module suite for Magento 2",
             "support": {
                 "issues": "https://github.com/MultiSafepay/magento2/issues",
-                "source": "https://github.com/MultiSafepay/magento2/tree/3.5.1"
+                "source": "https://github.com/MultiSafepay/magento2/tree/3.7.1"
             },
-            "time": "2024-05-01T13:52:29+00:00"
+            "time": "2024-08-06T11:50:03+00:00"
         },
         {
             "name": "multisafepay/magento2-adminhtml",
-            "version": "1.27.1",
+            "version": "1.29.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/MultiSafepay/magento2-adminhtml.git",
-                "reference": "0e453eb75e708ed4dd4aa43d83cf6af7f2bb69c6"
+                "reference": "6719fa7f38b3f406130b5b06937833362d3f44c3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/MultiSafepay/magento2-adminhtml/zipball/0e453eb75e708ed4dd4aa43d83cf6af7f2bb69c6",
-                "reference": "0e453eb75e708ed4dd4aa43d83cf6af7f2bb69c6",
+                "url": "https://api.github.com/repos/MultiSafepay/magento2-adminhtml/zipball/6719fa7f38b3f406130b5b06937833362d3f44c3",
+                "reference": "6719fa7f38b3f406130b5b06937833362d3f44c3",
                 "shasum": ""
             },
             "require": {
@@ -18107,7 +18107,7 @@
                 "magento/module-backend": "^101.0|^102.0",
                 "magento/module-config": "^101.0",
                 "magento/module-customer": "^102.0|^103.0",
-                "multisafepay/magento2-core": "^3.5.1"
+                "multisafepay/magento2-core": "^3.7"
             },
             "type": "magento2-module",
             "autoload": {
@@ -18125,9 +18125,9 @@
             "description": "MultiSafepay backend module for Magento 2",
             "support": {
                 "issues": "https://github.com/MultiSafepay/magento2-adminhtml/issues",
-                "source": "https://github.com/MultiSafepay/magento2-adminhtml/tree/1.27.1"
+                "source": "https://github.com/MultiSafepay/magento2-adminhtml/tree/1.29.0"
             },
-            "time": "2024-05-01T13:13:13+00:00"
+            "time": "2024-07-08T10:19:48+00:00"
         },
         {
             "name": "multisafepay/magento2-catalog-inventory",
@@ -18171,16 +18171,16 @@
         },
         {
             "name": "multisafepay/magento2-core",
-            "version": "3.5.1",
+            "version": "3.7.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/MultiSafepay/magento2-core.git",
-                "reference": "0cadd0b70b9829778ddf9d9667eb554ed14a19b0"
+                "reference": "131d3ee3419acfed5e3116df3005300c7adb7dca"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/MultiSafepay/magento2-core/zipball/0cadd0b70b9829778ddf9d9667eb554ed14a19b0",
-                "reference": "0cadd0b70b9829778ddf9d9667eb554ed14a19b0",
+                "url": "https://api.github.com/repos/MultiSafepay/magento2-core/zipball/131d3ee3419acfed5e3116df3005300c7adb7dca",
+                "reference": "131d3ee3419acfed5e3116df3005300c7adb7dca",
                 "shasum": ""
             },
             "require": {
@@ -18194,7 +18194,7 @@
                 "magento/module-sales": "^102.0|^103.0",
                 "magento/module-store": "^101.0",
                 "magento/module-vault": "^101.0",
-                "multisafepay/php-sdk": "^5.13",
+                "multisafepay/php-sdk": "^5.14",
                 "nyholm/psr7": "^1.4",
                 "php": ">=7.2",
                 "psr/http-client": "^1.0"
@@ -18222,22 +18222,22 @@
             "description": "MultiSafepay core module for Magento 2",
             "support": {
                 "issues": "https://github.com/MultiSafepay/magento2-core/issues",
-                "source": "https://github.com/MultiSafepay/magento2-core/tree/3.5.1"
+                "source": "https://github.com/MultiSafepay/magento2-core/tree/3.7.1"
             },
-            "time": "2024-05-01T12:35:53+00:00"
+            "time": "2024-08-06T11:49:43+00:00"
         },
         {
             "name": "multisafepay/magento2-frontend",
-            "version": "2.5.1",
+            "version": "2.6.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/MultiSafepay/magento2-frontend.git",
-                "reference": "fd64910ea9319025ed4b5bea8271ddff683f4cfe"
+                "reference": "a4ef9e6c2a24331278d6424fae185706a3a511bc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/MultiSafepay/magento2-frontend/zipball/fd64910ea9319025ed4b5bea8271ddff683f4cfe",
-                "reference": "fd64910ea9319025ed4b5bea8271ddff683f4cfe",
+                "url": "https://api.github.com/repos/MultiSafepay/magento2-frontend/zipball/a4ef9e6c2a24331278d6424fae185706a3a511bc",
+                "reference": "a4ef9e6c2a24331278d6424fae185706a3a511bc",
                 "shasum": ""
             },
             "require": {
@@ -18246,8 +18246,8 @@
                 "magento/module-quote": "^101.0",
                 "magento/module-sales": "^102.0|^103.0",
                 "magento/module-store": "^101.0",
-                "multisafepay/magento2-adminhtml": "^1.27.1",
-                "multisafepay/magento2-core": "^3.5.1"
+                "multisafepay/magento2-adminhtml": "^1.29",
+                "multisafepay/magento2-core": "^3.7.1"
             },
             "type": "magento2-module",
             "autoload": {
@@ -18265,9 +18265,9 @@
             "description": "MultiSafepay frontend module for Magento 2",
             "support": {
                 "issues": "https://github.com/MultiSafepay/magento2-frontend/issues",
-                "source": "https://github.com/MultiSafepay/magento2-frontend/tree/2.5.1"
+                "source": "https://github.com/MultiSafepay/magento2-frontend/tree/2.6.2"
             },
-            "time": "2024-05-01T13:21:48+00:00"
+            "time": "2024-08-06T11:49:50+00:00"
         },
         {
             "name": "multisafepay/magento2-msi",
@@ -18312,16 +18312,16 @@
         },
         {
             "name": "multisafepay/php-sdk",
-            "version": "5.13.0",
+            "version": "5.14.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/MultiSafepay/php-sdk.git",
-                "reference": "b88fa079981d590a70275d528cf52d8fd07affab"
+                "reference": "408f102e3228f072f2c1bcc76ac29a8031415480"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/MultiSafepay/php-sdk/zipball/b88fa079981d590a70275d528cf52d8fd07affab",
-                "reference": "b88fa079981d590a70275d528cf52d8fd07affab",
+                "url": "https://api.github.com/repos/MultiSafepay/php-sdk/zipball/408f102e3228f072f2c1bcc76ac29a8031415480",
+                "reference": "408f102e3228f072f2c1bcc76ac29a8031415480",
                 "shasum": ""
             },
             "require": {
@@ -18359,9 +18359,9 @@
             "description": "MultiSafepay PHP SDK",
             "support": {
                 "issues": "https://github.com/MultiSafepay/php-sdk/issues",
-                "source": "https://github.com/MultiSafepay/php-sdk/tree/5.13.0"
+                "source": "https://github.com/MultiSafepay/php-sdk/tree/5.14.0"
             },
-            "time": "2024-04-16T11:41:31+00:00"
+            "time": "2024-07-08T12:43:31+00:00"
         },
         {
             "name": "nikic/php-parser",

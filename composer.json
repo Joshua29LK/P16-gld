@@ -38,10 +38,10 @@
         "addwish/awext": "^1.1",
         "redchamps/module-core": "^1.2",
         "magefan/module-admin-notifications": "^2.2.2",
-        "multisafepay/magento2": "3.5.1",
         "mirasvit/module-core": "^1.4",
         "edifference/in3-onsite-messaging": "^1.0",
-        "fooman/pdfcustomiser-m2": "8.11.0"
+        "fooman/pdfcustomiser-m2": "8.11.0",
+        "multisafepay/magento2": "3.7.1"
     },
     "require-dev": {
 		"allure-framework/allure-phpunit": "~1.5.0",
