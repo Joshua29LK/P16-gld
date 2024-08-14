@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "4d989fceb5b55943b3243225c717ee3a",
+    "content-hash": "c23b616a7a673fa9a5c2af4454331a8c",
     "packages": [
         {
             "name": "2tvenom/cborencode",
@@ -17817,11 +17817,11 @@
         },
         {
             "name": "mirasvit/module-core",
-            "version": "1.4.35",
+            "version": "1.4.40",
             "dist": {
                 "type": "tar",
-                "url": "https://packages.mirasvit.com/57890:G402HBKJFL/downloads/mirasvit-module-core-1.4.35-0d5bb0.tar",
-                "reference": "360ebac55e5758a0329cd463ad578acd6f471a6f"
+                "url": "https://packages.mirasvit.com/57890:G402HBKJFL/downloads/mirasvit-module-core-1.4.40-a08ceb.tar",
+                "reference": "2cedc63acfcbe5cabe634b61b49cd34f0f4c2356"
             },
             "require": {
                 "magento/framework": "102.0.*|103.0.*",
@@ -17844,19 +17844,19 @@
                 "proprietary"
             ],
             "description": "Mirasvit Core",
-            "time": "2024-04-18T14:52:23+00:00"
+            "time": "2024-08-09T13:06:49+00:00"
         },
         {
             "name": "mirasvit/module-feed",
-            "version": "1.4.4",
+            "version": "1.4.10",
             "dist": {
                 "type": "tar",
-                "url": "https://packages.mirasvit.com/57890:G402HBKJFL/downloads/mirasvit-module-feed-1.4.4-d9fd86.tar",
-                "reference": "c999ce9600500f4deb2b992662fb505e65f84837"
+                "url": "https://packages.mirasvit.com/57890:G402HBKJFL/downloads/mirasvit-module-feed-1.4.10-3b5a86.tar",
+                "reference": "991173e516e4edc5f6a115151232bb507522a41a"
             },
             "require": {
                 "magento/framework": "102.0.*|103.0.*",
-                "mirasvit/module-core": "dev-master|>=1.4.34",
+                "mirasvit/module-core": "dev-master|>=1.4.40",
                 "mirasvit/module-report": "dev-master|~1.4.1",
                 "zf1/zend-reflection": "*"
             },
@@ -17873,7 +17873,7 @@
                 "proprietary"
             ],
             "description": "Advanced Product Feeds",
-            "time": "2024-04-26T09:53:25+00:00"
+            "time": "2024-08-09T13:40:36+00:00"
         },
         {
             "name": "mirasvit/module-report",

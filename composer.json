@@ -12,7 +12,7 @@
         "magento/product-community-edition": "2.4.5-p1",
         "composer/composer": "@alpha",
         "magento/data-migration-tool": "2.4.5",
-        "mirasvit/module-feed": "1.4.4",
+        "mirasvit/module-feed": "1.4.10",
         "mirasvit/module-cache-warmer": "1.9.10",
         "gmostafa/php-graphql-client": "^1.13",
         "dealer4dealer/xcore-magento2": "2.10.0",
