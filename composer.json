@@ -15,7 +15,7 @@
         "mirasvit/module-feed": "1.4.4",
         "mirasvit/module-cache-warmer": "1.9.10",
         "gmostafa/php-graphql-client": "^1.13",
-        "dealer4dealer/xcore-magento2": "2.9.0",
+        "dealer4dealer/xcore-magento2": "2.10.0",
         "dhlparcel/magento2-plugin": "1.0.46",
         "laminas/laminas-dependency-plugin": "^2.2",
         "swissup/module-marketplace": "^1.10",

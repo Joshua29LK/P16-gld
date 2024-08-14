@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "2c3b3e5dcbfc4196fda292cdc0baf1b4",
+    "content-hash": "2791987a1edbb757a89b2b3f598032ed",
     "packages": [
         {
             "name": "2tvenom/cborencode",
@@ -1402,16 +1402,16 @@
         },
         {
             "name": "dealer4dealer/xcore-magento2",
-            "version": "2.9.0",
+            "version": "2.10.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/dealer4dealer/magento2-restapi.git",
-                "reference": "7a7b88c56ae8cb8f4003dbf06e50d4a5f3764315"
+                "reference": "36b3063aa5a199597badbba6041afa86c9c87e7e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dealer4dealer/magento2-restapi/zipball/7a7b88c56ae8cb8f4003dbf06e50d4a5f3764315",
-                "reference": "7a7b88c56ae8cb8f4003dbf06e50d4a5f3764315",
+                "url": "https://api.github.com/repos/dealer4dealer/magento2-restapi/zipball/36b3063aa5a199597badbba6041afa86c9c87e7e",
+                "reference": "36b3063aa5a199597badbba6041afa86c9c87e7e",
                 "shasum": ""
             },
             "require": {
@@ -1439,9 +1439,9 @@
             "description": "This module extends the rest api of Magento2 and is needed for the usage of the xCore.",
             "support": {
                 "issues": "https://github.com/dealer4dealer/magento2-restapi/issues",
-                "source": "https://github.com/dealer4dealer/magento2-restapi/tree/2.9.0"
+                "source": "https://github.com/dealer4dealer/magento2-restapi/tree/2.10.0"
             },
-            "time": "2024-01-15T11:53:26+00:00"
+            "time": "2024-07-25T13:20:22+00:00"
         },
         {
             "name": "dhlparcel/magento2-plugin",
