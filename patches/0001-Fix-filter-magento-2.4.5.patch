@@ -1,0 +1,46 @@
+From d1bb0b372fd40503f88813b38f0c99196c850c23 Mon Sep 17 00:00:00 2001
+From: nvt <nvt@medeka.nl>
+Date: Wed, 24 Jul 2024 10:53:21 +0200
+Subject: [PATCH] Fix filter magento 2.4.5
+
+---
+ .../Fulltext/Collection/SearchResultApplier.php       | 11 +++++++++--
+ 1 file changed, 9 insertions(+), 2 deletions(-)
+
+diff --git a/Model/ResourceModel/Fulltext/Collection/SearchResultApplier.php b/Model/ResourceModel/Fulltext/Collection/SearchResultApplier.php
+index 97cb92a..1ad30b7 100644
+--- a/Model/ResourceModel/Fulltext/Collection/SearchResultApplier.php
++++ b/Model/ResourceModel/Fulltext/Collection/SearchResultApplier.php
+@@ -211,7 +211,6 @@ class SearchResultApplier implements SearchResultApplierInterface
+         $searchCriteria = $this->searchResult->getSearchCriteria();
+         $sortOrders = $searchCriteria->getSortOrders() ?? [];
+         $sortOrders = array_merge(['is_salable' => \Magento\Framework\DB\Select::SQL_DESC], $sortOrders);
+-
+         $connection = $this->collection->getConnection();
+         $query = clone $connection->select()
+             ->reset(\Magento\Framework\DB\Select::ORDER)
+@@ -231,6 +230,14 @@ class SearchResultApplier implements SearchResultApplierInterface
+             . ' AND cat_index.store_id = ' . $storeId,
+             ['cat_index.position']
+         );
++
++        $productIds = [];
++        foreach ($this->searchResult->getItems() as $item) {
++            $productIds[] = $item->getId();
++        }
++
++        $query->where('e.entity_id IN(?)', $productIds);
++
+         foreach ($sortOrders as $field => $dir) {
+             if ($field === 'name') {
+                 $entityTypeId = $this->collection->getEntity()->getTypeId();
+@@ -283,4 +290,4 @@ class SearchResultApplier implements SearchResultApplierInterface
+             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+         );
+     }
+-}
++}
+\ No newline at end of file
+-- 
+2.30.2
+

@@ -1,0 +1,21 @@
+From 73c9537334ca27dec834e44454219bf910f12442 Mon Sep 17 00:00:00 2001
+From: nvt <nvt@medeka.nl>
+Date: Wed, 24 Jul 2024 10:48:34 +0200
+Subject: [PATCH] magento security patch for 34102 csv luma
+
+---
+ i18n/en_US.csv | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/i18n/en_US.csv b/i18n/en_US.csv
+index 7bf9e0a..00493cc 100644
+--- a/i18n/en_US.csv
++++ b/i18n/en_US.csv
+@@ -54,3 +54,4 @@ Footer,Footer
+ "Update to your %store_name shipment","Update to your %store_name shipment"
+ "Address Book","Address Book"
+ "Account Information","Account Information"
++"Invalid data type","Invalid data type"
+-- 
+2.30.2
+

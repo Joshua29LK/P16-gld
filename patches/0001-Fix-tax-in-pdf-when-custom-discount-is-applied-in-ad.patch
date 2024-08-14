@@ -1,0 +1,26 @@
+From 29739e6cffb5f7c8ad40b9282d657f26d807bb48 Mon Sep 17 00:00:00 2001
+From: nvt <nvt@medeka.nl>
+Date: Wed, 24 Jul 2024 10:06:40 +0200
+Subject: [PATCH] Fix tax in pdf when custom discount is applied in admin
+ orders
+
+---
+ src/Block/Totals.php | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/Block/Totals.php b/src/Block/Totals.php
+index a507817..7055672 100644
+--- a/src/Block/Totals.php
++++ b/src/Block/Totals.php
+@@ -130,7 +130,7 @@ class Totals extends \Fooman\PdfCore\Block\Pdf\Block
+     private function getFixedTaxTotals($total)
+     {
+         $totalsReturn = [];
+-        $fullTaxInfo = $total->getFullTaxInfo();
++        $fullTaxInfo = [];
+ 
+         foreach ($fullTaxInfo as $taxLine) {
+             $line = [];
+-- 
+2.30.2
+

@@ -41,7 +41,8 @@
         "mirasvit/module-core": "^1.4",
         "edifference/in3-onsite-messaging": "^1.0",
         "fooman/pdfcustomiser-m2": "8.11.0",
-        "multisafepay/magento2": "3.7.1"
+        "multisafepay/magento2": "3.7.1",
+        "cweagans/composer-patches": "^1.7"
     },
     "require-dev": {
 		"allure-framework/allure-phpunit": "~1.5.0",
@@ -137,7 +138,39 @@
         }
     },
     "extra": {
-        "magento-force": "override"
+        "magento-force": "override",
+        "patches": {
+            "fooman/pdfcustomiser-implementation-m2": {
+                "Fix tax in pdf when custom discount is applied in admin orders": "patches/0001-Fix-tax-in-pdf-when-custom-discount-is-applied-in-ad.patch"
+            },
+			"fooman/printorderpdf-implementation-m2": {
+                "Tranlate Print into Print inkooporder": "patches/0001-Tranlate-Print-into-Print-inkooporder.patch"
+            },
+			"magento/framework": {
+                "magento security patch for 34102": "patches/0001-magento-security-patch-for-34102.patch"
+            },
+			"magento/theme-frontend-blank": {
+                "magento security patch for 34102 csv blank": "patches/0001-magento-security-patch-for-34102-csv-blank.patch"
+            },
+			"magento/theme-frontend-luma": {
+                "magento security patch for 34102 csv luma": "patches/0001-magento-security-patch-for-34102-csv-luma.patch"
+            },
+			"magento/module-elasticsearch": {
+                "Fix filter magento 2.4.5": "patches/0001-Fix-filter-magento-2.4.5.patch"
+            },
+			"magento/module-quote": {
+                "Add customer group Not logged in to guest orders": "patches/0001-Add-customer-group-Not-logged-in-to-guest-orders.patch"
+            },
+			"magento/module-sales": {
+                "Remove pdf print order actions": "patches/0001-Remove-pdf-print-order-actions.patch"
+            },
+			"magento/module-tax": {
+                "Fix for additional pricing in custom- and bundle options php8": "patches/0001-Fix-for-additional-pricing-in-custom-and-bundle-opti.patch"
+            },
+			"magento/module-ui": {
+                "Fix drag & drop feature in product management sorting order of custom options": "patches/0001-Fix-drag-drop-feature-in-product-management-sorting-.patch"
+            }
+		}
     },
     "config": {
         "allow-plugins": {
@@ -146,7 +179,8 @@
             "magento/inventory-composer-installer": true,
             "laminas/laminas-dependency-plugin": true,
             "php-http/discovery": true,
-            "dealerdirect/phpcodesniffer-composer-installer": true
+            "dealerdirect/phpcodesniffer-composer-installer": true,
+            "cweagans/composer-patches": true
         }
     }
 }

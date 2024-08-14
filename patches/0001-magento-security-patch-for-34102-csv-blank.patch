@@ -1,0 +1,21 @@
+From 73cea0d6414461a30653c8d10796aaa8b4908711 Mon Sep 17 00:00:00 2001
+From: nvt <nvt@medeka.nl>
+Date: Wed, 24 Jul 2024 10:43:56 +0200
+Subject: [PATCH] magento security patch for 34102 csv blank
+
+---
+ i18n/en_US.csv | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/i18n/en_US.csv b/i18n/en_US.csv
+index a491a56..5e8bef7 100644
+--- a/i18n/en_US.csv
++++ b/i18n/en_US.csv
+@@ -4,3 +4,4 @@ Summary,Summary
+ Menu,Menu
+ Account,Account
+ Settings,Settings
++"Invalid data type","Invalid data type"
+-- 
+2.30.2
+

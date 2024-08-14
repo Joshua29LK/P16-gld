@@ -1,0 +1,24 @@
+From 23f234b48f393700dbfbc4c7afb7497ef4005625 Mon Sep 17 00:00:00 2001
+From: nvt <nvt@medeka.nl>
+Date: Wed, 24 Jul 2024 12:27:52 +0200
+Subject: [PATCH] Fix for additional pricing in custom- and bundle options php8
+
+---
+ Pricing/Render/Adjustment.php | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/Pricing/Render/Adjustment.php b/Pricing/Render/Adjustment.php
+index 0e5c619..06f4e02 100644
+--- a/Pricing/Render/Adjustment.php
++++ b/Pricing/Render/Adjustment.php
+@@ -185,6 +185,6 @@ class Adjustment extends AbstractAdjustment
+     {
+         return $this->amountRender->getPriceType() === 'finalPrice'
+             ? 'basePrice'
+-            : 'base' . ucfirst($this->amountRender->getPriceType());
++            : 'base' . ucfirst($this->amountRender->getPriceType() ?? '');
+     }
+ }
+-- 
+2.30.2
+

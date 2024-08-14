@@ -1,0 +1,25 @@
+From 000e6f60458a07d351a500f3b22127bc48c497ee Mon Sep 17 00:00:00 2001
+From: nvt <nvt@medeka.nl>
+Date: Wed, 24 Jul 2024 10:26:50 +0200
+Subject: [PATCH] Tranlate Print into Print inkooporder
+
+---
+ src/Block/Adminhtml/PrintOrderButton.php | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/Block/Adminhtml/PrintOrderButton.php b/src/Block/Adminhtml/PrintOrderButton.php
+index 3377bee..6e7aedd 100644
+--- a/src/Block/Adminhtml/PrintOrderButton.php
++++ b/src/Block/Adminhtml/PrintOrderButton.php
+@@ -37,7 +37,7 @@ class PrintOrderButton extends \Magento\Backend\Block\Widget\Container
+         $this->addButton(
+             'fooman_print',
+             [
+-                'label'   => __('Print'),
++                'label'   => __('Print inkooporder'),
+                 'class'   => 'print',
+                 'onclick' => 'setLocation(\'' . $this->getPdfPrintUrl() . '\')'
+             ]
+-- 
+2.30.2
+
