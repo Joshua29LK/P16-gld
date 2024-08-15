@@ -81,7 +81,7 @@ define(
              */
             validate: function () {
                 var form = '#discount-form';
-                return additionalValidators.validate() && $(form).validation() && $(form).validation('isValid');
+                return $(form).validation() && $(form).validation('isValid');
             }
         });
     }
