@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "3ad3582c666e5e7086920200476d0408",
+    "content-hash": "8d79ea0c37ef726317dba14892243eb5",
     "packages": [
         {
             "name": "2tvenom/cborencode",
@@ -20145,6 +20145,36 @@
             ],
             "description": "This extension allows you to exclude any URL from XML sitemap.",
             "time": "2022-03-17T12:28:29+00:00"
+        },
+        {
+            "name": "redchamps/module-weight-display",
+            "version": "1.0.3",
+            "source": {
+                "type": "git",
+                "url": "git@bitbucket.org:redchampsTeam/weight-display.git",
+                "reference": "a390e8e61c2b6b616019d1620c4fe6be4443d439"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://repo.redchamps.com//dist/redchamps/module-weight-display/redchamps-module-weight-display-1.0.3-07ae4c.zip",
+                "reference": "a390e8e61c2b6b616019d1620c4fe6be4443d439",
+                "shasum": "3e0f5877804ea5a70308a54fc8f33e5cca99f3ce"
+            },
+            "require": {
+                "magento/module-catalog": "*",
+                "redchamps/module-core": "*"
+            },
+            "type": "magento2-module",
+            "autoload": {
+                "psr-4": {
+                    "RedChamps\\WeightDisplay\\": ""
+                },
+                "files": [
+                    "registration.php"
+                ]
+            },
+            "description": "This extension will display weight on cart page and shipping step.",
+            "time": "2024-08-09T07:58:26+00:00"
         },
         {
             "name": "rosell-dk/exec-with-fallback",
