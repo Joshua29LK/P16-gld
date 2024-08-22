@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "cc7ce31be8fd77b86cb37d1026e4da3e",
+    "content-hash": "8d79ea0c37ef726317dba14892243eb5",
     "packages": [
         {
             "name": "2tvenom/cborencode",
@@ -1351,6 +1351,54 @@
             "time": "2022-02-24T20:20:32+00:00"
         },
         {
+            "name": "cweagans/composer-patches",
+            "version": "1.7.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/cweagans/composer-patches.git",
+                "reference": "e190d4466fe2b103a55467dfa83fc2fecfcaf2db"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/cweagans/composer-patches/zipball/e190d4466fe2b103a55467dfa83fc2fecfcaf2db",
+                "reference": "e190d4466fe2b103a55467dfa83fc2fecfcaf2db",
+                "shasum": ""
+            },
+            "require": {
+                "composer-plugin-api": "^1.0 || ^2.0",
+                "php": ">=5.3.0"
+            },
+            "require-dev": {
+                "composer/composer": "~1.0 || ~2.0",
+                "phpunit/phpunit": "~4.6"
+            },
+            "type": "composer-plugin",
+            "extra": {
+                "class": "cweagans\\Composer\\Patches"
+            },
+            "autoload": {
+                "psr-4": {
+                    "cweagans\\Composer\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Cameron Eagans",
+                    "email": "me@cweagans.net"
+                }
+            ],
+            "description": "Provides a way to patch Composer packages.",
+            "support": {
+                "issues": "https://github.com/cweagans/composer-patches/issues",
+                "source": "https://github.com/cweagans/composer-patches/tree/1.7.3"
+            },
+            "time": "2022-12-20T22:53:13+00:00"
+        },
+        {
             "name": "dasprid/enum",
             "version": "1.0.5",
             "source": {
@@ -1402,16 +1450,16 @@
         },
         {
             "name": "dealer4dealer/xcore-magento2",
-            "version": "2.9.0",
+            "version": "2.10.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/dealer4dealer/magento2-restapi.git",
-                "reference": "7a7b88c56ae8cb8f4003dbf06e50d4a5f3764315"
+                "reference": "36b3063aa5a199597badbba6041afa86c9c87e7e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dealer4dealer/magento2-restapi/zipball/7a7b88c56ae8cb8f4003dbf06e50d4a5f3764315",
-                "reference": "7a7b88c56ae8cb8f4003dbf06e50d4a5f3764315",
+                "url": "https://api.github.com/repos/dealer4dealer/magento2-restapi/zipball/36b3063aa5a199597badbba6041afa86c9c87e7e",
+                "reference": "36b3063aa5a199597badbba6041afa86c9c87e7e",
                 "shasum": ""
             },
             "require": {
@@ -1439,22 +1487,22 @@
             "description": "This module extends the rest api of Magento2 and is needed for the usage of the xCore.",
             "support": {
                 "issues": "https://github.com/dealer4dealer/magento2-restapi/issues",
-                "source": "https://github.com/dealer4dealer/magento2-restapi/tree/2.9.0"
+                "source": "https://github.com/dealer4dealer/magento2-restapi/tree/2.10.0"
             },
-            "time": "2024-01-15T11:53:26+00:00"
+            "time": "2024-07-25T13:20:22+00:00"
         },
         {
             "name": "dhlparcel/magento2-plugin",
-            "version": "1.0.46",
+            "version": "1.0.49",
             "source": {
                 "type": "git",
                 "url": "https://github.com/dhlparcel/plugin-magento2-release.git",
-                "reference": "70ce72c710e719d7cbaeda5a5160fff9bbf52714"
+                "reference": "d9294115e5e475f35b3a49797f1b2469e7815437"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dhlparcel/plugin-magento2-release/zipball/70ce72c710e719d7cbaeda5a5160fff9bbf52714",
-                "reference": "70ce72c710e719d7cbaeda5a5160fff9bbf52714",
+                "url": "https://api.github.com/repos/dhlparcel/plugin-magento2-release/zipball/d9294115e5e475f35b3a49797f1b2469e7815437",
+                "reference": "d9294115e5e475f35b3a49797f1b2469e7815437",
                 "shasum": ""
             },
             "require": {
@@ -1483,9 +1531,9 @@
             "description": "DHL Parcel plugin for Magento 2",
             "support": {
                 "issues": "https://github.com/dhlparcel/plugin-magento2-release/issues",
-                "source": "https://github.com/dhlparcel/plugin-magento2-release/tree/v1.0.46"
+                "source": "https://github.com/dhlparcel/plugin-magento2-release/tree/v1.0.49"
             },
-            "time": "2024-02-26T11:48:05+00:00"
+            "time": "2024-07-19T13:16:03+00:00"
         },
         {
             "name": "dotsquares/module-advance-discount",
@@ -17738,11 +17786,11 @@
         },
         {
             "name": "mirasvit/module-cache-warmer",
-            "version": "1.9.7",
+            "version": "1.9.10",
             "dist": {
                 "type": "tar",
-                "url": "https://packages.mirasvit.com/43177:WBJ0IVK65P/downloads/mirasvit-module-cache-warmer-1.9.7-d66102.tar",
-                "reference": "8f5bb1bd9e8e4dff6044330b9e5faa945d627113"
+                "url": "https://packages.mirasvit.com/43177:WBJ0IVK65P/downloads/mirasvit-module-cache-warmer-1.9.10-a4ccf2.tar",
+                "reference": "2c2f3dd15fbc5dd1ffc8d917862106869e2d9eb6"
             },
             "require": {
                 "magento/framework": "102.0.*|103.0.*",
@@ -17765,15 +17813,15 @@
                 "proprietary"
             ],
             "description": "Cache Warmer",
-            "time": "2024-03-27T10:34:16+00:00"
+            "time": "2024-08-05T14:12:41+00:00"
         },
         {
             "name": "mirasvit/module-core",
-            "version": "1.4.35",
+            "version": "1.4.40",
             "dist": {
                 "type": "tar",
-                "url": "https://packages.mirasvit.com/57890:G402HBKJFL/downloads/mirasvit-module-core-1.4.35-0d5bb0.tar",
-                "reference": "360ebac55e5758a0329cd463ad578acd6f471a6f"
+                "url": "https://packages.mirasvit.com/57890:G402HBKJFL/downloads/mirasvit-module-core-1.4.40-a08ceb.tar",
+                "reference": "2cedc63acfcbe5cabe634b61b49cd34f0f4c2356"
             },
             "require": {
                 "magento/framework": "102.0.*|103.0.*",
@@ -17796,19 +17844,19 @@
                 "proprietary"
             ],
             "description": "Mirasvit Core",
-            "time": "2024-04-18T14:52:23+00:00"
+            "time": "2024-08-09T13:06:49+00:00"
         },
         {
             "name": "mirasvit/module-feed",
-            "version": "1.4.4",
+            "version": "1.4.10",
             "dist": {
                 "type": "tar",
-                "url": "https://packages.mirasvit.com/57890:G402HBKJFL/downloads/mirasvit-module-feed-1.4.4-d9fd86.tar",
-                "reference": "c999ce9600500f4deb2b992662fb505e65f84837"
+                "url": "https://packages.mirasvit.com/57890:G402HBKJFL/downloads/mirasvit-module-feed-1.4.10-3b5a86.tar",
+                "reference": "991173e516e4edc5f6a115151232bb507522a41a"
             },
             "require": {
                 "magento/framework": "102.0.*|103.0.*",
-                "mirasvit/module-core": "dev-master|>=1.4.34",
+                "mirasvit/module-core": "dev-master|>=1.4.40",
                 "mirasvit/module-report": "dev-master|~1.4.1",
                 "zf1/zend-reflection": "*"
             },
@@ -17825,7 +17873,7 @@
                 "proprietary"
             ],
             "description": "Advanced Product Feeds",
-            "time": "2024-04-26T09:53:25+00:00"
+            "time": "2024-08-09T13:40:36+00:00"
         },
         {
             "name": "mirasvit/module-report",
@@ -18056,23 +18104,23 @@
         },
         {
             "name": "multisafepay/magento2",
-            "version": "3.5.1",
+            "version": "3.7.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/MultiSafepay/magento2.git",
-                "reference": "a7094485dbfb89635cf79cb362b3472aa2f560ef"
+                "reference": "cce501a5c715b2a2206da8c3597126d69db41580"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/MultiSafepay/magento2/zipball/a7094485dbfb89635cf79cb362b3472aa2f560ef",
-                "reference": "a7094485dbfb89635cf79cb362b3472aa2f560ef",
+                "url": "https://api.github.com/repos/MultiSafepay/magento2/zipball/cce501a5c715b2a2206da8c3597126d69db41580",
+                "reference": "cce501a5c715b2a2206da8c3597126d69db41580",
                 "shasum": ""
             },
             "require": {
-                "multisafepay/magento2-adminhtml": "1.27.1",
+                "multisafepay/magento2-adminhtml": "1.29.0",
                 "multisafepay/magento2-catalog-inventory": "1.0.3",
-                "multisafepay/magento2-core": "3.5.1",
-                "multisafepay/magento2-frontend": "2.5.1",
+                "multisafepay/magento2-core": "3.7.1",
+                "multisafepay/magento2-frontend": "2.6.2",
                 "multisafepay/magento2-msi": "1.0.2"
             },
             "type": "metapackage",
@@ -18083,22 +18131,22 @@
             "description": "MultiSafepay module suite for Magento 2",
             "support": {
                 "issues": "https://github.com/MultiSafepay/magento2/issues",
-                "source": "https://github.com/MultiSafepay/magento2/tree/3.5.1"
+                "source": "https://github.com/MultiSafepay/magento2/tree/3.7.1"
             },
-            "time": "2024-05-01T13:52:29+00:00"
+            "time": "2024-08-06T11:50:03+00:00"
         },
         {
             "name": "multisafepay/magento2-adminhtml",
-            "version": "1.27.1",
+            "version": "1.29.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/MultiSafepay/magento2-adminhtml.git",
-                "reference": "0e453eb75e708ed4dd4aa43d83cf6af7f2bb69c6"
+                "reference": "6719fa7f38b3f406130b5b06937833362d3f44c3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/MultiSafepay/magento2-adminhtml/zipball/0e453eb75e708ed4dd4aa43d83cf6af7f2bb69c6",
-                "reference": "0e453eb75e708ed4dd4aa43d83cf6af7f2bb69c6",
+                "url": "https://api.github.com/repos/MultiSafepay/magento2-adminhtml/zipball/6719fa7f38b3f406130b5b06937833362d3f44c3",
+                "reference": "6719fa7f38b3f406130b5b06937833362d3f44c3",
                 "shasum": ""
             },
             "require": {
@@ -18107,7 +18155,7 @@
                 "magento/module-backend": "^101.0|^102.0",
                 "magento/module-config": "^101.0",
                 "magento/module-customer": "^102.0|^103.0",
-                "multisafepay/magento2-core": "^3.5.1"
+                "multisafepay/magento2-core": "^3.7"
             },
             "type": "magento2-module",
             "autoload": {
@@ -18125,9 +18173,9 @@
             "description": "MultiSafepay backend module for Magento 2",
             "support": {
                 "issues": "https://github.com/MultiSafepay/magento2-adminhtml/issues",
-                "source": "https://github.com/MultiSafepay/magento2-adminhtml/tree/1.27.1"
+                "source": "https://github.com/MultiSafepay/magento2-adminhtml/tree/1.29.0"
             },
-            "time": "2024-05-01T13:13:13+00:00"
+            "time": "2024-07-08T10:19:48+00:00"
         },
         {
             "name": "multisafepay/magento2-catalog-inventory",
@@ -18171,16 +18219,16 @@
         },
         {
             "name": "multisafepay/magento2-core",
-            "version": "3.5.1",
+            "version": "3.7.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/MultiSafepay/magento2-core.git",
-                "reference": "0cadd0b70b9829778ddf9d9667eb554ed14a19b0"
+                "reference": "131d3ee3419acfed5e3116df3005300c7adb7dca"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/MultiSafepay/magento2-core/zipball/0cadd0b70b9829778ddf9d9667eb554ed14a19b0",
-                "reference": "0cadd0b70b9829778ddf9d9667eb554ed14a19b0",
+                "url": "https://api.github.com/repos/MultiSafepay/magento2-core/zipball/131d3ee3419acfed5e3116df3005300c7adb7dca",
+                "reference": "131d3ee3419acfed5e3116df3005300c7adb7dca",
                 "shasum": ""
             },
             "require": {
@@ -18194,7 +18242,7 @@
                 "magento/module-sales": "^102.0|^103.0",
                 "magento/module-store": "^101.0",
                 "magento/module-vault": "^101.0",
-                "multisafepay/php-sdk": "^5.13",
+                "multisafepay/php-sdk": "^5.14",
                 "nyholm/psr7": "^1.4",
                 "php": ">=7.2",
                 "psr/http-client": "^1.0"
@@ -18222,22 +18270,22 @@
             "description": "MultiSafepay core module for Magento 2",
             "support": {
                 "issues": "https://github.com/MultiSafepay/magento2-core/issues",
-                "source": "https://github.com/MultiSafepay/magento2-core/tree/3.5.1"
+                "source": "https://github.com/MultiSafepay/magento2-core/tree/3.7.1"
             },
-            "time": "2024-05-01T12:35:53+00:00"
+            "time": "2024-08-06T11:49:43+00:00"
         },
         {
             "name": "multisafepay/magento2-frontend",
-            "version": "2.5.1",
+            "version": "2.6.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/MultiSafepay/magento2-frontend.git",
-                "reference": "fd64910ea9319025ed4b5bea8271ddff683f4cfe"
+                "reference": "a4ef9e6c2a24331278d6424fae185706a3a511bc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/MultiSafepay/magento2-frontend/zipball/fd64910ea9319025ed4b5bea8271ddff683f4cfe",
-                "reference": "fd64910ea9319025ed4b5bea8271ddff683f4cfe",
+                "url": "https://api.github.com/repos/MultiSafepay/magento2-frontend/zipball/a4ef9e6c2a24331278d6424fae185706a3a511bc",
+                "reference": "a4ef9e6c2a24331278d6424fae185706a3a511bc",
                 "shasum": ""
             },
             "require": {
@@ -18246,8 +18294,8 @@
                 "magento/module-quote": "^101.0",
                 "magento/module-sales": "^102.0|^103.0",
                 "magento/module-store": "^101.0",
-                "multisafepay/magento2-adminhtml": "^1.27.1",
-                "multisafepay/magento2-core": "^3.5.1"
+                "multisafepay/magento2-adminhtml": "^1.29",
+                "multisafepay/magento2-core": "^3.7.1"
             },
             "type": "magento2-module",
             "autoload": {
@@ -18265,9 +18313,9 @@
             "description": "MultiSafepay frontend module for Magento 2",
             "support": {
                 "issues": "https://github.com/MultiSafepay/magento2-frontend/issues",
-                "source": "https://github.com/MultiSafepay/magento2-frontend/tree/2.5.1"
+                "source": "https://github.com/MultiSafepay/magento2-frontend/tree/2.6.2"
             },
-            "time": "2024-05-01T13:21:48+00:00"
+            "time": "2024-08-06T11:49:50+00:00"
         },
         {
             "name": "multisafepay/magento2-msi",
@@ -18312,16 +18360,16 @@
         },
         {
             "name": "multisafepay/php-sdk",
-            "version": "5.13.0",
+            "version": "5.14.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/MultiSafepay/php-sdk.git",
-                "reference": "b88fa079981d590a70275d528cf52d8fd07affab"
+                "reference": "408f102e3228f072f2c1bcc76ac29a8031415480"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/MultiSafepay/php-sdk/zipball/b88fa079981d590a70275d528cf52d8fd07affab",
-                "reference": "b88fa079981d590a70275d528cf52d8fd07affab",
+                "url": "https://api.github.com/repos/MultiSafepay/php-sdk/zipball/408f102e3228f072f2c1bcc76ac29a8031415480",
+                "reference": "408f102e3228f072f2c1bcc76ac29a8031415480",
                 "shasum": ""
             },
             "require": {
@@ -18359,9 +18407,9 @@
             "description": "MultiSafepay PHP SDK",
             "support": {
                 "issues": "https://github.com/MultiSafepay/php-sdk/issues",
-                "source": "https://github.com/MultiSafepay/php-sdk/tree/5.13.0"
+                "source": "https://github.com/MultiSafepay/php-sdk/tree/5.14.0"
             },
-            "time": "2024-04-16T11:41:31+00:00"
+            "time": "2024-07-08T12:43:31+00:00"
         },
         {
             "name": "nikic/php-parser",
@@ -20097,6 +20145,36 @@
             ],
             "description": "This extension allows you to exclude any URL from XML sitemap.",
             "time": "2022-03-17T12:28:29+00:00"
+        },
+        {
+            "name": "redchamps/module-weight-display",
+            "version": "1.0.3",
+            "source": {
+                "type": "git",
+                "url": "git@bitbucket.org:redchampsTeam/weight-display.git",
+                "reference": "a390e8e61c2b6b616019d1620c4fe6be4443d439"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://repo.redchamps.com//dist/redchamps/module-weight-display/redchamps-module-weight-display-1.0.3-07ae4c.zip",
+                "reference": "a390e8e61c2b6b616019d1620c4fe6be4443d439",
+                "shasum": "3e0f5877804ea5a70308a54fc8f33e5cca99f3ce"
+            },
+            "require": {
+                "magento/module-catalog": "*",
+                "redchamps/module-core": "*"
+            },
+            "type": "magento2-module",
+            "autoload": {
+                "psr-4": {
+                    "RedChamps\\WeightDisplay\\": ""
+                },
+                "files": [
+                    "registration.php"
+                ]
+            },
+            "description": "This extension will display weight on cart page and shipping step.",
+            "time": "2024-08-09T07:58:26+00:00"
         },
         {
             "name": "rosell-dk/exec-with-fallback",

@@ -1,0 +1,47 @@
+From 2c7e61e4508309353d597f946c973e6af93aa6e8 Mon Sep 17 00:00:00 2001
+From: nvt <nvt@medeka.nl>
+Date: Wed, 24 Jul 2024 12:57:33 +0200
+Subject: [PATCH] Fix drag & drop feature in product management sorting order
+ of custom options
+
+---
+ view/base/web/js/dynamic-rows/dnd.js | 11 ++++++-----
+ 1 file changed, 6 insertions(+), 5 deletions(-)
+
+diff --git a/view/base/web/js/dynamic-rows/dnd.js b/view/base/web/js/dynamic-rows/dnd.js
+index c64bcdb..bdef42f 100644
+--- a/view/base/web/js/dynamic-rows/dnd.js
++++ b/view/base/web/js/dynamic-rows/dnd.js
+@@ -124,7 +124,9 @@ define([
+                 originRecord = $(elem).parents('tr').eq(0),
+                 drEl = this.draggableElement,
+                 $table = $(elem).parents('table').eq(0),
+-                $tableWrapper = $table.parent();
++                $tableWrapper = $table.parent(),
++                outerHight =
++                    $table.children('thead').outerHeight() === undefined ? 0 : $table.children('thead').outerHeight();
+ 
+             this.disableScroll();
+             $(recordNode).addClass(this.draggableElementClass);
+@@ -134,9 +136,8 @@ define([
+             drEl.instance = recordNode = this.processingStyles(recordNode, elem);
+             drEl.instanceCtx = this.getRecord(originRecord[0]);
+             drEl.eventMousedownY = this.getPageY(event);
+-            drEl.minYpos =
+-                $table.offset().top - originRecord.offset().top + $table.children('thead').outerHeight();
+-            drEl.maxYpos = drEl.minYpos + $table.children('tbody').outerHeight() - originRecord.outerHeight();
++            drEl.minYpos = $table.offset().top - originRecord.offset().top + outerHight;
++            drEl.maxYpos = drEl.minYpos + ($table.children('tbody').outerHeight() || 0) - originRecord.outerHeight();
+             $tableWrapper.append(recordNode);
+             this.body.on('mousemove touchmove', this.mousemoveHandler);
+             this.body.on('mouseup touchend', this.mouseupHandler);
+@@ -436,4 +437,4 @@ define([
+         }
+ 
+     });
+-});
++});
+\ No newline at end of file
+-- 
+2.30.2
+

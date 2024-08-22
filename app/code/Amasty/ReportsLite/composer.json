@@ -3,12 +3,12 @@
     "description": "Reports Lite by Amasty",
     "require": {
         "php": ">=7.3",
-        "amasty/module-advanced-reports": "*",
-        "amasty/base": ">=1.15.1"
+        "amasty/module-advanced-reports": ">=1.9.5",
+        "amasty/base": ">=1.16.0"
     },
     "homepage": "https://amasty.com/",
     "type": "magento2-module",
-    "version": "1.9.6",
+    "version": "1.10.0",
     "license": [
         "proprietary"
     ],

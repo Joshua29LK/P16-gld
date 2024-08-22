@@ -1,0 +1,35 @@
+From 2afab67a878050114d0b98352b9e23decfaba06c Mon Sep 17 00:00:00 2001
+From: nvt <nvt@medeka.nl>
+Date: Wed, 24 Jul 2024 11:34:25 +0200
+Subject: [PATCH] Add customer group Not logged in to guest orders
+
+---
+ Model/QuoteManagement.php | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
+
+diff --git a/Model/QuoteManagement.php b/Model/QuoteManagement.php
+index 51b6841..7d8cdea 100644
+--- a/Model/QuoteManagement.php
++++ b/Model/QuoteManagement.php
+@@ -424,8 +424,9 @@ class QuoteManagement implements CartManagementInterface
+                 }
+             }
+             $quote->setCustomerIsGuest(true);
+-            $groupId = $customer ? $customer->getGroupId() : GroupInterface::NOT_LOGGED_IN_ID;
+-            $quote->setCustomerGroupId($groupId);
++            $quote->setCustomerGroupId(
++                $quote->getCustomerId() ? $customer->getGroupId() : GroupInterface::NOT_LOGGED_IN_ID
++            );
+         }
+ 
+         $remoteAddress = $this->remoteAddress->getRemoteAddress();
+@@ -743,4 +744,4 @@ class QuoteManagement implements CartManagementInterface
+             throw new \Exception($message, 0, $e);
+         }
+     }
+-}
++}
+\ No newline at end of file
+-- 
+2.30.2
+
