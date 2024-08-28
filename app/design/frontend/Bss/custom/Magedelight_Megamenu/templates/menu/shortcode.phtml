@@ -54,7 +54,7 @@ $randomNumber = random_int(100000, 999999);
 
             //var topMargin;
             $(window).scroll(function () {
-                if ($(window).width() >= 767) {
+                if ($(window).width() >= 992) {
                     if ($(window).scrollTop() > stickyHeaderTop) {
                         $('.shortcodemenu .stickymenu').css({position: 'fixed', top: '0px', 'max-width': menuWidth});
                         $('.stickyalias').css('display', 'block');
@@ -68,10 +68,10 @@ $randomNumber = random_int(100000, 999999);
             $('#shortcode_menu_<?= /* @noEscape */ $randomNumber ?>.section-item-content .menu-container.shortcodemenu .menu > ul > li.dropdown').each(function (e) {
                 $(this).children('a').after('<span class="marker"><i class="icon-caret-down"></i></span>');
             });
-            
+
             var $dropdownsShortCode = jQuery('.mobile_home_menu .section-item-content .menu-container .menu > ul li.dropdown');
             var $mobileMenu = $('.nav-sections .section-item-content .menu-container .menu > ul li.dropdown');
-
+            //
             $dropdownsShortCode.find('span.marker').click(function() {
                 $(this).parent('li').addBack().toggleClass('active');
                 $(this).toggleClass('active').siblings('ul').slideToggle('500');
@@ -82,8 +82,9 @@ $randomNumber = random_int(100000, 999999);
                     icon.removeClass('icon-caret-up').addClass('icon-caret-down');
                 }
             });
-            if ($(window).width() < 768) {
+            if ($(window).width() < 992) {
                 $('.ph-mega-categories-list-lvl-2.megamenu-dropdown').hide();
+                $('.section-item-content .menu-container .menu > ul > li > ul').hide();
                 $dropdownsShortCode.find('a.had_child').click(function (e) {
                     e.preventDefault();
                     $(this).parent('li').toggleClass('active');

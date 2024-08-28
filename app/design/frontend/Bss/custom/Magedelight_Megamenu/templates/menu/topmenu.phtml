@@ -115,7 +115,7 @@ $loginUrl = $block->getUrl('customer/account/login', ['referer' => base64_encode
                 if (nav.length) {
                     var stickyHeaderTop = nav.offset().top;
                     jQuery(window).scroll(function () {
-                        if (jQuery(window).width() >= 767) {
+                        if (jQuery(window).width() >= 991) {
                             if (jQuery(window).scrollTop() > stickyHeaderTop) {
                                 nav.addClass('stuck');
                             } else {
@@ -163,7 +163,7 @@ $loginUrl = $block->getUrl('customer/account/login', ['referer' => base64_encode
         'jquery'
     ], function($){
         $(document).ready( function() {
-            if ($(window).width() >= 768) {
+            if ($(window).width() >= 991) {
                 var parentMenu = $('.ph-mega-categories-list-lvl-1 .icon-caret-right').closest('li');
                 parentMenu.find('ul.megamenu-dropdown').hide();
                 parentMenu.hover(function () {
