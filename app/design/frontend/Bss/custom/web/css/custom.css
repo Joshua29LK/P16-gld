@@ -2280,13 +2280,23 @@ h2 .hint:after {
 }
 @media (min-width: 768px) and (max-width: 991px) {
     .block-search {
-        width: 50% !important;
+        width: 65% !important;
+        padding-left: 40px !important;
     }
     .page-header .panel.wrapper {
         border: none !important;
     }
+    #header_logo {
+        padding-left: 3%;
+    }
+    .minicart-wrapper {
+        right: 10% !important;
+    }
+    .tablet-menu {
+        margin-right: -20% !important;
+    }
     .section-item-content .menu-container .menu > ul > li {
-        display: block !important;
+        display: flow-root !important;
         float: none !important;
     }
     .sections.nav-sections.stuck {
