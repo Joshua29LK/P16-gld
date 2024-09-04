@@ -318,7 +318,7 @@ ul, ol {
 }
 
 .section-item-content .menu-container .menu > ul .with-icon > a {
-    padding: 0 10px;
+    padding: 0 10px !important;
     margin: 0;
     line-height: 80px;
 }
@@ -2332,9 +2332,39 @@ h2 .hint:after {
     .desktop-mobile-title {
         display: none;
     }
+    .mst-searchautocomplete__close {
+        display: block;
+        position: absolute;
+        right: 6px;
+        top: 0;
+        font-weight: bold;
+        color: #999999;
+        font-size: 1.6rem;
+        padding: 10px;
+        line-height: 1rem;
+        cursor: pointer;
+    }
 }
 @media (min-width: 769px) {
     #search_mini_form .ico-search {
         margin-left: 0 !important;
+    }
+}
+@media screen and (orientation: landscape) {
+    .block-search {
+        width: 65% !important;
+        padding-left: 40px !important;
+    }
+    .page-header .panel.wrapper {
+        border: none !important;
+    }
+    #header_logo {
+        padding-left: 3%;
+    }
+    .minicart-wrapper {
+        right: 10% !important;
+    }
+    .tablet-menu {
+        margin-right: -20% !important;
     }
 }
