@@ -2333,7 +2333,7 @@ h2 .hint:after {
         display: none;
     }
     .mst-searchautocomplete__close {
-        display: block;
+        display: block !important;
         position: absolute;
         right: 6px;
         top: 0;
@@ -2366,5 +2366,17 @@ h2 .hint:after {
     }
     .tablet-menu {
         margin-right: -20% !important;
+    }
+    .mst-searchautocomplete__close {
+        display: block;
+        position: absolute;
+        right: 6px;
+        top: 0;
+        font-weight: bold;
+        color: #999999;
+        font-size: 1.6rem;
+        padding: 10px;
+        line-height: 1rem;
+        cursor: pointer;
     }
 }
