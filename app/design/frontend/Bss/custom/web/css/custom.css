@@ -2121,7 +2121,7 @@ h2 .hint:after {
     }
 
     .section-item-content .menu-container .menu > ul .with-icon > a {
-        padding: 0 20px;
+        padding: 0 20px !important;
         font-size: 16px;
         line-height: 60px;
         margin-top: 0;
@@ -2345,6 +2345,20 @@ h2 .hint:after {
         cursor: pointer;
     }
 }
+@media (min-width: 991px) and (max-width: 1200px) {
+    .section-item-content .menu-container .menu.horizontal, .section-item-content .menu-container .menu.horizontal-vertical {
+        max-width: 1200px;
+    }
+
+    .header .nav_custom_header {
+        padding-left: 20px;
+    }
+
+    .header.content {
+        padding: 20px 20px 0 !important;
+    }
+}
+
 @media (min-width: 769px) {
     #search_mini_form .ico-search {
         margin-left: 0 !important;
