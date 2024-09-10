@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "8d79ea0c37ef726317dba14892243eb5",
+    "content-hash": "434ba54494da9bd81e0987ecc5928a8d",
     "packages": [
         {
             "name": "2tvenom/cborencode",
@@ -17759,11 +17759,11 @@
         },
         {
             "name": "magmodules/magento2-channable",
-            "version": "1.18.2",
+            "version": "1.19.0",
             "dist": {
                 "type": "zip",
-                "url": "https://repo.magento.com/archives/magmodules/magento2-channable/magmodules-magento2-channable-1.18.2.0.zip",
-                "shasum": "25bb9bf9d71cdb192eddbdd6b936eb447f13b39b"
+                "url": "https://repo.magento.com/archives/magmodules/magento2-channable/magmodules-magento2-channable-1.19.0.0.zip",
+                "shasum": "349b022993a7b1ab8fda6e95573374ac021b2355"
             },
             "require": {
                 "ext-json": "*",
