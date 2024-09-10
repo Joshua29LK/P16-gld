@@ -1,6 +1,7 @@
 "Not Installed","Not Installed"
 "Instance Registration Key","Instance Registration Key"
 "Add New","Add New"
+subscribeText,subscribeText
 "Incompatibility with 3rd party module %1 found. To avoid possible conflicts, we strongly recommend turning it off with the following command: ""%2"". <a href=""%3"" target=""_blank"">Contact</a> our Support team for more information.","Incompatibility with 3rd party module %1 found. To avoid possible conflicts, we strongly recommend turning it off with the following command: ""%2"". <a href=""%3"" target=""_blank"">Contact</a> our Support team for more information."
 Extension,Extension
 Download,Download
@@ -74,8 +75,8 @@ Unsubscribe,Unsubscribe
 "Invalid Request.","Invalid Request."
 "All Store Views","All Store Views"
 "Entity config not found for given path %1.","Entity config not found for given path %1."
-"Amasty notice: Some Amasty extensions have missing or expired licenses. Please go to <a href=""%1"">Configuration</a> and check the details in the License Status column.","Amasty notice: Some Amasty extensions have missing or expired licenses. Please go to <a href=""%1"">Configuration</a> and check the details in the License Status column."
-"Amasty notice: Some Amasty subscriptions have been canceled or have limited access. Please go to <a href=""%1"">Configuration</a> and check the details in the License Status column.","Amasty notice: Some Amasty subscriptions have been canceled or have limited access. Please go to <a href=""%1"">Configuration</a> and check the details in the License Status column."
+"Amasty notice: Some Amasty extensions are being used without a valid license. To resolve this issue, please visit <a href=""%1"">Configuration</a> and review the details in the License Status column.","Amasty notice: Some Amasty extensions are being used without a valid license. To resolve this issue, please visit <a href=""%1"">Configuration</a> and review the details in the License Status column."
+"Amasty notice: Some Amasty subscriptions can be renewed due to inactive statuses. For more information, please refer to the License Status column in the <a href=""%1"">Configuration</a> section.","Amasty notice: Some Amasty subscriptions can be renewed due to inactive statuses. For more information, please refer to the License Status column in the <a href=""%1"">Configuration</a> section."
 "Amasty notice: Please go to <a href=""%1"">Configuration</a> and register your instance to avoid unlicensed product usage.","Amasty notice: Please go to <a href=""%1"">Configuration</a> and register your instance to avoid unlicensed product usage."
 Action,Action
 Add,Add
@@ -133,6 +134,14 @@ Actions,Actions
 None,None
 "Get Updates","Get Updates"
 "How to Update?","How to Update?"
+Upload,Upload
+"Select from Gallery","Select from Gallery"
+"Maximum file size","Maximum file size"
+"Allowed file types","Allowed file types"
+"Browse to find or drag image here","Browse to find or drag image here"
+"Click here or drag and drop to add files.","Click here or drag and drop to add files."
+"Subscribe to Unlock","Subscribe to Unlock"
+Close,Close
 "Close Current Menu List","Close Current Menu List"
 "Open ","Open "
 Search,Search
@@ -144,11 +153,14 @@ Amasty,Amasty
 "Settings & Notifications","Settings & Notifications"
 "Instance Registration","Instance Registration"
 "Production Environment","Production Environment"
+"In case you have any questions regarding the license registration process, refer to this detailed <a href=""https://support.amasty.com/portal/en/kb/articles/i-see-messages-in-my-account-and-admin-area-that-license-registration-is-required-what-should-i-do"" target=""_blank"">instruction</a>.","In case you have any questions regarding the license registration process, refer to this detailed <a href=""https://support.amasty.com/portal/en/kb/articles/i-see-messages-in-my-account-and-admin-area-that-license-registration-is-required-what-should-i-do"" target=""_blank"">instruction</a>."
 "Installed Extensions","Installed Extensions"
 Notifications,Notifications
 "Update Frequency","Update Frequency"
 "I want to Receive Notifications about:","I want to Receive Notifications about:"
 "Enable Feature Suggestions in Config?","Enable Feature Suggestions in Config?"
+"Enable License Notifications","Enable License Notifications"
+"Disable this setting to remove Magento system notifications about license state once all the installed Amasty products are registered.","Disable this setting to remove Magento system notifications about license state once all the installed Amasty products are registered."
 Menu,Menu
 "Enable Amasty Menu Item","Enable Amasty Menu Item"
 "System Information","System Information"

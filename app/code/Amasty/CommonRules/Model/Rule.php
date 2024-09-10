@@ -86,9 +86,13 @@ class Rule extends \Magento\Rule\Model\AbstractModel
      */
     public function match($rate)
     {
-        $selectedCarriers = explode(',', (string)$this->getCarriers());
+        if (is_string($this->getCarriers())) {
+            $selectedCarriers = explode(',', (string)$this->getCarriers());
+        } else {
+            $selectedCarriers = $this->getCarriers();
+        }
 
-        if (in_array($rate->getCarrier(), $selectedCarriers)) {
+        if (in_array($rate->getCarrier(), $selectedCarriers ?? [])) {
             return true;
         }
         $methods = $this->getMethods();
@@ -96,9 +100,11 @@ class Rule extends \Magento\Rule\Model\AbstractModel
         if (!$methods) {
             return false;
         }
-        $methods = array_unique(explode(',', $methods));
+        if (is_string($methods)) {
+            $methods = array_unique(explode(',', $methods));
+        }
         $rateCode = $rate->getCarrier();
-        if (strpos($rate->getCarrier(), '_') === false) {
+        if (strpos((string)$rate->getCarrier(), '_') === false) {
             $rateCode = $rate->getCarrier() . '_' . $rate->getMethod();
         }
 

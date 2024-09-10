@@ -253,6 +253,51 @@
                 </select>
             </formElements>
         </field>
+
+        <field name="priority" template="Amasty_Base/form/promo-field" class="Amasty\Shiprestriction\Ui\Form\Rule\SkipSubsequent">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="isPromo" xsi:type="boolean">true</item>
+                    <item name="promoLink" xsi:type="string"><![CDATA[
+                        https://amasty.com/amcustomer/account/products/?utm_source=extension&utm_medium=backend&utm_campaign=subscribe_shippingrestrictions
+                    ]]></item>
+                    <item name="label" xsi:type="string" translate="true">Priority</item>
+                    <item name="dataType" xsi:type="string">text</item>
+                    <item name="formElement" xsi:type="string">input</item>
+                    <item name="source" xsi:type="string">rule</item>
+                    <item name="dataScope" xsi:type="string">priority</item>
+                    <item name="validation" xsi:type="array">
+                        <item name="validate-zero-or-greater" xsi:type="boolean">true</item>
+                        <item name="validate-digits" xsi:type="boolean">true</item>
+                    </item>
+                </item>
+            </argument>
+        </field>
+        <field name="skip_subsequent" template="Amasty_Base/form/promo-field" class="Amasty\Shiprestriction\Ui\Form\Rule\SkipSubsequent">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="isPromo" xsi:type="boolean">true</item>
+                    <item name="promoLink" xsi:type="string"><![CDATA[
+                        https://amasty.com/amcustomer/account/products/?utm_source=extension&utm_medium=backend&utm_campaign=subscribe_shippingrestrictions
+                    ]]></item>
+                    <item name="label" xsi:type="string" translate="true">Discard Subsequent Rules</item>
+                    <item name="visible" xsi:type="boolean">true</item>
+                    <item name="dataType" xsi:type="string">boolean</item>
+                    <item name="formElement" xsi:type="string">checkbox</item>
+                    <item name="dataScope" xsi:type="string">skip_subsequent</item>
+                    <item name="prefer" xsi:type="string">toggle</item>
+                    <item name="valueMap" xsi:type="array">
+                        <item name="true" xsi:type="number">1</item>
+                        <item name="false" xsi:type="number">0</item>
+                    </item>
+                    <item name="toggleLabels" xsi:type="array">
+                        <item name="on" xsi:type="string" translate="true">Active</item>
+                        <item name="off" xsi:type="string" translate="true">Inactive</item>
+                    </item>
+                    <item name="default" xsi:type="number">0</item>
+                </item>
+            </argument>
+        </field>
     </fieldset>
     <fieldset name="conditions">
         <argument name="data" xsi:type="array">

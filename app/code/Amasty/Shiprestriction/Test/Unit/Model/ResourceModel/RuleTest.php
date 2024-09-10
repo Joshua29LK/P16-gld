@@ -35,6 +35,6 @@ class RuleTest extends \PHPUnit\Framework\TestCase
         $object->setData('methods', ['test']);
 
         $this->invokeMethod($model, '_beforeSave', [$object]);
-        $this->assertEquals('test', $object->getCarriers());
+        $this->assertEquals(['test'], $object->getCarriers());
     }
 }

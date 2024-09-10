@@ -19,7 +19,7 @@ class NewConditionHtml extends \Amasty\CommonRules\Controller\Adminhtml\Rule\Abs
      */
     public const ADMIN_RESOURCE = 'Amasty_Shiprestriction::rule';
 
-    public function execute()
+    public function execute(): void
     {
         $this->newConditions('conditions');
     }

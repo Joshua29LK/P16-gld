@@ -42,7 +42,7 @@ class Rule extends \Amasty\CommonRules\Model\ResourceModel\AbstractRule
                             unset($value[$key]);
                         }
                     }
-                    $object->setCarriers(implode(',', $carriers));
+                    $object->setCarriers($carriers);
                 }
 
                 $object->setData($field, implode(',', $value));

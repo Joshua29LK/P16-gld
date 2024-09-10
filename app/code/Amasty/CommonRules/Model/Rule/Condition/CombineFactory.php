@@ -21,7 +21,9 @@ class CombineFactory extends \Magento\SalesRule\Model\Rule\Condition\CombineFact
         \Magento\Framework\ObjectManagerInterface $objectManager,
         $instanceName = ConditionBuilder::AMASTY_COMMON_RULES_PATH_TO_CONDITIONS . 'Combine'
     ) {
+        // @phpstan-ignore-next-line
         $this->_objectManager = $objectManager;
+        // @phpstan-ignore-next-line
         $this->_instanceName = $instanceName;
     }
 }

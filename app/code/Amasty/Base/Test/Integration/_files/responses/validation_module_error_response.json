@@ -16,15 +16,15 @@
   "modules": [
     {
       "instanceKey": "b1b01ea4-e824-44f9-bc0d-9d7a7457b90c",
-      "code": "Amasty_Geoip",
-      "version": "1.5.5",
+      "code": "Amasty_Gdpr",
+      "version": "2.6.7",
       "verifyStatus": {
-        "status": "active",
-        "type": "success"
+        "status": "limited",
+        "type": "warning"
       },
       "messages": [{
-        "type": "success",
-        "content": "Your license for the product is valid, granting you access to all product updates."
+        "type": "warning",
+        "content": "Access to product updates is limited without an active subscription."
       }]
     },
     {

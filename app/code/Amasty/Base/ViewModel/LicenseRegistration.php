@@ -11,11 +11,13 @@ declare(strict_types=1);
 namespace Amasty\Base\ViewModel;
 
 use Amasty\Base\Block\Adminhtml\InstanceRegistrationMessages;
+use Amasty\Base\Model\Config;
 use Amasty\Base\Model\SysInfo\Command\LicenceService\GetCurrentLicenseValidation;
 use Amasty\Base\Model\SysInfo\Data\LicenseValidation;
 use Amasty\Base\Model\SysInfo\Data\LicenseValidation\Message as ValidationMessage;
 use Amasty\Base\Model\SysInfo\Data\LicenseValidation\MessageFactory;
 use Amasty\Base\Model\SysInfo\Data\LicenseValidation\Module\Message as ModuleMessage;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\UrlInterface;
 use Magento\Framework\View\Element\Block\ArgumentInterface;
@@ -42,16 +44,24 @@ class LicenseRegistration implements ArgumentInterface
      */
     private $request;
 
+    /**
+     * @var Config
+     */
+    private $configProvider;
+
     public function __construct(
         GetCurrentLicenseValidation $getCurrentLicenseValidation,
         UrlInterface $url,
         MessageFactory $messageFactory,
-        RequestInterface $request
+        RequestInterface $request,
+        Config $configProvider = null
     ) {
         $this->getCurrentLicenseValidation = $getCurrentLicenseValidation;
         $this->url = $url;
         $this->messageFactory = $messageFactory;
         $this->request = $request;
+        $this->configProvider = $configProvider
+            ?: ObjectManager::getInstance()->get(Config::class);
     }
 
     public function getMessage(): ?ValidationMessage
@@ -80,17 +90,23 @@ class LicenseRegistration implements ArgumentInterface
         $moduleMessageType = $this->getModulesMessagesError($licenseValidation);
         if ($moduleMessageType === ModuleMessage::ERROR) {
             return __(
-                'Amasty notice: Some Amasty extensions have missing or expired licenses.'
-                . ' Please go to <a href="%1">Configuration</a> and check the details in the License Status column.',
+                'Amasty notice: Some Amasty extensions are being used without a valid license. To resolve this '
+                . 'issue, please visit <a href="%1">Configuration</a> and review the details '
+                . 'in the License Status column.',
                 $this->getConfigSectionUrl()
             )->render();
         }
         if ($moduleMessageType === ModuleMessage::WARNING) {
-            return __(
-                'Amasty notice: Some Amasty subscriptions have been canceled or have limited access. '
-                . 'Please go to <a href="%1">Configuration</a> and check the details in the License Status column.',
-                $this->getConfigSectionUrl()
-            )->render();
+            if ($this->configProvider->isLicenseNotificationsEnabled()) {
+                return __(
+                    'Amasty notice: Some Amasty subscriptions can be renewed due to inactive statuses. '
+                    . 'For more information, please refer to the License Status column in '
+                    . 'the <a href="%1">Configuration</a> section.',
+                    $this->getConfigSectionUrl()
+                )->render();
+            }
+
+            return null;
         }
         if (!$isLicenseValid || $moduleMessageType === null) {
             return __(
@@ -123,16 +139,36 @@ class LicenseRegistration implements ArgumentInterface
      */
     private function getModulesMessagesError(LicenseValidation $license): ?string
     {
-        foreach ($license->getModules() as $module) {
+        $errorsTypes = [];
+        $modules = $license->getModules();
+        if (!$modules) {
+            return null; //no module messages - no validation status
+        }
+
+        foreach ($modules as $module) {
             foreach ($module->getMessages() as $message) {
                 $type = $message->getType();
-                if ($type && $type !== ModuleMessage::SUCCESS) {
-                    return $type;
+                if ($type) {
+                    switch ($type) {
+                        case ModuleMessage::SUCCESS:
+                            break;
+                        case ModuleMessage::ERROR:
+                            array_unshift($errorsTypes, $type);
+                            break;
+                        case ModuleMessage::WARNING:
+                        default:
+                            $errorsTypes[] = $type;
+                    }
                 }
             }
         }
 
-        return null; //no module messages - no validation status
+        $errorsTypes = array_unique($errorsTypes);
+        if (!empty($errorsTypes)) {
+            return (string)array_values($errorsTypes)[0];
+        }
+
+        return '';
     }
 
     private function getConfigSectionUrl(): string

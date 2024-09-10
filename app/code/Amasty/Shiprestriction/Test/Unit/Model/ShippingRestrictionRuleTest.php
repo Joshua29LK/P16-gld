@@ -34,10 +34,12 @@ class ShippingRestrictionRuleTest extends \PHPUnit\Framework\TestCase
     {
         $this->model = $this->createPartialMock(
             ShippingRestrictionRule::class,
-            ['prepareAllRules', 'isAdmin']
+            ['prepareAllRules', 'isAdmin', 'isValidNextRules']
         );
 
         $this->model->expects($this->any())->method('isAdmin')->willReturn(true);
+        $this->model->expects($this->any())->method('prepareAllRules')->willReturn([]);
+        $this->model->expects($this->any())->method('isValidNextRules')->willReturn(true);
     }
 
     /**

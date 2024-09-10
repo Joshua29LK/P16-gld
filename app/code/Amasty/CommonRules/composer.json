@@ -3,11 +3,11 @@
     "description": "Common Rules by Amasty",
     "require": {
         "php": ">=7.3",
-        "amasty/base": ">=1.14.7",
+        "amasty/base": ">=1.17.0",
         "amasty/module-advanced-conditions": ">=1.3.10"
     },
     "type": "magento2-module",
-    "version": "2.5.1",
+    "version": "2.5.3",
     "license": [
         "proprietary"
     ],

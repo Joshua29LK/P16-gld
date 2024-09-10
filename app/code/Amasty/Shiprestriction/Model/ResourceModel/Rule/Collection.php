@@ -7,11 +7,27 @@
 
 namespace Amasty\Shiprestriction\Model\ResourceModel\Rule;
 
-/**
- * Class Collection
- */
 class Collection extends \Amasty\CommonRules\Model\ResourceModel\Rule\Collection
 {
+    /**
+     * @var string
+     */
+    protected $_eventPrefix = 'amasty_shiprestriction_rule_collection';
+
+    /**
+     * @var string
+     */
+    protected $_eventObject = 'rule_collection';
+
+    /**
+     * @var array
+     */
+    protected $_map = [
+        'fields' => [
+            'rule_id' => 'main_table.rule_id'
+        ]
+    ];
+
     /**
      * Define resource model
      *

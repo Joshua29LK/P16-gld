@@ -40,4 +40,5 @@
         <plugin name="Amasty_CommonRules::FixEmptyMethodsPhp81"
                 type="Amasty\CommonRules\Plugin\Fedex\Model\Carrier\FixEmptyMethods"/>
     </type>
+
 </config>
