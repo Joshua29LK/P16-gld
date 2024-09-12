@@ -2347,7 +2347,7 @@ h2 .hint:after {
 }
 @media (min-width: 991px) and (max-width: 1200px) {
     .section-item-content .menu-container .menu.horizontal, .section-item-content .menu-container .menu.horizontal-vertical {
-        max-width: 1200px;
+        max-width: 100%;
     }
 
     .header .nav_custom_header {
@@ -2357,14 +2357,47 @@ h2 .hint:after {
     .header.content {
         padding: 20px 20px 0 !important;
     }
-}
 
+    #homepage-slider-text {
+        display: none !important;
+    }
+
+    .pagebuilder-banner-wrapper {
+        max-height: 300px;
+    }
+
+    #header_logo {
+        padding-left: 0;
+    }
+
+    .block-search {
+        width: 50% !important;
+        padding-left: 0 !important;
+    }
+
+    .minicart-wrapper {
+        right: 0 !important;
+    }
+
+    .section-item-content .menu-container .menu > ul > .with-icon {
+        margin-left: 10px;
+    }
+
+    .section-item-content .menu-container .menu > ul > li > a {
+        padding: 0 30px 10px 10px !important;
+        font-size: 14px;
+    }
+
+    .center_column .keur iframe {
+        width: 100% !important;
+    }
+}
 @media (min-width: 769px) {
     #search_mini_form .ico-search {
         margin-left: 0 !important;
     }
 }
-@media only screen and (min-width: 600px) and (max-width: 1024px) and (orientation: landscape) {
+@media only screen and (min-width: 600px) and (max-width: 991px) and (orientation: landscape) {
     .block-search {
         width: 65% !important;
         padding-left: 40px !important;
