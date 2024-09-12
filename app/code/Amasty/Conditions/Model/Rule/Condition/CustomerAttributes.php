@@ -399,7 +399,7 @@ class CustomerAttributes extends \Magento\Rule\Model\Condition\AbstractCondition
      */
     private function getMembership($created)
     {
-        return round((time() - strtotime($created)) / self::SECONDS_IN_DAY);
+        return  $created ? round((time() - strtotime($created)) / self::SECONDS_IN_DAY) : 0.0;
     }
 
     /**
@@ -409,6 +409,6 @@ class CustomerAttributes extends \Magento\Rule\Model\Condition\AbstractCondition
      */
     private function getRegistrationDate($created)
     {
-        return date('Y-m-d', strtotime($created));
+        return $created ? date('Y-m-d', strtotime($created)) : '';
     }
 }

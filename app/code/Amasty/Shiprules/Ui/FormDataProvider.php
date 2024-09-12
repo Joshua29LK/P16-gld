@@ -56,7 +56,9 @@ class FormDataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         $items = $this->collection->getItems();
         /** @var Rule $rule */
         foreach ($items as $rule) {
-            $this->loadedData[$rule->getId()] = $rule->prepareForEdit()->getData();
+            $this->loadedData[$rule->getId()] = $rule->prepareForEdit()->toArray();
+            $this->loadedData[$rule->getId()][Rule::EXTENSION_ATTRIBUTES_KEY]
+                = $rule->getExtensionAttributes()->__toArray();
         }
 
         $data = $this->dataPersistor->get(\Amasty\Shiprules\Model\ConstantsInterface::DATA_PERSISTOR_FORM);

@@ -119,7 +119,7 @@
                 </item>
             </argument>
         </field>
-        <field name="methods">
+        <field name="methods" sortOrder="30">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="label" xsi:type="string" translate="true">Shipping Carriers and Methods</item>
@@ -139,6 +139,32 @@
                 </item>
                 <item name="options" xsi:type="object">Amasty\CommonRules\Model\OptionProvider\Provider\CarriersMethodsOptions</item>
             </argument>
+        </field>
+        <field name="is_label_customized" template="Amasty_Base/form/promo-field"
+               formElement="checkbox" sortOrder="35">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="isPromo" xsi:type="boolean">true</item>
+                    <item name="promoLink"
+                          xsi:type="string"><![CDATA[https://amasty.com/amcustomer/account/products/?utm_source=extension&utm_medium=backend&utm_campaign=subscribe_shippingrules]]></item>
+                    <item name="additionalInfo" xsi:type="string"><![CDATA[<span class="admin__field-note">The functionality is available as part of an active product subscription or support subscription. To upgrade and obtain functionality, please follow the <a href="https://amasty.com/amcustomer/account/products/?utm_source=extension&utm_medium=backend&utm_campaign=subscribe_shippingrules" target="_blank">link</a>. Then you can find the 'amasty/module-ship-rules-name-customization' package for installation in composer suggest.</span>]]></item>
+                </item>
+            </argument>
+            <settings>
+                <dataType>boolean</dataType>
+                <label translate="true">Customize Name</label>
+            </settings>
+            <formElements>
+                <checkbox>
+                    <settings>
+                        <valueMap>
+                            <map name="false" xsi:type="boolean">false</map>
+                            <map name="true" xsi:type="boolean">true</map>
+                        </valueMap>
+                        <prefer>toggle</prefer>
+                    </settings>
+                </checkbox>
+            </formElements>
         </field>
         <field name="pos">
             <argument name="data" xsi:type="array">

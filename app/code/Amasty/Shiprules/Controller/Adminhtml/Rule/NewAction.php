@@ -35,6 +35,6 @@ class NewAction extends \Magento\Backend\App\Action
 
     public function execute()
     {
-        $this->resultForward->forward('edit');
+        return $this->resultForward->forward('edit');
     }
 }

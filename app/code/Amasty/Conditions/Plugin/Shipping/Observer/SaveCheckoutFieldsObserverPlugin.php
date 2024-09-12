@@ -30,6 +30,7 @@ class SaveCheckoutFieldsObserverPlugin
      *
      * @codingStandardsIgnoreStart
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @phpstan-ignore-next-line
      */
     public function beforeExecute(\Temando\Shipping\Observer\SaveCheckoutFieldsObserver $subject, Observer $observer)
     {

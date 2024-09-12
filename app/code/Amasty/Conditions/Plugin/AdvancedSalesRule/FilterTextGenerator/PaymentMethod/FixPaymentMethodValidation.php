@@ -27,6 +27,7 @@ class FixPaymentMethodValidation
 
     /**
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @phpstan-ignore-next-line
      */
     public function beforeGenerateFilterText(PaymentMethod $subject, DataObject $quoteAddress): array
     {

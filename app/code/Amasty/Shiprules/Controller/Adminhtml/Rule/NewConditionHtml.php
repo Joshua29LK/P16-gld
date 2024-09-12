@@ -22,5 +22,7 @@ class NewConditionHtml extends \Amasty\CommonRules\Controller\Adminhtml\Rule\Abs
     public function execute()
     {
         $this->newConditions('conditions');
+
+        return $this->getResponse();
     }
 }

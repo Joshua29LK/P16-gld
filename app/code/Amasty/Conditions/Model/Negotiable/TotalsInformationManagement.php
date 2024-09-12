@@ -7,9 +7,6 @@
 
 namespace Amasty\Conditions\Model\Negotiable;
 
-/**
- * Class TotalsInformationManagement
- */
 class TotalsInformationManagement implements \Amasty\Conditions\Api\Negotiable\TotalsInformationManagementInterface
 {
     /**
@@ -38,6 +35,7 @@ class TotalsInformationManagement implements \Amasty\Conditions\Api\Negotiable\T
         \Magento\Checkout\Api\Data\TotalsInformationInterface $addressInformation
     ) {
         /** @var \Magento\NegotiableQuote\Model\Webapi\CustomerCartValidator $validator */
+        // @phpstan-ignore class.notFound
         $validator = $this->objectManager->create(\Magento\NegotiableQuote\Model\Webapi\CustomerCartValidator::class);
         $validator->validate($cartId);
 

@@ -62,4 +62,15 @@
             </argument>
         </arguments>
     </virtualType>
+
+    <type name="Amasty\Shiprules\Block\Adminhtml\System\Config\SuggestNotification">
+        <arguments>
+            <argument name="suggestModules" xsi:type="array">
+                <item name="shipping_rules_hyva" xsi:type="string">Amasty_ShippingRulesHyva</item>
+                <item name="shipping_rules_hyva_checkout" xsi:type="string">Amasty_ShippingRulesHyvaCheckout</item>
+                <item name="shipping_rules_export" xsi:type="string">Amasty_ShipRulesExportEntity</item>
+                <item name="shipping_rules_import" xsi:type="string">Amasty_ShipRulesImportEntity</item>
+            </argument>
+        </arguments>
+    </type>
 </config>
