@@ -1,4 +1,4 @@
-@font-face {
++@font-face {
     font-family: 'Net-Museo-700';
     src: url('../fonts/Museo_Sans_700.ttf');
 }
@@ -2390,6 +2390,20 @@ h2 .hint:after {
 
     .center_column .keur iframe {
         width: 100% !important;
+    }
+
+    .panel.header .nav_custom_header nav .col-lg-4 .row .webwinkelkeurReviews {
+        margin-left: 60px;
+    }
+
+    #cmsinfo_block .row .order_process_guide li {
+        width: 200px;
+        background: white;
+        padding: 12px;
+    }
+
+    #cmsinfo_block .row ul.order_process_guide > li:after {
+        background: none;
     }
 }
 @media (min-width: 769px) {
