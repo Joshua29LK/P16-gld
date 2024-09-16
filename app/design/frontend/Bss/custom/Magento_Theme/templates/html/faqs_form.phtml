@@ -1,0 +1,14 @@
+<?php
+/**
+ * Searchbar block
+ *
+ * @var $block Bss\Faqs\Block\Searchbar
+ */
+$moduleConfig = $block->getModuleConfig();
+?>
+<form action="<?php echo $moduleConfig->getBaseUrl(); ?>faqs/search/result/" method="get" class="faq_form">
+    <input type="text" class="form-control input-lg" name="faq_search" placeholder="Doorzoek veelgestelde vragen">
+    <button type="submit" class="btn btn-secondary btn-sm btn-circle">
+        <i class="ico ico-20 ico-search"></i>
+    </button>
+</form>

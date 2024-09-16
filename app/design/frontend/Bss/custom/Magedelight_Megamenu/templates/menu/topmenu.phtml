@@ -1,0 +1,183 @@
+<?php
+/**
+ * MageDelight
+ * Copyright (C) 2023 Magedelight <info@magedelight.com>
+ *
+ * @category MageDelight
+ * @package Magedelight_Megamenu
+ * @copyright Copyright (c) 2023 Magedelight (http://www.magedelight.com/)
+ * @license http://opensource.org/licenses/gpl-3.0.html GNU General Public License,version 3 (GPL-3.0)
+ * @author Magedelight <info@magedelight.com>
+ */
+/**
+ * @var $block \Magedelight\Megamenu\Block\Topmenu
+ * @var $viewModel \Magedelight\Megamenu\ViewModel\Topmenu
+ */
+
+$viewModel = $block->getData('viewModel');
+
+$enableCustomMenu = $viewModel->enableCacheMenu();
+$menuData = $viewModel->getMenuData();
+$url  = $block->getUrl('*/*/*', ['_current' => true, '_use_rewrite' => true]);
+$loginUrl = $block->getUrl('customer/account/login', ['referer' => base64_encode($url)]);
+?>
+<?php if ($enableCustomMenu == 1 && $menuData != ''): ?>
+    <?= $menuData; ?>
+<?php else: ?>
+    <?php ob_start();
+    $columnsLimit = $block->getColumnsLimit() ? : 0;
+    $_menu = $block->getHtml('level-top', 'submenu', $columnsLimit);
+    $isAmazonMenuCreated = $block->isAmazonMenuCreated();
+    $_amazonMenu = $block->getAmazonMenuHtml();
+    $mainClass = $block->getMenuClass();
+    $burgerStatus = $block->getConfigBurgerStatus();
+    $amazonClass = $isAmazonMenuCreated ? "horizontal has-amazon" : "";
+    ?>
+    <?php if ($block->isPrimaryMenuSelected() || $isAmazonMenuCreated): ?>
+    <div class="menu-container horizontal-menu">
+        <div data-action="navigation" class="<?= /* @noEscape */ $mainClass; ?> <?= $amazonClass?>">
+            <?php if ($isAmazonMenuCreated) { ?>
+                <div class="amazon-menu-btn">
+                    <a href="javascript: void(0)"><?= __("Open Menu"); ?></a>
+                    <!-- <span data-action="toggle-nav" class="action nav-toggle"><span>Toggle Nav</span></span> -->
+                </div>
+            <?php } ?>
+            <?php if ($block->isPrimaryMenuSelected()): ?>
+                <ul class="md-top-menu-items">
+                    <div class="header_user_info">
+                        <a class="login" href="<?= $block->escapeUrl($loginUrl) ?>" rel="nofollow"
+                           title="Inloggen">
+                            <i class="ico ico-20 ico-lock"></i>
+                            <?= $block->escapeHtml(__('Inloggen')) ?>
+                        </a>
+                        <a class="mobile-clientservice" href="/contact"><?= $block->escapeHtml(__('Klantenservice')) ?> </a>
+                    </div>
+                    <li class="with-icon">
+                        <a href="/" title="Home">
+                            <i class="fa ico ico-home ico-24"></i>
+                            <span class="hide"><?= __("Home"); ?></span>
+                        </a>
+                    </li>
+                    <?= /* @noEscape */ $_menu; ?>
+                </ul>
+                <?= /* @noEscape */ $block->menuStyleHtml(); ?>
+                <script>
+                    require([
+                        'jquery'
+                    ], function($){
+                        $(document).ready( function() {
+                            $(document).on('click', '.tablet-menu', function() {
+                                if ($('body').hasClass('nav-is-visible')) {
+                                    $('body').removeClass('nav-is-visible');
+                                    $(this).html('<i class="icon-bars"></i>');
+                                } else {
+                                    $('body').addClass('nav-is-visible');
+                                    $(this).html('<i class="icon-times"></i>');
+                                }
+                            })
+                        });
+                    });
+                </script>
+            <?php endif; ?>
+        </div>
+        <?php if ($isAmazonMenuCreated) { ?>
+            <div class="md-amazon-menu">
+                <span class="md-menu-close-btn"></span>
+                <div class="md-amazon-menu-content">
+                    <?= /* @noEscape */ $_amazonMenu; ?>
+                </div>
+            </div>
+        <?php } ?>
+    </div>
+    <script type="text/x-magento-init">
+    {
+        "*": {
+            "Magedelight_Megamenu/js/megamenu/topmenu" : {
+                "animation_time": "<?= /* @noEscape */ $block->animationTime(); ?>",
+                "display_overlay": "<?= /* @noEscape */ $block->getPrimaryMenuDisplayOverlay(); ?>"
+            }
+        }
+    }
+    </script>
+    <script type="text/x-magento-init">
+    {
+        "*": {
+            "Magedelight_Megamenu/js/megamenu/amazonmenu" : {
+                "animation_time": "<?= /* @noEscape */ $block->animationTime(); ?>",
+                "display_overlay": "<?= /* @noEscape */ $block->getPrimaryMenuDisplayOverlay(); ?>"
+            }
+        }
+    }
+    </script>
+        <script type="text/javascript">
+            require(['jquery'], function ($) {
+                var nav = jQuery('.nav-sections');
+                if (nav.length) {
+                    var stickyHeaderTop = nav.offset().top;
+                    jQuery(window).scroll(function () {
+                        if (jQuery(window).width() >= 991) {
+                            if (jQuery(window).scrollTop() > stickyHeaderTop) {
+                                nav.addClass('stuck');
+                            } else {
+                                nav.removeClass('stuck');
+                            }
+                        }
+                    });
+                }
+
+            });
+        </script>
+<?php endif; ?>
+    <?php if ($burgerStatus): ?>
+        <?php
+        $columnsLimit = $block->getColumnsLimit() ?: 0;
+        $_menuHtml = $block->getBurgerHtml('level-top', 'submenu', $columnsLimit);
+        ?>
+    <nav class="navigation md-megamenu-burger" id="md-megamenu-burger" data-action="navigation" style="display: none;">
+        <ul data-mage-init='{"menu":{"responsive":true, "expanded":true, "position":{"my":"left top","at":"left bottom"}}}'>
+            <span class="md-menu-close-btn"><?= __('Close Btn'); ?></span>
+            <?= /* @noEscape */ $_menuHtml?>
+            <?= $block->getChildHtml() ?>
+        </ul>
+    </nav>
+    <script type="text/x-magento-init">
+        {
+            "*": {
+                "Magedelight_Megamenu/js/megamenu/burger" : {
+                    "burger_status": "<?= /* @noEscape */ $burgerStatus; ?>",
+                    "display_overlay": "<?= /* @noEscape */ $block->getPrimaryMenuDisplayOverlay(); ?>"
+                }
+            }
+        }
+    </script>
+    <?php endif; ?>
+    <?php
+    $storeMenuKey = $viewModel->getStoreMenuKey();
+    $fileContent = ob_get_contents();
+    $viewModel->saveVariableByCode($storeMenuKey, $fileContent);
+    ob_end_flush();
+    ?>
+<?php endif; ?>
+<script>
+    require([
+        'jquery'
+    ], function($){
+        $(document).ready( function() {
+            if ($(window).width() >= 991) {
+                var parentMenu = $('.ph-mega-categories-list-lvl-1 .icon-caret-right').closest('li');
+                parentMenu.find('ul.megamenu-dropdown').hide();
+                parentMenu.hover(function () {
+                    $(this).addClass('open');
+                    if ($('> ul.megamenu-dropdown', this).length > 0) {
+                        $('> ul.megamenu-dropdown', this).show();
+                    }
+                }, function () {
+                    if ($('> ul.megamenu-dropdown', this).length > 0) {
+                        $('> ul.megamenu-dropdown', this).hide();
+                    }
+                    $(this).removeClass('open');
+                });
+            }
+        });
+    });
+</script>

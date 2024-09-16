@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * BSS Commerce Co.
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the EULA
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://bsscommerce.com/Bss-Commerce-License.txt
+ *
+ * @category   BSS
+ * @package    Bss_Faqs
+ * @author     Extension Team
+ * @copyright  Copyright (c) 2017-2018 BSS Commerce Co. ( http://bsscommerce.com )
+ * @license    http://bsscommerce.com/Bss-Commerce-License.txt
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <faqs_config>
+            <Bss_Faqs>
+                <add_roboto>1</add_roboto>
+                <add_awesome>1</add_awesome>
+            </Bss_Faqs>
+            <display>
+                <most_faq_show>1</most_faq_show>
+                <most_faq_number>5</most_faq_number>
+                <related_faq_show>1</related_faq_show>
+                <question_per_category>5</question_per_category>
+                <faq_sort_by>time</faq_sort_by>
+                <question_display>expand</question_display>
+                <full_question_product_page>1</full_question_product_page>
+                <require_login_vote>1</require_login_vote>
+                <social_button>1</social_button>
+                <background_color>#fbc02d</background_color>
+            </display>
+            <message>
+                <search>We found $counter$ result(s) match the keyword $key$.</search>
+                <tag>We found $counter$ result(s) with tag(s): $tag$.</tag>
+                <helpful>Thanks for voting</helpful>
+                <unhelpful>Unhelpful message</unhelpful>
+            </message>
+        </faqs_config>
+    </default>
+</config>

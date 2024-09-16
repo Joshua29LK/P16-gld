@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="1column" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceBlock name="top.links">
+            <action method="setTemplate">
+                <argument name="template" xsi:type="string">Magento_Theme::html/topmenu_custom.phtml</argument>
+            </action>
+        </referenceBlock>
+        <referenceBlock name="header-wrapper">
+            <block class="Magento\Framework\View\Element\Template" name="mobile.menu.icon" before="-" template="Magento_Theme::html/mobile_menu.phtml" after="topSearch"/>
+        </referenceBlock>
+        <referenceBlock name="footer_links" remove="true"/>
+        <referenceBlock name="store_switcher" remove="true"/>
+        <referenceBlock name="copyright" remove="true"/>
+        <referenceBlock name="report.bugs" remove="true" />
+        <referenceBlock name="form.subscribe" remove="true"/>
+        <referenceContainer name="footer">
+            <block class="Bss\CustomTheme\Block\Footer" template="Magento_Theme::html/footer_custom.phtml"/>
+
+        </referenceContainer>
+        <referenceContainer name="before.body.end">
+            <block class="Magento\Framework\View\Element\Template" template="Magento_Theme::html/bottom_custom.phtml" before="copyright"/>
+        </referenceContainer>
+    </body>
+</page>

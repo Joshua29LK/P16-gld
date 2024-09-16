@@ -1,0 +1,46 @@
+<?php
+/**
+ * BSS Commerce Co.
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the EULA
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://bsscommerce.com/Bss-Commerce-License.txt
+ *
+ * @category   BSS
+ * @package    Bss_Faqs
+ * @author     Extension Team
+ * @copyright  Copyright (c) 2017-2018 BSS Commerce Co. ( http://bsscommerce.com )
+ * @license    http://bsscommerce.com/Bss-Commerce-License.txt
+ */
+
+// @codingStandardsIgnoreFile
+?>
+<?php
+/**
+ * Question page main block
+ *
+ * @var $block Bss\Faqs\Block\QuestionpageBlock
+ */
+$moduleConfig = $block->getModuleConfig();
+?>
+<div class="faq_question_main_block">
+<div class="main_block_loading"><i class="fa fa-spinner fa-pulse" aria-hidden="true"></i>
+</div>
+</div>
+<script type="text/x-magento-init">
+    {
+        ".faq_question_main_block": {
+            "bss_faqs_question_mainpage": {
+                "nopicURL": "<?php echo $block->getViewFileUrl('Bss_Faqs::image/default_image.png'); ?>",
+                "baseUrl": "<?php echo $moduleConfig->getBaseUrl(); ?>",
+                "block": ".faq_question_main_block",
+                "paramtype": "<?php echo $block->getParamType(); ?>",
+                "paramvalue": "<?php echo $block->getParamValue(); ?>",
+                "paramcategory": "<?php echo $block->getCategory(); ?>"
+            }
+        }
+    }
+</script>

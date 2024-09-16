@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * BSS Commerce Co.
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the EULA
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://bsscommerce.com/Bss-Commerce-License.txt
+ *
+ * @category   BSS
+ * @package    Bss_Faqs
+ * @author     Extension Team
+ * @copyright  Copyright (c) 2017-2018 BSS Commerce Co. ( http://bsscommerce.com )
+ * @license    http://bsscommerce.com/Bss-Commerce-License.txt
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
+    <menu>
+        <add id="Bss_Faqs::faqs" title="FAQs" module="Bss_Faqs" sortOrder="100" parent="Magento_Backend::marketing" resource="Bss_Faqs::faqs"/>
+        <add id="Bss_Faqs::faqs_question" title="FAQs" translate="title" module="Bss_Faqs" sortOrder="10" parent="Bss_Faqs::faqs" action="adminhtml/faqs/index" resource="Bss_Faqs::faqs_question"/>
+        <add id="Bss_Faqs::faqs_category" title="FAQs Category" translate="title" module="Bss_Faqs" sortOrder="20" parent="Bss_Faqs::faqs" action="adminhtml/faqcategory/index" resource="Bss_Faqs::faqs_category"/>
+    </menu>
+</config>

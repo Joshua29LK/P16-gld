@@ -1,0 +1,113 @@
+<?php
+/**
+ * MageDelight
+ * Copyright (C) 2023 Magedelight <info@magedelight.com>
+ *
+ * @category MageDelight
+ * @package Magedelight_Megamenu
+ * @copyright Copyright (c) 2023 Magedelight (http://www.magedelight.com/)
+ * @license http://opensource.org/licenses/gpl-3.0.html GNU General Public License,version 3 (GPL-3.0)
+ * @author Magedelight <info@magedelight.com>
+ */
+?>
+<?php
+/**
+ * @var $block \Magedelight\Megamenu\Block\ShortcodeMenu
+ */
+?>
+<?php $_menu = $block->getHtml() ?>
+<?php
+$randomNumber = random_int(100000, 999999);
+?>
+<div class="section-item-content" id="<?= /* @noEscape */ 'shortcode_menu_'.$randomNumber; ?>">
+    <div class="menu-container shortcodemenu">
+        <div class="menu <?= /* @noEscape */ $block->getMenuDesign(); ?> <?php
+        if ($block->isStickyEnable() == '1'):
+            echo "stickymenu";
+        endif;
+        ?>">
+            <ul>
+                <?= /* @noEscape */ $_menu; ?>
+            </ul>
+            <?php
+            echo $block->menuStyleHtml();
+            ?>
+        </div>
+        <?php
+        if ($block->isStickyEnable() == '1') {
+            ?>
+            <div class="stickyalias"> </div>
+            <?php
+        }
+        ?>
+    </div>
+</div>
+
+<script type="text/javascript">
+    var animation_time = '<?= /* @noEscape */ $block->animationTime(); ?>';
+    require(['jquery'], function ($) {
+
+        var nav = $('.shortcodemenu');
+        if (nav.length) {
+            var stickyHeaderTop = nav.offset().top;
+            var menuWidth = jQuery('.shortcodemenu .menu.stickymenu').width();
+
+            //var topMargin;
+            $(window).scroll(function () {
+                if ($(window).width() >= 992) {
+                    if ($(window).scrollTop() > stickyHeaderTop) {
+                        $('.shortcodemenu .stickymenu').css({position: 'fixed', top: '0px', 'max-width': menuWidth});
+                        $('.stickyalias').css('display', 'block');
+                    } else {
+                        $('.shortcodemenu .stickymenu').css({position: 'static', top: '0px'});
+                        $('.stickyalias').css('display', 'none');
+                    }
+                }
+            });
+
+            $('#shortcode_menu_<?= /* @noEscape */ $randomNumber ?>.section-item-content .menu-container.shortcodemenu .menu > ul > li.dropdown').each(function (e) {
+                $(this).children('a').after('<span class="marker"><i class="icon-caret-down"></i></span>');
+            });
+
+            var $dropdownsShortCode = jQuery('.mobile_home_menu .section-item-content .menu-container .menu > ul li.dropdown');
+            var $mobileMenu = $('.nav-sections .section-item-content .menu-container .menu > ul li.dropdown');
+            //
+            $dropdownsShortCode.find('span.marker').click(function() {
+                $(this).parent('li').addBack().toggleClass('active');
+                $(this).toggleClass('active').siblings('ul').slideToggle('500');
+                var icon = $(this).find('i');
+                if (icon.hasClass('icon-caret-down')) {
+                    icon.removeClass('icon-caret-down').addClass('icon-caret-up');
+                } else {
+                    icon.removeClass('icon-caret-up').addClass('icon-caret-down');
+                }
+            });
+            if ($(window).width() < 992) {
+                $('.ph-mega-categories-list-lvl-2.megamenu-dropdown').hide();
+                $('.section-item-content .menu-container .menu > ul > li > ul').hide();
+                $dropdownsShortCode.find('a.had_child').click(function (e) {
+                    e.preventDefault();
+                    $(this).parent('li').toggleClass('active');
+                    $(this).toggleClass('active').siblings('ul').slideToggle('500');
+                    var icon = $(this).find('i');
+                    if (icon.hasClass('icon-caret-down')) {
+                        icon.removeClass('icon-caret-down').addClass('icon-caret-up');
+                    } else {
+                        icon.removeClass('icon-caret-up').addClass('icon-caret-down');
+                    }
+                });
+                $mobileMenu.find('a.had_child').click(function (e) {
+                    e.preventDefault();
+                    $(this).parent('li').toggleClass('active');
+                    $(this).toggleClass('active').siblings('ul').slideToggle('500');
+                    var icon = $(this).find('i');
+                    if (icon.hasClass('icon-caret-down')) {
+                        icon.removeClass('icon-caret-down').addClass('icon-caret-up');
+                    } else {
+                        icon.removeClass('icon-caret-up').addClass('icon-caret-down');
+                    }
+                });
+            }
+        }
+    });
+</script>

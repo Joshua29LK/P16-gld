@@ -1,0 +1,104 @@
+<?php
+/**
+ * @var \Bss\CustomTheme\Block\MegaMenu $block
+ */
+?>
+<?php
+$parentCat = $block->getCategoryById();
+$childsLv1Cat = $block->getLevel1ChildCategories();
+$twoFirstCat = array_slice($childsLv1Cat, 0, 2);
+$twoFirstCat = array_reverse($twoFirstCat);
+$secondCat = array_slice($childsLv1Cat, 2, 1);
+$topProducts = $block->getTopProducts();
+?>
+<div class="">
+    <div class="ph-type-4 ph-col ph-col-3"></div>
+    <?php if (!empty($twoFirstCat)) : ?>
+    <?php foreach ($twoFirstCat as $item) : ?>
+    <div class="ph-type-4 ph-col ph-col-3">
+        <div class="col-md-12">
+            <h3 class="ph-mega-categories-cat-title cat_<?= $item->getId(); ?>">
+                <a href="<?= $item->getUrl(); ?>" title="<?= $item->getName(); ?>"><?= $item->getName(); ?></a>
+            </h3>
+            <ul class="ph-mega-categories-list-lvl-1">
+                <?php $childsLv2 = $item->getChildrenCategories(); ?>
+                <?php if (!empty($childsLv2)) : ?>
+                    <?php foreach ($childsLv2 as $itemLv2) : ?>
+                        <li class="cat_<?= $itemLv2->getId(); ?> ">
+                            <a href="<?= $itemLv2->getUrl() ?>" title="<?= $itemLv2->getName() ?>" class="<?= $itemLv2->hasChildren() ? "had_child" : "" ?>"><?= $itemLv2->getName() ?>
+                            <?php if ($itemLv2->hasChildren()) : ?>
+                                <i class="hidden-sm icon icon-caret-right pull-right"></i>
+                                <i class="hidden-sm icon icon-caret-down pull-right"></i>
+                            <?php endif; ?>
+                            </a>
+                            <?php if ($itemLv2->hasChildren()) : ?>
+                                <?php $childsLv3 = $itemLv2->getChildrenCategories(); ?>
+                                <ul class="ph-mega-categories-list-lvl-2 dropdown megamenu-dropdown">
+                                    <?php if (!empty($childsLv3)) : ?>
+                                    <?php foreach ($childsLv3 as $itemLv3) : ?>
+                                    <li class="cat_<?= $itemLv3->getId(); ?> ">
+                                        <a href="<?= $itemLv3->getUrl() ?>"> <?= $itemLv3->getName() ?> </a>
+                                    </li>
+                                    <?php endforeach; ?>
+                                    <?php endif; ?>
+                                </ul>
+                            <?php endif; ?>
+                        </li>
+                    <?php endforeach; ?>
+                <?php endif; ?>
+            </ul>
+        </div>
+    </div>
+    <?php endforeach; ?>
+    <?php endif; ?>
+    <div class="ph-type-6 ph-col ph-col-3">
+        <div class="col-sm-12">
+            <h3><?= $block->escapeHtml(__('Top 5 producten')) ?></h3>
+            <ol class="product_list_ph">
+                <?php if (!empty($topProducts)) : ?>
+                    <?php foreach ($topProducts as $product) : ?>
+                        <li class="ph_product_item">
+                            <a href="<?= $product->getProductUrl(); ?>" title="<?= $product->getName(); ?>"> <?= $product->getName(); ?> </a>
+                            <a class="ajax_add_to_cart_button btn btn-primary btn-round" href="https://www.glasgigant.nl/winkelmandje?add=1&amp;id_product=625&amp;token=e54f267d26f56bb53cb84b28c80c7ed0" rel="nofollow" title="Add to cart" data-id-product="<?= $product->getId(); ?>">
+                                <i class="icon-shopping-cart"></i>
+                            </a>
+                        </li>
+                    <?php endforeach; ?>
+                <?php endif; ?>
+            </ol>
+        </div>
+    </div>
+    <?php if (!empty($secondCat)) : ?>
+    <?php foreach ($secondCat as $item) : ?>
+    <div class="ph-type-4 ph-col ph-col-3">
+        <div class="col-md-12">
+            <h3 class="ph-mega-categories-cat-title cat_<?= $item->getId(); ?>">
+                <a href="<?= $item->getUrl(); ?>" title="<?= $item->getName(); ?>"> <?= $item->getName(); ?> </a>
+            </h3>
+            <ul class="ph-mega-categories-list-lvl-1">
+                <?php $childsLv2 = $item->getChildrenCategories(); ?>
+                <?php if (!empty($childsLv2)) : ?>
+                <?php foreach ($childsLv2 as $itemLv2) : ?>
+                    <li class="cat_<?= $itemLv2->getId(); ?> ">
+                        <a href="<?= $itemLv2->getUrl() ?>"> <?= $itemLv2->getName() ?> </a>
+                    </li>
+                <?php endforeach; ?>
+                <?php endif; ?>
+            </ul>
+        </div>
+    </div>
+    <?php endforeach; ?>
+    <?php endif; ?>
+    <div class="ph-type-5 ph-col ph-col-12 ph-new-row">
+        <h3></h3>
+        <div class="alert alert-warning alert-menu">
+            <div class="alert-menu-image">
+                <img src="https://glasgigant.nl/img/cms/mechanic.png" alt="" width="113" height="109" class="pull-left">
+            </div>
+            <a href="/79-keuzehulp" class="btn btn-secondary pull-right">Open de glaskeuzehulp <em class="icon-chevron-right"></em>
+            </a>
+            <p>Hulp nodig bij het kiezen? Gebruik onze glaskeuzehulp!</p>
+            <div class="clearfix"></div>
+        </div>
+    </div>
+</div>

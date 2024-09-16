@@ -1,0 +1,73 @@
+You need login to vote,You need login to vote
+Thanks for voting,Thanks for voting
+Ask a question,Ask a question
+Submit,Submit
+Question lenght must be 10 characters or more!,Question lenght must be 10 characters or more!
+Category,Category
+Most FAQs,Most FAQs
+Related FAQs,Related FAQs
+Tag list,Tag list
+Home,Home
+Go to Home Page,Go to Home Page
+FAQ Main Page,FAQ Main Page
+Go to FAQ Main Page,Go to FAQ Main Page
+Search result,Search result
+Add New Category,Add New Category
+FAQs Category Management,FAQs Category Management
+Add New FAQ Category,Add New FAQ Category
+Edit FAQ Category,Edit FAQ Category
+FAQ Category Details,FAQ Category Details
+Category Title,Category Title
+FAQ list,FAQ list
+Show in Main Page,Show in Main Page
+URL Key,URL Key
+Category Image,Category Image
+'Recommend uploading square image with width and height over 250px<br/>The size limit for uploading an image is 1200px x 1200px','Recommend uploading square image with width and height over 250px<br/>The size limit for uploading an image is 1200px x 1200px'
+Background Color,Background Color
+"Using color format: ""#cccccc"" or ""red""","Using color format: ""#cccccc"" or ""red"""
+FAQs Management,FAQs Management
+Add FAQ,Add FAQ
+Edit FAQ,Edit FAQ
+Add New FAQ,Add New FAQ
+General,General
+Author,Author
+SEO,SEO
+Product,Product
+Related,Related
+Title,Title
+Category,Category
+Is Most FAQ,Is Most FAQ
+Answer,Answer
+Short Answer,Short Answer
+Tag,Tag
+"Separate tag by "","": tag1,tag2,tag3,...","Separate tag by "","": tag1,tag2,tag3,..."
+FAQs Question,FAQs Question
+Save Category,Save Category
+Edit Category ID: %1,Edit Category ID: %1
+Related FAQs Assign,Related FAQs Assign
+Related Assign,Related Assign
+Add Roboto Font,Add Roboto Font
+If your site has installed Roboto font, you can choose No in this configuration,If your site has installed Roboto font, you can choose No in this configuration
+Add Font Awesome,Add Font Awesome
+If your site has installed Font Awesome, you can choose No in this configuration,If your site has installed Font Awesome, you can choose No in this configuration
+FAQs Display,FAQs Display
+Show Most FAQs Box,Show Most FAQs Box
+Show most FAQs box in FAQs main page,Show most FAQs box in FAQs main page
+A Number of Questions in Most FAQs Box,A Number of Questions in Most FAQs Box
+Show Related Questions,Show Related Questions
+Show related question in question detail page,Show related question in question detail page
+A Number of Questions Per Category,A Number of Questions Per Category
+Limit number of questions each category in FAQs main page,Limit number of questions each category in FAQs main page
+Sort By,Sort By
+Sort config for FAQs in main page,Sort config for FAQs in main page
+Question Block Display,Question Block Display
+Product Page Full Question,Product Page Full Question
+Show full question at product page,Show full question at product page
+Require Login to Vote,Require Login to Vote
+Background Color of Sidebar Header,Background Color of Sidebar Header
+Notify Message,Notify Message
+Message in Search Result Page,Message in Search Result Page
+Insert $counter$ to show number of result and $key$ for keyword,Insert $counter$ to show number of result and $key$ for keyword
+Message in Question with Tag Page,Message in Question with Tag Page
+Insert $counter$ to show number of result and $tag$ for tag list,Insert $counter$ to show number of result and $tag$ for tag list
+Unhelpful Button Message,Unhelpful Button Message
