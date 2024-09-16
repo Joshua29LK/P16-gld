@@ -298,6 +298,14 @@ class DependOption extends AbstractDb
      */
     public function removeOldDco($productId)
     {
+        $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+        $logger = $objectManager->create(\Psr\Log\LoggerInterface::class);
+        $logger->alert("bss test ne: " . $productId);
+        $writer = new \Zend_Log_Writer_Stream(BP . '/var/log/custom.log');
+        $logger1 = new \Zend_Log();
+        $logger1->addWriter($writer);
+        $logger1->info("removeOldDco");
+        $logger1->info(print_r(debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 50), true));
         $this->getConnection()->delete(
             $this->getMainTable(),
             ['product_id=?' => $productId]
@@ -313,6 +321,14 @@ class DependOption extends AbstractDb
      */
     public function removeOptionByDepedentId($dependentId)
     {
+        $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+        $logger = $objectManager->create(\Psr\Log\LoggerInterface::class);
+        $logger->alert("bss test: " . $dependentId);
+        $writer = new \Zend_Log_Writer_Stream(BP . '/var/log/custom.log');
+        $logger1 = new \Zend_Log();
+        $logger1->addWriter($writer);
+        $logger1->info("removeOptionByDepedentId");
+        $logger1->info(print_r(debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 50), true));
         $this->getConnection()->delete(
             $this->getMainTable(),
             ['increment_id=?' => $dependentId]
