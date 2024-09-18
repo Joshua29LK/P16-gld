@@ -165,37 +165,29 @@ class Sidebar extends Template
 
             $childCategories = $this->getSubcategories($category);
 
-            if ( count($childCategories) > 0 )
-            {
-
+            if (is_array($childCategories) && count($childCategories) > 0) {
                 $html .= '<ul class="o-list o-list--unstyled">';
-
+            
                 // Loop through children categories
-                foreach ( $childCategories as $childCategory )
-                {
-
+                foreach ($childCategories as $childCategory) {
                     $html .= '<li class="level' . $level . ($this->isActive($childCategory) ? ' active' : '') . '">';
                     $html .= '<a href="' . $this->getCategoryUrl($childCategory) . '" title="' . $childCategory->getName() . '" class="' . ($this->isActive($childCategory) ? 'is-active' : '') . '">' . $childCategory->getName() . '</a>';
-
-                    if ( $childCategory->hasChildren() )
-                    {
-                        if ( $this->isActive($childCategory) )
-                        {
+            
+                    if ($childCategory->hasChildren()) {
+                        if ($this->isActive($childCategory)) {
                             $html .= '<span class="expanded"><i class="fa fa-minus"></i></span>';
-                        }
-                        else
-                        {
+                        } else {
                             $html .= '<span class="expand"><i class="fa fa-plus"></i></span>';
                         }
                     }
-
-                    if ( $childCategory->hasChildren() )
-                    {
+            
+                    if ($childCategory->hasChildren()) {
                         $html .= $this->getChildCategoryView($childCategory, '', ($level + 1));
                     }
-
+            
                     $html .= '</li>';
                 }
+            
                 $html .= '</ul>';
             }
         }
