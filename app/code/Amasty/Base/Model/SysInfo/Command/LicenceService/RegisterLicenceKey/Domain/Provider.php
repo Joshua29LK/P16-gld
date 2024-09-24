@@ -55,6 +55,10 @@ class Provider
             PHP_URL_HOST
         );
 
+        if (!$baseUrl) {
+            return [];
+        }
+
         return [$baseUrl];
     }
 }

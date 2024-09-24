@@ -58,4 +58,7 @@
     <type name="Magento\Config\Block\System\Config\Edit">
         <plugin name="Amasty_Base::removeSaveButton" type="Amasty\Base\Plugin\Config\Block\System\Config\Edit\RemoveSaveButton"/>
     </type>
+    <type name="ClassyLlama\AvaTax\Plugin\Model\ConfigPlugin">
+        <plugin name="Amasty_Base::disableAmastySectionCheck" type="Amasty\Base\Plugin\ClassyLlama\Plugin\Model\ConfigPlugin\DisableAmastySectionCheck"/>
+    </type>
 </config>

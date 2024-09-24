@@ -77,7 +77,7 @@ define([
             var text = $('label[for="' + this.uid + '"]').closest(
                 '.admin__fieldset-wrapper-content.admin__collapsible-content._show'
             ).find('.admin__action-multiselect .admin__action-multiselect-text').text();
-            if ( checkExist.length && text != $.mage.__('Drop-down') &&  text != $.mage.__('Radio Buttons')) {
+            if ( checkExist.length && text != 'Drop-down' &&  text != 'Radio Buttons') {
                 checkExist.parent().parent().parent().hide();
                 checkExist.parentsUntil('.admin__fieldset-wrapper-content.admin__collapsible-content._show').find('table thead tr th span').each(function() {
                     if ($( this ).text() == $.mage.__('Swatch Image')) {
@@ -85,7 +85,7 @@ define([
                     }
                 });
             }
-            if (checkExist.length && text == $.mage.__('Drop-down') ||  text == $.mage.__('Radio Buttons')) {
+            if (checkExist.length && text == 'Drop-down' ||  text == 'Radio Buttons') {
                 checkExist.parent().parent().parent().show();
                 checkExist.parentsUntil('.admin__fieldset-wrapper-content.admin__collapsible-content._show').find('table thead tr th span').each(function() {
                     if ($( this ).text() == $.mage.__('Swatch Image')) {

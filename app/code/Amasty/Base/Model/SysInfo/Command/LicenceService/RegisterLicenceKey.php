@@ -69,6 +69,10 @@ class RegisterLicenceKey
     public function execute(bool $force = false): void
     {
         $currentDomains = $this->domainProvider->getCurrentDomains();
+        if (empty($currentDomains)) {
+            return;
+        }
+
         if (!$force) {
             $storedDomains = $this->domainProvider->getStoredDomains();
             $domains = array_diff($currentDomains, $storedDomains);

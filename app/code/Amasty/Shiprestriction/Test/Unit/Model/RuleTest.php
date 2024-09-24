@@ -41,7 +41,7 @@ class RuleTest extends \PHPUnit\Framework\TestCase
     {
         $this->model->setData('stores', 12);
         $this->model->setData('cust_groups', [15]);
-        $this->model->setCarriers('test');
+        $this->model->setCarriers(['test']);
         $this->model->prepareForEdit();
         $this->assertEquals(['test', ''], $this->model->getMethods());
     }
@@ -62,5 +62,23 @@ class RuleTest extends \PHPUnit\Framework\TestCase
     {
         $this->model->setStores([1, 2, 3]);
         $this->assertEquals('1,2,3', $this->model->getData('stores'));
+    }
+
+    /**
+     * @covers Rule::getMethods
+     */
+    public function testGetMethods()
+    {
+        $this->model->setData('methods', 'dhl,fedex');
+        $this->assertEquals(['dhl', 'fedex'], $this->model->getMethods());
+    }
+
+    /**
+     * @covers Rule::setMethods
+     */
+    public function testSetMethods()
+    {
+        $this->model->setMethods(['dhl', 'fedex']);
+        $this->assertEquals('dhl,fedex', $this->model->getData('methods'));
     }
 }

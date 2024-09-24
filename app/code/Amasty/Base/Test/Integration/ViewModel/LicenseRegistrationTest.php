@@ -57,7 +57,7 @@ class LicenseRegistrationTest extends TestCase
         $licenseRegistration = $this->prepareClassForTest('validation_module_error_response.json');
         $message = $licenseRegistration->getMessage();
         $this->assertEquals('warning', $message->getType());
-        $this->assertStringContainsString('extensions have missing or expired licenses', $message->getContent());
+        $this->assertStringContainsString('extensions are being used without a valid license', $message->getContent());
     }
 
     public function testModuleWarningMessage(): void
@@ -65,7 +65,15 @@ class LicenseRegistrationTest extends TestCase
         $licenseRegistration = $this->prepareClassForTest('validation_module_warning_response.json');
         $message = $licenseRegistration->getMessage();
         $this->assertEquals('warning', $message->getType());
-        $this->assertStringContainsString('subscriptions have been canceled', $message->getContent());
+        $this->assertStringContainsString('subscriptions can be renewed due to inactive', $message->getContent());
+    }
+
+    public function testModuleErrorAfterWarningMessage(): void
+    {
+        $licenseRegistration = $this->prepareClassForTest('validation_module_error_after_warning_response.json');
+        $message = $licenseRegistration->getMessage();
+        $this->assertEquals('warning', $message->getType());
+        $this->assertStringContainsString('extensions are being used without a valid license', $message->getContent());
     }
 
     private function prepareClassForTest(string $responseFile): LicenseRegistration

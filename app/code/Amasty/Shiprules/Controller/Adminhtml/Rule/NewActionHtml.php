@@ -22,5 +22,7 @@ class NewActionHtml extends \Amasty\CommonRules\Controller\Adminhtml\Rule\Abstra
     public function execute()
     {
         $this->newConditions('actions');
+
+        return $this->getResponse();
     }
 }

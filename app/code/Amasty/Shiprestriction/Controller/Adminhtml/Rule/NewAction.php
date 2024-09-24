@@ -9,6 +9,7 @@ namespace Amasty\Shiprestriction\Controller\Adminhtml\Rule;
 
 use Magento\Backend\App\Action\Context;
 use Magento\Backend\Model\View\Result\Forward;
+use Magento\Framework\Controller\ResultInterface;
 
 /**
  * Action of Rule creating.
@@ -33,8 +34,8 @@ class NewAction extends \Magento\Backend\App\Action
         $this->resultForward = $resultForward;
     }
 
-    public function execute()
+    public function execute(): ResultInterface
     {
-        $this->resultForward->forward('edit');
+        return $this->resultForward->forward('edit');
     }
 }

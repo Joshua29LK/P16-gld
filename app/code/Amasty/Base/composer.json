@@ -7,7 +7,7 @@
         "monolog/monolog": ">=1.17"
     },
     "type": "magento2-module",
-    "version": "1.16.0",
+    "version": "1.17.0",
     "license": [
         "proprietary"
     ],

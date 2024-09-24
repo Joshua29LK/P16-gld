@@ -3,17 +3,18 @@
     "description": "Shipping Restrictions Subscription Package by Amasty",
     "require": {
         "php": ">=7.3",
-        "amasty/base": ">=1.15.1",
+        "amasty/base": ">=1.17.0",
         "amasty/shiprestriction": ">=2.9.1"
     },
     "suggest": {
         "amasty/module-ship-restriction-hyva": "Install module-ship-restriction-hyva module to activate the integration with Hyv\u00e4 Theme.",
         "amasty/module-ship-restriction-hyva-checkout": "Please install this package to ensure compatibility between the Shipping Restrictions extension and the Hyv\u00e4 Checkout.",
-        "amasty/module-shiprestriction-restricted-products": "Install this package to configure the restricted products displaying in the restriction message."
+        "amasty/module-shiprestriction-restricted-products": "Install this package to configure the restricted products displaying in the restriction message.",
+        "amasty/module-shipping-restriction-subscription-functionality": "This package provides the ability to discard subsequent rules and set their priority."
     },
     "homepage": "https://amasty.com/",
     "type": "magento2-module",
-    "version": "2.10.0",
+    "version": "2.11.0",
     "license": "proprietary",
     "autoload": {
         "files": [

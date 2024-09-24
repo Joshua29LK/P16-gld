@@ -34,6 +34,7 @@
                 <field id="license_registration" translate="label comment" sortOrder="20" showInDefault="1"
                        showInWebsite="0" showInStore="0">
                     <label>License Registration</label>
+                    <comment><![CDATA[In case you have any questions regarding the license registration process, refer to this detailed <a href="https://support.amasty.com/portal/en/kb/articles/i-see-messages-in-my-account-and-admin-area-that-license-registration-is-required-what-should-i-do" target="_blank">instruction</a>.]]></comment>
                     <frontend_model>Amasty\Base\Block\Adminhtml\System\Config\Form\Field\LicenseKeys</frontend_model>
                     <backend_model>Amasty\Base\Model\Config\Backend\Serialized\LicenseRegistrationArraySerialized</backend_model>
                     <config_path>amasty_base/instance_registration/license_registration</config_path>
@@ -68,6 +69,11 @@
                 <field id="ads_enable" translate="label" type="select" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Enable Feature Suggestions in Config?</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="enable_license_notifications" translate="label comment" type="select" sortOrder="40" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Enable License Notifications</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>Disable this setting to remove Magento system notifications about license state once all the installed Amasty products are registered.</comment>
                 </field>
             </group>
 

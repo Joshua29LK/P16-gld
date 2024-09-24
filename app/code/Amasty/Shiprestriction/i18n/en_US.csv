@@ -1,6 +1,7 @@
 "Apply the rule only if the following conditions are met (leave blank for all products).","Apply the rule only if the following conditions are met (leave blank for all products)."
 Conditions,Conditions
 "Please update Amasty Base module. Re-upload it and replace all the files.","Please update Amasty Base module. Re-upload it and replace all the files."
+"Extra features may be provided by additional packages in the extension's 'suggest' section. Please explore the available suggested packages","Extra features may be provided by additional packages in the extension's 'suggest' section. Please explore the available suggested packages"
 "Add new Shipping Restriction Rule","Add new Shipping Restriction Rule"
 "Unable to load Shipping Restriction Rule with ID %1. Please review the log and try again.","Unable to load Shipping Restriction Rule with ID %1. Please review the log and try again."
 "Shipping Restrictions","Shipping Restrictions"
@@ -9,9 +10,9 @@ Conditions,Conditions
 Choose,Choose
 "Advanced Conditions","Advanced Conditions"
 Source,Source
+here,here
 "Incl. Tax","Incl. Tax"
 "Excl. Tax","Excl. Tax"
-Information,Information
 General,General
 "Include tax in subtotal","Include tax in subtotal"
 "Use subtotal after discount","Use subtotal after discount"
@@ -32,6 +33,8 @@ Inactive,Inactive
 "Custom Restriction Message","Custom Restriction Message"
 "Show Restriction Message Once","Show Restriction Message Once"
 "Select ‘Yes’ if you’d like to restrict the whole carrier and show one restriction message for it.","Select ‘Yes’ if you’d like to restrict the whole carrier and show one restriction message for it."
+Priority,Priority
+"Discard Subsequent Rules","Discard Subsequent Rules"
 "Select Sources","Select Sources"
 Done,Done
 Backorders,Backorders

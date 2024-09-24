@@ -7,7 +7,7 @@
 
 namespace Amasty\Shiprules\Api\Data;
 
-interface RuleInterface
+interface RuleInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
     /**
      * Constants defined for keys of data array
@@ -488,9 +488,20 @@ interface RuleInterface
     public function getSkipSubsequent();
 
     /**
-     * @param bool $forAdmin
+     * @param bool $skipSubsequent
      *
      * @return \Amasty\Shiprules\Api\Data\RuleInterface
      */
     public function setSkipSubsequent($skipSubsequent);
+
+    /**
+     * @return \Amasty\Shiprules\Api\Data\RuleExtensionInterface
+     */
+    public function getExtensionAttributes(): \Amasty\Shiprules\Api\Data\RuleExtensionInterface;
+
+    /**
+     * @param \Amasty\Shiprules\Api\Data\RuleExtensionInterface $extensionAttributes
+     * @return $this
+     */
+    public function setExtensionAttributes(\Amasty\Shiprules\Api\Data\RuleExtensionInterface $extensionAttributes);
 }

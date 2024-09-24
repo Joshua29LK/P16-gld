@@ -1,7 +1,9 @@
 Conditions,Conditions
 "Apply the rule only to cart items matching the following conditions (leave blank for all items).","Apply the rule only to cart items matching the following conditions (leave blank for all items)."
 "Apply the rule only if the following conditions are met (leave blank for all products).","Apply the rule only if the following conditions are met (leave blank for all products)."
+"Enable the system-common-rules module for the extension to function correctly. Please run the following command in SSH: composer require amasty/system-common-rules.","Enable the system-common-rules module for the extension to function correctly. Please run the following command in SSH: composer require amasty/system-common-rules."
 "Please update Amasty Base module. Re-upload it and replace all the files.","Please update Amasty Base module. Re-upload it and replace all the files."
+"Extra features are provided by additional packages in the extension's 'suggest' section. Please explore the available suggested packages","Extra features are provided by additional packages in the extension's 'suggest' section. Please explore the available suggested packages"
 "Add new Shipping Rule","Add new Shipping Rule"
 "Unable to load Shipping Rule with ID %1. Please review the log and try again.","Unable to load Shipping Rule with ID %1. Please review the log and try again."
 "Shipping Rules","Shipping Rules"
@@ -25,7 +27,7 @@ Subtotal,Subtotal
 "Non backorders","Non backorders"
 Inactive,Inactive
 Active,Active
-Information,Information
+here,here
 General,General
 "Include Tax in Subtotal","Include Tax in Subtotal"
 "Use Subtotal after Discount","Use Subtotal after Discount"
@@ -38,6 +40,7 @@ Save,Save
 "Rule Name","Rule Name"
 "Rule Status","Rule Status"
 "Shipping Carriers and Methods","Shipping Carriers and Methods"
+"Customize Name","Customize Name"
 "Rule Priority","Rule Priority"
 "Discard Subsequent Rules","Discard Subsequent Rules"
 Products,Products

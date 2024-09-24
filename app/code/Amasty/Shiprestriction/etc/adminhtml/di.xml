@@ -41,4 +41,15 @@
             <argument name="resource" xsi:type="object">Amasty\Shiprestriction\Model\ResourceModel\Rule</argument>
         </arguments>
     </type>
+
+
+    <type name="Amasty\Shiprestriction\Block\Adminhtml\System\Config\SuggestNotification">
+        <arguments>
+            <argument name="suggestModules" xsi:type="array">
+                <item name="shipping_restriction_hyva" xsi:type="string">Amasty_ShipRestrictionHyva</item>
+                <item name="shipping_restriction_hyva_checkout" xsi:type="string">Amasty_ShipRestrictionHyvaCheckout</item>
+                <item name="shipping_restriction_restricted_products" xsi:type="string">Amasty_ShiprestrictionRestrictedProducts</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

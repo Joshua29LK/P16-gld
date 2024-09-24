@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "8d79ea0c37ef726317dba14892243eb5",
+    "content-hash": "0485a5f5040bb3fc3a5a625550fca347",
     "packages": [
         {
             "name": "2tvenom/cborencode",
@@ -5127,21 +5127,21 @@
         },
         {
             "name": "magefan/module-blog",
-            "version": "2.11.4",
+            "version": "2.12.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/magefan/module-blog.git",
-                "reference": "57c0778696a5ef688873ba4c5dcde5d990675e2a"
+                "reference": "7dddf90c0577d3965639bba32c7baaaddb8d8e93"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/magefan/module-blog/zipball/57c0778696a5ef688873ba4c5dcde5d990675e2a",
-                "reference": "57c0778696a5ef688873ba4c5dcde5d990675e2a",
+                "url": "https://api.github.com/repos/magefan/module-blog/zipball/7dddf90c0577d3965639bba32c7baaaddb8d8e93",
+                "reference": "7dddf90c0577d3965639bba32c7baaaddb8d8e93",
                 "shasum": ""
             },
             "require": {
                 "magefan/module-blog-graph-ql": ">=2.1.9",
-                "magefan/module-community": ">=2.1.23",
+                "magefan/module-community": ">=2.1.29",
                 "magefan/module-wysiwyg-advanced": ">=2.0.15"
             },
             "suggest": {
@@ -5160,9 +5160,64 @@
             "description": "Implements Blog functionality on Magento 2 store",
             "support": {
                 "issues": "https://github.com/magefan/module-blog/issues",
-                "source": "https://github.com/magefan/module-blog/tree/2.11.4"
+                "source": "https://github.com/magefan/module-blog/tree/2.12.0"
             },
-            "time": "2024-05-21T06:58:58+00:00"
+            "time": "2024-09-20T11:23:02+00:00"
+        },
+        {
+            "name": "magefan/module-blog-author",
+            "version": "2.12.0",
+            "dist": {
+                "type": "zip",
+                "url": "https://magefan.com/repo/packages/download/user/hX6XG3KZm9wRNY8Pzetxp2Ce9xIWMMGG/pw/UeB1nQT895o9Vp6uwtnDbiI5mCEYatS8/package/magefan-module-blog-author/version/2.12.0/"
+            },
+            "type": "magento2-module",
+            "autoload": {
+                "psr-4": {
+                    "Magefan\\BlogAuthor\\": ""
+                },
+                "files": [
+                    "registration.php"
+                ]
+            },
+            "license": [
+                "EULA"
+            ],
+            "description": "Magefan Blog Author for Magento 2"
+        },
+        {
+            "name": "magefan/module-blog-extra",
+            "version": "2.12.0",
+            "dist": {
+                "type": "zip",
+                "url": "https://magefan.com/repo/packages/download/user/hX6XG3KZm9wRNY8Pzetxp2Ce9xIWMMGG/pw/UeB1nQT895o9Vp6uwtnDbiI5mCEYatS8/package/magefan-module-blog-extra/version/2.12.0/"
+            },
+            "require": {
+                "magefan/module-blog-author": "2.12.0",
+                "magefan/module-blog-import": "2.12.0",
+                "magefan/module-blog-plus": "2.12.0",
+                "magefan/module-productwidget": ">=2.0.14",
+                "magefan/module-youtube-widget": ">=2.0.18"
+            },
+            "type": "magento2-module",
+            "autoload": {
+                "psr-4": {
+                    "Magefan\\BlogExtra\\": ""
+                },
+                "files": [
+                    "registration.php"
+                ]
+            },
+            "license": [
+                "EULA"
+            ],
+            "authors": [
+                {
+                    "name": "Magefan",
+                    "email": "support@magefan.com"
+                }
+            ],
+            "description": "Magefan Blog Extra for Magento 2"
         },
         {
             "name": "magefan/module-blog-graph-ql",
@@ -5196,17 +5251,62 @@
             "time": "2023-08-21T14:13:31+00:00"
         },
         {
+            "name": "magefan/module-blog-import",
+            "version": "2.12.0",
+            "dist": {
+                "type": "zip",
+                "url": "https://magefan.com/repo/packages/download/user/hX6XG3KZm9wRNY8Pzetxp2Ce9xIWMMGG/pw/UeB1nQT895o9Vp6uwtnDbiI5mCEYatS8/package/magefan-module-blog-import/version/2.12.0/"
+            },
+            "type": "magento2-module",
+            "autoload": {
+                "psr-4": {
+                    "Magefan\\BlogImport\\": ""
+                },
+                "files": [
+                    "registration.php"
+                ]
+            },
+            "license": [
+                "EULA"
+            ],
+            "description": "Magefan Blog Import for Magento 2"
+        },
+        {
+            "name": "magefan/module-blog-plus",
+            "version": "2.12.0",
+            "dist": {
+                "type": "zip",
+                "url": "https://magefan.com/repo/packages/download/user/hX6XG3KZm9wRNY8Pzetxp2Ce9xIWMMGG/pw/UeB1nQT895o9Vp6uwtnDbiI5mCEYatS8/package/magefan-module-blog-plus/version/2.12.0/"
+            },
+            "require": {
+                "magefan/module-blog": "2.12.0"
+            },
+            "type": "magento2-module",
+            "autoload": {
+                "files": [
+                    "registration.php"
+                ],
+                "psr-4": {
+                    "Magefan\\BlogPlus\\": ""
+                }
+            },
+            "license": [
+                "EULA"
+            ],
+            "description": "Implements Additional Blog functionality on Magento 2 store"
+        },
+        {
             "name": "magefan/module-community",
-            "version": "2.1.28",
+            "version": "2.1.29",
             "source": {
                 "type": "git",
                 "url": "https://github.com/magefan/module-community.git",
-                "reference": "33f73bd6c3726697b228424e24e38ba3245812d7"
+                "reference": "bf2ee5811175c3e923d3bf7287946c84f5c69eda"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/magefan/module-community/zipball/33f73bd6c3726697b228424e24e38ba3245812d7",
-                "reference": "33f73bd6c3726697b228424e24e38ba3245812d7",
+                "url": "https://api.github.com/repos/magefan/module-community/zipball/bf2ee5811175c3e923d3bf7287946c84f5c69eda",
+                "reference": "bf2ee5811175c3e923d3bf7287946c84f5c69eda",
                 "shasum": ""
             },
             "require": {
@@ -5225,9 +5325,34 @@
             "description": "Magefan core module, required for other Magefan extensions",
             "support": {
                 "issues": "https://github.com/magefan/module-community/issues",
-                "source": "https://github.com/magefan/module-community/tree/2.1.28"
+                "source": "https://github.com/magefan/module-community/tree/2.1.29"
             },
-            "time": "2024-06-14T13:22:52+00:00"
+            "time": "2024-07-03T07:10:45+00:00"
+        },
+        {
+            "name": "magefan/module-productwidget",
+            "version": "2.0.14",
+            "dist": {
+                "type": "zip",
+                "url": "https://magefan.com/repo/packages/download/user/hX6XG3KZm9wRNY8Pzetxp2Ce9xIWMMGG/pw/UeB1nQT895o9Vp6uwtnDbiI5mCEYatS8/package/magefan-module-productwidget/version/2.0.14/"
+            },
+            "require": {
+                "magefan/module-community": ">=2.1.29",
+                "magefan/module-wysiwyg-advanced": ">=2.0.15"
+            },
+            "type": "magento2-module",
+            "autoload": {
+                "psr-4": {
+                    "Magefan\\ProductWidget\\": ""
+                },
+                "files": [
+                    "registration.php"
+                ]
+            },
+            "license": [
+                "EULA"
+            ],
+            "description": "Advanced Product Widget for Magento 2"
         },
         {
             "name": "magefan/module-wysiwyg-advanced",
@@ -5266,6 +5391,29 @@
                 "source": "https://github.com/magefan/module-wysiwyg-advanced/tree/2.0.15"
             },
             "time": "2023-05-30T14:33:57+00:00"
+        },
+        {
+            "name": "magefan/module-youtube-widget",
+            "version": "2.0.18",
+            "dist": {
+                "type": "zip",
+                "url": "https://magefan.com/repo/packages/download/user/hX6XG3KZm9wRNY8Pzetxp2Ce9xIWMMGG/pw/UeB1nQT895o9Vp6uwtnDbiI5mCEYatS8/package/magefan-module-youtube-widget/version/2.0.18/"
+            },
+            "require": {
+                "magefan/module-community": ">=2.1.29"
+            },
+            "type": "magento2-module",
+            "autoload": {
+                "psr-4": {
+                    "Magefan\\YouTubeWidget\\": ""
+                },
+                "files": [
+                    "registration.php"
+                ]
+            },
+            "license": [
+                "EULA"
+            ]
         },
         {
             "name": "magenizr/magento2-resetuibookmarks",
@@ -17759,11 +17907,11 @@
         },
         {
             "name": "magmodules/magento2-channable",
-            "version": "1.18.2",
+            "version": "1.19.0",
             "dist": {
                 "type": "zip",
-                "url": "https://repo.magento.com/archives/magmodules/magento2-channable/magmodules-magento2-channable-1.18.2.0.zip",
-                "shasum": "25bb9bf9d71cdb192eddbdd6b936eb447f13b39b"
+                "url": "https://repo.magento.com/archives/magmodules/magento2-channable/magmodules-magento2-channable-1.19.0.0.zip",
+                "shasum": "349b022993a7b1ab8fda6e95573374ac021b2355"
             },
             "require": {
                 "ext-json": "*",

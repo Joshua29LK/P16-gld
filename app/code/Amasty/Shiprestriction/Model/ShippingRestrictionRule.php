@@ -7,6 +7,9 @@
 
 namespace Amasty\Shiprestriction\Model;
 
+use Amasty\Shiprestriction\Api\Data\RuleInterface;
+use Amasty\Shiprestriction\Model\Validation\NextRuleValidatorInterface;
+
 class ShippingRestrictionRule
 {
     /**
@@ -39,18 +42,30 @@ class ShippingRestrictionRule
      */
     private $salesRuleValidator;
 
+    /**
+     * @var array
+     */
+    private $nextRulesValidators;
+
+    /**
+     * @var bool|null
+     */
+    private $skipNextRules = null;
+
     public function __construct(
         \Magento\Framework\App\State $appState,
         \Amasty\Shiprestriction\Model\ResourceModel\Rule\Collection $rulesCollection,
         \Amasty\Shiprestriction\Model\ProductRegistry $productRegistry,
         \Amasty\Shiprestriction\Model\Message\MessageBuilder $messageBuilder,
-        \Amasty\CommonRules\Model\Validator\SalesRule $salesRuleValidator
+        \Amasty\CommonRules\Model\Validator\SalesRule $salesRuleValidator,
+        array $nextRulesValidators = []
     ) {
         $this->appState = $appState;
         $this->rulesCollection = $rulesCollection;
         $this->productRegistry = $productRegistry;
         $this->messageBuilder = $messageBuilder;
         $this->salesRuleValidator = $salesRuleValidator;
+        $this->nextRulesValidators = $this->initializeValidators($nextRulesValidators);
     }
 
     /**
@@ -71,10 +86,14 @@ class ShippingRestrictionRule
         $firstItem = current($allItems);
         /** @var \Magento\Quote\Model\Quote\Address $address */
         $address = $firstItem->getAddress();
+        $address->setData('city', trim((string)$address->getData('city')));
+        $address->setData('postcode', trim((string)$address->getData('postcode')));
         $address->setItemsToValidateRestrictions($allItems);
 
         //multishipping optimization
-        $this->prepareAllRules($address);
+        if (!$this->allRules) {
+            $this->allRules = $this->prepareAllRules($address);
+        }
 
         /**
          * Fix for admin checkout
@@ -100,22 +119,22 @@ class ShippingRestrictionRule
      * @param $address
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    protected function prepareAllRules($address)
+    public function prepareAllRules($address)
     {
-        if (!$this->allRules) {
-            $this->allRules = $this->rulesCollection->addAddressFilter($address);
+        $allRules = $this->rulesCollection->addAddressFilter($address);
 
-            if ($this->isAdmin()) {
-                $this->allRules->addFieldToFilter('for_admin', 1);
-            }
-
-            $this->allRules = $this->rulesCollection->getItems();
-
-            /** @var \Amasty\Shiprestriction\Model\Rule $rule */
-            foreach ($this->allRules as $rule) {
-                $rule->afterLoad();
-            }
+        if ($this->isAdmin()) {
+            $allRules->addFieldToFilter('for_admin', 1);
         }
+
+        $allRules = $this->rulesCollection->getItems();
+
+        /** @var \Amasty\Shiprestriction\Model\Rule $rule */
+        foreach ($allRules as $rule) {
+            $rule->afterLoad();
+        }
+
+        return $allRules;
     }
 
     /**
@@ -146,6 +165,10 @@ class ShippingRestrictionRule
 
                 $rule->setCustomRestrictionMessage($newMessage);
                 $validRules[] = $rule;
+
+                if (!$this->isValidNextRules($rule)) {
+                    break;
+                }
             }
         }
 
@@ -159,5 +182,37 @@ class ShippingRestrictionRule
     protected function isAdmin()
     {
         return $this->appState->getAreaCode() == \Magento\Backend\App\Area\FrontNameResolver::AREA_CODE;
+    }
+
+    /**
+     * @return NextRuleValidatorInterface[]
+     */
+    private function initializeValidators(array $nextRulesValidators): array
+    {
+        $validators = [];
+        foreach ($nextRulesValidators as $validator) {
+            if (!$validator instanceof NextRuleValidatorInterface) {
+                throw new \InvalidArgumentException(
+                    'Type "' . get_class($validator) . '" is not instance of '
+                    . NextRuleValidatorInterface::class
+                );
+            }
+            $validators[] = $validator;
+        }
+
+        return $validators;
+    }
+
+    protected function isValidNextRules(RuleInterface $rule): bool
+    {
+        $isValid = true;
+        foreach ($this->nextRulesValidators as $validator) {
+            $isValid = $validator->isValid($rule);
+            if ($isValid === false) {
+                break;
+            }
+        }
+
+        return $isValid;
     }
 }

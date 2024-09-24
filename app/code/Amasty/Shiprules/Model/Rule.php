@@ -8,6 +8,7 @@
 namespace Amasty\Shiprules\Model;
 
 use Amasty\Shiprules\Api\Data\RuleInterface;
+use Amasty\Shiprules\Api\Data\RuleExtensionInterface;
 use Amasty\Shiprules\Model\ResourceModel\Rule as ResourceRule;
 use Amasty\Shiprules\Model\ResourceModel\Rule\RelationsResolver;
 use Amasty\Shiprules\Model\Rule\Validator\ValidatorComposite;
@@ -15,6 +16,11 @@ use Magento\Framework\App\ObjectManager;
 
 class Rule extends \Amasty\CommonRules\Model\Rule implements RuleInterface
 {
+    /**
+     * @var string
+     */
+    protected $_eventPrefix = 'amasty_shiprules_rule_model';
+
     /**
      * @var ValidatorComposite
      */
@@ -67,6 +73,16 @@ class Rule extends \Amasty\CommonRules\Model\Rule implements RuleInterface
         return $this;
     }
 
+    private function convertExtensionAttributesToObject(array $extensionAttributesData)
+    {
+        /** @var RuleExtensionInterface $extensionAttributes */
+        $extensionAttributes = $this->extensionAttributesFactory->create(
+            get_class($this),
+            ['data' => $extensionAttributesData]
+        );
+        $this->_setExtensionAttributes($extensionAttributes);
+    }
+
     /**
      * @param \Magento\Framework\DataObject $object
      * @param array|null $items
@@ -108,6 +124,10 @@ class Rule extends \Amasty\CommonRules\Model\Rule implements RuleInterface
                 $arr['actions'][1],
                 'actions'
             );
+        }
+
+        if (isset($data[self::EXTENSION_ATTRIBUTES_KEY]) && is_array($data[self::EXTENSION_ATTRIBUTES_KEY])) {
+            $this->convertExtensionAttributesToObject($data[self::EXTENSION_ATTRIBUTES_KEY]);
         }
 
         return $this;
@@ -787,5 +807,15 @@ class Rule extends \Amasty\CommonRules\Model\Rule implements RuleInterface
         }
 
         return $this->validatorComposite;
+    }
+
+    public function getExtensionAttributes(): RuleExtensionInterface
+    {
+        return $this->_getExtensionAttributes();
+    }
+
+    public function setExtensionAttributes(RuleExtensionInterface $extensionAttributes)
+    {
+        return $this->_setExtensionAttributes($extensionAttributes);
     }
 }

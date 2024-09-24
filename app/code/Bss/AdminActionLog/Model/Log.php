@@ -344,8 +344,6 @@ class Log
                     if (isset($productData['quantity_and_stock_status']['qty'])) {
                         $newValue['qty'] = $productData['quantity_and_stock_status']['qty'];
                         $this->sendmail = true;
-                    } else {
-                        $newValue['qty'] = '';
                     }
                 }
                 if (array_key_exists('update_time', $newValue)) {

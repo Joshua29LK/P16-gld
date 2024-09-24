@@ -22,8 +22,7 @@
         "swissup/easytabs": "1.12.9",
         "rosell-dk/webp-convert": "^2.9",
         "dotsquares/module-advance-discount": "^1.0",
-        "magmodules/magento2-channable": "1.18.2",
-        "magefan/module-blog": "2.11.4",
+        "magmodules/magento2-channable": "1.19.0",
         "geissweb/module-euvat": "1.21.2",
         "magevision/module-update-order-email-address": "2.4.5",
         "snmportal/module-syntaxhighlighter": "2.4.6",
@@ -43,7 +42,9 @@
         "fooman/pdfcustomiser-m2": "8.11.0",
         "multisafepay/magento2": "3.7.1",
         "cweagans/composer-patches": "^1.7",
-        "redchamps/module-weight-display": "1.0.3"
+        "redchamps/module-weight-display": "1.0.3",
+        "magefan/module-productwidget": "^2.0",
+        "magefan/module-blog-extra": "2.12.0"
     },
     "require-dev": {
 		"allure-framework/allure-phpunit": "~1.5.0",
@@ -136,6 +137,10 @@
         "redchamps": {
             "type": "composer",
             "url": "https://RkIXo16HMUDYAKLXxu4WASILzmPS:OMRKsT5QD9uNJ1Y2T5nHqPtzmeu@repo.redchamps.com/repositories/info@medeka.nl-chckh3yEvmUcgk1nSOOUwz6VMAor4gb9"
+        },
+        "magefan-blog-plus-extra-m2": {
+            "type": "composer",
+            "url": "https://magefan.com/repo/hX6XG3KZm9wRNY8Pzetxp2Ce9xIWMMGG/UeB1nQT895o9Vp6uwtnDbiI5mCEYatS8/"
         }
     },
     "extra": {

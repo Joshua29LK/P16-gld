@@ -25,6 +25,7 @@ class Config extends ConfigProviderAbstract
     public const NOTIFICATIONS_FREQUENCY = 'notifications/frequency';
     public const NOTIFICATIONS_TYPE = 'notifications/type';
     public const NOTIFICATIONS_ADS_ENABLE = 'notifications/ads_enable';
+    public const LICENSE_NOTIFICATIONS_ENABLE = 'notifications/enable_license_notifications';
     public const LICENCE_SERVICE_API_URL = 'licence_service/api_url';
 
     public const AMASTY_MENU_ENABLE = 'menu/enable';
@@ -90,6 +91,11 @@ class Config extends ConfigProviderAbstract
     public function isAdsEnabled(): bool
     {
         return (bool)$this->getValue(self::NOTIFICATIONS_ADS_ENABLE);
+    }
+
+    public function isLicenseNotificationsEnabled(): bool
+    {
+        return (bool)$this->getValue(self::LICENSE_NOTIFICATIONS_ENABLE);
     }
 
     public function isAmastyMenuEnabled(): bool
