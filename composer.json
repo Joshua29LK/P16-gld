@@ -40,11 +40,11 @@
         "mirasvit/module-core": "^1.4",
         "edifference/in3-onsite-messaging": "^1.0",
         "fooman/pdfcustomiser-m2": "8.11.0",
-        "multisafepay/magento2": "3.7.1",
         "cweagans/composer-patches": "^1.7",
         "redchamps/module-weight-display": "1.0.3",
         "magefan/module-productwidget": "^2.0",
-        "magefan/module-blog-extra": "2.12.0"
+        "magefan/module-blog-extra": "2.12.0",
+        "multisafepay/magento2": "3.8.1"
     },
     "require-dev": {
 		"allure-framework/allure-phpunit": "~1.5.0",

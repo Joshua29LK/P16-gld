@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "0485a5f5040bb3fc3a5a625550fca347",
+    "content-hash": "4d00093272bb1581a30a9ea1be3df960",
     "packages": [
         {
             "name": "2tvenom/cborencode",
@@ -18252,23 +18252,23 @@
         },
         {
             "name": "multisafepay/magento2",
-            "version": "3.7.1",
+            "version": "3.8.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/MultiSafepay/magento2.git",
-                "reference": "cce501a5c715b2a2206da8c3597126d69db41580"
+                "reference": "8832bc8101e8caf684f5f669a47811a37bbb3d58"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/MultiSafepay/magento2/zipball/cce501a5c715b2a2206da8c3597126d69db41580",
-                "reference": "cce501a5c715b2a2206da8c3597126d69db41580",
+                "url": "https://api.github.com/repos/MultiSafepay/magento2/zipball/8832bc8101e8caf684f5f669a47811a37bbb3d58",
+                "reference": "8832bc8101e8caf684f5f669a47811a37bbb3d58",
                 "shasum": ""
             },
             "require": {
-                "multisafepay/magento2-adminhtml": "1.29.0",
+                "multisafepay/magento2-adminhtml": "1.30.0",
                 "multisafepay/magento2-catalog-inventory": "1.0.3",
-                "multisafepay/magento2-core": "3.7.1",
-                "multisafepay/magento2-frontend": "2.6.2",
+                "multisafepay/magento2-core": "3.8.1",
+                "multisafepay/magento2-frontend": "2.7.1",
                 "multisafepay/magento2-msi": "1.0.2"
             },
             "type": "metapackage",
@@ -18279,22 +18279,22 @@
             "description": "MultiSafepay module suite for Magento 2",
             "support": {
                 "issues": "https://github.com/MultiSafepay/magento2/issues",
-                "source": "https://github.com/MultiSafepay/magento2/tree/3.7.1"
+                "source": "https://github.com/MultiSafepay/magento2/tree/3.8.1"
             },
-            "time": "2024-08-06T11:50:03+00:00"
+            "time": "2024-09-20T09:50:30+00:00"
         },
         {
             "name": "multisafepay/magento2-adminhtml",
-            "version": "1.29.0",
+            "version": "1.30.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/MultiSafepay/magento2-adminhtml.git",
-                "reference": "6719fa7f38b3f406130b5b06937833362d3f44c3"
+                "reference": "e727e88f34c4b1df9cab314f5b5f0703a747761a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/MultiSafepay/magento2-adminhtml/zipball/6719fa7f38b3f406130b5b06937833362d3f44c3",
-                "reference": "6719fa7f38b3f406130b5b06937833362d3f44c3",
+                "url": "https://api.github.com/repos/MultiSafepay/magento2-adminhtml/zipball/e727e88f34c4b1df9cab314f5b5f0703a747761a",
+                "reference": "e727e88f34c4b1df9cab314f5b5f0703a747761a",
                 "shasum": ""
             },
             "require": {
@@ -18303,7 +18303,7 @@
                 "magento/module-backend": "^101.0|^102.0",
                 "magento/module-config": "^101.0",
                 "magento/module-customer": "^102.0|^103.0",
-                "multisafepay/magento2-core": "^3.7"
+                "multisafepay/magento2-core": "^3.8"
             },
             "type": "magento2-module",
             "autoload": {
@@ -18321,9 +18321,9 @@
             "description": "MultiSafepay backend module for Magento 2",
             "support": {
                 "issues": "https://github.com/MultiSafepay/magento2-adminhtml/issues",
-                "source": "https://github.com/MultiSafepay/magento2-adminhtml/tree/1.29.0"
+                "source": "https://github.com/MultiSafepay/magento2-adminhtml/tree/1.30.0"
             },
-            "time": "2024-07-08T10:19:48+00:00"
+            "time": "2024-08-31T14:38:48+00:00"
         },
         {
             "name": "multisafepay/magento2-catalog-inventory",
@@ -18367,16 +18367,16 @@
         },
         {
             "name": "multisafepay/magento2-core",
-            "version": "3.7.1",
+            "version": "3.8.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/MultiSafepay/magento2-core.git",
-                "reference": "131d3ee3419acfed5e3116df3005300c7adb7dca"
+                "reference": "143a898c51e96abc712fe3fc7c1d133f01215a0e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/MultiSafepay/magento2-core/zipball/131d3ee3419acfed5e3116df3005300c7adb7dca",
-                "reference": "131d3ee3419acfed5e3116df3005300c7adb7dca",
+                "url": "https://api.github.com/repos/MultiSafepay/magento2-core/zipball/143a898c51e96abc712fe3fc7c1d133f01215a0e",
+                "reference": "143a898c51e96abc712fe3fc7c1d133f01215a0e",
                 "shasum": ""
             },
             "require": {
@@ -18418,22 +18418,22 @@
             "description": "MultiSafepay core module for Magento 2",
             "support": {
                 "issues": "https://github.com/MultiSafepay/magento2-core/issues",
-                "source": "https://github.com/MultiSafepay/magento2-core/tree/3.7.1"
+                "source": "https://github.com/MultiSafepay/magento2-core/tree/3.8.1"
             },
-            "time": "2024-08-06T11:49:43+00:00"
+            "time": "2024-09-20T09:12:44+00:00"
         },
         {
             "name": "multisafepay/magento2-frontend",
-            "version": "2.6.2",
+            "version": "2.7.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/MultiSafepay/magento2-frontend.git",
-                "reference": "a4ef9e6c2a24331278d6424fae185706a3a511bc"
+                "reference": "196951434db3c0bc4e2f94cf68ab1ac6a64b632b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/MultiSafepay/magento2-frontend/zipball/a4ef9e6c2a24331278d6424fae185706a3a511bc",
-                "reference": "a4ef9e6c2a24331278d6424fae185706a3a511bc",
+                "url": "https://api.github.com/repos/MultiSafepay/magento2-frontend/zipball/196951434db3c0bc4e2f94cf68ab1ac6a64b632b",
+                "reference": "196951434db3c0bc4e2f94cf68ab1ac6a64b632b",
                 "shasum": ""
             },
             "require": {
@@ -18442,8 +18442,8 @@
                 "magento/module-quote": "^101.0",
                 "magento/module-sales": "^102.0|^103.0",
                 "magento/module-store": "^101.0",
-                "multisafepay/magento2-adminhtml": "^1.29",
-                "multisafepay/magento2-core": "^3.7.1"
+                "multisafepay/magento2-adminhtml": "^1.30",
+                "multisafepay/magento2-core": "^3.8"
             },
             "type": "magento2-module",
             "autoload": {
@@ -18461,9 +18461,9 @@
             "description": "MultiSafepay frontend module for Magento 2",
             "support": {
                 "issues": "https://github.com/MultiSafepay/magento2-frontend/issues",
-                "source": "https://github.com/MultiSafepay/magento2-frontend/tree/2.6.2"
+                "source": "https://github.com/MultiSafepay/magento2-frontend/tree/2.7.1"
             },
-            "time": "2024-08-06T11:49:50+00:00"
+            "time": "2024-09-20T09:26:35+00:00"
         },
         {
             "name": "multisafepay/magento2-msi",
@@ -18617,16 +18617,16 @@
         },
         {
             "name": "nyholm/psr7",
-            "version": "1.8.1",
+            "version": "1.8.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Nyholm/psr7.git",
-                "reference": "aa5fc277a4f5508013d571341ade0c3886d4d00e"
+                "reference": "a71f2b11690f4b24d099d6b16690a90ae14fc6f3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Nyholm/psr7/zipball/aa5fc277a4f5508013d571341ade0c3886d4d00e",
-                "reference": "aa5fc277a4f5508013d571341ade0c3886d4d00e",
+                "url": "https://api.github.com/repos/Nyholm/psr7/zipball/a71f2b11690f4b24d099d6b16690a90ae14fc6f3",
+                "reference": "a71f2b11690f4b24d099d6b16690a90ae14fc6f3",
                 "shasum": ""
             },
             "require": {
@@ -18679,7 +18679,7 @@
             ],
             "support": {
                 "issues": "https://github.com/Nyholm/psr7/issues",
-                "source": "https://github.com/Nyholm/psr7/tree/1.8.1"
+                "source": "https://github.com/Nyholm/psr7/tree/1.8.2"
             },
             "funding": [
                 {
@@ -18691,7 +18691,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2023-11-13T09:31:12+00:00"
+            "time": "2024-09-09T07:06:30+00:00"
         },
         {
             "name": "paragonie/constant_time_encoding",
