@@ -1500,8 +1500,11 @@ body .breadcrumbs .item:not(:last-child):after {
 .product-options-wrapper .field select, .product-options-wrapper .field input {
     border-color: #dfdfdf; }
 
-.product.info.detailed .data.item.content {padding:0}
+.product.info.detailed .data.item.content {padding:20px 0;}
 .additional-attributes-wrapper .table > :not(:first-child) {border-top-width: 0px;}
+body .product.info.detailed .product.data.items .data.switch {
+    padding-bottom: 25px !important;
+}
 
 body .block-static-block.widget, body .block-cms-link.widget {margin-bottom:0px}
 body .section-item-content .menu-container .menu.horizontal.center>ul>li {float:left;}
