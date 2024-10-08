@@ -1,42 +1,83 @@
 <?php
-	if(!empty($_POST['fieldemail'])){
-		echo '<span style="margin-left: 15px; font-size:medium; color: green;">Bedankt voor het invullen. Het formulier is verzonden.</span>';
+	if (!empty($_POST['fieldemail'])) {
+		$boknummer = $_POST['fieldboknumber'];
+		if (strpos($boknummer, '90') === 0) {
+			// Melding als het boknummer met 90 begint
+			echo '<span style="margin-left: 15px; font-size:medium; color: red;">Let op: Dit is een one-way bok. Deze wordt niet opgehaald door de fabrikant.</span>';
+		} else {
+			// Normale melding bij succesvolle verzending
+			echo '<span style="margin-left: 15px; font-size:medium; color: green;">Bedankt voor het invullen. Het formulier is verzonden.</span>';
+		}
 	}
+
 	function sendMail() {
 		try {
-			if(isset($_POST['submit']) && isset($_POST['fieldname']) && isset($_POST['fieldemail']) && isset($_POST['fieldpickup']) && isset($_POST['fieldzipcode']) && isset($_POST['fieldboknumber']) && isset($_POST['fieldcomment'])){
-				$headers = "Content-type: text/html";
-				$to = "glasbok@glasdiscount.nl";
-				$mail_content = "<html><body>";
+			if (isset($_POST['submit'], $_POST['fieldname'], $_POST['fieldemail'], $_POST['fieldpickup'], $_POST['fieldzipcode'], $_POST['fieldboknumber'], $_POST['fieldcomment'])) {
+				$headers  = "Content-type: text/html; charset=UTF-8" . "\r\n";
+				$headers .= "From: Glasdiscount.nl <no-reply@glasdiscount.nl>" . "\r\n";				$to = 				"glasbok@glasdiscount.nl";
+				$mail_content  = "<html><body>";
 				$mail_content .= "<br><img data-imagetype='External' src='https://www.glasdiscount.nl/media/wysiwyg/logo-glasdiscount-newsletter.png' style='margin-bottom:5px' border='0'/><br>";
-				$mail_content .= "Beste medewerker!<br><br>Er is een bok gemeld om op te halen.<br><br>Naam: " .$_POST['fieldname']. "<br>Email: " .$_POST['fieldemail']. "<br>Telefoon: " .$_POST['fieldtelephone']. "<br>Ophalen op adres: " .$_POST['fieldpickup']. "<br>Postcode: " .$_POST['fieldzipcode']. "<br>Plaats: " .$_POST['fieldcity']. "<br>Boknummer: " .$_POST['fieldboknumber']. "<br>Ordernummer: " .$_POST['fieldordernumber']. "<br>Bericht: " .$_POST['fieldcomment']. "";
-				$mail_content .= "</body></html>";
+				$mail_content .= "Beste medewerker!<br><br>Op " . date("d-m-Y") . " is er een bok gemeld om op te halen.<br><br>";
+				$mail_content .= "Naam: " . htmlspecialchars($_POST['fieldname']) . "<br>";
+				$mail_content .= "Email: " . htmlspecialchars($_POST['fieldemail']) . "<br>";
+				$mail_content .= "Telefoon: " . htmlspecialchars($_POST['fieldtelephone']) . "<br>";
+				$mail_content .= "Ophalen op adres: " . htmlspecialchars($_POST['fieldpickup']) . "<br>";
+				$mail_content .= "Postcode: " . htmlspecialchars($_POST['fieldzipcode']) . "<br>";
+				$mail_content .= "Plaats: " . htmlspecialchars($_POST['fieldcity']) . "<br>";
+				$mail_content .= "Boknummer: " . htmlspecialchars($_POST['fieldboknumber']) . "<br>";
+				$mail_content .= "Ordernummer: " . htmlspecialchars($_POST['fieldordernumber']) . "<br>";
+				$mail_content .= "Bericht: " . (!empty($_POST['fieldcomment']) ? htmlspecialchars($_POST['fieldcomment']) : "Geen opmerking opgegeven") . "<br>";									$mail_content .= "</body></html>";
 				mail($to, 'Nieuwe aanvraag glasbok leegmelden', $mail_content, $headers);
 			}
-		} catch (Exception $e){
-			echo 'Caught exception: ',  $e->getMessage(), "\n";
+		} catch (Exception $e) {
+			error_log("Mail sending failed: " . $e->getMessage());
+			echo 'Er is een fout opgetreden bij het verzenden van uw aanvraag.';
 		}
 	}
 
 	function sendReplyMail() {
 		try {
-			if(isset($_POST['submit']) && isset($_POST['fieldname']) && isset($_POST['fieldemail']) && isset($_POST['fieldpickup']) && isset($_POST['fieldzipcode']) && isset($_POST['fieldboknumber']) && isset($_POST['fieldcomment'])){
-				$headers = "Content-type: text/html";
+			if (isset($_POST['submit'], $_POST['fieldname'], $_POST['fieldemail'], $_POST['fieldpickup'], $_POST['fieldzipcode'], $_POST['fieldboknumber'], $_POST['fieldcomment'])) {
+				$headers  = "Content-type: text/html; charset=UTF-8" . "\r\n";
+				$headers .= "From: Glasdiscount.nl <no-reply@glasdiscount.nl>" . "\r\n";
 				$to = $_POST['fieldemail'];
-				$mail_content = "<html><body>";
+				$mail_content  = "<html><body>";
 				$mail_content .= "<br><img data-imagetype='External' src='https://www.glasdiscount.nl/media/wysiwyg/logo-glasdiscount-newsletter.png' style='margin-bottom:5px' border='0'/><br>";
-				$mail_content .= "<br>Bedankt voor het invullen van het formulier.<br>";
-				$mail_content .= "<br>Een medewerker van Glasdiscount neemt binnenkort contact met u op.";
+				$mail_content .= "<br>Geachte heer/mevrouw,<br>";
+				$mail_content .= "<br>Hartelijk dank voor het invullen van het formulier. Na ontvangst van uw melding zullen de";
+				$mail_content .= "<br>betreffende fabrikanten de glasbokken zelf komen ophalen. Wij willen u erop wijzen dat dit enkele";
+				$mail_content .= "<br>weken in beslag kan nemen. Helaas kunnen wij u geen exacte datum geven waarop het ophalen";
+				$mail_content .= "<br>plaatsvindt. Wij verzoeken u daarom ervoor te zorgen dat de glasbok goed toegankelijk is vanaf de";
+				$mail_content .= "<br>openbare weg.";
+				$mail_content .= "<br><br>Alvast bedankt voor uw geduld en medewerking.";
 				$mail_content .= "<br><br>Met vriendelijke groet,";
 				$mail_content .= "<br>Team Glasdiscount!";
 				$mail_content .= "</body></html>";
 				mail($to, 'Uw aanmelding "glasbok leegmelden" is ontvangen', $mail_content, $headers);
 			}
-		} catch (Exception $e){
-			echo 'Caught exception: ',  $e->getMessage(), "\n";
+		} catch (Exception $e) {
+			error_log("Reply mail sending failed: " . $e->getMessage());
+			echo 'Er is een fout opgetreden bij het verzenden van de bevestiging.';
 		}
 	}
 ?>
+<!-- JavaScript voor real-time boknummer controle -->
+<script>
+    function checkBoknummer() {
+        var boknummerField = document.getElementById('fieldboknumber');
+        var warningMessage = document.getElementById('boknummer-warning');
+
+        // Controleer of de invoer het patroon "90" bevat, ongeacht voorafgaande letters of symbolen
+        var boknummer = boknummerField.value;
+        var regex = /90$/;  // Zoek naar "90" aan het einde van de invoer
+
+        if (regex.test(boknummer)) {
+            warningMessage.style.display = 'block';  // Toon de waarschuwing
+        } else {
+            warningMessage.style.display = 'none';   // Verberg de waarschuwing
+        }
+    }
+</script>
 <div class="contact-us-page">
     <div class="row form-contact">
 </div>
@@ -50,7 +91,9 @@
           data-mage-init='{"validation":{}}'>
 		<fieldset class="fieldset">
 				<br><p><?php /* @escapeNotVerified */
-					echo __('Op deze pagina kunt u een glasbok leegmelden door onderstaand formulier in te vullen.') ?></p>
+					echo __('Op deze pagina kunt u een glasbok leegmelden door onderstaand formulier in te vullen.<br><br>Houten bokken die beginnen met boknummer 90 zijn eenmalige (one-way) bokken en worden niet 							opgehaald door de fabrikant of Glasdiscount.<br />
+    						Houten bokken die beginnen met boknummer 95 zijn retourbokken en moeten worden afgemeld.<br />
+    						Fabrikanten halen de bokken zelf op na ontvangst van uw melding, dit kan echter enkele weken duren.') ?></p>
 			<div style="margin-top:18px">
 				<div style="display:flex; width: 100%;">
 					<div class="field name required" style="margin:0 10px 10px 0px; width:100%">
@@ -95,12 +138,15 @@
 				</div>
 				</div>
 				<div style="display:flex; width: 100%;">
-                <div class="field boknumber required" style="margin:0 10px 10px 0px; width:100%">
-					<div class="control">
-						<input placeholder="<?php echo __('Boknummer*') ?>" name="fieldboknumber" id="fieldboknumber" title="<?php /* @escapeNotVerified */
-						echo __('Boknummer') ?>" value="" class="input-text" type="text" data-validate="{required:true}"/>
+					<div class="field boknumber required" style="margin:0 10px 10px 0px; width:100%">
+						<div class="control">
+							<input placeholder="Boknummer*" name="fieldboknumber" id="fieldboknumber" title="Boknummer" value="" class="input-text" type="text" data-validate="{required:true}" oninput="checkBoknummer()"/>
+						</div>
+						<!-- Waarschuwingsmelding voor one-way bok -->
+						<span id="boknummer-warning" style="display:none; color:red; font-size:14px;">
+							Let op: Dit is een one-way bok. Deze wordt niet opgehaald door de fabrikant of Glasdiscount.
+						</span>
 					</div>
-				</div>
 				<div class="field ordernumber required" style="margin:0 10px 10px 0px; width:100%">
 					<div class="control">
 						<input placeholder="<?php echo __('Ordernummer*') ?>" name="fieldordernumber" id="fieldordernumber" title="<?php /* @escapeNotVerified */
@@ -111,9 +157,8 @@
 			</div>
 			<div class="field comment required" style="margin:0 10px 10px 0px !important;">
 				<div class="control">
-					<textarea placeholder="<?php echo __('Bericht*') ?>" name="fieldcomment" id="fieldcomment" title="<?php /* @escapeNotVerified */
-					echo __('Bericht') ?>" class="input-text" cols="5" rows="3"></textarea>
-				</div>
+					<textarea placeholder="<?php echo __('Opmerking') ?>" name="fieldcomment" id="fieldcomment" title="<?php /* @escapeNotVerified */ echo __('Opmerking') ?>" class="input-text" cols="5" rows="3"></textarea>
+			</div>
 			</div>
 			<?php echo $block->getChildHtml('form.additional.info'); ?>
 		</fieldset>
@@ -123,10 +168,6 @@
 			</div>
 		</div>
 	</form>
-	<span>*Houten bokken zonder boknummer zijn one-way bokken en worden niet opgehaald door de fabrikant. <br />
-		Fabrikanten halen de bokken zelf op na ontvangst van uw melding, dit kan echter enkele dagen duren.</span>
+    </div>
+  </div>
 </div>
-</div>
-</div>
-
-
