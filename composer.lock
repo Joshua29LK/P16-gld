@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "4d00093272bb1581a30a9ea1be3df960",
+    "content-hash": "8f5a9e0e648eb307e70f74f0643332d2",
     "packages": [
         {
             "name": "2tvenom/cborencode",
@@ -19496,6 +19496,60 @@
             "time": "2023-11-27T11:13:31+00:00"
         },
         {
+            "name": "picqer/magento2-plugin",
+            "version": "1.0.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/picqer/magento2-plugin.git",
+                "reference": "02332b0c97d7526281a0e6fd68761a30d9381ca3"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/picqer/magento2-plugin/zipball/02332b0c97d7526281a0e6fd68761a30d9381ca3",
+                "reference": "02332b0c97d7526281a0e6fd68761a30d9381ca3",
+                "shasum": ""
+            },
+            "require": {
+                "ext-curl": "*",
+                "ext-json": "*",
+                "php": ">=5.6.0"
+            },
+            "type": "magento2-module",
+            "autoload": {
+                "files": [
+                    "registration.php"
+                ],
+                "psr-4": {
+                    "Picqer\\Integration\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Anna van Brecht",
+                    "email": "support@picqer.com"
+                },
+                {
+                    "name": "Stephan Groen",
+                    "email": "support@picqer.com"
+                }
+            ],
+            "description": "Picqer Extended Integration for Magento 2",
+            "homepage": "https://github.com/picqer/magento2-plugin",
+            "keywords": [
+                "magento2",
+                "picqer"
+            ],
+            "support": {
+                "issues": "https://github.com/picqer/magento2-plugin/issues",
+                "source": "https://github.com/picqer/magento2-plugin/tree/v1.0.3"
+            },
+            "time": "2022-05-03T08:19:41+00:00"
+        },
+        {
             "name": "psr/container",
             "version": "1.1.2",
             "source": {
@@ -28650,5 +28704,5 @@
     "prefer-lowest": false,
     "platform": [],
     "platform-dev": [],
-    "plugin-api-version": "2.3.0"
+    "plugin-api-version": "2.6.0"
 }
