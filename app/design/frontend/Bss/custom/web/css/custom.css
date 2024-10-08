@@ -1503,6 +1503,9 @@ body .breadcrumbs .item:not(:last-child):after {
 .product.info.detailed .data.item.content {padding:0}
 .additional-attributes-wrapper .table > :not(:first-child) {border-top-width: 0px;}
 
+body .block-static-block.widget, body .block-cms-link.widget {margin-bottom:0px}
+body .section-item-content .menu-container .menu.horizontal.center>ul>li {float:left;}
+
 @media screen and (min-width: 992px) {
     .col-lg-3 {
         padding-left: 20px;
