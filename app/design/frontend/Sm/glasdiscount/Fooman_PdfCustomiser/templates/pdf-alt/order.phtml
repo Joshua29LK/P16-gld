@@ -84,6 +84,26 @@ Geerdink Bouwmaterialen B.V.<br/>
     <tr>
         <td colspan="2">&nbsp;</td>
     </tr>
+    <?php if ($order->getIsVirtual()): ?>
+        <tr>
+            <td valign="top" colspan="2" style="font-weight:bold;border: 2px solid #808080;background-color: #ededed"><strong><?php echo __('Payment Method') ?></strong></td>
+        </tr>
+        <tr>
+            <td valign="top" colspan="2" style="border-left: 2px solid #808080;border-bottom: 2px solid #808080;border-right: 2px solid #808080;"><?php echo $block->getPaymentBlock() ?></td>
+        </tr>
+    <?php else: ?>
+        <tr>
+            <td valign="top" width="50%" style="font-weight:bold;border: 2px solid #808080;background-color: #ededed"><strong><?php echo __('Payment Method') ?></strong></td>
+            <td valign="top" style="font-weight:bold;border: 2px solid #808080;background-color: #ededed"><strong><?php echo __('Shipping Method') ?></strong></td>
+        </tr>
+        <tr>
+            <td valign="top" width="50%" style="border-left: 2px solid #808080;border-bottom: 2px solid #808080;"><?php echo $block->getPaymentBlock() ?></td>
+            <td valign="top" style="border-bottom: 2px solid #808080;border-right: 2px solid #808080;"><?php echo $block->getShippingBlock() ?></td>
+        </tr>
+    <?php endif; ?>
+    <tr>
+        <td colspan="2">&nbsp;</td>
+    </tr>
 </table>
 
 <?php echo $block->getItemsBlock($design->getItemStyling()) ?>
