@@ -1446,6 +1446,63 @@ h2 .hint:after {
 .with-icon .hide {
     display: none;
 }
+
+body .breadcrumbs {
+    padding-left:0px;
+    padding-top:20px;
+}
+body .breadcrumbs .items {
+    font-size: 1.6rem;
+}
+body .breadcrumbs .item:not(:last-child):after {
+    line-height: 21px;
+}
+.product-info-main .page-title-wrapper h1.page-title {
+    font-size: 28px;
+    font-weight: 600;
+    color: #2f358f;
+}
+.product-info-main .action.primary.tocart {
+    background-color: #F15A29;
+    background-image: -webkit-linear-gradient(#F78D17, #F15A29);
+    background-image: linear-gradient(#F78D17, #F15A29);
+    text-shadow: 1px 1px 1px rgba(234,60,23,0.5);
+    border-width:0px;
+}
+.product-info-main .price-box .price-wrapper.price-including-tax .price{
+    font-size: 2.4rem;
+    font-weight: 500;
+    color: #F15A29;
+}
+.product-info-main .product-add-form {
+    margin-top:25px;
+    max-width: 450px;
+}
+.product-options-wrapper {
+    margin-top: 20px;
+    color:#4c4c4c;
+}
+.product-options-wrapper .fieldset .label {
+    font-weight: 400;
+    font-size: 16px;
+}
+
+.product-options-wrapper .fieldset {
+    margin: 0 -5px;
+}
+.product-options-wrapper .fieldset .field {
+    padding: 0 5px;
+}
+.product-options-wrapper .fieldset .afmeting.field {
+    width: 50%;
+    display: inline-block;
+}
+.product-options-wrapper .field select, .product-options-wrapper .field input {
+    border-color: #dfdfdf; }
+
+.product.info.detailed .data.item.content {padding:0}
+.additional-attributes-wrapper .table > :not(:first-child) {border-top-width: 0px;}
+
 @media screen and (min-width: 992px) {
     .col-lg-3 {
         padding-left: 20px;
@@ -2409,6 +2466,12 @@ h2 .hint:after {
 @media (min-width: 769px) {
     #search_mini_form .ico-search {
         margin-left: 0 !important;
+    }
+    body.page-layout-1column .product-info-main {
+        width: 60%;
+    }
+    body.page-layout-1column .product.media {
+        width: 39%;
     }
 }
 @media only screen and (min-width: 600px) and (max-width: 991px) and (orientation: landscape) {
