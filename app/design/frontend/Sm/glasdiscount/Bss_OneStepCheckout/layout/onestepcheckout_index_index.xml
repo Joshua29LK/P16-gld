@@ -106,6 +106,12 @@
                                                 </item>
                                             </item>
                                         </item>
+                                        <item name="subscribe" xsi:type="array">
+                                            <item name="sortOrder" xsi:type="string">260</item>
+                                        </item>
+                                        <item name="agreements" xsi:type="array">
+                                            <item name="sortOrder" xsi:type="string">250</item>
+                                        </item>
                                     </item>
                                 </item>
                             </item>
