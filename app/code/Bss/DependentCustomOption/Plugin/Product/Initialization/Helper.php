@@ -76,8 +76,10 @@ class Helper
     private function removeOption($options, $product)
     {
         $allDependentIds = [];
-        foreach ($product->getData('options') as $productOption) {
-            $allDependentIds[] = $productOption->getData('dependent_id');
+        if ($product->getData('options')) {
+            foreach ($product->getData('options') as $productOption) {
+                $allDependentIds[] = $productOption->getData('dependent_id');
+            }
         }
 
         $dependentIds = $this->getDependentIds($options);
@@ -85,7 +87,7 @@ class Helper
         foreach ($allDependentIds as $dependentId) {
             if (!in_array($dependentId, $dependentIds)) {
                 $this->dependOption->removeDependentOnOptions($dependentId);
-                $this->dependOption->removeOptionByDepedentId($dependentId);
+                $this->dependOption->removeOptionByDepedentId($dependentId, $product->getId());
             }
         }
     }
