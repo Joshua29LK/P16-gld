@@ -1,0 +1,26 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+?>
+<?php /* @var $block \Magento\Catalog\Block\Product\View\AbstractView */?>
+<?php $_product = $block->getProduct() ?>
+
+<?php if ($block->displayProductStockStatus()) :?>
+    <?php if ($_product->isAvailable()) :?>
+       
+    <?php else :?>
+        <div class="uit-voorraad price-wrapper price-including-tax" title="<?= $block->escapeHtmlAttr(__('Availability')) ?>">
+            <span class="price-box"><span class="price"><?= $block->escapeHtml(__('Out of stock')) ?></span></span>
+			<p>Dit product is momenteel helaas niet leverbaar.</p>
+        </div>
+		<style>
+			body.catalog-product-view .price-box.price-final_price{display:none;}
+			.uit-voorraad .price-box {color:#f15a29;margin-bottom:10px;display:inline-block;}
+			.uit-voorraad p {font-size:1.5rem;}
+			.catalog-product-view .product-info-main .uit-voorraad .price-box{margin-top:0}
+		</style>
+    <?php endif; ?>
+<?php endif; ?>
+
