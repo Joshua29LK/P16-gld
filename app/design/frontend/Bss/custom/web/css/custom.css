@@ -1592,6 +1592,7 @@ body .easycatalogimg-grid .item {
 .minicart-items .price-excluding-tax {display:none}
 
 .catalog-product-view .fotorama--fullscreen {z-index:99999!important;}
+.fotorama__nav-wrap.fotorama__nav-wrap--horizontal {text-align:center;}
 /* 
  * This CSS file contains styles for the main layout of the webpage.
  * 
