@@ -1,0 +1,13 @@
+<tr class="grand totals incl">
+    <th class="mark" scope="row">
+        <strong data-bind="i18n: title"></strong>
+    </th>
+    <td data-bind="attr: {'data-th': inclTaxLabel}" class="amount">
+        <strong><span class="price color-red" data-bind="text: getValue()"></span></strong>
+        <span> (</span>
+        <span data-bind="i18n: 'Inclusief'"></span>
+        <strong><span class="price color-red" data-bind="text: ' ' + getFormattedPrice(getTotals().tax_amount) + ' '"></span></strong>
+        <span data-bind="i18n: 'Tax'"></span>
+        <span>)</span>
+    </td>
+</tr>

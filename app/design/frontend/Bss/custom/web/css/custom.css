@@ -1577,6 +1577,21 @@ body .easycatalogimg-grid .item {
     padding: 0px !important;
 }
 
+/* minicart  */
+#share-cart-btn-mini-cart, .block-minicart .subtotal .label {
+    display:none;
+}
+.block-minicar .action.primary {
+    background: #12337F;
+    border: 1px solid #12337F;
+}
+.block-minicart .minicart-items .product-item-details {
+    text-align:left;
+}
+.minicart-items .update-cart-item {display: inline-block!important;}
+.minicart-items .price-excluding-tax {display:none}
+
+
 /* 
  * This CSS file contains styles for the main layout of the webpage.
  * 
