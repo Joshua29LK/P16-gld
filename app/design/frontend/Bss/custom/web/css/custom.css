@@ -1594,9 +1594,18 @@ body .easycatalogimg-grid .item {
 .catalog-product-view .fotorama--fullscreen {z-index:99999!important;}
 .fotorama__nav-wrap.fotorama__nav-wrap--horizontal {text-align:center;}
 
+/* cart */
+.checkout-cart-index .cart-summary #block-shipping {display:none;}
+.checkout-cart-index .page-title-wrapper h1 {margin:25px 0 10px}
+.checkout-cart-index .cart.table-wrapper .item-options {font-size:inherit}
+.checkout-cart-index .table > :not(:first-child) {border-width:0px;}
+.checkout-cart-index .table > :not(caption) > * > * {border-width:0px;}
+.checkout-cart-index .cart-summary>.title {font-weight: 600;color: #212529; margin: 2.1rem 0 0.7rem;}
+.checkout-cart-index .block.discount {color: #212529;}
+
 /* checkout  */
 body.bss-onestepcheckout .modal-content, body.bss-onestepcheckout .modal-header {border-width:0px;}
-.fieldset.create-account .field .label {float:none;text-align: left;}
+body.bss-onestepcheckout .fieldset.create-account .field .label {float:none;text-align: left;}
 .form.form-login {margin-top:12px;}
 .form.form-login .fieldset > .field {margin-bottom:5px;}
 .fieldset.address {margin:0 -1%}
