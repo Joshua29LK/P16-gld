@@ -1,0 +1,31 @@
+<?php
+$currentProduct = $block->getCurrentProduct();
+$widthHeightIds = $block->getWidthHeightIds();
+$formula = $block->getConditions($currentProduct->getId());
+if (is_array($formula) && isset($formula[0]['conditions'][0]['weight'])) {
+    $weightFormula = $formula[0]['conditions'][0]['weight'];
+} else {
+    $weightFormula = null;
+}
+?>
+
+<div class="specificaties-box">
+    <h2>Specificaties:</h2>
+    <ul>
+        <li class="oppervlakte"><span>Oppervlakte</span> <span id="oppervlakte-value">0</span> m²</li>
+        <li class="gewicht"><span>Gewicht (per ruit)</span> <span id="weight-value">0</span> kg</li>
+    </ul>
+</div>
+
+<script type="text/x-magento-init">
+    {
+        "*": {
+            "Bss_SpecificatiesBox/js/area-calculator": {
+                "widthSelector": "#options_<?php echo $widthHeightIds['width_id']; ?>_text",
+                "heightSelector": "#options_<?php echo $widthHeightIds['height_id']; ?>_text",
+                "weightFormula": "<?php echo $weightFormula; ?>"
+        }
+    }
+}
+</script>
+

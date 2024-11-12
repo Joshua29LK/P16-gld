@@ -120,8 +120,10 @@ define(['jquery','Magento_Catalog/js/price-utils','underscore','mage/template'],
 					{
 						payload.eventData.push(value);
 					});
-					
-					dataLayer.push(payload);
+
+					if (typeof dataLayer !== 'undefined' && Array.isArray(dataLayer)) {
+						dataLayer.push(payload);
+					}
 				}
 			}
 		});
