@@ -4,28 +4,85 @@ namespace Bss\SpecificatiesBox\Block;
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\Registry;
 use Itoris\ProductPriceFormula\Helper\Data;
+use Magento\Tax\Model\Calculation as TaxCalculation;
 
+/**
+ * Class SpecificatiesBox
+ *
+ * Block class for displaying specifications and handling tax calculations.
+ */
 class SpecificatiesBox extends Template
 {
+    /**
+     * @var Registry
+     */
     protected $_registry;
+
+    /**
+     * @var Data
+     */
     protected $helper;
 
+    /**
+     * @var TaxCalculation
+     */
+    protected $taxCalculation;
+
+    /**
+     * @var \Magento\Framework\ObjectManagerInterface
+     */
+    protected $_objectManager;
+
+    /**
+     * Constructor
+     *
+     * @param Template\Context $context
+     * @param Registry $registry
+     * @param Data $helper
+     * @param \Magento\Framework\ObjectManagerInterface $objectManager
+     * @param TaxCalculation $taxCalculation
+     * @param array $data
+     */
     public function __construct(
         Template\Context $context,
         Registry $registry,
-        \Itoris\ProductPriceFormula\Helper\Data $helper,
+        Data $helper,
         \Magento\Framework\ObjectManagerInterface $objectManager,
+        TaxCalculation $taxCalculation,
         array $data = []
     ) {
         parent::__construct($context, $data);
         $this->_registry = $registry;
         $this->helper = $helper;
         $this->_objectManager = $objectManager;
+        $this->taxCalculation = $taxCalculation;
     }
+
 
     public function getCurrentProduct()
     {
         return $this->_registry->registry('current_product');
+    }
+
+    public function getTaxRate()
+    {
+        $product = $this->getCurrentProduct();
+        
+        if (!$product) {
+            return null;
+        }
+        
+        $taxClassId = $product->getTaxClassId();
+        
+        $customerGroupId = $this->_objectManager->get('Magento\Customer\Model\Session')->getCustomerGroupId();
+        $store = $this->_objectManager->get('Magento\Store\Model\StoreManagerInterface')->getStore();
+        
+        $request = $this->taxCalculation->getRateRequest(null, null, $customerGroupId, $store);
+        $request->setProductClassId($taxClassId);
+        
+        $taxRate = $this->taxCalculation->getRate($request);
+
+        return $taxRate;
     }
 
     public function getConditions($productId) {

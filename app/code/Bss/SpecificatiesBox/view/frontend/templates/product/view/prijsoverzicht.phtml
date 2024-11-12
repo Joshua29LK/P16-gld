@@ -1,27 +1,17 @@
+<?php
+$taxRate = $block->getTaxRate();
+?>
+
 <div class="prijsoverzicht-box" data-bind="scope: 'priceSummary'">
     <h2>Prijsoverzicht:</h2>
     <ul>
         <li class="total_excl_btw">
             <span>Total excl. btw:</span>
-            <span data-bind="html: subtotal, css: 'float-right-class'"></span>
+            <span id="total_excl_btw-value" style="float: right;">€ 0</span>
         </li>
         <li class="product_btw">
-            <span>btw <span data-bind="text: taxRate"></span>:</span>
-            <span data-bind="html: tax, css: 'float-right-class'"></span>
+            <span>btw <?= $taxRate . "%" ?>:</span>
+            <span id="product_btw-value" style="float: right;">€ 0</span>
         </li>
     </ul>
 </div>
-
-<script type="text/x-magento-init">
-    {
-        "*": {
-            "Magento_Ui/js/core/app": {
-                "components": {
-                    "priceSummary": {
-                        "component": "Bss_SpecificatiesBox/js/price-summary"
-                    }
-                }
-            }
-        }
-    }
-</script>
