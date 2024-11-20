@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework/Setup/Declaration/Schema/etc/schema.xsd">
+    <table name="bss_zip_delivery" resource="default" engine="innodb" comment="BSS Zip Delivery Table">
+        <column xsi:type="int" name="zip_id" nullable="false" identity="true" unsigned="true" comment="Zip ID"/>
+        <column xsi:type="varchar" name="zip_code" nullable="false" length="10" comment="Zip Code"/>
+        <column xsi:type="text" name="delivery_days" nullable="true" comment="Delivery Days"/>
+        <column xsi:type="timestamp" name="created_at" nullable="false" default="CURRENT_TIMESTAMP" comment="Created At"/>
+        <column xsi:type="timestamp" name="updated_at" nullable="false" default="CURRENT_TIMESTAMP" on_update="true" comment="Updated At"/>
+
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="zip_id"/>
+        </constraint>
+    </table>
+</schema>

@@ -1,0 +1,17 @@
+<?xml version="1.0" ?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework/Menu/etc/menu.xsd">
+    <menu>
+        <add id="Bss_CustomizeDeliveryDate::main_menu"
+             title="Customize Delivery Date"
+             module="Bss_CustomizeDeliveryDate"
+             sortOrder="100"
+             resource="Bss_CustomizeDeliveryDate::main_menu"/>
+        <add id="Bss_CustomizeDeliveryDate::zip_management"
+             title="Zip Delivery Management"
+             module="Bss_CustomizeDeliveryDate"
+             sortOrder="10"
+             parent="Bss_CustomizeDeliveryDate::main_menu"
+             action="customize_delivery_date/zip/index"
+             resource="Bss_CustomizeDeliveryDate::zip_management"/>
+    </menu>
+</config>
