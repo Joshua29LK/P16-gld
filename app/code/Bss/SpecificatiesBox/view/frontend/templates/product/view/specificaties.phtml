@@ -29,3 +29,22 @@ if (is_array($formula) && isset($formula[0]['conditions'][0]['weight'])) {
 }
 </script>
 
+<?php if(empty($formula) || !$widthHeightIds['width_id'] || !$widthHeightIds['height_id']) { ?>
+    <style>
+        .fixed-product-box {
+            display: none;
+        }
+
+        .product-info-main {
+            padding-right: 0 !important;
+        }
+
+        .product-info-price {
+            display: block !important;
+        }
+
+        .product-options-bottom {
+            display: block !important;
+        }
+    </style>
+<?php } ?>

@@ -35,17 +35,17 @@
             });
             
             $('#specificaties-product-addtocart-button').on('click', function () {
-                var button = this;
-                var originalText = button.innerHTML;
-                
-                button.innerHTML = '<span><i class="fa fa-shopping-cart"></i> Toevoegen...</span>';
-                button.disabled = true;
-                
-                setTimeout(function() {
-                    button.innerHTML = originalText;
-                    button.disabled = false;
-                }, 3000);
-                
+                // var button = this;
+                // var originalText = button.innerHTML;
+                //
+                // button.innerHTML = '<span><i class="fa fa-shopping-cart"></i> Toevoegen...</span>';
+                // button.disabled = true;
+                //
+                // setTimeout(function() {
+                //     button.innerHTML = originalText;
+                //     button.disabled = false;
+                // }, 3000);
+
                 $('#qty').val($('#specificaties-qty').val());
                 $('#product-addtocart-button').click();
             });
