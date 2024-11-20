@@ -17,6 +17,8 @@
  */
 namespace Bss\OrderDeliveryDate\Block\Plugin\Checkout;
 
+use Magento\Catalog\Model\ResourceModel\Product as ProductResource;
+
 class LayoutProcessorPlugin
 {
     const DELIVERY_FORM_DISPLAY_AT_SHIPPING_ADDRESS = 0;
@@ -34,16 +36,23 @@ class LayoutProcessorPlugin
     protected $cart;
 
     /**
+     * @var ProductResource
+     */
+    protected $productResource;
+
+    /**
      * LayoutProcessorPlugin constructor.
      * @param \Bss\OrderDeliveryDate\Helper\Data $helper
      * @param \Magento\Checkout\Model\Cart $cart
      */
     public function __construct(
         \Bss\OrderDeliveryDate\Helper\Data $helper,
-        \Magento\Checkout\Model\Cart $cart
+        \Magento\Checkout\Model\Cart $cart,
+        ProductResource $productResource
     ) {
         $this->helper = $helper;
         $this->cart = $cart;
+        $this->productResource = $productResource;
     }
 
     /**
@@ -59,17 +68,51 @@ class LayoutProcessorPlugin
     ) {
         $container = null;
         $check = false;
+        $isShow = false;
         $cartItems = $this->cart->getQuote()->getAllVisibleItems();
         foreach ($cartItems as $cartItem) {
             $productType = $cartItem->getProduct()->getTypeId();
+            $verzendgroep = $this->productResource->getAttributeRawValue(
+                $cartItem->getProductId(),
+                ['verzendgroep'],
+                $cartItem->getStoreId()
+            );
+            $verzendgroepText = $this->productResource->getAttribute('verzendgroep')->getSource()->getOptionText($verzendgroep);
+            if($verzendgroepText == "show") {
+                $isShow = true;
+            }
+
             if ($productType != "downloadable" && $productType != "virtual") {
                 $check = true;
                 continue;
             }
         }
 
-        if (!$this->helper->isEnabled() || !$check) {
+        if (!$this->helper->isEnabled() || !$check || !$isShow) {
             return $jsLayout;
+        }
+        if ($this->helper->getDisplayAt() == self::DELIVERY_FORM_DISPLAY_AT_SHIPPING_ADDRESS) {
+            $container = 'before-form';
+        } elseif ($this->helper->getDisplayAt() == self::DELIVERY_FORM_DISPLAY_AT_SHIPPING_METHOD) {
+            $container = 'before-shipping-method-form';
+        }
+
+        // before place order
+        if ($this->helper->getDisplayAt() == self::DELIVERY_FORM_DISPLAY_AT_REVIEW_PAYMENTS) {
+            $jsLayout['components']['checkout']['children']['steps']['children']['billing-step']['children']
+            ['payment']['children']['beforeMethods']['children']['delivery-date'] = [
+                'component' => 'Bss_OrderDeliveryDate/js/view/delivery-date',
+                'displayArea' => 'delivery-date',
+                'sortOrder' => 11
+            ];
+        } else {
+            $jsLayout['components']['checkout']['children']['steps']['children']['shipping-step']['children']
+            ['shippingAddress']['children'][$container]['children']['delivery-date'] = [];
+            $jsLayout['components']['checkout']['children']['steps']['children']['shipping-step']['children']
+            ['shippingAddress']['children'][$container]['children']['delivery-date']
+            ['component'] = 'Bss_OrderDeliveryDate/js/view/delivery-date';
+            $jsLayout['components']['checkout']['children']['steps']['children']['shipping-step']['children']
+            ['shippingAddress']['children'][$container]['children']['delivery-date']['sortOrder'] = 10;
         }
 
         return $jsLayout;

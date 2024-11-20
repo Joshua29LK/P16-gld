@@ -22,10 +22,12 @@ define(
         'mage/translate',
         'Magento_Checkout/js/model/full-screen-loader',
         'Bss_OrderDeliveryDate/js/model/delivery-form-data',
+        'Magento_Checkout/js/model/quote',
+        'Magento_Checkout/js/model/payment/renderer-list',
         'underscore',
         'mage/calendar'
     ],
-    function ($, ko, Component, $t, fullScreenLoader, deliveryFormData, _) {
+    function ($, ko, Component, $t, fullScreenLoader, deliveryFormData, quote, rendererList, _) {
         'use strict';
 
         $.extend(true, $, {
@@ -112,6 +114,23 @@ define(
                 });
 
                 this.listingTimeSlot(this.listTimeSlot());
+
+                quote.shippingAddress.subscribe(function (address) {
+                    var countryAllow = window.checkoutConfig.orderdeliverydate_countries;
+                    var shippingAddress = quote.shippingAddress();
+
+                    if (shippingAddress) {
+                        var country = shippingAddress.countryId;
+                        if (Array.isArray(countryAllow) && countryAllow.includes(country)) {
+                            self.dateRequired(false);
+                            self.bssDeliveryEnable(false);
+                        } else {
+                            self.dateRequired(true);
+                            self.bssDeliveryEnable(true);
+                        }
+                    }
+                });
+
             },
 
             bssValidateField: function() {
@@ -308,8 +327,41 @@ define(
                     block_out_holidays = window.checkoutConfig.bss_delivery_block_out_holidays;
                 var day_off_arr = [];
                 var day_off = window.checkoutConfig.bss_delivery_day_off;
-                if (day_off) {
-                    day_off_arr = day_off.split(',');
+
+                var shippingAddress = quote.shippingAddress();
+                if(shippingAddress) {
+                    var postcode = shippingAddress.postcode;
+
+                    var listZipDelivery = window.checkoutConfig.zip_delivery_list;
+                    var deliveryDaysByZip = null;
+
+                    for (let record of listZipDelivery) {
+                        const storedZipCode = record.zip_code;
+
+                        if (storedZipCode === postcode) {
+                            deliveryDaysByZip = record.delivery_days;
+                            break;
+                        }
+
+                        if (storedZipCode.includes('-')) {
+                            const [from, to] = storedZipCode.split('-').map(Number);
+                            if (postcode >= from && postcode <= to) {
+                                deliveryDaysByZip = record.delivery_days;
+                                break;
+                            }
+                        }
+
+                        if (storedZipCode === '*') {
+                            deliveryDaysByZip = record.delivery_days;
+                            break;
+                        }
+                    }
+
+                    if (deliveryDaysByZip) {
+                        day_off_arr = deliveryDaysByZip.split(',');
+                    }
+                } else {
+                    day_off_arr = [];
                 }
                 for (var i = 0; i < day_off_arr.length; i++) {
                     day_off_arr[i] = parseInt(day_off_arr[i]);
@@ -320,6 +372,7 @@ define(
 
                 return [false, ''];
             },
+
             /**
              * Get min date
              *

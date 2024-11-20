@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <section id="orderdeliverydate">
+            <group id="general">
+                <field id="levertijd_indicatie" translate="label" sortOrder="130" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Levertijd indicatie</label>
+                    <frontend_model>Bss\CustomizeDeliveryDate\Block\Adminhtml\System\Config\Form\Field\Deliverytime</frontend_model>
+                    <backend_model>Magento\Config\Model\Config\Backend\Serialized\ArraySerialized</backend_model>
+                </field>
+                <field id="orderdeliverydate_countries" translate="label" type="multiselect" sortOrder="140" showInDefault="1" showInWebsite="1" canRestore="1">
+                    <label>Countries are not Allowed</label>
+                    <source_model>Magento\Directory\Model\Config\Source\Country</source_model>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>
