@@ -7,6 +7,8 @@ define([
         var widthSelector = config.widthSelector;
         var heightSelector = config.heightSelector;
         var weightFormula = config.weightFormula;
+        var fixedBoxSelector = '.fixed-product-box';
+        var footerSelector = '.page-footer';
 
         function calculateArea() {
             var width = parseFloat($(widthSelector).val()) || 0;
@@ -27,7 +29,31 @@ define([
                 return 0;
             }
         }
-        
+
+        function handleScroll() {
+            var $fixedBox = $(fixedBoxSelector);
+            var $footer = $(footerSelector);
+            var footerOffset = $footer.offset().top;
+            var fixedBoxHeight = $fixedBox.outerHeight();
+            var scrollTop = $(window).scrollTop();
+            var viewportHeight = $(window).height();
+            var initialTop = 280;
+
+            if (scrollTop + viewportHeight >= footerOffset + 100) {
+                $fixedBox.css({
+                    position: 'absolute',
+                    top: `${footerOffset - fixedBoxHeight}px`
+                });
+            } else {
+                $fixedBox.css({
+                    position: 'fixed',
+                    top: `${initialTop}px`
+                });
+            }
+        }
+
+        $(window).on('scroll', handleScroll);
+        $(window).trigger('scroll');
         $(widthSelector + ',' + heightSelector).on('input', calculateArea);
     };
 });

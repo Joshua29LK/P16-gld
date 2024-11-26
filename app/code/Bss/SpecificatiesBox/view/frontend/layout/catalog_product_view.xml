@@ -18,5 +18,6 @@
                 <block class="Magento\Framework\View\Element\Template" name="specificaties_box_product_add_to" template="Bss_SpecificatiesBox::product/view/addto.phtml" />
             </container>
         </referenceContainer>
+        <move element="specificaties_box_product_container" destination="page.wrapper" after="-"/>
     </body>
 </page>

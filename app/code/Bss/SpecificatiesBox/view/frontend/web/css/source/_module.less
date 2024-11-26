@@ -1,6 +1,6 @@
 .fixed-product-box {
-  position: fixed;
-  top: 230px;
+  position: absolute;
+  top: 280px;
   right: 20px;
   width: 20vw;
   background-color: #F4F4F9;
@@ -115,6 +115,11 @@
       width: 100%;
       padding: 10px;
       border-radius: 20px;
+      background-color: #F15A29;
+      background-image: -webkit-linear-gradient(#F78D17, #F15A29);
+      background-image: linear-gradient(#F78D17, #F15A29);
+      text-shadow: 1px 1px 1px rgba(234, 60, 23, 0.5);
+      border-width: 0;
     }
   }
 }
@@ -156,14 +161,24 @@
       .product-info-price {
         display: none;
       }
-      
+
       .product-options-bottom {
         display: none;
       }
-      
-      .fixed-product-box {
-        .product-info-price {
-          display: block;
+    }
+
+    .fixed-product-box {
+      .product-info-price {
+        display: block;
+
+        .price-label {
+          display: none;
+        }
+
+        .price-including-tax .price {
+          font-size: 2.4rem;
+          font-weight: 500;
+          color: #F15A29;
         }
       }
     }
@@ -181,7 +196,23 @@
 @media (min-width: 1200px) {
   .catalog-product-view {
     .product-info-main {
+      padding-right: 22%;
+    }
+  }
+}
+
+@media (min-width: 1400px) {
+  .catalog-product-view {
+    .product-info-main {
       padding-right: 20%;
+    }
+  }
+}
+
+@media (min-width: 1600px) {
+  .catalog-product-view {
+    .product-info-main {
+      padding-right: 18%;
     }
   }
 }
