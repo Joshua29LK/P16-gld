@@ -102,7 +102,7 @@ class CompositeConfigProvider implements \Magento\Checkout\Model\ConfigProviderI
 
             $quote = $this->checkoutSession->getQuote();
             $listLevertijdIndicatie = $this->bssHelper->getLevertijdIndicatieConfig();
-            $maxDay = null;
+            $maxDay = 0;
 
             foreach ($quote->getAllItems() as $item) {
                 $deliveryValue = $this->productResource->getAttributeRawValue(
