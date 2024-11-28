@@ -338,7 +338,7 @@ define(
                     for (let record of listZipDelivery) {
                         const storedZipCode = record.zip_code;
 
-                        if (storedZipCode === postcode) {
+                        if (storedZipCode.replaceAll(' ', '') === postcode.replaceAll(' ', '')) {
                             deliveryDaysByZip = record.delivery_days;
                             break;
                         }
@@ -358,11 +358,19 @@ define(
                     }
 
                     if (deliveryDaysByZip) {
-                        day_off_arr = deliveryDaysByZip.split(',');
+                        var day_off_arr_zip = deliveryDaysByZip.split(',');
                     }
-                } else {
-                    day_off_arr = [];
                 }
+
+                if (day_off) {
+                    var day_off_arr_code = day_off.split(',');
+                }
+
+                day_off_arr = [
+                    ...(day_off_arr_zip || []),
+                    ...(day_off_arr_code || [])
+                ];
+
                 for (var i = 0; i < day_off_arr.length; i++) {
                     day_off_arr[i] = parseInt(day_off_arr[i]);
                 }

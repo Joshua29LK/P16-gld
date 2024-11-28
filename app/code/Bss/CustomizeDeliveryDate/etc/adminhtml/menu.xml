@@ -2,7 +2,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework/Menu/etc/menu.xsd">
     <menu>
         <add id="Bss_CustomizeDeliveryDate::main_menu"
-             title="Customize Delivery Date"
+             title="Zip Delivery Management"
              module="Bss_CustomizeDeliveryDate"
              sortOrder="100"
              resource="Bss_CustomizeDeliveryDate::main_menu"/>
