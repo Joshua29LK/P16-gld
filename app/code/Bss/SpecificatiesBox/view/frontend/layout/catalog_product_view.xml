@@ -4,17 +4,6 @@
             <container name="specificaties_box_product_container" htmlTag="div" htmlClass="fixed-product-box">
                 <block class="Bss\SpecificatiesBox\Block\SpecificatiesBox" name="specificaties_box_product_block" template="Bss_SpecificatiesBox::product/view/specificaties.phtml" />
                 <block class="Bss\SpecificatiesBox\Block\SpecificatiesBox" name="prijsoverzicht_box_product_block" template="Bss_SpecificatiesBox::product/view/prijsoverzicht.phtml" />
-                <!-- Duplicate product info price block structure for the specificaties box -->
-                <container name="specificaties.product.info.price" label="Specificaties Product Info Price" htmlTag="div" htmlClass="product-info-price">
-                    <block class="Magento\Catalog\Block\Product\View" name="specificaties.product.info.review" template="Magento_Catalog::product/view/review.phtml" after="custom.product.info.stock.sku" />
-                    <block class="Magento\Catalog\Pricing\Render" name="specificaties.product.price.final">
-                        <arguments>
-                            <argument name="price_render" xsi:type="string">product.price.render.default</argument>
-                            <argument name="price_type_code" xsi:type="string">final_price</argument>
-                            <argument name="zone" xsi:type="string">item_view</argument>
-                        </arguments>
-                    </block>
-                </container>
                 <block class="Magento\Framework\View\Element\Template" name="specificaties_box_product_add_to" template="Bss_SpecificatiesBox::product/view/addto.phtml" />
             </container>
         </referenceContainer>
