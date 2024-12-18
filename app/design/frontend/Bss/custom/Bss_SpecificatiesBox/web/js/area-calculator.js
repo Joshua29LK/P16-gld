@@ -38,6 +38,9 @@ define([
             var scrollTop = $(window).scrollTop();
             var viewportHeight = $(window).height();
             var initialTop = 280;
+            if ($(window).width() < 992) {
+                initialTop = 140;
+            }
 
             if (scrollTop + viewportHeight >= footerOffset + 100) {
                 $fixedBox.css({
