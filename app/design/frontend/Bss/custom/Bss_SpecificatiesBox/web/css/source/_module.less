@@ -1,8 +1,8 @@
 .fixed-product-box {
   position: absolute;
-  top: 280px;
+  top: 140px;
   right: 20px;
-  width: 20vw;
+  width: 18vw;
   background-color: #F4F4F9;
   border: 1px solid #ccc;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -192,13 +192,20 @@
     .product-info-main {
       padding-right: 25%;
     }
+    .fixed-product-box {
+      top: 280px;
+    }
   }
 }
 
 @media (min-width: 1200px) {
   .catalog-product-view {
     .product-info-main {
-      padding-right: 22%;
+      padding-right: 30%;
+    }
+    .fixed-product-box {
+      min-width: 300px;
+      right: 5%;
     }
   }
 }
@@ -206,7 +213,10 @@
 @media (min-width: 1400px) {
   .catalog-product-view {
     .product-info-main {
-      padding-right: 20%;
+      padding-right: 30%;
+    }
+    .fixed-product-box {
+      right: 10%;
     }
   }
 }
@@ -214,7 +224,10 @@
 @media (min-width: 1600px) {
   .catalog-product-view {
     .product-info-main {
-      padding-right: 18%;
+      padding-right: 30%;
+    }
+    .fixed-product-box {
+      right: 15%;
     }
   }
 }
