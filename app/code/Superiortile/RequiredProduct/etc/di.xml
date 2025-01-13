@@ -1,0 +1,99 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Magento\Catalog\Model\Product\LinkTypeProvider">
+        <arguments>
+            <argument name="linkTypes" xsi:type="array">
+                <item name="requiredproduct1" xsi:type="const">Superiortile\RequiredProduct\Model\Product\Link::LINK_TYPE_REQUIRE_PRODUCT_1</item>
+                <item name="requiredproduct2" xsi:type="const">Superiortile\RequiredProduct\Model\Product\Link::LINK_TYPE_REQUIRE_PRODUCT_2</item>
+                <item name="requiredproduct3" xsi:type="const">Superiortile\RequiredProduct\Model\Product\Link::LINK_TYPE_REQUIRE_PRODUCT_3</item>
+                <item name="requiredproduct4" xsi:type="const">Superiortile\RequiredProduct\Model\Product\Link::LINK_TYPE_REQUIRE_PRODUCT_4</item>
+                <item name="requiredproduct5" xsi:type="const">Superiortile\RequiredProduct\Model\Product\Link::LINK_TYPE_REQUIRE_PRODUCT_5</item>
+                <item name="requiredproduct6" xsi:type="const">Superiortile\RequiredProduct\Model\Product\Link::LINK_TYPE_REQUIRE_PRODUCT_6</item>
+                <item name="requiredproduct7" xsi:type="const">Superiortile\RequiredProduct\Model\Product\Link::LINK_TYPE_REQUIRE_PRODUCT_7</item>
+                <item name="requiredproduct8" xsi:type="const">Superiortile\RequiredProduct\Model\Product\Link::LINK_TYPE_REQUIRE_PRODUCT_8</item>
+            </argument>
+        </arguments>
+    </type>
+    <virtualType name="Superiortile\RequiredProduct\Model\ProductLink\CollectionProvider\RequiredProduct1"
+                 type="Superiortile\RequiredProduct\Model\ProductLink\CollectionProvider\RequiredLinkProducts">
+        <arguments>
+            <argument name="linkType" xsi:type="string">requiredproduct1</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Superiortile\RequiredProduct\Model\ProductLink\CollectionProvider\RequiredProduct2"
+                 type="Superiortile\RequiredProduct\Model\ProductLink\CollectionProvider\RequiredLinkProducts">
+        <arguments>
+            <argument name="linkType" xsi:type="string">requiredproduct2</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Superiortile\RequiredProduct\Model\ProductLink\CollectionProvider\RequiredProduct3"
+                 type="Superiortile\RequiredProduct\Model\ProductLink\CollectionProvider\RequiredLinkProducts">
+        <arguments>
+            <argument name="linkType" xsi:type="string">requiredproduct3</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Superiortile\RequiredProduct\Model\ProductLink\CollectionProvider\RequiredProduct4"
+                 type="Superiortile\RequiredProduct\Model\ProductLink\CollectionProvider\RequiredLinkProducts">
+        <arguments>
+            <argument name="linkType" xsi:type="string">requiredproduct4</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Superiortile\RequiredProduct\Model\ProductLink\CollectionProvider\RequiredProduct5"
+                 type="Superiortile\RequiredProduct\Model\ProductLink\CollectionProvider\RequiredLinkProducts">
+        <arguments>
+            <argument name="linkType" xsi:type="string">requiredproduct5</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Superiortile\RequiredProduct\Model\ProductLink\CollectionProvider\RequiredProduct6"
+                 type="Superiortile\RequiredProduct\Model\ProductLink\CollectionProvider\RequiredLinkProducts">
+        <arguments>
+            <argument name="linkType" xsi:type="string">requiredproduct6</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Superiortile\RequiredProduct\Model\ProductLink\CollectionProvider\RequiredProduct7"
+                 type="Superiortile\RequiredProduct\Model\ProductLink\CollectionProvider\RequiredLinkProducts">
+        <arguments>
+            <argument name="linkType" xsi:type="string">requiredproduct7</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Superiortile\RequiredProduct\Model\ProductLink\CollectionProvider\RequiredProduct8"
+                               type="Superiortile\RequiredProduct\Model\ProductLink\CollectionProvider\RequiredLinkProducts">
+        <arguments>
+            <argument name="linkType" xsi:type="string">requiredproduct8</argument>
+        </arguments>
+    </virtualType>
+
+    <type name="Magento\Catalog\Model\ProductLink\CollectionProvider">
+        <arguments>
+            <argument name="providers" xsi:type="array">
+                <item name="requiredproduct1" xsi:type="object">Superiortile\RequiredProduct\Model\ProductLink\CollectionProvider\RequiredProduct1</item>
+                <item name="requiredproduct2" xsi:type="object">Superiortile\RequiredProduct\Model\ProductLink\CollectionProvider\RequiredProduct2</item>
+                <item name="requiredproduct3" xsi:type="object">Superiortile\RequiredProduct\Model\ProductLink\CollectionProvider\RequiredProduct3</item>
+                <item name="requiredproduct4" xsi:type="object">Superiortile\RequiredProduct\Model\ProductLink\CollectionProvider\RequiredProduct4</item>
+                <item name="requiredproduct5" xsi:type="object">Superiortile\RequiredProduct\Model\ProductLink\CollectionProvider\RequiredProduct5</item>
+                <item name="requiredproduct6" xsi:type="object">Superiortile\RequiredProduct\Model\ProductLink\CollectionProvider\RequiredProduct6</item>
+                <item name="requiredproduct7" xsi:type="object">Superiortile\RequiredProduct\Model\ProductLink\CollectionProvider\RequiredProduct7</item>
+                <item name="requiredproduct8" xsi:type="object">Superiortile\RequiredProduct\Model\ProductLink\CollectionProvider\RequiredProduct8</item>
+            </argument>
+        </arguments>
+    </type>
+    <!-- Plugin to add update argument in collectionProvider -->
+    <type name="Superiortile\RequiredProduct\Model\ProductLink\CollectionProvider\RequiredLinkProducts">
+        <plugin name="change_custom_link_before" type="Superiortile\RequiredProduct\Plugin\UpdateToRequiredLinkModel"/>
+    </type>
+
+    <type name="Magento\CatalogImportExport\Model\Import\Product\LinkProcessor">
+        <arguments>
+            <argument name="linkNameToId" xsi:type="array">
+                <item name="requiredproducts1" xsi:type="const">Superiortile\RequiredProduct\Model\Product\Link::LINK_TYPE_REQUIRE_PRODUCT_1</item>
+                <item name="requiredproducts2" xsi:type="const">Superiortile\RequiredProduct\Model\Product\Link::LINK_TYPE_REQUIRE_PRODUCT_2</item>
+                <item name="requiredproducts3" xsi:type="const">Superiortile\RequiredProduct\Model\Product\Link::LINK_TYPE_REQUIRE_PRODUCT_3</item>
+                <item name="requiredproducts4" xsi:type="const">Superiortile\RequiredProduct\Model\Product\Link::LINK_TYPE_REQUIRE_PRODUCT_4</item>
+                <item name="requiredproducts5" xsi:type="const">Superiortile\RequiredProduct\Model\Product\Link::LINK_TYPE_REQUIRE_PRODUCT_5</item>
+                <item name="requiredproducts6" xsi:type="const">Superiortile\RequiredProduct\Model\Product\Link::LINK_TYPE_REQUIRE_PRODUCT_6</item>
+                <item name="requiredproducts7" xsi:type="const">Superiortile\RequiredProduct\Model\Product\Link::LINK_TYPE_REQUIRE_PRODUCT_7</item>
+                <item name="requiredproducts8" xsi:type="const">Superiortile\RequiredProduct\Model\Product\Link::LINK_TYPE_REQUIRE_PRODUCT_8</item>
+            </argument>
+        </arguments>
+    </type>
+</config>

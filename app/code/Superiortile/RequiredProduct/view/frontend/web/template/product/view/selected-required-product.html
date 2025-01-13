@@ -1,0 +1,39 @@
+<!-- ko foreach: selectedRequiredProduct -->
+<div class="item required-configurable-item">
+    <input class="selected-required-qty" type="hidden"
+           data-bind="attr: { name: $parent.selectedRequiredInputQtyName, value: qty, form: $parent.formId }">
+    <div class="product-item-info">
+        <a href="#" class="product photo product-item-photo"
+           data-bind="attr: { href: productUrl }">
+            <img data-bind="attr: { src: imageUrl, alt: name }" alt="">
+        </a>
+        <div class="product details product-item-details">
+            <strong class="product name product-item-name" data-bind="text: name"></strong>
+            <!-- ko if: attributes.finish -->
+            <div class="product-attribute finish">
+                <span class="label" data-bind="text: attributes.finish.label"></span>
+                <span class="value" data-bind="text: attributes.finish.value"></span>
+            </div>
+            <!-- /ko -->
+            <div class="product-attribute qty">
+                <span class="label"><!-- ko i18n: "Quantity" --><!-- /ko --></span>
+                <span class="value" data-bind="text: qty"></span>
+            </div>
+            <!-- ko if: attributes.price -->
+            <div class="product-attribute price">
+                <span class="label" data-bind="text: attributes.price.label"></span>
+                <span class="value" data-bind="html: attributes.price.value"></span>
+            </div>
+            <!-- /ko -->
+        </div>
+    </div>
+    <div class="actions">
+        <button class="action primary edit" data-bind="click: $parent.editSelectedRequiredProduct">
+            <!-- ko i18n: 'Edit' --><!-- /ko -->
+        </button>
+        <button class="action secondary remove" data-bind="click: $parent.removeSelectedRequiredProduct">
+            <!-- ko i18n: 'Remove' --><!-- /ko -->
+        </button>
+    </div>
+</div>
+<!-- /ko -->

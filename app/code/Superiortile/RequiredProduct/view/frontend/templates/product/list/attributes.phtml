@@ -1,0 +1,27 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ *
+ * @var \Superiortile\RequiredProduct\Block\Product\View\Attributes $block
+ * @var \Magento\Framework\Escaper $escaper
+ */
+?>
+
+<?php
+    $_product = $block->getProduct();
+    $attributeCodes = ['finish'];
+?>
+<?php foreach ($attributeCodes as $attributeCode): ?>
+    <?php
+        $attribute = $_product->getResource()->getAttribute($attributeCode);
+        $_label = $attribute ? $attribute->getStoreLabel() : '';
+        $_value = $attribute ? $attribute->getFrontend()->getValue($_product) : '';
+    ?>
+    <?php if ($_label && $_value): ?>
+        <div class="product-attribute">
+            <strong class="label"><?= $escaper->escapeHtml($_label) ?></strong>
+            <span class="value"><?= $escaper->escapeHtml($_value) ?></span>
+        </div>
+    <?php endif; ?>
+<?php endforeach; ?>

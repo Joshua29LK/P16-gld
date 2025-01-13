@@ -1,0 +1,35 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+/**
+ * Product view template
+ *
+ * @var $block \Magento\Catalog\Block\Product\View
+ * @var \Magento\Framework\Escaper $escaper
+ */
+?>
+
+<?php
+$_product = $block->getProduct();
+$mainProductId = (int)$block->getRequest()->getParam('main_product');
+$collectionTypeId = (int)$block->getRequest()->getParam('type_id');
+$isUpdatePopup = (int) $block->getRequest()->getParam('qty');
+?>
+
+<div class="product-add-form">
+    <form data-product-sku="<?= $block->escapeHtml($_product->getSku()) ?>"
+          action="<?= $escaper->escapeUrl($block->getUrl('requiredproduct/product/add/')) ?>" method="post"
+          id="product_addtocart_form">
+        <input type="hidden" name="product" value="<?= /** @noEscape */ (int)$_product->getId() ?>" />
+        <input type="hidden" name="main_product" value="<?= /** @noEscape */ $mainProductId ?>" />
+        <input type="hidden" name="type_id" value="<?= /** @noEscape */ $collectionTypeId ?>" />
+        <input type="hidden" name="is_update_qty" value="<?= /** @noEscape */ $isUpdatePopup ?>" />
+        <?= /** @noEscape */ $block->getBlockHtml('formkey') ?>
+        <?php if (!$block->hasOptions()): ?>
+            <?= /** @noEscape */ $block->getChildHtml('product_info_form_content') ?>
+        <?php endif; ?>
+    </form>
+</div>

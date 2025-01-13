@@ -1,0 +1,19 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+/**
+ * @var \Magento\Catalog\Block\Product\View\Attributes $block
+ * @var \Magento\Framework\Escaper $escaper
+ */
+
+$_product = $block->getProduct();
+?>
+<div class="required-product-link">
+    <a href="<?= $escaper->escapeUrl($_product->getProductUrl()) ?>" target="_blank">
+        <?= /** @noEscape */ __('View full product details') ?>
+    </a>
+</div>
+

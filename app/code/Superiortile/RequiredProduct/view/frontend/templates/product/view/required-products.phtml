@@ -1,0 +1,68 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ *
+ * @var \Superiortile\RequiredProduct\Block\Product\View\RequiredProducts $block
+ * @var \Magento\Framework\Escaper $escaper
+ */
+?>
+
+<?php
+$linkTypeId = (int) $block->getLinkTypeId();
+
+$collection = $block->getRequiredCollection($linkTypeId);
+$collectionTooltip = $block->getCollectionTooltip($linkTypeId);
+$collectionName = $block->getCollectionName($linkTypeId);
+$requiredProductsData = $block->getRequiredCollectionDataJson($linkTypeId);
+$slideConfigs = $block->getSlideConfigsJson();
+?>
+<?php if (count($collection)): ?>
+    <div class="required-configurable-products <?= /** @noEscape */ $linkTypeId ?>"
+         data-bind="scope:'required-configurable-<?= /** @noEscape */ $linkTypeId ?>'">
+        <!-- ko template: getTemplate() --><!-- /ko -->
+    </div>
+    <div class="required-products"
+         data-bind="scope:'requiredProducts-<?= /** @noEscape */ $linkTypeId ?>'"
+         data-collection-name="<?= $escaper->escapeHtml($collectionName) ?>"
+         data-type-id="<?= /** @noEscape */ $linkTypeId ?>">
+        <div class="actions">
+            <button data-bind="click: onClickAdd" class="action primary add">
+                <span><?= /** @noEscape */ __('Add') ?></span>
+            </button>
+        </div>
+
+        <div class="products-list-wrapper required-products-wrapper related
+             required-products-wrapper-<?= /** @noEscape */ $linkTypeId ?>"
+             style="display: none;">
+            <div class="products owl-carousel required-products required-products-<?= /** @noEscape */ $linkTypeId ?>"
+                 data-mage-init='{"OXowlCarousel": <?= /** @noEscape */ $slideConfigs ?>}'>
+                <?= /** @noEscape */ $block->getProductListHtml($linkTypeId) ?>
+            </div>
+        </div>
+
+    </div>
+    <script type="text/x-magento-init">
+    {
+        "#required-products-block": {
+            "Magento_Ui/js/core/app": {
+                "components": {
+                    "requiredProducts-<?= /** @noEscape */ $linkTypeId ?>": {
+                        "component": "Superiortile_RequiredProduct/js/required-products",
+                        "collectionId": "<?= /** @noEscape */ $linkTypeId ?>",
+                        "collectionName": "<?= $escaper->escapeHtml($collectionName) ?>",
+                        "mainProductId": "<?= /** @noEscape */ (int) $block->getProduct()->getId() ?>",
+                        "collectionTypeId": "<?= /** @noEscape */ $linkTypeId ?>"
+                    },
+                    "required-configurable-<?= /** @noEscape */ $linkTypeId ?>": {
+                        "component": "Superiortile_RequiredProduct/js/required-configurable",
+                        "mainProductId": <?= /** @noEscape */ (int) $block->getProduct()->getId() ?>,
+                        "collectionId": <?= /** @noEscape */ $linkTypeId ?>,
+                        "requiredProductsData": <?= /** @noEscape */ $requiredProductsData ?>
+                    }
+                }
+            }
+        }
+    }
+</script>
+<?php endif ?>

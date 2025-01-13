@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Customer:etc/sections.xsd">
+    <action name="checkout/cart/add">
+        <section name="required-configurable"/>
+    </action>
+
+    <action name="checkout/sidebar/removeItem">
+        <section name="required-configurable"/>
+    </action>
+
+    <action name="requiredproduct/product/add">
+        <section name="required-configurable"/>
+    </action>
+
+    <action name="requiredproduct/product/remove">
+        <section name="required-configurable"/>
+    </action>
+
+    <action name="requiredproduct/product/editPost">
+        <section name="required-configurable"/>
+    </action>
+</config>

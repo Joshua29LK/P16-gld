@@ -1,0 +1,31 @@
+<?xml version="1.0" ?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <update handle="catalog_product_view"/>
+    <body>
+        <referenceBlock name="product.info" template="Superiortile_RequiredProduct::product/view/form.phtml" />
+        <referenceBlock name="product.info.details" template="Superiortile_RequiredProduct::product/view/details.phtml"/>
+        <referenceContainer name="product.info.main">
+            <block class="Magento\Catalog\Block\Product\View\Attributes" name="required.product.detail.link"
+                   template="Superiortile_RequiredProduct::product/view/required-product-link.phtml">
+            </block>
+        </referenceContainer>
+
+
+        <referenceBlock name="view.addto.wishlist2.additional" remove="true"/>
+        <referenceBlock name="product.info.showroom.location" remove="true"/>
+        <referenceBlock name="product.info.model" remove="true"/>
+        <referenceBlock name="product.info.collection.name" remove="true"/>
+        <referenceBlock name="product.info.badge" remove="true"/>
+        <referenceBlock name="product.info.addto2" remove="true"/>
+        <referenceBlock name="product.info.review" remove="true"/>
+
+        <referenceBlock name="product.info.addto" remove="true"/>
+        <referenceBlock name="product.info.addto" remove="true"/>
+        <referenceBlock name="content.aside" remove="true"/>
+        <referenceBlock name="content.bottom" remove="true"/>
+
+        <move element="product.info" destination="product.info.main" after="-"/>
+        <move element="product.info.details" destination="product.info.main" after="product.info.main"/>
+        <move element="required.product.detail.link" destination="product.info.main" after="product.info.details" before="product.info"/>
+    </body>
+</page>

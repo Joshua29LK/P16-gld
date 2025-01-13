@@ -1,0 +1,64 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceContainer name="product.info.main">
+            <block class="Superiortile\RequiredProduct\Block\Product\View\RequiredProducts" name="product.info.required.collection"
+                   template="Superiortile_RequiredProduct::product/view/required-product-collections.phtml" after="product.info.price">
+                <block class="Superiortile\RequiredProduct\Block\Product\View\RequiredProducts" name="product.info.required.products.1"
+                       template="Superiortile_RequiredProduct::product/view/required-products.phtml" >
+                    <arguments>
+                        <argument name="link_type_id" xsi:type="string">11</argument>
+                    </arguments>
+                </block>
+                <block class="Superiortile\RequiredProduct\Block\Product\View\RequiredProducts" name="product.info.required.products.2"
+                       template="Superiortile_RequiredProduct::product/view/required-products.phtml" >
+                    <arguments>
+                        <argument name="link_type_id" xsi:type="string">12</argument>
+                    </arguments>
+                </block>
+                <block class="Superiortile\RequiredProduct\Block\Product\View\RequiredProducts" name="product.info.required.products.3"
+                       template="Superiortile_RequiredProduct::product/view/required-products.phtml" >
+                    <arguments>
+                        <argument name="link_type_id" xsi:type="string">13</argument>
+                    </arguments>
+                </block>
+                <block class="Superiortile\RequiredProduct\Block\Product\View\RequiredProducts" name="product.info.required.products.4"
+                       template="Superiortile_RequiredProduct::product/view/required-products.phtml" >
+                    <arguments>
+                        <argument name="link_type_id" xsi:type="string">14</argument>
+                    </arguments>
+                </block>
+                <block class="Superiortile\RequiredProduct\Block\Product\View\RequiredProducts" name="product.info.required.products.5"
+                       template="Superiortile_RequiredProduct::product/view/required-products.phtml" >
+                    <arguments>
+                        <argument name="link_type_id" xsi:type="string">15</argument>
+                    </arguments>
+                </block>
+                <block class="Superiortile\RequiredProduct\Block\Product\View\RequiredProducts" name="product.info.required.products.6"
+                       template="Superiortile_RequiredProduct::product/view/required-products.phtml" >
+                    <arguments>
+                        <argument name="link_type_id" xsi:type="string">16</argument>
+                    </arguments>
+                </block>
+                <block class="Superiortile\RequiredProduct\Block\Product\View\RequiredProducts" name="product.info.required.products.7"
+                       template="Superiortile_RequiredProduct::product/view/required-products.phtml" >
+                    <arguments>
+                        <argument name="link_type_id" xsi:type="string">17</argument>
+                    </arguments>
+                </block>
+                <block class="Superiortile\RequiredProduct\Block\Product\View\RequiredProducts" name="product.info.required.products.8"
+                       template="Superiortile_RequiredProduct::product/view/required-products.phtml" >
+                    <arguments>
+                        <argument name="link_type_id" xsi:type="string">18</argument>
+                    </arguments>
+                </block>
+            </block>
+        </referenceContainer>
+    </body>
+</page>

@@ -1,0 +1,37 @@
+
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ *
+ * @var \Magento\Framework\Escaper $escaper
+ * @var \Magento\Catalog\Model\Product $_product
+ * @var \Superiortile\RequiredProduct\Block\Product\View\Items $block
+ * @var \Magento\Catalog\Model\ResourceModel\Product\Link\Product\Collection $collection
+ */
+$collection = $block->getProductCollection();
+$image = 'related_products_list';
+?>
+
+<?php if (count($collection)): ?>
+    <?php foreach ($collection as $_product): ?>
+        <div class="item product product-item required-item"
+
+            data-product-id="<?= $escaper->escapeHtmlAttr($_product->getId()) ?>">
+            <div class="product-item-info">
+                <a href="#" class="product photo product-item-photo">
+                    <?= $block->getImage($_product, $image)->toHtml() ?>
+                </a>
+            </div>
+            <div class="product details product-item-details">
+                <strong class="product name product-item-name">
+                    <?= $escaper->escapeHtml($_product->getName()) ?>
+                </strong>
+                <div class="product-item-attributes">
+                    <?= /* @noEscape */ $block->getProductAttributesHtml($_product) ?>
+                </div>
+            </div>
+            <?= /* @noEscape */ $block->getProductPrice($_product) ?>
+        </div>
+    <?php endforeach; ?>
+<?php endif; ?>
