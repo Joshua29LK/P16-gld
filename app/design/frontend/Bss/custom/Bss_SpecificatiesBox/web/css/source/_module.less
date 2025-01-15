@@ -1,4 +1,8 @@
-.fixed-product-box {
+.fixed-product-box-mobile {
+  display: none;
+}
+
+.fixed-product-box, .fixed-product-box-mobile {
   position: absolute;
   top: 140px;
   right: 20px;
@@ -81,7 +85,6 @@
       width: 100%;
       text-align: center;
       font-size: 16px;
-      padding: 20px;
       border: none;
       outline: none;
     }
@@ -132,6 +135,15 @@
       display: none;
     }
   }
+
+  .fixed-product-box-mobile {
+    display: block;
+    position: unset;
+    width: 100%;
+    border: none;
+    margin-bottom: 10px;
+  }
+
 }
 
 @media (max-width: 991px) {
