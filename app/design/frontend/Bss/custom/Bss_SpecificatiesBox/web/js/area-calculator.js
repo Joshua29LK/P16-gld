@@ -14,9 +14,9 @@ define([
             var width = parseFloat($(widthSelector).val()) || 0;
             var height = parseFloat($(heightSelector).val()) || 0;
             var area = (width * height / 1000000).toFixed(2);
-            $('#oppervlakte-value').text(area);
+            $('.oppervlakte-value').text(area);
             var weight = calculateWeight(area);
-            $('#weight-value').text(weight.toFixed(2));
+            $('.weight-value').text(weight.toFixed(2));
         }
 
         function calculateWeight(area) {
@@ -35,18 +35,22 @@ define([
             var $footer = $(footerSelector);
             var footerOffset = $footer.offset().top;
             var fixedBoxHeight = $fixedBox.outerHeight();
+            var fixedBoxOffset = $fixedBox.offset().top;
             var scrollTop = $(window).scrollTop();
             var viewportHeight = $(window).height();
             var initialTop = 280;
-            if ($(window).width() < 992) {
+            if (scrollTop > 0) {
+                initialTop = 232;
+            } else if ($(window).width() < 992) {
                 initialTop = 140;
             }
 
-            if (scrollTop + viewportHeight >= footerOffset + 100) {
-                $fixedBox.css({
-                    position: 'absolute',
-                    top: `${footerOffset - fixedBoxHeight}px`
-                });
+            var fixedBoxBottom = scrollTop + initialTop + fixedBoxHeight;
+            if (fixedBoxBottom >= footerOffset) {
+            $fixedBox.css({
+                position: 'absolute',
+                top: `${footerOffset - fixedBoxHeight}px`
+            });
             } else {
                 $fixedBox.css({
                     position: 'fixed',
