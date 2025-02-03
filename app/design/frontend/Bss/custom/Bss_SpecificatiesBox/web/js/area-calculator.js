@@ -39,9 +39,7 @@ define([
             var scrollTop = $(window).scrollTop();
             var viewportHeight = $(window).height();
             var initialTop = 280;
-            if (scrollTop > 0) {
-                initialTop = 232;
-            } else if ($(window).width() < 992) {
+            if ($(window).width() < 992) {
                 initialTop = 140;
             }
 
