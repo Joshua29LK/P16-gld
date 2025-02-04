@@ -2,6 +2,8 @@
 $currentProduct = $block->getCurrentProduct();
 $widthHeightIds = $block->getWidthHeightIds();
 $formula = $block->getConditions($currentProduct->getId());
+$isOutOfStock = !$currentProduct->isSaleable();
+
 if (is_array($formula) && isset($formula[0]['conditions'][0]['weight'])) {
     $weightFormula = $formula[0]['conditions'][0]['weight'];
 } else {
@@ -12,8 +14,8 @@ if (is_array($formula) && isset($formula[0]['conditions'][0]['weight'])) {
 <div class="specificaties-box">
     <h2>Specificaties:</h2>
     <ul>
-        <li class="oppervlakte"><span>Oppervlakte</span> <span id="oppervlakte-value">0</span> m²</li>
-        <li class="gewicht"><span>Gewicht (per ruit)</span> <span id="weight-value">0</span> kg</li>
+        <li class="oppervlakte"><span>Oppervlakte</span> <span class="oppervlakte-value">0</span> m²</li>
+        <li class="gewicht"><span>Gewicht (per ruit)</span> <span class="weight-value">0</span> kg</li>
     </ul>
 </div>
 
@@ -29,9 +31,9 @@ if (is_array($formula) && isset($formula[0]['conditions'][0]['weight'])) {
 }
 </script>
 
-<?php if(empty($formula) || !$widthHeightIds['width_id'] || !$widthHeightIds['height_id']) { ?>
+<?php if(empty($formula) || !$widthHeightIds['width_id'] || !$widthHeightIds['height_id'] || $isOutOfStock) { ?>
     <style>
-        .fixed-product-box {
+        .fixed-product-box, .fixed-product-box-mobile {
             display: none;
         }
 

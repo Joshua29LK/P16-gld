@@ -153,9 +153,9 @@ Itoris.PriceFormula = {
 		var bssPrice = curObj.finalPrice.toFixed(2);
 		var bssTotalTax = (bssPrice * (taxRate - 1)).toFixed(2);
 		var bssPriceIncl = (parseFloat(bssPrice) + parseFloat(bssTotalTax)).toFixed(2);
-		jQuery('#total_excl_btw-value').text('€ ' + bssPrice);
-		jQuery('#product_btw-value').text('€ ' + bssTotalTax);
-		jQuery('#total_incl_btw-value').text('€ ' + bssPriceIncl);
+		jQuery('.total_excl_btw-value').text('€ ' + bssPrice);
+		jQuery('.product_btw-value').text('€ ' + bssTotalTax);
+		jQuery('.total_incl_btw-value').text('€ ' + bssPriceIncl);
         
         if (priceForCompare > 0) {
             finalPriceObj.text(window._priceUtils.formatPrice(curObj.finalPrice * (!curObj.priceFormulaTaxInfo.priceAlreadyIncludesTax && curObj.priceFormulaTaxInfo.displayPriceMode > 1 ? taxRate : 1)));

@@ -1,4 +1,8 @@
-.fixed-product-box {
+.fixed-product-box-mobile {
+  display: none;
+}
+
+.fixed-product-box, .fixed-product-box-mobile {
   position: absolute;
   top: 140px;
   right: 20px;
@@ -81,7 +85,6 @@
       width: 100%;
       text-align: center;
       font-size: 16px;
-      padding: 20px;
       border: none;
       outline: none;
     }
@@ -113,7 +116,7 @@
       margin-top: 20px;
     }
 
-    #specificaties-product-addtocart-button {
+    #specificaties-product-addtocart-button, #specificaties-product-addtocart-button-mobile {
       width: 100%;
       padding: 10px;
       border-radius: 20px;
@@ -132,10 +135,22 @@
       display: none;
     }
   }
+
+  .fixed-product-box-mobile {
+    display: block;
+    position: unset;
+    width: 100%;
+    border: none;
+    margin-bottom: 10px;
+  }
+
 }
 
 @media (max-width: 991px) {
   .catalog-product-view {
+    .product-options-bottom {
+      display: none;
+    }
     .fixed-product-box {
       top: 90px;
       font-size: 11px;
@@ -232,3 +247,18 @@
   }
 }
 
+@media (min-width: 768px) and (max-width: 1200px) {
+  .catalog-product-view {
+    .fixed-product-box {
+      right: 2%;
+
+      .total_incl_btw {
+        padding-bottom: 0;
+      }
+
+      .prijsoverzicht-box::after {
+        height: 0;
+      }
+    }
+  }
+}
