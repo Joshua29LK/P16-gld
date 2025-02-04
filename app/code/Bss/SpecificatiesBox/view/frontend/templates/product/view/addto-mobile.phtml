@@ -3,9 +3,9 @@
         <span>Aantal</span>
     </label>
     <div class="qty-wrapper">
-        <button type="button" id="btn-decrease" class="btn-decrease">-</button>
+        <button type="button" id="btn-decrease-mobile" class="btn-decrease">-</button>
         <input type="number" id="specificaties-qty-mobile" class="input-qty" name="qty" value="1" min="1" />
-        <button type="button" id="btn-increase" class="btn-increase">+</button>
+        <button type="button" id="btn-increase-mobile" class="btn-increase">+</button>
     </div>
     <div class="actions">
         <button type="submit" title="In winkelwagen" class="action primary tocart" id="specificaties-product-addtocart-button-mobile">
@@ -20,7 +20,7 @@
 <script type="text/javascript">
     require(['jquery'], function($) {
         $(document).ready(function() {
-            $('#btn-decrease').on('click', function () {
+            $('#btn-decrease-mobile').on('click', function () {
                 var qtyInput = $('#specificaties-qty-mobile');
                 var currentQty = parseInt(qtyInput.val());
                 if (currentQty > 1) {
@@ -28,14 +28,14 @@
                 }
             });
 
-            $('#btn-increase').on('click', function () {
+            $('#btn-increase-mobile').on('click', function () {
                 var qtyInput = $('#specificaties-qty-mobile');
                 var currentQty = parseInt(qtyInput.val());
                 qtyInput.val(currentQty + 1);
             });
 
             $('#specificaties-product-addtocart-button-mobile').on('click', function () {
-                $('#qty').val($('#specificaties-qty').val());
+                $('#qty').val($('#specificaties-qty-mobile').val());
                 $('#product-addtocart-button').click();
             });
         });

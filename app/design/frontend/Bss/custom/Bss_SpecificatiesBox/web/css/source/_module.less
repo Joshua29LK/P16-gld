@@ -116,7 +116,7 @@
       margin-top: 20px;
     }
 
-    #specificaties-product-addtocart-button {
+    #specificaties-product-addtocart-button, #specificaties-product-addtocart-button-mobile {
       width: 100%;
       padding: 10px;
       border-radius: 20px;
@@ -247,3 +247,18 @@
   }
 }
 
+@media (min-width: 768px) and (max-width: 1200px) {
+  .catalog-product-view {
+    .fixed-product-box {
+      right: 2%;
+
+      .total_incl_btw {
+        padding-bottom: 0;
+      }
+
+      .prijsoverzicht-box::after {
+        height: 0;
+      }
+    }
+  }
+}
