@@ -12,22 +12,23 @@
 $linkTypeId = (int) $block->getLinkTypeId();
 
 $collection = $block->getRequiredCollection($linkTypeId);
-$collectionTooltip = $block->getCollectionTooltip($linkTypeId);
 $collectionName = $block->getCollectionName($linkTypeId);
 $requiredProductsData = $block->getRequiredCollectionDataJson($linkTypeId);
 $slideConfigs = $block->getSlideConfigsJson();
+
 ?>
 <?php if (count($collection)): ?>
-    <div class="required-configurable-products <?= /** @noEscape */ $linkTypeId ?>"
-         data-bind="scope:'required-configurable-<?= /** @noEscape */ $linkTypeId ?>'">
-        <!-- ko template: getTemplate() --><!-- /ko -->
-    </div>
     <div class="required-products"
          data-bind="scope:'requiredProducts-<?= /** @noEscape */ $linkTypeId ?>'"
          data-collection-name="<?= $escaper->escapeHtml($collectionName) ?>"
          data-type-id="<?= /** @noEscape */ $linkTypeId ?>">
+        <div class="collection-info">
+            <span class="collection-name">
+                <span class="name"><?= $escaper->escapeHtml($collectionName) ?></span>
+            </span>
+        </div>
         <div class="actions">
-            <button data-bind="click: onClickAdd" class="action primary add">
+            <button data-bind="click: onClickAdd, visible: canShoButtonAdd" class="action primary add">
                 <span><?= /** @noEscape */ __('Add') ?></span>
             </button>
         </div>
@@ -41,6 +42,10 @@ $slideConfigs = $block->getSlideConfigsJson();
             </div>
         </div>
 
+    </div>
+    <div class="required-configurable-products <?= /** @noEscape */ $linkTypeId ?>"
+         data-bind="scope:'required-configurable-<?= /** @noEscape */ $linkTypeId ?>'">
+        <!-- ko template: getTemplate() --><!-- /ko -->
     </div>
     <script type="text/x-magento-init">
     {

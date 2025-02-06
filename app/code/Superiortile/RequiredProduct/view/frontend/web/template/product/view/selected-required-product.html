@@ -1,39 +1,63 @@
-<!-- ko foreach: selectedRequiredProduct -->
+<!-- Copyright © Magento, Inc. All rights reserved. -->
+<!-- See COPYING.txt for license details. -->
+
+<!-- ko if: selectedRequiredProduct() -->
 <div class="item required-configurable-item">
     <input class="selected-required-qty" type="hidden"
-           data-bind="attr: { name: $parent.selectedRequiredInputQtyName, value: qty, form: $parent.formId }">
+           data-bind="attr:{name: selectedRequiredInputQtyName, value: selectedRequiredProduct().qty, form: formId}">
+    <input type="hidden"
+           data-bind="attr: {
+           name: 'options-' + selectedRequiredInputQtyName,
+           value: JSON.stringify(selectedRequiredProduct().options),
+           form: formId
+       }">
     <div class="product-item-info">
         <a href="#" class="product photo product-item-photo"
-           data-bind="attr: { href: productUrl }">
-            <img data-bind="attr: { src: imageUrl, alt: name }" alt="">
+           data-bind="attr:{href: selectedRequiredProduct().productUrl}">
+            <img data-bind="attr: {src: selectedRequiredProduct().imageUrl, alt: selectedRequiredProduct().name}" alt="">
         </a>
         <div class="product details product-item-details">
-            <strong class="product name product-item-name" data-bind="text: name"></strong>
-            <!-- ko if: attributes.finish -->
-            <div class="product-attribute finish">
-                <span class="label" data-bind="text: attributes.finish.label"></span>
-                <span class="value" data-bind="text: attributes.finish.value"></span>
+            <strong class="product name product-item-name" data-bind="text: selectedRequiredProduct().name"></strong>
+            <!-- ko if: selectedRequiredProduct().attributes.options && selectedRequiredProduct().attributes.options.length -->
+            <div class="product-attribute custom-options">
+                <ul data-bind="foreach: selectedRequiredProduct().attributes.options">
+                    <li>
+                        <strong data-bind="text: label"></strong>:
+                        <span data-bind="text: value"></span>
+                    </li>
+                </ul>
             </div>
-            <!-- /ko -->
+            <!--/ko-->
+
+            <!-- ko if: selectedRequiredProduct().attributes.finish -->
+            <div class="product-attribute qty">
+                <span class="label">
+                    <!-- ko text: selectedRequiredProduct().attributes.finish.label --><!-- /ko -->
+                </span>
+                <span class="value" data-bind="text: selectedRequiredProduct().attributes.finish.value"></span>
+            </div>
+            <!--/ko-->
             <div class="product-attribute qty">
                 <span class="label"><!-- ko i18n: "Quantity" --><!-- /ko --></span>
-                <span class="value" data-bind="text: qty"></span>
+                <span class="value" data-bind="text: selectedRequiredProduct().qty"></span>
             </div>
-            <!-- ko if: attributes.price -->
-            <div class="product-attribute price">
-                <span class="label" data-bind="text: attributes.price.label"></span>
-                <span class="value" data-bind="html: attributes.price.value"></span>
+            <!-- ko if: selectedRequiredProduct().attributes.price -->
+            <div class="product-attribute qty">
+                <span class="label">
+                    <!-- ko text: selectedRequiredProduct().attributes.price.label --><!-- /ko -->
+                </span>
+                <span class="value" data-bind="html: selectedRequiredProduct().attributes.price.value"></span>
             </div>
-            <!-- /ko -->
+            <!--/ko-->
         </div>
     </div>
     <div class="actions">
-        <button class="action primary edit" data-bind="click: $parent.editSelectedRequiredProduct">
+        <button class="action primary edit" data-bind="click: editSelectedRequiredProduct">
             <!-- ko i18n: 'Edit' --><!-- /ko -->
         </button>
-        <button class="action secondary remove" data-bind="click: $parent.removeSelectedRequiredProduct">
+        <button class="action secondary remove" data-bind="click: removeSelectedRequiredProduct">
             <!-- ko i18n: 'Remove' --><!-- /ko -->
         </button>
     </div>
 </div>
-<!-- /ko -->
+<!--/ko-->

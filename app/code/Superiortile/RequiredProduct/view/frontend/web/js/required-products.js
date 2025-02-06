@@ -89,10 +89,44 @@ define([
             requiredProductDetail.requiredProductListModals(modals);
         },
 
-        /**
-         * onClickAdd
-         */
         onClickAdd: function () {
+            let isValid = true;
+            let firstInvalidElement = null;
+
+            const requiredFields = document.querySelectorAll(".product-custom-option[aria-required='true'], .product-custom-option[required]");
+
+            requiredFields.forEach(field => {
+                const label = document.querySelector(`label[for="${field.id}"]`);
+                const labelText = label ? label.innerText.trim() : "";
+
+                if (labelText === "Breedte (mm)" || labelText === "Hoogte (mm)") {
+                    if ((field.type === "text" || field.type === "number" || field.tagName === "SELECT") && field.value.trim() === "") {
+                        isValid = false;
+                        field.classList.add("input-error");
+                        if (!firstInvalidElement) firstInvalidElement = field;
+                    }
+                }
+            });
+
+            const errorBlock = document.querySelector(".required-products-block .mage-error");
+            if (!isValid) {
+                if (errorBlock) {
+                    errorBlock.textContent = "Please fill in both 'Breedte (mm)' and 'Hoogte (mm)' fields to proceed.";
+                    errorBlock.style.display = "block";
+                }
+
+                if (firstInvalidElement) {
+                    firstInvalidElement.scrollIntoView({ behavior: "smooth", block: "center" });
+                    firstInvalidElement.focus();
+                }
+
+                return;
+            }
+
+            if (errorBlock) {
+                errorBlock.style.display = "none";
+            }
+
             this.modalPopup.modal('openModal');
         }
     });

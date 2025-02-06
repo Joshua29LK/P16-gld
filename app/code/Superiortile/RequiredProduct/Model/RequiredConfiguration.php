@@ -69,13 +69,16 @@ class RequiredConfiguration
 
         $qty = (int) $request->getParam('qty') ?: 1;
 
+        $customOptions = $request->getParam('options', []);
+
         $collectionData = $this->configurableData[$mainProductId] ?? [];
 
-        $collectionData[] = [
+        $collectionData[$collectionTypeId] = [
             'qty' => $qty,
             'product_id' => $requiredProductId,
             'main_product' => $mainProductId,
-            'collection_type_id' => $collectionTypeId
+            'collection_type_id' => $collectionTypeId,
+            'custom_options' => $customOptions
         ];
 
         $this->configurableData[$mainProductId] = $collectionData;

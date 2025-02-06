@@ -19,7 +19,7 @@ define([
     return Component.extend({
         defaults: {
             template: 'Superiortile_RequiredProduct/product/view/selected-required-product',
-            selectedRequiredProduct: ko.observableArray([]),
+            selectedRequiredProduct: {},
             requiredProductsData: {},
             selectedRequiredInputName: {},
             collectionId: null,
@@ -112,30 +112,94 @@ define([
             var self = this,
                 product,
                 productItemsData,
-                configurable = self.requiredConfigurable()[self.mainProductId];
+                configurable = self.requiredConfigurable()[self.mainProductId] ?
+                    self.requiredConfigurable()[self.mainProductId][self.collectionId] : {};
 
-                Object.keys(configurable).forEach(function(key) {
-                    var product = self.requiredProductsData[configurable[key]['product_id']] || null;
+            if (configurable && configurable.product_id) {
+                product = self.requiredProductsData[configurable.product_id] ?? null;
 
-                    if (product) {
-                        product.qty = configurable.qty;
-                        self.selectedRequiredInputQtyName = 'required-item[%1][%2]'
-                            .replace('%1', self.collectionId)
-                            .replace('%2', configurable[key]['product_id']);
-                        product.attributes.qty = {
-                            label: $.mage.__('Quantity'),
-                            value: product.qty,
-                            attribute_code: 'qty',
-                        };
-                       
-                        if (
-                            !self.selectedRequiredProduct().map(p => p.product_id).includes(product.id)
-                        ) {
-                            self.selectedRequiredProduct.push(product);
+                if (product) {
+                    product.qty = configurable.qty;
+                    product.options = configurable.custom_options || {};
+                    this.selectedRequiredInputQtyName = 'required-item[%1][%2]'
+                        .replace('%1', this.collectionId)
+                        .replace('%2', configurable.product_id);
+
+                    product.attributes.qty = {
+                        label: $.mage.__('Quantity'),
+                        value: product.qty,
+                        attribute_code: 'qty'
+                    };
+                    product.attributes.options = this.getCustomOptionDetails(product,configurable.custom_options);
+                }
+            }
+
+            self.selectedRequiredProduct(product);
+            productItemsData = self.selectedRequiredProductItems();
+            if (product && product.id) {
+                productItemsData[this.collectionId] = {
+                    qty: product.qty,
+                    price: product.price,
+                    id: product.id,
+                    product_id: product.id,
+                    options: product.options
+                };
+            } else {
+                delete productItemsData[this.collectionId];
+            }
+
+            self.selectedRequiredProductItems(productItemsData);
+            requiredProductDetail.selectedRequiredItems(productItemsData);
+        },
+
+        /**
+         * Function to get custom options label and value based on product data
+         */
+        getCustomOptionDetails: function(product, customOptionsData) {
+            var optionsDetails = [];
+
+            var customOptions = product.attributes.custom_options || [];
+
+            Object.keys(customOptionsData).forEach(function (key) {
+                var optionId = key;
+                var optionValue = customOptionsData[key];
+
+                if (!optionValue) return;
+
+                var option = customOptions.find(function (opt) {
+                    return opt.id === optionId;
+                });
+
+                if (option) {
+                    var optionLabel = option.title;
+                    var optionValues = option.values || [];
+                    var optionType = option.type;
+
+                    if (optionType === "field") {
+                        optionsDetails.push({
+                            label: optionLabel,
+                            value: optionValue
+                        });
+                    } else if (optionType === "drop_down" || optionType === "radio") {
+                        var selectedValue = optionValues.find(function (value) {
+                            return value.id === optionValue;
+                        });
+
+                        if (selectedValue) {
+                            optionsDetails.push({
+                                label: optionLabel,
+                                value: selectedValue.title
+                            });
+                        } else {
+                            optionsDetails.push({
+                                label: optionLabel,
+                                value: optionValue
+                            });
                         }
                     }
-
-                });
+                }
+            });
+            return optionsDetails;
         },
 
         /**
@@ -153,7 +217,7 @@ define([
         removeSelectedRequiredProduct: function (component, event) {
             var self = this,
                 configurable = self.requiredConfigurable()[self.mainProductId] ?
-                    self.requiredConfigurable()[self.mainProductId][self.collectionId] : {};
+                self.requiredConfigurable()[self.mainProductId][self.collectionId] : {};
 
             configurable.form_key = $.mage.cookies.get('form_key');
 

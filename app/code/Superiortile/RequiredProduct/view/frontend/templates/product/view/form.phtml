@@ -27,9 +27,19 @@ $isUpdatePopup = (int) $block->getRequest()->getParam('qty');
         <input type="hidden" name="main_product" value="<?= /** @noEscape */ $mainProductId ?>" />
         <input type="hidden" name="type_id" value="<?= /** @noEscape */ $collectionTypeId ?>" />
         <input type="hidden" name="is_update_qty" value="<?= /** @noEscape */ $isUpdatePopup ?>" />
-        <?= /** @noEscape */ $block->getBlockHtml('formkey') ?>
-        <?php if (!$block->hasOptions()): ?>
-            <?= /** @noEscape */ $block->getChildHtml('product_info_form_content') ?>
+        <?= $block->getBlockHtml('formkey') ?>
+        <?= $block->getChildHtml('form_top') ?>
+        <?php if (!$block->hasOptions()) :?>
+            <?= $block->getChildHtml('product_info_form_content') ?>
+        <?php else :?>
+            <?php if ($_product->isSaleable() && $block->getOptionsContainer() == 'container1') :?>
+                <?= $block->getChildChildHtml('options_container') ?>
+            <?php endif;?>
         <?php endif; ?>
+
+        <?php if ($_product->isSaleable() && $block->hasOptions() && $block->getOptionsContainer() == 'container2') :?>
+            <?= $block->getChildChildHtml('options_container') ?>
+        <?php endif;?>
+        <?= $block->getChildHtml('form_bottom') ?>
     </form>
 </div>

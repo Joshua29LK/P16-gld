@@ -97,6 +97,7 @@ class RequiredProducts extends Attributes
                 ->addAttributeToFilter('visibility', ['in' => $this->getVisibleInSiteIds()])
                 ->addAttributeToSelect('*')
                 ->setProduct($product)
+                ->addOptionsToResult()
                 ->setIsStrongMode();
         }
 
@@ -116,19 +117,52 @@ class RequiredProducts extends Attributes
 
         /** @var Product $product */
         foreach ($collection as $product) {
+            $customOptions = $this->getCustomOptions($product);
             $result[$product->getId()] = [
                 'id' => $product->getId(),
                 'imageUrl' => $this->imageHelper->init($product, 'product_small_image')->getUrl(),
                 'name' => $product->getName(),
-                'price' => $product->getFinalPrice(),
+                'price' => $product->getPriceInfo()->getPrice('final_price')->getAmount()->getValue(),
                 'formattedPrice' => $product->getFormattedPrice(),
                 'productUrl' => $product->getProductUrl(),
                 'regularPrice' => (float) $product->getPrice(),
-                'attributes' => $this->getAttributes($product)
+                'attributes' => array_merge($this->getAttributes($product), ['custom_options' => $customOptions])
             ];
         }
 
         return $this->serializer->serialize($result);
+    }
+
+    /**
+     * Get Custom option from product
+     */
+    private function getCustomOptions($product)
+    {
+        $options = [];
+        $customOptions = $product->getOptions() ?? [];
+
+        foreach ($customOptions as $option) {
+            $values = [];
+            $optionValues = $option->getValues() ?? [];
+
+            foreach ($optionValues as $value) {
+                $values[] = [
+                    'id' => $value->getId(),
+                    'title' => $value->getTitle(),
+                    'price' => $value->getPrice(),
+                    'price_type' => $value->getPriceType()
+                ];
+            }
+
+            $options[] = [
+                'id' => $option->getId(),
+                'title' => $option->getTitle(),
+                'type' => $option->getType(),
+                'values' => $values
+            ];
+        }
+
+        return $options;
     }
 
     /**

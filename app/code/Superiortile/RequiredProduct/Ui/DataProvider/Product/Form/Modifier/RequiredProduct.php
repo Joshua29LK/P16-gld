@@ -61,9 +61,9 @@ class RequiredProduct extends Related
                     'arguments' => [
                         'data' => [
                             'config' => [
-                                'label' => __('Related Product Collection'),
+                                'label' => __('Required Product Collection'),
                                 'componentType' => Fieldset::NAME,
-                                'sortOrder' => 55,
+                                'sortOrder' => 110,
                                 'dataScope' => '',
                                 'provider' => static::FORM_NAME . '.product_form_data_source',
                                 'ns' => static::FORM_NAME,
@@ -75,7 +75,35 @@ class RequiredProduct extends Related
                         $this->scopePrefix . static::DATA_SCOPE_REQUIRED_PRODUCT_1 => $this->getRequiredProductFieldset(
                             static::DATA_SCOPE_REQUIRED_PRODUCT_1,
                             1
-                        )
+                        ),
+                        $this->scopePrefix . static::DATA_SCOPE_REQUIRED_PRODUCT_2 => $this->getRequiredProductFieldset(
+                            static::DATA_SCOPE_REQUIRED_PRODUCT_2,
+                            2
+                        ),
+                        $this->scopePrefix . static::DATA_SCOPE_REQUIRED_PRODUCT_3 => $this->getRequiredProductFieldset(
+                            static::DATA_SCOPE_REQUIRED_PRODUCT_3,
+                            3
+                        ),
+                        $this->scopePrefix . static::DATA_SCOPE_REQUIRED_PRODUCT_4 => $this->getRequiredProductFieldset(
+                            static::DATA_SCOPE_REQUIRED_PRODUCT_4,
+                            4
+                        ),
+                        $this->scopePrefix . static::DATA_SCOPE_REQUIRED_PRODUCT_5 => $this->getRequiredProductFieldset(
+                            static::DATA_SCOPE_REQUIRED_PRODUCT_5,
+                            5
+                        ),
+                        $this->scopePrefix . static::DATA_SCOPE_REQUIRED_PRODUCT_6 => $this->getRequiredProductFieldset(
+                            static::DATA_SCOPE_REQUIRED_PRODUCT_6,
+                            6
+                        ),
+                        $this->scopePrefix . static::DATA_SCOPE_REQUIRED_PRODUCT_7 => $this->getRequiredProductFieldset(
+                            static::DATA_SCOPE_REQUIRED_PRODUCT_7,
+                            7
+                        ),
+                        $this->scopePrefix . static::DATA_SCOPE_REQUIRED_PRODUCT_8 => $this->getRequiredProductFieldset(
+                            static::DATA_SCOPE_REQUIRED_PRODUCT_8,
+                            8
+                        ),
                     ],
                 ],
             ]
@@ -92,17 +120,17 @@ class RequiredProduct extends Related
     protected function getRequiredProductFieldset($scope, $number = 1)
     {
         $content = __(
-            'Related products.'
+            'Required products.'
         );
         return [
             'children' => [
                 'button_set' => $this->getButtonSet(
                     $content,
-                    __('Add Related Products'),
+                    __('Add Required Products'),
                     $this->scopePrefix . $scope
                 ),
                 'modal' => $this->getGenericModal(
-                    __('Add Related Products'),
+                    __('Add Required Products'),
                     $this->scopePrefix . $scope
                 ),
                 $scope => $this->getGrid($this->scopePrefix . $scope),
@@ -111,7 +139,7 @@ class RequiredProduct extends Related
                 'data' => [
                     'config' => [
                         'additionalClasses' => 'admin__fieldset-section',
-                        'label' => __('Related Collection'),
+                        'label' => __('Required Collection %1', $number),
                         'collapsible' => false,
                         'componentType' => Fieldset::NAME,
                         'dataScope' => '',

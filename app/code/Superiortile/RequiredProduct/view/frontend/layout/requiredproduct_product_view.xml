@@ -9,23 +9,26 @@
                    template="Superiortile_RequiredProduct::product/view/required-product-link.phtml">
             </block>
         </referenceContainer>
-
-
-        <referenceBlock name="view.addto.wishlist2.additional" remove="true"/>
-        <referenceBlock name="product.info.showroom.location" remove="true"/>
-        <referenceBlock name="product.info.model" remove="true"/>
-        <referenceBlock name="product.info.collection.name" remove="true"/>
-        <referenceBlock name="product.info.badge" remove="true"/>
-        <referenceBlock name="product.info.addto2" remove="true"/>
-        <referenceBlock name="product.info.review" remove="true"/>
-
-        <referenceBlock name="product.info.addto" remove="true"/>
-        <referenceBlock name="product.info.addto" remove="true"/>
-        <referenceBlock name="content.aside" remove="true"/>
-        <referenceBlock name="content.bottom" remove="true"/>
-
-        <move element="product.info" destination="product.info.main" after="-"/>
-        <move element="product.info.details" destination="product.info.main" after="product.info.main"/>
-        <move element="required.product.detail.link" destination="product.info.main" after="product.info.details" before="product.info"/>
+        <referenceContainer name="header.container" remove="true"/>
+        <referenceContainer name="footer" remove="true"/>
+        <referenceBlock name="breadcrumbs" remove="true"/>
+        <referenceBlock name="catalog.topnav.without.ttl" remove="true"/>
+        <referenceBlock name="navigation.sections" remove="true"/>
+        <referenceContainer name="before.body.end" remove="true"/>
+        <referenceBlock name="product.info.addtocart">
+            <action method="setTemplate">
+                <argument name="template" xsi:type="string">Superiortile_RequiredProduct::product/view/addtocart.phtml</argument>
+            </action>
+        </referenceBlock>
+        <referenceBlock name="product.info.addtocart.additional">
+            <action method="setTemplate">
+                <argument name="template" xsi:type="string">Superiortile_RequiredProduct::product/view/addtocart.phtml</argument>
+            </action>
+        </referenceBlock>
+        <referenceBlock name="reviews.tab" remove="false"/>
+        <referenceBlock name="catalog.product.more.from.collection" remove="true"/>
+        <referenceBlock name="catalog.product.related" remove="true"/>
+        <referenceBlock name="product.info.required.collection" remove="true"/>
+        <referenceBlock name="product.info.upsell" remove="true"/>
     </body>
 </page>

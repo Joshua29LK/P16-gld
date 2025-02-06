@@ -24,6 +24,7 @@ define([
         ajaxSubmit: function (form) {
             var self = this,
                 formData;
+
             self.disableAddToCartButton(form);
             formData = new FormData(form[0]);
 

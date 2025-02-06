@@ -9,20 +9,11 @@
 
 ?>
 <div class="required-products-block" id="required-products-block">
-    <span class="title"><?= /** @noEscape */ __('Related Products') ?></span>
+    <span class="title"><?= /** @noEscape */ __('Required Products') ?></span>
     <?= /** @noEscape */ $block->getChildHtml() ?>
+    <div class="mage-error" style="display: none;"></div>
 </div>
 <div id="required-product-detail"></div>
-<div class="required-subtotals" data-bind="scope:'required-subtotals'">
-    <!-- ko if: totals().totalQty -->
-    <span class="label">
-        <!-- ko text: label.replace('%s', totals().totalQty) --><!-- /ko -->
-    </span>
-    <span class="total">
-        <!-- ko text: totals().formattedPrice --><!-- /ko -->
-    </span>
-    <!-- /ko -->
-</div>
 <script type="text/x-magento-init">
     {
         ".required-subtotals": {
