@@ -158,8 +158,8 @@ Itoris.PriceFormula = {
         jQuery('.total_incl_btw-value').text('€ ' + bssPriceIncl);
 
         if (priceForCompare > 0) {
-            finalPriceObj.text(window._priceUtils.formatPrice(curObj.finalPrice * (!curObj.priceFormulaTaxInfo.priceAlreadyIncludesTax && curObj.priceFormulaTaxInfo.displayPriceMode > 1 ? taxRate : 1)));
-            if (basePriceObj[0] && basePriceObj[0] !== finalPriceObj[0]) basePriceObj.text(window._priceUtils.formatPrice(curObj.finalPrice * (!curObj.priceFormulaTaxInfo.priceAlreadyIncludesTax && curObj.priceFormulaTaxInfo.displayPriceMode != 3 || curObj.priceFormulaTaxInfo.priceAlreadyIncludesTax && curObj.priceFormulaTaxInfo.displayPriceMode != 2 ? taxRate : 1)));
+            finalPriceObj.text(window._priceUtils.formatPrice(curObj.finalPrice.toFixed(2) * (!curObj.priceFormulaTaxInfo.priceAlreadyIncludesTax && curObj.priceFormulaTaxInfo.displayPriceMode > 1 ? taxRate : 1)));
+            if (basePriceObj[0] && basePriceObj[0] !== finalPriceObj[0]) basePriceObj.text(window._priceUtils.formatPrice(curObj.finalPrice.toFixed(2) * (!curObj.priceFormulaTaxInfo.priceAlreadyIncludesTax && curObj.priceFormulaTaxInfo.displayPriceMode != 3 || curObj.priceFormulaTaxInfo.priceAlreadyIncludesTax && curObj.priceFormulaTaxInfo.displayPriceMode != 2 ? taxRate : 1)));
         }
     },
     getConfigurableOptionsConfig: function(){
