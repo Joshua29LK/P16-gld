@@ -12,6 +12,9 @@
                     <label>Countries are not Allowed</label>
                     <source_model>Magento\Directory\Model\Config\Source\Country</source_model>
                 </field>
+                <field id="verzendgroep" translate="label" type="text" sortOrder="150" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>MAP the values in attribute Verzendgroep </label>
+                </field>
             </group>
         </section>
     </system>

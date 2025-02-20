@@ -47,10 +47,12 @@ class LayoutProcessorPlugin
      */
     public function __construct(
         \Bss\OrderDeliveryDate\Helper\Data $helper,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Checkout\Model\Cart $cart,
         ProductResource $productResource
     ) {
         $this->helper = $helper;
+        $this->scopeConfig = $scopeConfig;
         $this->cart = $cart;
         $this->productResource = $productResource;
     }
@@ -66,6 +68,7 @@ class LayoutProcessorPlugin
         \Magento\Checkout\Block\Checkout\LayoutProcessor $subject,
         array $jsLayout
     ) {
+
         $container = null;
         $check = false;
         $isShow = false;
@@ -77,10 +80,18 @@ class LayoutProcessorPlugin
                 ['verzendgroep'],
                 $cartItem->getStoreId()
             );
-            $verzendgroepText = $this->productResource->getAttribute('verzendgroep')->getSource()->getOptionText($verzendgroep);
-            if($verzendgroepText == "show") {
-                $isShow = true;
+            $Verzendgroep =  $this->scopeConfig->getValue(
+                'orderdeliverydate/general/verzendgroep',
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            );
+            
+            if (!empty($Verzendgroep)) {
+                $Verzendgroep = explode(',', $Verzendgroep);
+                $verzendgroepText = $this->productResource->getAttribute('verzendgroep')->getSource()->getOptionText($verzendgroep);
+                $isShow = in_array($verzendgroepText, $Verzendgroep);
             }
+            
+           
 
             if ($productType != "downloadable" && $productType != "virtual") {
                 $check = true;
