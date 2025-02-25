@@ -84,14 +84,16 @@ class LayoutProcessorPlugin
                 'orderdeliverydate/general/verzendgroep',
                 \Magento\Store\Model\ScopeInterface::SCOPE_STORE
             );
-            
+
             if (!empty($Verzendgroep)) {
                 $Verzendgroep = explode(',', $Verzendgroep);
                 $verzendgroepText = $this->productResource->getAttribute('verzendgroep')->getSource()->getOptionText($verzendgroep);
-                $isShow = in_array($verzendgroepText, $Verzendgroep);
+                if(in_array($verzendgroepText, $Verzendgroep)) {
+                    $isShow = true;
+                }
             }
-            
-           
+
+
 
             if ($productType != "downloadable" && $productType != "virtual") {
                 $check = true;
