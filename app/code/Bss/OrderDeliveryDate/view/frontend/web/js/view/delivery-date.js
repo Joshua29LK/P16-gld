@@ -121,7 +121,7 @@ define(
 
                     if (shippingAddress) {
                         var country = shippingAddress.countryId;
-                        if (Array.isArray(countryAllow) && countryAllow.includes(country)) {
+                        if ((Array.isArray(countryAllow) && countryAllow.includes(country)) || shippingAddress.postcode == "*") {
                             self.dateRequired(false);
                             self.bssDeliveryEnable(false);
                         } else {
@@ -345,7 +345,8 @@ define(
 
                         if (storedZipCode.includes('-')) {
                             const [from, to] = storedZipCode.split('-').map(Number);
-                            if (postcode >= from && postcode <= to) {
+                            let postcodeNumber = postcode.replace(/\s/g, '').substring(0, 4);
+                            if (postcodeNumber >= from && postcodeNumber <= to) {
                                 deliveryDaysByZip = record.delivery_days;
                                 break;
                             }
