@@ -170,21 +170,21 @@
                         animateOut: "<?php echo $_parameters['animateOut'] ?>",
                         animateIn: "<?php echo $_parameters['animateIn'] ?>",
                         items: 1,
-                        loop: <?php echo ($_parameters['loop'] == 0) ? 'false' : 'true' ?>,
+                        loop: <?php echo (!$_parameters['loop']) ? 'false' : 'true' ?>,
                         //center: true,
                         //rewind: false,
                         startPosition: <?php echo $_parameters['startPosition'] ? $_parameters['startPosition'] : '0' ?>,
-                        rtl: ThemeOptions.rtl_layout == 1 ? true : false,                                   
-            
-                        autoplay : <?php echo ($_parameters['autoplay'] == 0) ? 'false' : 'true' ?>,
-                        
-                        autoplayHoverPause : <?php echo ($_parameters['autoplayHoverPause'] == 0) ? 'false' : 'true' ?>,
-                        autoplayTimeout: <?php echo ($_parameters['autoplaySpeed'] == 0) ? '3000' : $_parameters['autoplaySpeed'] ?>,
-                        nav: <?php echo ($_parameters['nav'] == 0) ? 'false' : 'true' ?>,
-                        dots: <?php echo ($_parameters['dots'] == 0) ? 'false' : 'true' ?>,
-                        lazyLoad: <?php echo ($_parameters['lazyLoad'] == 0) ? 'false' : 'true' ?>,
-                        URLhashListener: <?php echo ($_parameters['controlNavThumbs'] == 0) ? 'false' : 'true' ?>,
-                                    
+                        rtl: ThemeOptions.rtl_layout == 1 ? true : false,
+
+                        autoplay : <?php echo (!$_parameters['autoplay']) ? 'false' : 'true' ?>,
+
+                        autoplayHoverPause : <?php echo (!$_parameters['autoplayHoverPause']) ? 'false' : 'true' ?>,
+                        autoplayTimeout: <?php echo (!$_parameters['autoplaySpeed']) ? '3000' : $_parameters['autoplaySpeed'] ?>,
+                        nav: <?php echo (!$_parameters['nav']) ? 'false' : 'true' ?>,
+                        dots: <?php echo (!$_parameters['dots']) ? 'false' : 'true' ?>,
+                        lazyLoad: <?php echo (!$_parameters['lazyLoad']) ? 'false' : 'true' ?>,
+                        URLhashListener: <?php echo (!$_parameters['controlNavThumbs']) ? 'false' : 'true' ?>,
+
                     });
                 }
             });
