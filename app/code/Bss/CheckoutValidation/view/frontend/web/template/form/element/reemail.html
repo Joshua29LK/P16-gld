@@ -1,0 +1,43 @@
+<!--
+/**
+ * BSS Commerce Co.
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the EULA
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://bsscommerce.com/Bss-Commerce-License.txt
+ *
+ * @category   BSS
+ * @package    Bss_CheckoutValidation
+ * @author     Extension Team
+ * @copyright  Copyright (c) 2020-2021 BSS Commerce Co. ( http://bsscommerce.com )
+ * @license    http://bsscommerce.com/Bss-Commerce-License.txt
+ */
+-->
+<div class="field required">
+    <label class="label" for="customer-email"><span data-bind="i18n: 'Email Address Confirmation'"></span></label>
+    <div class="control _with-tooltip">
+        <input class="input-text"
+               type="email"
+               autocomplete="new-username"
+               oncopy="return false"
+               oncut="return false"
+               onpaste="return false"
+               readonly
+               data-bind="
+                    afterRender: getConfirmEmail,
+                    event: {
+                        'keyup': getConfirmEmail,
+                        'click': removeReadOnly,
+                        'onfocus': removeReadOnly,
+                        'onfocusout': addReadOnly
+                    },
+                    mageInit: {'mage/trim-input':{}}"
+               name="re-username"
+               data-validate="{required:true, 'validate-email':true}"
+               id="re-customer-email" />
+        <!-- ko template: 'ui/form/element/helper/tooltip' --><!-- /ko -->
+    </div>
+</div>
