@@ -131,6 +131,17 @@ define(
                     }
                 });
 
+                quote.shippingMethod.subscribe(function (method) {
+                    if (method) {
+                        if (method.carrier_code === 'flatrate' && method.method_code === 'flatrate') {
+                            self.dateRequired(true);
+                            self.bssDeliveryEnable(true);
+                        } else {
+                            self.dateRequired(false);
+                            self.bssDeliveryEnable(false);
+                        }
+                    }
+                });
             },
 
             bssValidateField: function() {
