@@ -22,12 +22,13 @@ define(
         'mage/translate',
         'Magento_Checkout/js/model/full-screen-loader',
         'Bss_OrderDeliveryDate/js/model/delivery-form-data',
+        'Magento_Customer/js/model/customer',
         'Magento_Checkout/js/model/quote',
         'Magento_Checkout/js/model/payment/renderer-list',
         'underscore',
         'mage/calendar'
     ],
-    function ($, ko, Component, $t, fullScreenLoader, deliveryFormData, quote, rendererList, _) {
+    function ($, ko, Component, $t, fullScreenLoader, deliveryFormData, customer, quote, rendererList, _) {
         'use strict';
 
         $.extend(true, $, {
@@ -59,6 +60,10 @@ define(
             errorTimeRequiredValidate : ko.observable(false),
 
             errorCommentRequiredValidate : ko.observable(false),
+
+            countryNotAllowed : ko.observable(false),
+
+            isFlatrate : ko.observable(false),
 
             //Validate Date
             isValidDateBss: function(dateString) {
@@ -116,32 +121,37 @@ define(
                 this.listingTimeSlot(this.listTimeSlot());
 
                 quote.shippingAddress.subscribe(function (address) {
-                    var countryAllow = window.checkoutConfig.orderdeliverydate_countries;
+                    var allowedCountries = window.checkoutConfig.orderdeliverydate_countries;
                     var shippingAddress = quote.shippingAddress();
 
                     if (shippingAddress) {
                         var country = shippingAddress.countryId;
-                        if ((Array.isArray(countryAllow) && countryAllow.includes(country)) || shippingAddress.postcode == "*") {
-                            self.dateRequired(false);
-                            self.bssDeliveryEnable(false);
-                        } else {
-                            self.dateRequired(true);
-                            self.bssDeliveryEnable(true);
+                        var isCountryAllowed = Array.isArray(allowedCountries) && allowedCountries.includes(country);
+                        var isPostcodeAll = shippingAddress.postcode === "*";
+                        var postcodenL = $('#shipping-postcodenl-postcode').val();
+                        if(!customer.isLoggedIn() && shippingAddress.countryId == "NL" && !postcodenL) {
+                            isPostcodeAll = true;
                         }
+
+                        self.countryNotAllowed = !isCountryAllowed && !isPostcodeAll;
                     }
+
+                    updateDeliveryStatus();
                 });
 
                 quote.shippingMethod.subscribe(function (method) {
                     if (method) {
-                        if (method.carrier_code === 'flatrate' && method.method_code === 'flatrate') {
-                            self.dateRequired(true);
-                            self.bssDeliveryEnable(true);
-                        } else {
-                            self.dateRequired(false);
-                            self.bssDeliveryEnable(false);
-                        }
+                        self.isFlatrate = method.carrier_code === 'flatrate' && method.method_code === 'flatrate';
                     }
+
+                    updateDeliveryStatus();
                 });
+
+                function updateDeliveryStatus() {
+                    var enableDelivery = self.countryNotAllowed && self.isFlatrate;
+                    self.dateRequired(enableDelivery);
+                    self.bssDeliveryEnable(enableDelivery);
+                }
             },
 
             bssValidateField: function() {
