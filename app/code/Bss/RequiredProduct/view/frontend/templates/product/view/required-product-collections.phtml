@@ -1,0 +1,31 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ *
+ * @var \Bss\RequiredProduct\Block\Product\View\RequiredProducts $block
+ * @var \Magento\Framework\Escaper $escaper
+ */
+
+?>
+<div class="required-products-block" id="required-products-block">
+    <?php if (strlen(trim($block->getChildHtml()))): ?>
+    <span class="title"><?= /** @noEscape */ __('Required Products') ?></span>
+    <?= /** @noEscape */ $block->getChildHtml() ?>
+    <?php endif; ?>
+    <div class="mage-error" style="display: none;"></div>
+</div>
+<div id="required-product-detail"></div>
+<script type="text/x-magento-init">
+    {
+        ".required-subtotals": {
+            "Magento_Ui/js/core/app": {
+                "components": {
+                    "required-subtotals": {
+                        "component": "Bss_RequiredProduct/js/product/totals"
+                    }
+                }
+            }
+        }
+    }
+</script>

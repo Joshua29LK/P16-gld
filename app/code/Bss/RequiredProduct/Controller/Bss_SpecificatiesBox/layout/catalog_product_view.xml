@@ -1,0 +1,19 @@
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceContainer name="product.info.main">
+            <container name="specificaties_box_product_container" htmlTag="div" htmlClass="fixed-product-box">
+                <block class="Bss\SpecificatiesBox\Block\SpecificatiesBox" name="specificaties_box_product_block" template="Bss_SpecificatiesBox::product/view/specificaties.phtml" />
+                <block class="Bss\SpecificatiesBox\Block\SpecificatiesBox" name="prijsoverzicht_box_product_block" template="Bss_SpecificatiesBox::product/view/prijsoverzicht.phtml" />
+                <block class="Magento\Framework\View\Element\Template" name="specificaties_box_product_add_to" template="Bss_SpecificatiesBox::product/view/addto.phtml" />
+            </container>
+        </referenceContainer>
+        <move element="specificaties_box_product_container" destination="column.main" after="-"/>
+        <referenceContainer name="product.info.options.wrapper">
+            <container name="specificaties_box_product_container_mobile" htmlTag="div" htmlClass="fixed-product-box-mobile">
+                <block class="Bss\SpecificatiesBox\Block\SpecificatiesBox" name="specificaties_box_product_block_mobile" template="Bss_SpecificatiesBox::product/view/specificaties.phtml" />
+                <block class="Bss\SpecificatiesBox\Block\SpecificatiesBox" name="prijsoverzicht_box_product_block_mobile" template="Bss_SpecificatiesBox::product/view/prijsoverzicht.phtml" />
+                <block class="Magento\Framework\View\Element\Template" name="specificaties_box_product_add_to_mobile" template="Bss_SpecificatiesBox::product/view/addto-mobile.phtml" />
+            </container>
+        </referenceContainer>
+    </body>
+</page>
