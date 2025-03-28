@@ -9,21 +9,22 @@
       xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <body>
         <move element="page.main.title" destination="product.info.main" before="-"/>
-		<move element="product.info.overview" destination="product.info.main" after="page.main.title"/>
-		<move element="product.info.price" destination="product.info.main" after="-"/>
-		<move element="inmeetservice" destination="product.info.media" after="-"/>
-		<move element="usps-keurmerk" destination="product.info.main" after="product.info.price"/>
-<block class="Magento\Cms\Block\Block" name="inmeetservice">
-    <arguments>
-        <argument name="block_id" xsi:type="string">inmeetservice</argument>
-    </arguments>
-</block>
+        <move element="product.info.overview" destination="product.info.main" after="page.main.title"/>
+        <move element="product.info.price" destination="product.info.main" after="-"/>
+        <move element="keuzehulp" destination="product.info.media" after="-"/>
+        <move element="product.info.required.collection" destination="product.info.main" before="usps-keurmerk" after="product.info.price"/>
+        <move element="usps-keurmerk" destination="product.info.main" after="product.info.required.collection"/>
+        <block class="Magento\Framework\View\Element\Template" name="keuzehulp">
+            <arguments>
+                <argument name="template" xsi:type="string">Magento_Catalog::product/view/banner_keuzehulp.phtml</argument>
+            </arguments>
+        </block>
 
-<block class="Magento\Cms\Block\Block" name="usps-keurmerk">
-    <arguments>
-        <argument name="block_id" xsi:type="string">usps-keurmerk</argument>
-    </arguments>
-</block>
+        <block class="Magento\Cms\Block\Block" name="usps-keurmerk">
+            <arguments>
+                <argument name="block_id" xsi:type="string">usps-keurmerk</argument>
+            </arguments>
+        </block>
 
         <referenceBlock name="catalog.product.related" remove="true"/>
         <referenceBlock name="product.info.upsell" remove="true"/>
@@ -79,7 +80,7 @@
                                template="Magento_Catalog::product/list/addto/compare.phtml"/>
                     </block>
                 </block>
-				<block class="Swissup\Easytabs\Block\ProductTabs" name="product.info.tabs" as="info_tabs" template="Swissup_Easytabs::tabs.phtml" after="product.info.media" />
+                <block class="Swissup\Easytabs\Block\ProductTabs" name="product.info.tabs" as="info_tabs" template="Swissup_Easytabs::tabs.phtml" after="product.info.media" />
                 <block class="Magento\Cms\Block\Block" name="hello-retail-product" before="product.info.tabs">
                     <arguments>
                         <argument name="block_id" xsi:type="string">hello-retail-product</argument>
@@ -91,7 +92,7 @@
                     </arguments>
                 </block>
             </container>
-			
+
         </referenceContainer>
     </body>
 </page>

@@ -10,6 +10,7 @@ namespace Bss\RequiredProduct\Model;
 use Magento\Checkout\Model\SessionFactory;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\DataObject;
+use Magento\Framework\Pricing\PriceCurrencyInterface;
 
 /**
  * Class Bss\RequiredProduct\Model\RequiredConfiguration
@@ -29,12 +30,19 @@ class RequiredConfiguration
     private $configurableData;
 
     /**
+     * @var PriceCurrencyInterface
+     */
+    protected $priceCurrency;
+
+    /**
      * @param SessionFactory $session
      */
     public function __construct(
-        SessionFactory $session
+        SessionFactory $session,
+        PriceCurrencyInterface $priceCurrency
     ) {
         $this->session = $session->create();
+        $this->priceCurrency = $priceCurrency;
         $this->_construct();
     }
 
@@ -62,7 +70,9 @@ class RequiredConfiguration
         $mainProductId = (int) $request->getParam('main_product');
         $requiredProductId = (int) $request->getParam('product');
         $collectionTypeId = (int) $request->getParam('type_id');
-
+        $finalPrice = (float) $request->getParam('final_price');
+        $finalPrice = round($finalPrice, 2);
+        $priceValue = $this->priceCurrency->format($finalPrice);
         if (!$mainProductId || !$requiredProductId || !$collectionTypeId) {
             return false;
         }
@@ -78,7 +88,9 @@ class RequiredConfiguration
             'product_id' => $requiredProductId,
             'main_product' => $mainProductId,
             'collection_type_id' => $collectionTypeId,
-            'custom_options' => $customOptions
+            'custom_options' => $customOptions,
+            'final_price' => $finalPrice,
+            'price_value' => $priceValue,
         ];
 
         $this->configurableData[$mainProductId] = $collectionData;

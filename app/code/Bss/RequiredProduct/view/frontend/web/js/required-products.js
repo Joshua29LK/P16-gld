@@ -154,12 +154,12 @@ define([
             var self = this,
                 modals,
                 options = {
-                type: 'popup',
-                modalClass: 'required-popup required-products-list-popup',
-                responsive: true,
-                buttons: [],
-                title: $.mage.__('Select %1').replace('%1', self.collectionName)
-            };
+                    type: 'popup',
+                    modalClass: 'required-popup required-products-list-popup',
+                    responsive: true,
+                    buttons: [],
+                    title: $.mage.__('Select %1').replace('%1', self.collectionName)
+                };
 
             if (!self.modalPopup) {
                 self.modalPopup = $(self.listProductSelector);
@@ -214,6 +214,7 @@ define([
             }
 
             this.modalPopup.modal('openModal');
+            this.modalPopup.find('.actions .tocart').prop('disabled', false);
         }
     });
 });

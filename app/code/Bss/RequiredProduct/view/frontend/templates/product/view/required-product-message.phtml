@@ -3,7 +3,16 @@
 $errorRequired = (int)$block->getRequest()->getParam('required_error');
 ?>
 <?php if ($errorRequired) : ?>
-<div class="message notice">
-    <span><?= $block->escapeHtml(__("The product's required option(s) weren't entered. Make sure the options are entered and try again.")) ?></span>
-</div>
+    <div class="message notice">
+        <span><?= $block->escapeHtml(__("The product's required option(s) weren't entered. Make sure the options are entered and try again.")) ?></span>
+    </div>
 <?php endif; ?>
+<script type="text/x-magento-init">
+    {
+        ".price-box": {
+            "Magento_Catalog/js/price-box": {
+                "priceConfig": <?= /* @noEscape */ $block->getJsonConfig() ?>
+    }
+}
+}
+</script>

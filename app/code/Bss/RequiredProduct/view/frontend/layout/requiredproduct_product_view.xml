@@ -2,7 +2,7 @@
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <update handle="catalog_product_view"/>
     <head>
-        <link src="Itoris_ProductPriceFormula::js/formula.js"/>
+        <link src="Bss_RequiredProduct::js/formula.js"/>
     </head>
     <body>
         <referenceContainer name="content">
