@@ -101,6 +101,7 @@ abstract class AbstractAjax implements HttpPostActionInterface
     {
         $this->http->getHeaders()->clearHeaders();
         $this->http->setHeader('Content-Type', 'application/json');
+        $this->http->setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0', true);
         return $this->http->setBody(
             $this->serializer->serialize($response)
         );
