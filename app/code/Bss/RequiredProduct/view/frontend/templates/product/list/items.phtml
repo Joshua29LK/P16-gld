@@ -17,7 +17,7 @@ $image = 'related_products_list';
     <?php foreach ($collection as $_product): ?>
         <div class="item product product-item required-item"
 
-            data-product-id="<?= $escaper->escapeHtmlAttr($_product->getId()) ?>">
+             data-product-id="<?= $escaper->escapeHtmlAttr($_product->getId()) ?>">
             <div class="product-info-container" data-product-id="<?= $escaper->escapeHtmlAttr($_product->getId()) ?>">
                 <div class="product-item-info">
                     <a href="#" class="product photo product-item-photo">
@@ -41,6 +41,7 @@ $image = 'related_products_list';
                     <?= $block->getBlockHtml('formkey') ?>
                     <?= $block->getChildHtml('form_top') ?>
                     <?= $block->getChildHtml('form_bottom') ?>
+                    <input type="hidden" name="final_price<?= $_product->getTypeId() == 'simple' ? '_simple' : '' ?>" value="<?= $block->getProductPriceInclTax($_product) ?>" />
                     <div class="actions">
                         <button type="submit"
                                 title="<?= $block->escapeHtmlAttr('Meebestellen') ?>"

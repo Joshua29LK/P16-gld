@@ -67,12 +67,20 @@ class RequiredConfiguration
      */
     public function addConfigurableItem($request)
     {
+        $priceValue = '';
+        $finalPrice = 0;
         $mainProductId = (int) $request->getParam('main_product');
         $requiredProductId = (int) $request->getParam('product');
         $collectionTypeId = (int) $request->getParam('type_id');
-        $finalPrice = (float) $request->getParam('final_price');
-        $finalPrice = round($finalPrice, 2);
-        $priceValue = $this->priceCurrency->format($finalPrice);
+        if ($request->getParam('final_price_simple')) {
+            $finalPrice = (float) $request->getParam('final_price_simple');
+        } elseif ($request->getParam('final_price')) {
+            $finalPrice = (float)$request->getParam('final_price');
+        }
+        if ($finalPrice) {
+            $finalPrice = round($finalPrice, 2);
+            $priceValue = $this->priceCurrency->format($finalPrice);
+        }
         if (!$mainProductId || !$requiredProductId || !$collectionTypeId) {
             return false;
         }

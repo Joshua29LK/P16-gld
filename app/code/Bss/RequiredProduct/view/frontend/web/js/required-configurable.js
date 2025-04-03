@@ -120,7 +120,9 @@ define([
 
                 if (product) {
                     product.qty = configurable.qty;
-                    product.price = configurable.final_price;
+                    if (configurable.final_price) {
+                        product.price = configurable.final_price;
+                    }
                     product.options = configurable.custom_options || {};
                     this.selectedRequiredInputQtyName = 'required-item[%1][%2]'
                         .replace('%1', this.collectionId)
@@ -131,7 +133,9 @@ define([
                         value: product.qty,
                         attribute_code: 'qty'
                     };
-                    product.attributes.price.value = configurable.price_value;
+                    if (configurable.price_value) {
+                        product.attributes.price.value = configurable.price_value;
+                    }
                     product.attributes.options = this.getCustomOptionDetails(product,configurable.custom_options);
                 }
             }
