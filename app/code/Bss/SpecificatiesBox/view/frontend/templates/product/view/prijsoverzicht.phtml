@@ -6,11 +6,15 @@ $taxRate = $block->getTaxRate();
     <h2>Prijsoverzicht:</h2>
     <ul>
         <li class="total_excl_btw">
-            <span>Total excl. btw:</span>
+            <span>Prijs excl. BTW:</span>
             <span class="total_excl_btw-value" style="float: right;">€ 0</span>
         </li>
+        <li class="old_price_btw" style="display: none;">
+            <span>Discount:</span>
+            <span class="old_price_btw-value" style="float: right;">€ 0</span>
+        </li>
         <li class="product_btw">
-            <span>btw <?= $taxRate . "%" ?>:</span>
+            <span>Btw <?= $taxRate . "%" ?>:</span>
             <span class="product_btw-value" style="float: right;">€ 0</span>
         </li>
     </ul>
@@ -18,7 +22,7 @@ $taxRate = $block->getTaxRate();
 
 <div class="product-info-price">
     <div class="total_incl_btw">
-        <span>Total incl. btw:</span>
+        <span>Totaal incl. BTW:</span>
         <span class="total_incl_btw-value" style="float: right;">€ 0</span>
     </div>
 </div>
