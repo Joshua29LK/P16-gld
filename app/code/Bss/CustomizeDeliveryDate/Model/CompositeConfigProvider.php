@@ -151,6 +151,7 @@ class CompositeConfigProvider implements \Magento\Checkout\Model\ConfigProviderI
             $output['min_date'] = $this->getMindate($day_off, $block_out_holidays, $process_time, $current_time);
             $output['zip_delivery_list'] = $processedZipDelivery;
             $output['orderdeliverydate_countries'] = $this->bssHelper->getCountryNotAllow();
+            $output['orderdeliverydate_postcoderanges'] = $this->bssHelper->getAllowedPostcodeRanges();
         }
         return $output;
     }

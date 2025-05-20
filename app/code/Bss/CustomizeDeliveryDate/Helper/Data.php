@@ -510,4 +510,29 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
 
         return explode(',', $configValue);
     }
+
+    public function getAllowedPostcodeRanges() {
+        $calendarAllowedRanges = $this->scopeConfig->getValue(
+            'orderdeliverydate/general/postcode_range',
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
+
+        if (!$calendarAllowedRanges) {
+            return [];
+        }
+
+        $ranges = json_decode($calendarAllowedRanges, true);
+
+        if (!is_array($ranges)) {
+            return [];
+        }
+
+        $filtered = array_filter($ranges, function ($item) {
+            return isset($item['from'], $item['to']) &&
+                is_numeric($item['from']) &&
+                is_numeric($item['to']);
+        });
+
+        return array_values($filtered);
+    }
 }

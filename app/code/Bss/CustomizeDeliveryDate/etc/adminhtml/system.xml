@@ -12,8 +12,13 @@
                     <label>Countries are not Allowed</label>
                     <source_model>Magento\Directory\Model\Config\Source\Country</source_model>
                 </field>
-                <field id="verzendgroep" translate="label" type="text" sortOrder="150" showInDefault="1" showInWebsite="0" showInStore="0">
+                <field id="verzendgroep" translate="label" type="text" sortOrder="150" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>MAP the values in attribute Verzendgroep </label>
+                </field>
+                <field id="postcode_range" translate="label" sortOrder="160" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Allowed Postcode Ranges</label>
+                    <frontend_model>Bss\CustomizeDeliveryDate\Block\Adminhtml\System\Config\Field\Range</frontend_model>
+                    <backend_model>Magento\Config\Model\Config\Backend\Serialized\ArraySerialized</backend_model>
                 </field>
             </group>
         </section>

@@ -122,18 +122,34 @@ define(
 
                 quote.shippingAddress.subscribe(function (address) {
                     var allowedCountries = window.checkoutConfig.orderdeliverydate_countries;
+                    var allowedPostCodeRanges =  window.checkoutConfig.orderdeliverydate_postcoderanges;
                     var shippingAddress = quote.shippingAddress();
 
                     if (shippingAddress) {
                         var country = shippingAddress.countryId;
+                        var postcode = shippingAddress.postcode;
                         var isCountryAllowed = Array.isArray(allowedCountries) && allowedCountries.includes(country);
-                        var isPostcodeAll = shippingAddress.postcode === "*";
+                        var isPostcodeAll = postcode === "*";
+
                         var postcodenL = $('#shipping-postcodenl-postcode').val();
                         if(!customer.isLoggedIn() && shippingAddress.countryId == "NL" && !postcodenL) {
+                            postcode = postcodenL;
                             isPostcodeAll = true;
                         }
 
-                        self.countryNotAllowed = !isCountryAllowed && !isPostcodeAll;
+                        var isPostcodeInRange = false;
+                        if (postcode && Array.isArray(allowedPostCodeRanges)) {
+                            let postcodeNumber = postcode.replace(/\s/g, '').substring(0, 4);
+                            allowedPostCodeRanges.forEach(function (range) {
+                                var from = parseInt(range.from);
+                                var to = parseInt(range.to);
+                                if (!isNaN(from) && !isNaN(to) && postcodeNumber >= from && postcodeNumber <= to) {
+                                    isPostcodeInRange = true;
+                                }
+                            });
+                        }
+
+                        self.countryNotAllowed = !isCountryAllowed && !isPostcodeAll  && isPostcodeInRange;
                     }
 
                     updateDeliveryStatus();
