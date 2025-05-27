@@ -83,10 +83,14 @@ Itoris.PriceFormula = {
                 var bssDiscount = parseFloat(normal_price - spe_price).toFixed(2);
 
                 if (bssDiscount > 0) {
-                    jQuery('.old_price_btw').css('display', 'block');
-                    jQuery('.old_price_btw-value').text('€ ' + bssDiscount);
+                    jQuery('.show-if-has-discount').removeClass('hidden');
+                    jQuery('.show-if-not-has-discount').addClass('hidden');
+
+                    jQuery('.discount_price_btw-value').text('€ ' + bssDiscount);
+                    jQuery('.old_price_btw-value').text('€ ' + normal_price);
                 } else {
-                    jQuery('.old_price_btw').css('display', 'none');
+                    jQuery('.show-if-has-discount').addClass('hidden');
+                    jQuery('.show-if-not-has-discount').removeClass('hidden');
                 }
             } catch (error) {
                 // Error
@@ -126,6 +130,10 @@ Itoris.PriceFormula = {
         var decimalSymbol = curObj.getPriceBox().data('magePriceBox').options.priceConfig.priceFormat.decimalSymbol;
         var price = (baseInitialAmount ? basePriceObj[0] : finalPriceObj[0]).innerHTML;
         price = price.replace(/[^0-9]+/g,"") / (price.indexOf(decimalSymbol) > -1 ? 100 : 1);
+
+        if (basePriceObj == finalPriceObj) { // Call by Base price (Incl Tax)
+            price = Math.round(price / taxRate * 100) / 100; // => convert to excl tax
+        }
 
         curObj.initialPrice = baseInitialAmount ? baseInitialAmount : finalInitialAmount;
 
@@ -167,6 +175,7 @@ Itoris.PriceFormula = {
         }
 
         curObj.finalPrice = priceForCompare > 0 ? priceForCompare * curObj.priceFormulaCurrencyConversionRate / (multiplyByQty && parseFloat($('qty').value) > 0 ? $('qty').value : 1) : price;
+        curObj.finalPrice = Math.round(curObj.finalPrice * 100) / 100; // Fix bug JS convert number
         //curObj.finalPrice = curObj.finalPrice.toFixed(2);
 
         //var tierObj = jQuery('.product-info-main .prices-tier');
