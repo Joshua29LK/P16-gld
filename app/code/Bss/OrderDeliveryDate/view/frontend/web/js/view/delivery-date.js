@@ -22,10 +22,13 @@ define(
         'mage/translate',
         'Magento_Checkout/js/model/full-screen-loader',
         'Bss_OrderDeliveryDate/js/model/delivery-form-data',
+        'Magento_Customer/js/model/customer',
+        'Magento_Checkout/js/model/quote',
+        'Magento_Checkout/js/model/payment/renderer-list',
         'underscore',
         'mage/calendar'
     ],
-    function ($, ko, Component, $t, fullScreenLoader, deliveryFormData, _) {
+    function ($, ko, Component, $t, fullScreenLoader, deliveryFormData, customer, quote, rendererList, _) {
         'use strict';
 
         $.extend(true, $, {
@@ -57,6 +60,10 @@ define(
             errorTimeRequiredValidate : ko.observable(false),
 
             errorCommentRequiredValidate : ko.observable(false),
+
+            countryNotAllowed : ko.observable(false),
+
+            isFlatrate : ko.observable(false),
 
             //Validate Date
             isValidDateBss: function(dateString) {
@@ -112,6 +119,73 @@ define(
                 });
 
                 this.listingTimeSlot(this.listTimeSlot());
+
+                function beforeUpdateDeliveryStatus() {
+                    var allowedCountries = window.checkoutConfig.orderdeliverydate_countries;
+                    var disallowedPostCodeRanges =  window.checkoutConfig.orderdeliverydate_postcoderanges;
+                    var shippingAddress = quote.shippingAddress();
+
+                    if (shippingAddress) {
+                        var country = shippingAddress.countryId;
+                        var postcode = shippingAddress.postcode;
+                        var isCountryAllowed = Array.isArray(allowedCountries) && allowedCountries.includes(country);
+                        var isPostcodeAll = postcode === "*";
+
+                        var postcodenL = $('#shipping-postcodenl-postcode').val();
+                        if(!customer.isLoggedIn() && shippingAddress.countryId == "NL" && !postcodenL) {
+                            postcode = postcodenL;
+                            isPostcodeAll = true;
+                        }
+
+                        var isPostcodeDisallowed = false;
+                        if (postcode && Array.isArray(disallowedPostCodeRanges)) {
+                            let postcodeNumber = postcode.replace(/\s/g, '').substring(0, 4);
+                            disallowedPostCodeRanges.forEach(function (range) {
+                                var from = parseInt(range.from);
+                                var to = parseInt(range.to);
+                                if (!isNaN(from) && !isNaN(to) && postcodeNumber >= from && postcodeNumber <= to) {
+                                    isPostcodeDisallowed = true;
+                                }
+                            });
+                        }
+
+                        self.countryNotAllowed = !isCountryAllowed && !isPostcodeAll  && !isPostcodeDisallowed;
+                    }
+
+                    updateDeliveryStatus();
+                }
+
+                let addressManualSubscribed = false;
+
+                quote.shippingAddress.subscribe(function (address) {
+                    if (!addressManualSubscribed) {
+                        var context = ko.contextFor(document.querySelector('#shipping-postcodenl-street-manual'));
+                        if (context && context.$data && context.$data.streetManual) {
+                            context.$data.streetManual.subscribe(function(newVal) {
+                                if (newVal) {
+                                    beforeUpdateDeliveryStatus();
+                                }
+                            });
+                            addressManualSubscribed = true;
+                        }
+                    }
+
+                    beforeUpdateDeliveryStatus();
+                });
+
+                quote.shippingMethod.subscribe(function (method) {
+                    if (method) {
+                        self.isFlatrate = method.carrier_code === 'flatrate' && method.method_code === 'flatrate';
+                    }
+
+                    updateDeliveryStatus();
+                });
+
+                function updateDeliveryStatus() {
+                    var enableDelivery = self.countryNotAllowed && self.isFlatrate;
+                    self.dateRequired(enableDelivery);
+                    self.bssDeliveryEnable(enableDelivery);
+                }
             },
 
             bssValidateField: function() {
@@ -308,9 +382,51 @@ define(
                     block_out_holidays = window.checkoutConfig.bss_delivery_block_out_holidays;
                 var day_off_arr = [];
                 var day_off = window.checkoutConfig.bss_delivery_day_off;
-                if (day_off) {
-                    day_off_arr = day_off.split(',');
+
+                var shippingAddress = quote.shippingAddress();
+                if(shippingAddress) {
+                    var postcode = shippingAddress.postcode;
+
+                    var listZipDelivery = window.checkoutConfig.zip_delivery_list;
+                    var deliveryDaysByZip = null;
+
+                    for (let record of listZipDelivery) {
+                        const storedZipCode = record.zip_code;
+
+                        if (storedZipCode.replaceAll(' ', '') === postcode.replaceAll(' ', '')) {
+                            deliveryDaysByZip = record.delivery_days;
+                            break;
+                        }
+
+                        if (storedZipCode.includes('-')) {
+                            const [from, to] = storedZipCode.split('-').map(Number);
+                            let postcodeNumber = postcode.replace(/\s/g, '').substring(0, 4);
+                            if (postcodeNumber >= from && postcodeNumber <= to) {
+                                deliveryDaysByZip = record.delivery_days;
+                                break;
+                            }
+                        }
+
+                        if (storedZipCode === '*') {
+                            deliveryDaysByZip = record.delivery_days;
+                            break;
+                        }
+                    }
+
+                    if (deliveryDaysByZip) {
+                        var day_off_arr_zip = deliveryDaysByZip.split(',');
+                    }
                 }
+
+                if (day_off) {
+                    var day_off_arr_code = day_off.split(',');
+                }
+
+                day_off_arr = [
+                    ...(day_off_arr_zip || []),
+                    ...(day_off_arr_code || [])
+                ];
+
                 for (var i = 0; i < day_off_arr.length; i++) {
                     day_off_arr[i] = parseInt(day_off_arr[i]);
                 }
@@ -320,6 +436,7 @@ define(
 
                 return [false, ''];
             },
+
             /**
              * Get min date
              *
